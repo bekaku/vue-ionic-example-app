@@ -1,0 +1,141 @@
+$z-fullscreen: 6000 !default
+.q-float-left
+  float: left
+.q-float-right
+  float: right
+
+.q-relative-position
+  position: relative
+
+.q-fixed,
+.q-fixed-full,
+.q-fullscreen,
+.q-fixed-center,
+.q-fixed-bottom,
+.q-fixed-left,
+.q-fixed-right,
+.q-fixed-top,
+.q-fixed-top-left,
+.q-fixed-top-right,
+.q-fixed-bottom-left,
+.q-fixed-bottom-right
+  position: fixed
+
+.q-absolute,
+.q-absolute-full,
+.q-absolute-center,
+.q-absolute-bottom,
+.q-absolute-left,
+.q-absolute-right,
+.q-absolute-top,
+.q-absolute-top-left,
+.q-absolute-top-right,
+.q-absolute-bottom-left,
+.q-absolute-bottom-right
+  position: absolute
+
+.q-fixed-top, .q-absolute-top
+  top: 0
+  left: 0
+  right: 0
+.q-fixed-right, .q-absolute-right
+  top: 0
+  right: 0
+  bottom: 0
+.q-fixed-bottom, .q-absolute-bottom
+  right: 0
+  bottom: 0
+  left: 0
+.q-fixed-left, .q-absolute-left
+  top: 0
+  bottom: 0
+  left: 0
+.q-fixed-top-left, .q-absolute-top-left
+  top: 0
+  left: 0
+.q-fixed-top-right, .q-absolute-top-right
+  top: 0
+  right: 0
+.q-fixed-bottom-left, .q-absolute-bottom-left
+  bottom: 0
+  left: 0
+.q-fixed-bottom-right, .q-absolute-bottom-right
+  bottom: 0
+  right: 0
+
+.q-fullscreen
+  z-index: $z-fullscreen
+  border-radius: 0 !important
+  max-width: 100vw
+  max-height: 100vh
+
+.q-absolute-full, .q-fullscreen, .q-fixed-full
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+
+.q-fixed-center, .q-absolute-center
+  top: 50% !important
+  left: 50% !important
+  transform: translate(-50%, -50%) !important
+
+.q-vertical-
+  &top
+    vertical-align: top !important
+  &middle
+    vertical-align: middle !important
+  &bottom
+    vertical-align: bottom !important
+
+.q-on-left
+  margin-right: 12px
+.q-on-right
+  margin-left: 12px
+
+.q-align-items-start
+  align-items: start
+
+.q-center
+  display: block
+  margin-left: auto
+  margin-right: auto
+
+.q-centered
+  /* position: fixed; */
+  top: 50%
+  left: 50%
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%)
+
+.q-centered-vertical
+  margin: 0
+  position: absolute
+  top: 50%
+  -ms-transform: translateY(-50%)
+  transform: translateY(-50%)
+
+.q-centered-horizontal
+  margin: 0
+  position: absolute
+  left: 50%
+  -ms-transform: translateX(-50%)
+  transform: translateX(-50%)
+
+.q-centered-both
+  margin: 0
+  position: absolute
+  top: 50%
+  left: 50%
+  -ms-transform: translate(-50%, -50%)
+  transform: translate(-50%, -50%)
+
+.q-fixed-bottom2
+  position: fixed
+  right: 0 !important
+  bottom: 0 !important
+  left: 0 !important
+  z-index: 1030
+  -webkit-transform: translate3d(0, 0, 0)
+  -o-transform: translate3d(0, 0, 0)
+  transform: translate3d(0, 0, 0)

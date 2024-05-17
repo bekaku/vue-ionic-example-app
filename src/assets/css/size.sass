@@ -1,0 +1,129 @@
+$space-base: 16px !default
+$space-x-base: $space-base !default
+$space-y-base: $space-base !default
+
+$space-none: (x: 0, y: 0) !default
+$space-xs: (x: ($space-x-base * .25), y: ($space-y-base * .25)) !default
+$space-sm: (x: ($space-x-base * .5), y: ($space-y-base * .5)) !default
+$space-md: (x: $space-x-base, y: $space-y-base) !default
+$space-lg: (x: ($space-x-base * 1.5), y: ($space-y-base * 1.5)) !default
+$space-xl: (x: ($space-x-base * 3), y: ($space-y-base * 3)) !default
+
+// sorry for long line; we need .sass and it doesn't support multi-line list
+$spaces: ('none': $space-none, 'xs': $space-xs, 'sm': $space-sm, 'md': $space-md, 'lg': $space-lg, 'xl': $space-xl) !default
+
+$breakpoint-xs: 599px !default
+$breakpoint-sm: 1023px !default
+$breakpoint-md: 1439px !default
+$breakpoint-lg: 1919px !default
+
+$sizes: ('xs': 0, 'sm': ($breakpoint-xs + 1), 'md': ($breakpoint-sm + 1), 'lg': ($breakpoint-md + 1), 'xl': ($breakpoint-lg + 1)) !default
+$flex-gutter-xs: ($space-base * .25) !default
+$flex-gutter-sm: ($space-base * .5) !default
+$flex-gutter-md: $space-base !default
+$flex-gutter-lg: ($space-base * 1.5) !default
+$flex-gutter-xl: ($space-base * 3) !default
+// sorry for long line; we need .sass and it doesn't support multi-line list
+$flex-gutter: ('none': 0, 'xs': $flex-gutter-xs, 'sm': $flex-gutter-sm, 'md': $flex-gutter-md, 'lg': $flex-gutter-lg, 'xl': $flex-gutter-xl) !default
+
+\:root
+  @each $name, $size in $sizes
+    #{"--q-size-"}#{$name}: #{$size}
+
+.q-fit
+  width: 100% !important
+  height: 100% !important
+.q-full-height
+  height: 100% !important
+.q-full-width
+  width: 100% !important
+  margin-left: 0 !important
+  margin-right: 0 !important
+
+.q-window-height
+  margin-top: 0 !important
+  margin-bottom: 0 !important
+  height: 100vh !important
+.q-window-width
+  margin-left: 0 !important
+  margin-right: 0 !important
+  width: 100vw !important
+
+.q-block
+  display: block !important
+.q-inline-block
+  display: inline-block !important
+
+@each $space, $value in $spaces
+
+  .q-pa-#{$space}
+    padding: map-get($value, "y") map-get($value, "x") !important
+  .q-pl-#{$space}
+    padding-left: map-get($value, "x") !important
+  .q-pr-#{$space}
+    padding-right: map-get($value, "x") !important
+  .q-pt-#{$space}
+    padding-top: map-get($value, "y") !important
+  .q-pb-#{$space}
+    padding-bottom: map-get($value, "y") !important
+  .q-px-#{$space}
+    padding-left: map-get($value, "x") !important
+    padding-right: map-get($value, "x") !important
+  .q-py-#{$space}
+    padding-top: map-get($value, "y") !important
+    padding-bottom: map-get($value, "y") !important
+
+  .q-ma-#{$space}
+    margin: map-get($value, "y") map-get($value, "x") !important
+  .q-ml-#{$space}
+    margin-left: map-get($value, "x") !important
+  .q-mr-#{$space}
+    margin-right: map-get($value, "x") !important
+  .q-mt-#{$space}
+    margin-top: map-get($value, "y") !important
+  .q-mb-#{$space}
+    margin-bottom: map-get($value, "y") !important
+  .q-mx-#{$space}
+    margin-left: map-get($value, "x") !important
+    margin-right: map-get($value, "x") !important
+  .q-my-#{$space}
+    margin-top: map-get($value, "y") !important
+    margin-bottom: map-get($value, "y") !important
+
+.q-mt-auto, .q-my-auto
+  margin-top: auto !important
+.q-ml-auto
+  margin-left: auto !important
+.q-mb-auto, .q-my-auto
+  margin-bottom: auto !important
+.q-mr-auto
+  margin-right: auto !important
+.q-mx-auto
+  margin-left: auto !important
+  margin-right: auto !important
+
+@each $name, $size in $flex-gutter
+  .q-gutter
+    &-x-#{$name}
+      margin-left: -$size !important
+      > *
+        margin-left: $size !important
+    &-y-#{$name}
+      margin-top: -$size !important
+      > *
+        margin-top: $size !important
+    &-#{$name}
+      @extend .q-gutter-x-#{$name}
+      @extend .q-gutter-y-#{$name}
+  .q-col-gutter
+    &-x-#{$name}
+      margin-left: -$size !important
+      > *
+        padding-left: $size !important
+    &-y-#{$name}
+      margin-top: -$size !important
+      > *
+        padding-top: $size !important
+    &-#{$name}
+      @extend .q-col-gutter-x-#{$name}
+      @extend .q-col-gutter-y-#{$name}
