@@ -35,11 +35,6 @@ const afterTabChange = (ev: any) => {
   // do something after tab change
   tabStore.setCurrentTab(ev.tab);
 };
-const onOpenPost = () => {
-  // utilStore.onNewPost();
-  tabStore.setCurrentTab(TabsName.POST);
-  WeeGoTo('/post/form');
-};
 const onTabClick = (ev: any) => {
   to.value = setTimeout(() => {
     if (tabStore.currentTab != 'TabsName.POST') {

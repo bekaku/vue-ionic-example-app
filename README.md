@@ -38,6 +38,7 @@ yarn dev
 Build the application for production:
 
 ```bash
+build:prod 
 npm run build
 ```
 
