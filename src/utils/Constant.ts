@@ -27,7 +27,7 @@ export const config = {
 };
 
 export const Devmode = true;
-export const PrefixKey = '_gd5_';
+export const PrefixKey = '_vue_ionic_';
 export const DefaultLocale = 'th';
 export const LocaleKey = PrefixKey + 'mb_locale';
 export const ThemeKey = PrefixKey + 'mb_theme';

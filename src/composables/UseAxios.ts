@@ -1,13 +1,6 @@
-import { AxiosKey } from "@/plugins/AxiosSymbols";
+import { AxiosKey } from '@/plugins/AxiosSymbols';
 import { AppException, RequestType, ResponseMessage } from '@/types/Common';
-import {
-  isAppException,
-  isServerException,
-  isServerResponseMessage
-} from '@/utils/AppUtil';
-import {
-  AppAuthTokenKey
-} from '@/utils/Constant';
+import { isAppException, isServerException, isServerResponseMessage } from '@/utils/AppUtil';
 import { injectStrict } from '@/utils/InjectTyped';
 import { App } from '@capacitor/app';
 import { toastController } from '@ionic/vue';
@@ -16,17 +9,15 @@ import { alertCircle, closeOutline, exitOutline } from 'ionicons/icons';
 import { onUnmounted, ref } from 'vue';
 import { useBase } from './UseBase';
 import { useConfig } from './UseConfig';
-import { useLang } from './UseLang';
-import { loadStorage } from '@/utils/StorageUtil';
+
 export const useAxios = () => {
   const sessionTimeOutRef = ref();
   const $appAxios = injectStrict(AxiosKey); // it's typed now
-  const { locale } = useLang();
-  const { WeeToast, } = useBase();
+  const { WeeToast } = useBase();
   const { isDevMode, getConfigPublicType } = useConfig();
   onUnmounted(() => {
     if (sessionTimeOutRef.value) {
-      clearTimeout(sessionTimeOutRef.value)
+      clearTimeout(sessionTimeOutRef.value);
     }
   });
   const validateServerResponse = <T>(res: T): Promise<T | null> => {
@@ -73,53 +64,41 @@ export const useAxios = () => {
     const res = await callAxios<T>(req);
     return await validateServerResponse<T>(res);
   };
-  // const callAxiosFile = async <T>(req: RequestType): Promise<any> => {
-  //   return new Promise(async (resolve, /*reject*/) => {
-  //     const response = await callAxiosProcess<T>(req, true);
-  //     if (response.data) {
-  //       const blob = new Blob([response.data as BlobPart], { type: response.headers['content-type'] });
-  //       const imageUrlObject = URL.createObjectURL(blob);
-  //       resolve(imageUrlObject);
-  //     }
-  //     resolve(null);
-  //   });
-  // };
   const callAxiosFile = async <T>(req: RequestType): Promise<any> => {
     return new Promise(async (resolve /*reject*/) => {
       const response = await callAxiosProcess<T>(req, false);
       resolve(response);
     });
   };
-  const callAxios = async<T>(req: RequestType): Promise<T> => {
-    return new Promise(async (resolve, /*reject*/) => {
+  const callAxios = async <T>(req: RequestType): Promise<T> => {
+    return new Promise(async (resolve /*reject*/) => {
       const response = await callAxiosProcess<T>(req);
-      if (response.data) {
-        if (isAppException(response.data)) {
-          notifyException(response.data);
-        } else if (isServerResponseMessage(response.data)) {
-          notifyServerMessage(response.data);
+      if (response.status != 401 && response.status != 403) {
+        if (response.data) {
+          if (isAppException(response.data)) {
+            notifyException(response.data);
+          } else if (isServerResponseMessage(response.data)) {
+            notifyServerMessage(response.data);
+          }
         }
       }
       resolve(response.data as T);
-    });
+    }
+    );
   };
   const callAxiosProcess = <T>(req: RequestType, logDev: boolean = true): Promise<AxiosResponse<T>> => {
-    return new Promise(async(resolve, /*reject*/) => {
-      // api.defaults.headers = reqHeader();
-      // api.defaults.headers['Accept-Language'] = locale.value;
-      // api.defaults.headers.Authorization = `Bearer ${token}`;
-      // $appAxios.defaults.headers.common['Content-Type'] = 'application/json';
-      const jwtKey = await loadStorage<string>(AppAuthTokenKey);
-      $appAxios.defaults.headers['Accept-Language'] = locale.value as string;
-      $appAxios.defaults.headers.Authorization = `Bearer ${jwtKey}`;
-      // $appAxios.defaults.headers.Authorization = `Bearer ${localStorage.getItem(AppAuthTokenKey)}`;
+    return new Promise(async (resolve /*reject*/) => {
+      // const jwtKey = await loadStorage<string>(AppAuthTokenKey);
+      // const locale = await loadStorage<string>(LocaleKey);
+      // $appAxios.defaults.headers['Accept-Language'] = locale;
+      // $appAxios.defaults.headers.Authorization = `Bearer ${jwtKey}`;
+
 
       if (req.baseURL != undefined) {
         $appAxios.defaults.baseURL = req.baseURL;
       } else {
         $appAxios.defaults.baseURL = getConfigPublicType<string>('apiBaseUrl');
       }
-
 
       if (req.contentType) {
         $appAxios.defaults.headers['Content-Type'] = req.contentType;
@@ -131,12 +110,7 @@ export const useAxios = () => {
       } else {
         $appAxios.defaults.responseType = 'json';
       }
-      // console.log('useCallApi > useFetch :', req);
-      // $appAxios({
-      //   method: req.method,
-      //   url: req.API,
-      //   data: req.body ? req.body : undefined
-      // })
+
       $appAxios({
         method: req.method,
         url: req.API,
@@ -147,27 +121,16 @@ export const useAxios = () => {
             console.log(`api ${$appAxios.defaults.baseURL}${req.API}`, req, logDev ? response : '');
           }
           resolve(response as AxiosResponse<T>);
-        })
-        .catch((error: any) => {
-          if (isDevMode()) {
-            console.error(`api ${$appAxios.defaults.baseURL}${req.API}`, req, error);
-          }
-          resolve(error);
-          // reject(error);
-          // if (error.code == 'ERR_NETWORK') {
-          // window.location.replace('/404');
-          // }
-          showErrorToast(error);
-          // WeeToast({
-          //   headerText: error.code,
-          //   text: error.message,
-          //   icon: alertCircle,
-          //   closeIcon: closeOutline,
-          //   toastPosition: 'middle',
-          //   color: 'danger',
-          //   time: 0
-          // });
         });
+
+
+      // .catch((error: any) => {
+      //   if (isDevMode()) {
+      //     console.error(`api ${$appAxios.defaults.baseURL}${req.API}`, req, error);
+      //   }
+      //   resolve(error);
+      //   showErrorToast(error);
+      // });
     });
   };
 
@@ -184,7 +147,8 @@ export const useAxios = () => {
           // text: t('base.close'),
           icon: closeOutline,
           role: 'cancel',
-          handler: () => { }
+          handler: () => {
+          }
         },
         {
           // text: t('base.appExit'),

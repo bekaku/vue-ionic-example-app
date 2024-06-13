@@ -439,6 +439,7 @@ export interface FileSaveResult {
 export interface RefeshTokenStatus {
   status: boolean;
   fourceLogout: boolean;
+  token?: string;
 }
 
 export interface ForgotPasswordRequest {

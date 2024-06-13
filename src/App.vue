@@ -36,9 +36,9 @@ onBeforeMount(async () => {
     console.log('App.vue >onBeforeMount > authenStore ', authenStore.auth);
   }
   App.addListener('appStateChange', async ({ isActive }) => {
-    if (isActive) {
-      await authenStore.stopAndRestartRefreshTokenTimer();
-    }
+    // if (isActive) {
+    //   await authenStore.stopAndRestartRefreshTokenTimer();
+    // }
     setAppStateChange(isActive);
   });
 

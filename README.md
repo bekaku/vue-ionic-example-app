@@ -48,19 +48,19 @@ Locally preview production build:
 npm run preview
 ```
 
-Sycn code to Android studio and Xcode:
+Sync code to Android studio and Xcode:
 
 ```bash
 npx cap sync
 ```
 
-Sycn code to Android studio:
+Sync code to Android studio:
 
 ```bash
 npx cap sync android
 ```
 
-Sycn code to xCode:
+Sync code to xCode:
 
 ```bash
 npx cap sync ios

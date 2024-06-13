@@ -5,7 +5,7 @@ import { defineStore } from 'pinia';
 // import router from '@/router';
 import { RefeshTokenStatus } from '@/types/Common';
 import { getConfig } from '@/utils/AppUtil';
-import { AppAuthRefeshTokenKey, AppAuthTokenKey, LocaleKey } from '@/utils/Constant';
+import { AppAuthRefeshTokenKey, AppAuthTokenKey, LocaleKey, RefreshTokenProcessAtt } from '@/utils/Constant';
 import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 
 export const useAuthenStore = defineStore('authenStore', {
@@ -15,7 +15,8 @@ export const useAuthenStore = defineStore('authenStore', {
       refreshTokenTimeout: null as any,
       refreshTokenTimeoutNo: 0,
       devMode: process.env.NODE_ENV == 'development',
-      sessionExpired: false
+      sessionExpired: false,
+      initial: false
     };
   },
   getters: {
@@ -27,80 +28,88 @@ export const useAuthenStore = defineStore('authenStore', {
   },
   actions: {
     async refreshToken(): Promise<RefeshTokenStatus> {
-      // const authTokenKey = localStorage.getItem(AppAuthTokenKey);
-      // const refreshToken = localStorage.getItem(AppAuthRefeshTokenKey);
-      // const localeVal = localStorage.getItem(LocaleKey);
-      const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
-      const refreshToken = await loadStorage<string>(AppAuthRefeshTokenKey);
-      const localeVal = await loadStorage<string>(LocaleKey);
-      if (authTokenKey) {
-        const refreshIt = await canRefreshToken(authTokenKey, this.devMode, 'authenStore > refreshToken');
-        if (refreshIt) {
-          appAxios.defaults.headers.Authorization = `Bearer ${authTokenKey}`;
-          appAxios.defaults.headers['Accept-Language'] = localeVal;
-          appAxios.defaults.baseURL = getConfig<string>('apiBaseUrl');
-          appAxios.defaults.responseType = 'json';
-          appAxios.defaults.headers['Content-Type'] = 'application/json';
-          const response = await appAxios({
-            method: 'POST',
-            url: '/api/auth/refreshToken',
-            data: {
-              refreshToken: {
-                refreshToken: refreshToken
-              }
-            }
-          });
-          if (this.devMode) {
-            console.log(`api ${appAxios.defaults.baseURL}/api/auth/refreshToken`, response);
+      return new Promise(async (resolve /*reject*/) => {
+        await saveStorage(RefreshTokenProcessAtt, true);
+        const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
+        if (authTokenKey) {
+          const refreshIt = await canRefreshToken(authTokenKey, this.devMode, 'authenStore > refreshToken');
+          if (refreshIt) {
+            const refreshRes = await this.refreshTokenProcess();
+            resolve(refreshRes);
           }
-          if (response && response.status == 200 && response.data && response.data.refreshToken && response.data.authenticationToken) {
-            // localStorage.setItem(AppAuthRefeshTokenKey, response.data.refreshToken);
-            // localStorage.setItem(AppAuthTokenKey, response.data.authenticationToken);
-            await saveStorage(AppAuthRefeshTokenKey, response.data.refreshToken);
-            await saveStorage(AppAuthTokenKey, response.data.authenticationToken);
-            this.sessionExpired = false;
-            await this.startRefreshTokenTimer();
-          } else if (response && response.status == 401) {
-            this.sessionExpired = true;
-            // router.push('/auth/login');
-            // router.replace('/auth/login');
-            return new Promise((resolve /*reject*/) => {
-              resolve({
-                status: false,
-                fourceLogout: true
-              });
-            });
-          }
-        } else {
-          await this.startRefreshTokenTimer();
         }
-      }
-      return new Promise((resolve /*reject*/) => {
+        await saveStorage(RefreshTokenProcessAtt, false);
         resolve({
           status: true,
           fourceLogout: false
         });
       });
     },
-    async startRefreshTokenTimer() {
+    async refreshTokenProcess(): Promise<RefeshTokenStatus> {
       return new Promise(async (resolve /*reject*/) => {
-        // const authTokenKey = localStorage.getItem(AppAuthTokenKey);
-        const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
-        if (authTokenKey) {
-          this.refreshTokenTimeoutNo = await getRefreshTokenTimeout(authTokenKey);
-          // this.refreshTokenTimeout = setTimeout(this.refreshToken, 10 * 1000);
-          if (this.devMode) {
-            console.log('startRefreshTokenTimer {}', this.refreshTokenTimeoutNo);
-          }
-          if (this.refreshTokenTimeoutNo > 0) {
-            if (this.devMode) {
-              console.log('Start Timer');
+        // const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
+        const refreshToken = await loadStorage<string>(AppAuthRefeshTokenKey);
+        // const localeVal = await loadStorage<string>(LocaleKey);
+        // appAxios.defaults.headers.Authorization = `Bearer ${authTokenKey}`;
+        // appAxios.defaults.headers['Accept-Language'] = localeVal;
+        appAxios.defaults.baseURL = getConfig<string>('apiBaseUrl');
+        appAxios.defaults.responseType = 'json';
+        appAxios.defaults.headers['Content-Type'] = 'application/json';
+        const response = await appAxios({
+          method: 'POST',
+          url: '/api/auth/refreshToken',
+          data: {
+            refreshToken: {
+              refreshToken: refreshToken
             }
-            this.refreshTokenTimeout = setTimeout(this.refreshToken, this.refreshTokenTimeoutNo);
           }
+        });
+        if (this.devMode) {
+          console.log(`api ${appAxios.defaults.baseURL}/api/auth/refreshToken`, response);
         }
-        resolve(true);
+        if (response && response.status == 200 && response.data && response.data.refreshToken && response.data.authenticationToken) {
+          await saveStorage(AppAuthRefeshTokenKey, response.data.refreshToken);
+          await saveStorage(AppAuthTokenKey, response.data.authenticationToken);
+          this.sessionExpired = false;
+          await saveStorage(RefreshTokenProcessAtt, false);
+          resolve({
+            status: true,
+            token: response.data.authenticationToken,
+            fourceLogout: false
+          });
+
+        } else if (response && response.status == 401) {
+          this.sessionExpired = true;
+          // router.push('/auth/login');
+          // router.replace('/auth/login');
+          await saveStorage(RefreshTokenProcessAtt, false);
+          resolve({
+            status: false,
+            fourceLogout: true
+          });
+        }
       });
+    },
+    async startRefreshTokenTimer() {
+      // return new Promise(async (resolve /*reject*/) => {
+      //   const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
+      //   if (authTokenKey) {
+      //     this.refreshTokenTimeoutNo = await getRefreshTokenTimeout(authTokenKey);
+      //     if (this.devMode) {
+      //       console.log('startRefreshTokenTimer {}', this.refreshTokenTimeoutNo);
+      //     }
+      //     if (this.refreshTokenTimeoutNo > 0) {
+      //       if (this.devMode) {
+      //         console.log('Start Timer');
+      //       }
+      //       this.refreshTokenTimeout = setTimeout(() => {
+      //         this.refreshToken();
+      //       }, this.refreshTokenTimeoutNo);
+      //     }
+      //   }
+      //   resolve(true);
+      // });
+      return new Promise(async (resolve) => resolve(true));
     },
     stopRefreshTokenTimer() {
       return new Promise(async (resolve /*reject*/) => {
@@ -121,22 +130,35 @@ export const useAuthenStore = defineStore('authenStore', {
     },
     async initialAuthData() {
       return new Promise(async (resolve /*reject*/) => {
+        const status = await this.initialAuthDataProcess();
+        resolve(status);
+      });
+    },
+    async initialAuthDataProcess() {
+      return new Promise(async (resolve /*reject*/) => {
         const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
-        // const authTokenKey = localStorage.getItem(AppAuthTokenKey);
         if (authTokenKey) {
-          appAxios.defaults.headers.Authorization = `Bearer ${authTokenKey}`;
+          // appAxios.defaults.headers.Authorization = `Bearer ${authTokenKey}`;
           appAxios.defaults.responseType = 'json';
           appAxios.defaults.headers['Content-Type'] = 'application/json';
           const response = await appAxios({
             method: 'GET',
             url: '/api/user/currentUserData'
           });
+          if (this.devMode) {
+            console.log('initialAuthDataProcess > /api/user/currentUserData', response);
+          }
           if (response && response.status == 200) {
             this.setAuthen(response.data);
           }
+          this.setInitial(true);
+          resolve(response.status);
         }
-        resolve(true);
+        resolve(200);
       });
+    },
+    setInitial(status: boolean) {
+      this.initial = status;
     },
     setAuthen(item: UserDto) {
       this.auth = item;

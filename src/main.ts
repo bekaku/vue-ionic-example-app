@@ -33,6 +33,9 @@ import './assets/css/positioning.sass';
 import './assets/css/elevation.sass';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 import { useAuthenStore } from '@/stores/AuthenStore';
+import { AppAuthTokenKey, LocaleKey } from '@/utils/Constant';
+import { loadStorage } from '@/utils/StorageUtil';
+import { canRefreshToken } from '@/utils/JwtUtil';
 
 startApp();
 
@@ -45,15 +48,43 @@ async function startApp() {
   // app.config.globalProperties.$appAxios = { ...appAxios };
   app.provide(AxiosKey, appAxios);
   router.isReady().then(async () => {
+    const authenStore = useAuthenStore();
     // attempt to auto refresh token before startup
-    try {
-      const authenStore = useAuthenStore();
-      const response = await authenStore.refreshToken();
-      if (response && response.fourceLogout) {
-        await router.replace('/auth/login');
-      } else {
-        await authenStore.initialAuthData();
+    appAxios.interceptors.request.use(async (config) => {
+      let jwtKey = await loadStorage<string>(AppAuthTokenKey);
+      if (jwtKey) {
+        if (config.url && config.url != '/api/auth/refreshToken') {
+          const refreshIt = await canRefreshToken(jwtKey, false);
+          if (refreshIt) {
+            const response = await authenStore.refreshTokenProcess();
+            if (response && response.fourceLogout) {
+              await router.replace('/auth/login');
+              return Promise.reject('session expired');
+            } else if (response && response.token) {
+              jwtKey = response.token;
+            }
+          }
+        }
       }
+      config.headers['Accept-Language'] = await loadStorage<string>(LocaleKey);
+      config.headers.Authorization = `Bearer ${jwtKey}`;
+      return config;
+    }, error => {
+      return Promise.reject(error);
+    });
+    try {
+      const status = await authenStore.initialAuthData();
+      if (status == 403) {
+        await router.replace('/auth/login');
+      }
+      // const authenStore = useAuthenStore();
+      // const response = await authenStore.refreshToken();
+      // if (response && response.fourceLogout) {
+      //   await router.replace('/auth/login');
+      // } else {
+      //   await authenStore.initialAuthData();
+      // }
+
     } catch {
     }
     app.mount('#app');
