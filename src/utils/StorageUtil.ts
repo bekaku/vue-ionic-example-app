@@ -1,5 +1,5 @@
 import { Preferences } from '@capacitor/preferences';
-import { DeviceIdAtt, FcmTokenKey, LocaleKey, ThemeKey } from '@/utils/Constant';
+import { DeviceIdAtt, FcmTokenKey, LocaleKey, RefreshTokenProcessAtt, ThemeKey } from '@/utils/Constant';
 import { KeyValue } from '@/types/Common';
 
 export const saveStorage = async (key: string, value: any, isJson = false): Promise<boolean> => {
@@ -26,7 +26,7 @@ export const removeStorage = async (key: string, from: string | undefined = unde
     resolve(true);
   });
 };
-export const clearStorage = async (exceptKeys: string[] = [LocaleKey, ThemeKey, FcmTokenKey, DeviceIdAtt]): Promise<boolean> => {
+export const clearStorage = async (exceptKeys: string[] = [LocaleKey, ThemeKey, FcmTokenKey, DeviceIdAtt, RefreshTokenProcessAtt]): Promise<boolean> => {
   const exceptItems: KeyValue[] = [];
   if (exceptKeys.length > 0) {
     for (const k of exceptKeys) {

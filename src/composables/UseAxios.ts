@@ -9,6 +9,8 @@ import { alertCircle, closeOutline, exitOutline } from 'ionicons/icons';
 import { onUnmounted, ref } from 'vue';
 import { useBase } from './UseBase';
 import { useConfig } from './UseConfig';
+import { AppAuthTokenKey, LocaleKey } from '@/utils/Constant';
+import { loadStorage } from '@/utils/StorageUtil';
 
 export const useAxios = () => {
   const sessionTimeOutRef = ref();
@@ -88,11 +90,9 @@ export const useAxios = () => {
   };
   const callAxiosProcess = <T>(req: RequestType, logDev: boolean = true): Promise<AxiosResponse<T>> => {
     return new Promise(async (resolve /*reject*/) => {
-      // const jwtKey = await loadStorage<string>(AppAuthTokenKey);
-      // const locale = await loadStorage<string>(LocaleKey);
-      // $appAxios.defaults.headers['Accept-Language'] = locale;
-      // $appAxios.defaults.headers.Authorization = `Bearer ${jwtKey}`;
-
+      const jwtKey = await loadStorage<string>(AppAuthTokenKey);
+      // $appAxios.defaults.headers['Accept-Language'] = await loadStorage<string>(LocaleKey);
+      $appAxios.defaults.headers.Authorization = `Bearer ${jwtKey}`;
 
       if (req.baseURL != undefined) {
         $appAxios.defaults.baseURL = req.baseURL;
@@ -121,16 +121,21 @@ export const useAxios = () => {
             console.log(`api ${$appAxios.defaults.baseURL}${req.API}`, req, logDev ? response : '');
           }
           resolve(response as AxiosResponse<T>);
+        })
+        .catch((error: any) => {
+          if (isDevMode()) {
+            console.error(`api `, error.response.status);
+
+            console.error(`api ${$appAxios.defaults.baseURL}${req.API}`, req, error);
+          }
+          const errResponse = error?.response;
+          if (errResponse && errResponse.status) {
+            if (errResponse.status != 401 && errResponse.status != 403) {
+              showErrorToast(error);
+            }
+          }
+          resolve(error);
         });
-
-
-      // .catch((error: any) => {
-      //   if (isDevMode()) {
-      //     console.error(`api ${$appAxios.defaults.baseURL}${req.API}`, req, error);
-      //   }
-      //   resolve(error);
-      //   showErrorToast(error);
-      // });
     });
   };
 
@@ -142,6 +147,7 @@ export const useAxios = () => {
       icon: alertCircle,
       duration: 5 * 1000,
       mode: 'ios',
+      color: 'danger',
       buttons: [
         {
           // text: t('base.close'),

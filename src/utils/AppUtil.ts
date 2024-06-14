@@ -321,10 +321,10 @@ export const isValidJSON = (jsonString: string) => {
   }
 };
 export const localStorageClear = async () => {
-  // await clearStorage();
+  await clearStorage();
   return new Promise((resolve) => {
-    localStorage.clear();
-    window.localStorage.clear();
+    // localStorage.clear();
+    // window.localStorage.clear();
     resolve(true);
   });
 };

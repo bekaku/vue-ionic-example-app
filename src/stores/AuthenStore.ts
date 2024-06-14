@@ -138,7 +138,7 @@ export const useAuthenStore = defineStore('authenStore', {
       return new Promise(async (resolve /*reject*/) => {
         const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
         if (authTokenKey) {
-          // appAxios.defaults.headers.Authorization = `Bearer ${authTokenKey}`;
+          appAxios.defaults.headers.Authorization = `Bearer ${authTokenKey}`;
           appAxios.defaults.responseType = 'json';
           appAxios.defaults.headers['Content-Type'] = 'application/json';
           const response = await appAxios({
