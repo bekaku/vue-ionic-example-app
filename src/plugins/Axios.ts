@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { DefaultApiCLient, config, AppAuthTokenKey, LocaleKey, AppAuthRefeshTokenKey } from '@/utils/Constant';
 import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import { getConfig as getAppConfig } from "@/utils/AppUtil";
 import router from '../router';
 
 declare module '@vue/runtime-core' {
@@ -74,6 +75,7 @@ appAxiosInstance.interceptors.response.use(function (response) {
     isRefreshing = true;
 
     const refreshToken = await loadStorage<string>(AppAuthRefeshTokenKey);
+    originalRequest.baseURL = getAppConfig<string>('apiBaseUrl');
     return new Promise(function (resolve, reject) {
       appAxiosInstance.post('/api/auth/refreshToken', {
         refreshToken: {
