@@ -1,3 +1,4 @@
+import { JwtStatus } from '@/types/Common';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
 export const decodeJWT = (token: string): Promise<JwtPayload | null> => {
     return new Promise((resolve) => {
@@ -38,5 +39,27 @@ export const getRefreshTokenTimeout = async (token: string): Promise<number> => 
             resolve(timeout);
         }
         resolve(0);
+    });
+};
+
+export const getTokenStatus = async (token: string): Promise<JwtStatus> => {
+    return new Promise(async (resolve) => {
+        try {
+            const decodeToken = await decodeJWT(token);
+            if (decodeToken && decodeToken.exp) {
+                // Get the current time in seconds since the epoch
+                const currentTime = Math.floor(Date.now() / 1000);
+                // Check if the token is expired
+                if (decodeToken && currentTime > decodeToken.exp) {
+                    resolve('EXPIRED');
+                } else {
+                    resolve('VALID');
+                }
+            } else {
+                resolve('NO_EXPIRATION_TIME');
+            }
+        } catch (err) {
+            resolve('INVALID');
+        }
     });
 };

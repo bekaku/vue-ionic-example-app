@@ -68,7 +68,7 @@ export type IAlert =
   | 'is-light';
 export type IHrefTarget = '_blank' | '_parent' | '_self' | '_top';
 export type ImgRatioType = '1' | '16/9' | '4/3';
-
+export type JwtStatus = 'VALID' | 'EXPIRED' | 'NO_EXPIRATION_TIME' | 'INVALID';
 // interface
 export interface ILocales {
   name: string;

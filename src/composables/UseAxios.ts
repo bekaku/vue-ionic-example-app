@@ -90,9 +90,9 @@ export const useAxios = () => {
   };
   const callAxiosProcess = <T>(req: RequestType, logDev: boolean = true): Promise<AxiosResponse<T>> => {
     return new Promise(async (resolve /*reject*/) => {
-      const jwtKey = await loadStorage<string>(AppAuthTokenKey);
+      // const jwtKey = await loadStorage<string>(AppAuthTokenKey);
       // $appAxios.defaults.headers['Accept-Language'] = await loadStorage<string>(LocaleKey);
-      $appAxios.defaults.headers.Authorization = `Bearer ${jwtKey}`;
+      // $appAxios.defaults.headers.Authorization = `Bearer ${jwtKey}`;
 
       if (req.baseURL != undefined) {
         $appAxios.defaults.baseURL = req.baseURL;
@@ -128,9 +128,8 @@ export const useAxios = () => {
 
             console.error(`api ${$appAxios.defaults.baseURL}${req.API}`, req, error);
           }
-          const errResponse = error?.response;
-          if (errResponse && errResponse.status) {
-            if (errResponse.status != 401 && errResponse.status != 403) {
+          if (error?.response && error?.response?.status) {
+            if (error.response.status != 401 && error.response.status != 403) {
               showErrorToast(error);
             }
           }
