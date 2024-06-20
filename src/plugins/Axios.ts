@@ -27,11 +27,11 @@ const appAxiosInstance = axios.create({
   // validateStatus: (status) => status <= 500 // Resolve only if the status code is less than 500
 });
 appAxiosInstance.interceptors.request.use(async (config) => {
-  let jwtKey = await loadStorage<string>(AppAuthTokenKey);
+  // let jwtKey = await loadStorage<string>(AppAuthTokenKey);
   config.headers['Accept-Language'] = await loadStorage<string>(LocaleKey);
-  if (jwtKey) {
-    config.headers.Authorization = `Bearer ${jwtKey}`;
-  }
+  // if (jwtKey) {
+  //   config.headers.Authorization = `Bearer ${jwtKey}`;
+  // }
   return config;
 }, error => {
   return Promise.reject(error);
