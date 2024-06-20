@@ -44,22 +44,25 @@ export const getRefreshTokenTimeout = async (token: string): Promise<number> => 
 
 export const getTokenStatus = async (token: string): Promise<JwtStatus> => {
     return new Promise(async (resolve) => {
-        try {
-            const decodeToken = await decodeJWT(token);
-            if (decodeToken && decodeToken.exp) {
-                // Get the current time in seconds since the epoch
-                const currentTime = Math.floor(Date.now() / 1000);
-                // Check if the token is expired
-                if (decodeToken && currentTime > decodeToken.exp) {
-                    resolve('EXPIRED');
-                } else {
-                    resolve('VALID');
-                }
-            } else {
-                resolve('NO_EXPIRATION_TIME');
-            }
-        } catch (err) {
-            resolve('INVALID');
+      try {
+        const decodeToken = await decodeJWT(token);
+        if (decodeToken && decodeToken.exp) {
+          // Get the current time in seconds since the epoch
+          // const currentTime = Math.floor(Date.now() / 1000);
+          const currentTime = new Date().getTime()+3000;//add 3 more seconds in case not expired when fetch new data from server
+          const expirationTime = decodeToken.exp * 1000; // Convert to milliseconds
+          // Check if the token is expired
+          if (decodeToken && currentTime > expirationTime) {
+          // if (decodeToken && currentTime > decodeToken.exp) {
+            resolve('EXPIRED');
+          } else {
+            resolve('VALID');
+          }
+        } else {
+          resolve('NO_EXPIRATION_TIME');
         }
+      } catch (err) {
+        resolve('INVALID');
+      }
     });
-};
+  };
