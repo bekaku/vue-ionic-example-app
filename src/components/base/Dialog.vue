@@ -45,6 +45,18 @@
   </ion-modal>
 </template>
 <script setup lang="ts">
+/*
+    <base-dialog
+    v-if="showMarkdownHelp"
+    :model-value="showMarkdownHelp"
+    @on-close="showMarkdownHelp = false"
+    content-padding
+    :title="t('base.photo')"
+  >
+    showMarkdownHelp
+
+  </base-dialog>
+ */
 import { closeOutline } from 'ionicons/icons';
 import { computed, defineAsyncComponent } from 'vue';
 import {

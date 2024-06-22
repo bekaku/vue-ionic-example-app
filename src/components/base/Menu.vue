@@ -15,12 +15,6 @@
           :item="item"
           @on-select="onSelect"
         >
-          <template
-            v-if="item.iconSs && item.iconSs == 'satisfactionBtn'"
-            #start
-          >
-            <SatisfactionBtnIcon slot="start" />
-          </template>
         </menu-item>
         <slot name="extraItem"></slot>
       </ion-list>
@@ -39,9 +33,6 @@ import {
 } from '@ionic/vue';
 import { ellipsisVertical } from 'ionicons/icons';
 import MenuItem from '@/components/MenuItem.vue';
-const SatisfactionBtnIcon = defineAsyncComponent(
-  () => import('@/components/icon/SatisfactionBtnIcon.vue'),
-);
 defineProps({
   icon: {
     type: String,

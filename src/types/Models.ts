@@ -21,6 +21,9 @@ export interface LabelValue<Type> {
   label: string;
   value: Type;
   description?: string;
+  avatar?: string;
+  icon?: string;
+  fetch?: boolean;
 }
 export interface ApiListResponse<Type> {
   totalPages: number;

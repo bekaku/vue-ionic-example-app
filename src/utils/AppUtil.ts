@@ -1,4 +1,4 @@
-import { AppException, IHrefTarget, ISortModeType, ResponseMessage, ServerException } from '@/types/Common';
+import { AppException, IApiListResponse, IHrefTarget, ISortModeType, ResponseMessage, ServerException } from '@/types/Common';
 import { config } from '@/utils/Constant';
 import { clearStorage } from '@/utils/StorageUtil';
 import { Device } from '@capacitor/device';
@@ -18,6 +18,17 @@ export const validateEmail = (email: string) => {
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
+};
+export const isArray = (value: any): boolean => {
+  return Array.isArray(value);
+};
+export const isListResponse = (obj: any): obj is IApiListResponse => {
+  return (obj &&
+    obj.dataList !== undefined &&
+    obj.last !== undefined &&
+    obj.totalElements !== undefined &&
+    obj.totalPages !== undefined
+  );
 };
 export const isAppException = (obj: any): obj is AppException => {
   return (

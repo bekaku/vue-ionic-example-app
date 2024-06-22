@@ -23,14 +23,21 @@
         ></ion-searchbar>
       </ion-toolbar>
     </ion-header>
-    <ion-content :scrollY="true" class="ion-padding">
-      <ion-list id="base-option-list" :inset="true">
+    <ion-content :scrollY="true">
+      <ion-list id="base-option-list" :inset="false">
         <template v-if="filteredItems.length > 0">
           <ion-item
             v-for="item in filteredItems"
             :key="item.value"
             class="ion-text-wrap"
           >
+            <base-avatar
+              slot="start"
+              v-if="item.avatar"
+              :src="item.avatar"
+              :fetch-image="fecthImage"
+            />
+
             <template v-if="item.description">
               <ion-label>
                 <ion-checkbox
@@ -70,52 +77,44 @@
   </ion-modal>
 </template>
 <script setup lang="ts">
-import { computed, defineAsyncComponent, PropType, ref } from 'vue';
+import { defineAsyncComponent, ref } from 'vue';
 import { LabelValue } from '@/types/Models';
-import { close } from 'ionicons/icons';
 import { useLang } from '@/composables/UseLang';
-import { useBase } from '@/composables/UseBase';
+import type { CheckboxCustomEvent, SearchbarCustomEvent } from '@ionic/vue';
 import {
-  IonModal,
+  IonButton,
+  IonButtons,
+  IonCheckbox,
   IonContent,
   IonHeader,
-  IonTitle,
-  IonButtons,
-  IonButton,
-  IonIcon,
-  IonCheckbox,
   IonItem,
-  IonList,
-  IonSearchbar,
-  IonToolbar,
   IonLabel,
+  IonList,
+  IonModal,
+  IonSearchbar,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/vue';
-import type { CheckboxCustomEvent, SearchbarCustomEvent } from '@ionic/vue';
+import BaseAvatar from '@/components/base/BaseAvatar.vue';
+
 const BaseToolbar = defineAsyncComponent(
   () => import('@/components/base/Toolbar.vue'),
 );
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    require: true,
+const props = withDefaults(
+  defineProps<{
+    multiple?: boolean;
+    fecthImage?: boolean;
+    items?: LabelValue<any>[];
+    selectedItems: any[];
+    title?: string;
+  }>(),
+  {
+    multiple: true,
+    fecthImage: true,
+    items: () => [],
+    title: 'Select Items',
   },
-  multiple: {
-    type: Boolean,
-    require: true,
-  },
-  items: {
-    type: Array as PropType<LabelValue<any>[]>,
-    default: () => [],
-  },
-  selectedItems: {
-    type: Array as PropType<any[]>,
-    default: () => [],
-  },
-  title: {
-    type: String,
-    default: 'Select Items',
-  },
-});
+);
 const { t } = useLang();
 const emit = defineEmits([
   'on-close',
@@ -125,10 +124,7 @@ const emit = defineEmits([
 ]);
 const filteredItems = ref<LabelValue<any>[]>([...props.items]);
 const workingSelectedValues = ref<any[]>([...props.selectedItems]);
-const show = computed({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val),
-});
+const show = defineModel('show', { type: Boolean, default: false });
 
 const onClose = () => {
   emit('on-close');

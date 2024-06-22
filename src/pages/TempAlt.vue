@@ -1,49 +1,36 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <base-toolbar>
-        <ion-buttons slot="start">
-          <base-back-button
-            text=""
-            default-href="/tabs/home"
-          ></base-back-button>
-        </ion-buttons>
-        <ion-title> {{ t('themeLeaderApproved') }}</ion-title>
-      </base-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true" :scroll-y="true">
-      <ion-list>
-        <ion-item lines="none">
-          <ion-label>
-            <h2 class="text-muted">{{ t('base.mode') }}</h2>
-          </ion-label>
-        </ion-item>
-        <ion-item
-          lines="none"
-          v-for="theme in availableThemes"
-          :key="theme.key"
-          @click="langugeAndThemeStore.setThemeSetting(theme.key)"
-        >
-          <ion-label>{{ t(theme.text) }}</ion-label>
-          <ion-icon
-            v-if="theme.key == langugeAndThemeStore.themeSetting"
-            slot="end"
-            color="primary"
-            :icon="checkmarkCircle"
-          ></ion-icon>
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-page>
+  <base-layout
+    :page-title="t('nav.chats')"
+    fullscreen
+    :content-padding="false"
+    show-back-link
+  >
+    <template v-slot:actions-end>
+      <ion-buttons>
+        <BaseMenu :items="myMenuItems"></BaseMenu>
+      </ion-buttons>
+    </template>
+    <ion-searchbar
+      animated
+      :placeholder="t('base.search') + ' ' + t('nav.chats')"
+      :debounce="250"
+    ></ion-searchbar>
+
+    <base-result
+      :icon-size-alt="32"
+      :show-icon="true"
+      status="empty"
+      full-height
+    >
+    </base-result>
+
+  </base-layout>
 </template>
 <script setup lang="ts">
-import { useLangugeAndThemeStore } from '@/stores/LangugeAndThemeStore';
-import { availableThemes } from '@/utils/ThemeUtil';
-import { checkmarkCircle } from 'ionicons/icons';
+import { computed, ref } from 'vue';
+import { addOutline, funnelOutline, searchOutline } from 'ionicons/icons';
 import { useLang } from '@/composables/UseLang';
 import { useBase } from '@/composables/UseBase';
-import BaseToolbar from '@/components/base/Toolbar.vue';
-import BaseBackButton from '@/components/base/BackButton.vue';
 import {
   IonPage,
   IonRow,
@@ -97,8 +84,37 @@ import {
   IonTabs,
   IonTabBar,
   IonTabButton,
+  IonFab,
+  IonFabButton
 } from '@ionic/vue';
-const langugeAndThemeStore = useLangugeAndThemeStore();
+import BaseLayout from '@/components/base/Layout.vue';
+import BaseResult from '@/components/base/Result.vue';
+import BaseMenu from '@/components/base/Menu.vue';
+import { IMenuItem } from '@/types/Models';
+
+const { WeeGoTo } = useBase();
 const { t } = useLang();
-const { onBack } = useBase();
+const myMenuItems: IMenuItem[] = [
+  {
+    id: 0,
+    title: 'base.search',
+    i18n: true,
+    icon: searchOutline,
+    iconType: 'ion'
+  },
+  {
+    id: 1,
+    title: 'sort.sort',
+    i18n: true,
+    icon: funnelOutline,
+    iconType: 'ion'
+  },
+  {
+    id: 2,
+    title: 'base.addNew',
+    i18n: true,
+    icon: addOutline,
+    iconType: 'ion'
+  }
+];
 </script>

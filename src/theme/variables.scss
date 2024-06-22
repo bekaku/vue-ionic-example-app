@@ -93,6 +93,7 @@ http://ionicframework.com/docs/theming/ */
   // --second-bg-color-theme-dark: #1c1c1d;
   --app-bg-color-theme-dark: #1d232a;
   --second-bg-color-theme-dark: #242b34;
+  --third-bg-color-theme-dark: #161b20;
 
   --app-border-color: #e9e9ec;
   --app-border-color-theme-dark: #394552;
@@ -109,6 +110,8 @@ http://ionicframework.com/docs/theming/ */
   --app-segment-background-dark: #323c48;
   --app-segment-button-selected-dark: var(--app-bg-color-theme-dark);
   --app-segment-button-selected-text-dark: var(--ion-color-primary);
+  --app-input-backgroud: #f8f9fc;
+  --app-input-backgroud-dark: var(--app-bg-color-theme-dark);
 
 
   --v-text-muted: #687782;
@@ -173,6 +176,37 @@ http://ionicframework.com/docs/theming/ */
 
   ion-segment-button::part(indicator-background) {
     border-radius: 20px;
+  }
+
+  ion-textarea,
+  ion-input {
+    --background: var(--app-input-backgroud);
+    --border-radius: 10px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    margin: 5px 0;
+    //border: 1px solid var(--border-light-color);
+    //border-radius: 10px;
+  }
+
+  ion-radio {
+    --border-radius: 4px;
+    --inner-border-radius: 4px;
+
+    --color: #ddd;
+    --color-checked: var(--ion-color-primary);
+  }
+
+  ion-radio.ios::part(container) {
+    width: 20px;
+    height: 20px;
+
+    border: 2px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .radio-checked.ios::part(container) {
+    border-color: var(--ion-color-primary);
   }
 }
 
@@ -286,6 +320,7 @@ body[color-theme='dark'] {
   --ion-text-color-rgb: 255, 255, 255;
 
   --ion-card-color: var(--v-main-text-body-theme-dark);
+  --app-input-backgroud: var(--app-input-backgroud-dark);
 
   /* Chat  */
   --wee-messenger-left-msg-bg: #2d2d2e;
@@ -333,6 +368,9 @@ body[color-theme='dark'] {
     --color: var(--v-text-muted-dark);
   }
 
+  ion-label p {
+    color: var(--v-text-muted-dark);
+  }
 }
 
 /*

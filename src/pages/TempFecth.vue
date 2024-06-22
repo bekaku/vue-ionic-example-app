@@ -53,8 +53,8 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import RewardTradeService from '@/api/RewardTradeService';
-import { RewardTrade } from '@/types/Models';
+import PermissionService from '@/api/PermissionService';
+import { Permission } from '@/types/Models';
 import { useLang } from '@/composables/UseLang';
 import { usePaging } from '@/composables/UsePaging';
 import { useSort } from '@/composables/UseSort';
@@ -130,12 +130,12 @@ const { sort, sortMode } = useSort({
   column: 'quantity',
   mode: 'desc',
 });
-const { myTradeHistoryList } = RewardTradeService();
+const { findAll } = PermissionService();
 const isInfiniteDisabled = ref(false);
 const fristLoaded = ref(false);
 const loading = ref(false);
 
-const items = ref<RewardTrade[]>([]);
+const items = ref<Permission[]>([]);
 const pageParam = computed(
   () =>
     `?page=${pages.value.current > 0 ? pages.value.current - 1 : 0}&size=${
@@ -159,7 +159,7 @@ const doRefresh = async (event: any) => {
   }
 };
 const loadData = async () => {
-  const res = await myTradeHistoryList(pageParam.value);
+  const res = await findAll(pageParam.value);
   if (res) {
     items.value.push(...res.dataList);
     if (res.last || res.totalElements == 0) {

@@ -32,16 +32,16 @@
 </template>
 <script setup lang="ts">
 /*
-    <lazy-base-modal
+    <base-modal
       v-if="show"
       :model-value="show"
       :title="t('base.chooseFromFile')"
       :initial-breakpoint="0.25"
-      :breakpoints="[0, 0.25]"
+      :breakpoints="[0, 0.25, 0.5,0.7,1]"
       @update:modelValue="(newVal : boolean) => show=newVal"
       @on-close="show = false"
     >
-    </lazy-base-modal>
+    </base-modal>
   */
 import { computed, defineAsyncComponent, PropType } from 'vue';
 import { close } from 'ionicons/icons';

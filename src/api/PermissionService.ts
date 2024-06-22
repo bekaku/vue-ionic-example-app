@@ -1,5 +1,5 @@
 import { useAxios } from '@/composables/UseAxios';
-import { IAcl } from '@/types/Models';
+import { ApiListResponse, IAcl, Permission } from '@/types/Models';
 export default () => {
   const { callAxiosV2 } = useAxios();
   const userAcl = async (getMenuList: number = 0): Promise<IAcl | null> => {
@@ -8,8 +8,14 @@ export default () => {
       method: 'GET'
     });
   };
-
+  const findAll = async (q: string): Promise<ApiListResponse<Permission> | null> => {
+    return await callAxiosV2<ApiListResponse<Permission>>({
+      API: `/api/permission${q}`,
+      method: 'GET'
+    });
+  };
   return {
-    userAcl
+    userAcl,
+    findAll
   };
 };

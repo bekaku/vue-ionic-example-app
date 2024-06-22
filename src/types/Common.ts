@@ -208,6 +208,13 @@ export interface CrudListApiOptions {
   defaultSort?: ISort;
   itemsPerPage?: number;
   fetchListOnload?: boolean;
+  pageAble?: boolean;
+  pageStartZero?: boolean;
+  sortAble?: boolean;
+  concatList?: boolean;
+}
+export interface ICrudListApiOptions extends CrudListApiOptions {
+  urlEndpoint: string;
 }
 
 export interface CrudFormApiOptions {

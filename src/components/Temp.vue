@@ -3,7 +3,19 @@
 </template>
 <script setup lang="ts">
 import { computed, PropType } from 'vue';
-import { Hashtag } from '@/types/Models';
+
+const props = withDefaults(
+  defineProps<{
+    height?: number;
+    autofocus?: boolean;
+  }>(),
+  {
+    height: 450,
+    autofocus: false,
+  },
+);
+
+/*
 const props = defineProps({
   modelValue: {
     type: String,
@@ -13,7 +25,6 @@ const props = defineProps({
     default: () => [],
   },
 });
-/*
 interface Props {
   modelValue: string;
   overlay?: boolean;
@@ -56,17 +67,18 @@ const emit = defineEmits<{
 
 
 */
-// const emit = defineEmits(['update:modelValue']);
 
 // <comp-use-model v-model="testModel" v-model:count="count"></comp-use-model>
-// const modelValue = defineModel<number>();
+const modelValue = defineModel<number>();
 // const count = defineModel('count', { type: Number, default: 0 });
 //const count = defineModel('count');
+
+// const emit = defineEmits(['update:modelValue']);
 const emit = defineEmits<{
   'update:modelValue': [val: string | undefined];
 }>();
-const year = computed({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val),
-});
+// const year = computed({
+//   get: () => props.modelValue,
+//   set: (val) => emit('update:modelValue', val),
+// });
 </script>
