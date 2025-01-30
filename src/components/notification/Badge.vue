@@ -14,7 +14,8 @@
 <script setup lang="ts">
 import { IonBadge, IonButton, IonIcon } from '@ionic/vue';
 import { notificationsOutline } from 'ionicons/icons';
-import { computed, PropType } from 'vue';
+import type { PropType } from 'vue';
+import { computed } from 'vue';
 const props = defineProps({
   no: {
     type: Number as PropType<string | number>,

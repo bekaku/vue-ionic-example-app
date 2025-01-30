@@ -1,13 +1,17 @@
 <template>
-  <ion-row>
+  <ion-row v-if="modelValue">
     <ion-col>
+      <ion-item v-if="showClose" :detail="false" button>
+        <ion-button slot="end" shape="round" :color="!isDark ? 'light' : 'dark'" @click="$emit('on-close')">
+          <ion-icon slot="icon-only" :icon="closeOutline"></ion-icon>
+        </ion-button>
+      </ion-item>
       <ion-item :detail="false" button>
         <ion-select
           :label="t('sort.by')"
           interface="action-sheet"
-          v-model="sort.column"
+          v-model="modelValue.column"
           :cancel-text="t('base.cancel')"
-          @ion-change="onSortColumn"
         >
           <ion-select-option
             v-for="(item, index) in fields"
@@ -22,9 +26,8 @@
         <ion-select
           :label="t('sort.sort')"
           interface="action-sheet"
-          v-model="sort.mode"
+          v-model="modelValue.mode"
           :cancel-text="t('base.cancel')"
-          @ion-change="onSortMode"
         >
           <ion-select-option
             v-for="(item, index) in sortMode"
@@ -42,49 +45,32 @@
 <script setup lang="ts">
 import { useLang } from '@/composables/UseLang';
 import { useSort } from '@/composables/UseSort';
-import { ISort } from '@/types/Common';
-import { LabelValue } from '@/types/Models';
-import {
-  IonCol,
-  IonItem,
-  IonRow,
-  IonSelect,
-  IonSelectOption,
-} from '@ionic/vue';
+import { useTheme } from '@/composables/UseTheme';
+import type { ISort, LabelValue } from '@/types/Common';
+import { IonButton, IonCol, IonIcon, IonItem, IonRow, IonSelect, IonSelectOption } from '@ionic/vue';
 import { biFunnel } from '@quasar/extras/bootstrap-icons';
-import { PropType } from 'vue';
-const props = defineProps({
-  fields: {
-    type: Array as PropType<LabelValue<string>[]>,
-    default: () => [],
-  },
-  sort: {
-    type: Object as PropType<ISort>,
-    default: null,
-  },
-  icon: {
-    type: String,
-    default: biFunnel,
-  },
-  label: {
-    type: String,
-    default: undefined,
-  },
-  width: {
-    type: Number,
-    default: 200,
-  },
-  listDense: {
-    type: Boolean,
-    default: true,
-  },
-  btnRound: {
-    type: Boolean,
-    default: true,
-  },
+import { closeOutline } from 'ionicons/icons';
+
+withDefaults(defineProps<{
+  fields: LabelValue<string>[]
+  icon?: string
+  label?: string
+  width?: number
+  listDense?: boolean
+  btnRound?: boolean
+  showClose?: boolean
+}>(), {
+  icon: biFunnel,
+  autofocus: false,
+  width: 200,
+  boolean: true,
+  btnRound: true,
+  showClose: false
 });
-const emit = defineEmits(['on-sort-column', 'on-sort-mode']);
+const emit = defineEmits(['on-sort-column', 'on-sort-mode', 'on-close']);
+const modelValue = defineModel<ISort>();
 const { t } = useLang();
+const { isDark } = useTheme();
 const { sortMode } = useSort();
 const onSortColumn = (ev: any) => {
   if (ev && ev.detail) {

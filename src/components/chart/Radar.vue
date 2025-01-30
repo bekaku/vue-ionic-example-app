@@ -35,16 +35,17 @@
           >
           </chart-radar>
   */
-import { PropType, ref, watchEffect, onUnmounted, onMounted, watch } from 'vue';
-import {
-  PieChartType,
+import { useTheme } from '@/composables/UseTheme';
+import type {
   ChartMode,
   ChartThemePalete,
-  Strokestyle,
+  PieChartType,
   Position,
+  Strokestyle,
 } from '@/types/Chart';
+import type { PropType } from 'vue';
+import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
-import { useBase } from '@/composables/UseBase';
 const props = defineProps({
   modelValue: Object,
   chartId: {
@@ -77,7 +78,7 @@ const props = defineProps({
   },
   type: {
     type: String as PropType<PieChartType>,
-    default: 'area', //area , line , bar
+    default: 'area', // area , line , bar
   },
   mode: {
     type: String as PropType<ChartMode>,
@@ -134,12 +135,12 @@ const props = defineProps({
   },
   strokestyle: {
     type: String as PropType<Strokestyle>,
-    default: 'smooth', //smooth, straight, stepline
+    default: 'smooth', // smooth, straight, stepline
   },
 });
 const chartSeries = ref(props.series);
 const options = ref<any>();
-const { isDark } = useBase();
+const { isDark } = useTheme();
 watchEffect(() => {
   if (props.series && props.series.length > 0) {
     chartSeries.value = props.series;

@@ -5,7 +5,7 @@
     :content-padding="false"
     show-back-link
   >
-    <template v-slot:actions-end>
+    <template #actions-end>
       <ion-buttons>
         <BaseMenu :items="myMenuItems"></BaseMenu>
       </ion-buttons>
@@ -23,8 +23,7 @@
       full-height
     >
     </base-result>
-
-  </base-layout>
+</base-layout>
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
@@ -87,10 +86,10 @@ import {
   IonFab,
   IonFabButton
 } from '@ionic/vue';
-import BaseLayout from '@/components/base/Layout.vue';
+import BaseLayout from '@/components/base/BaseLayout.vue';
 import BaseResult from '@/components/base/Result.vue';
 import BaseMenu from '@/components/base/Menu.vue';
-import { IMenuItem } from '@/types/Models';
+import type { IMenuItem } from '@/types/Models';
 
 const { WeeGoTo } = useBase();
 const { t } = useLang();

@@ -1,12 +1,10 @@
 import { useAxios, } from '@/composables/UseAxios';
-import { ResponseMessage } from '@/types/Common';
-import {
+import type { AppLocale, ResponseMessage } from '@/types/Common';
+import type {
   AccessTokenDto,
-  AppLocale,
   UserChangePasswordRequest,
   UserDto,
-  UserPersonalEditRequest,
-  UserProfileDto
+  UserPersonalEditRequest
 } from '@/types/Models';
 
 export default () => {
@@ -35,7 +33,7 @@ export default () => {
   };
   const updateDefaultLocale = async (locale: AppLocale): Promise<UserDto | null> => {
     return await callAxiosV2<UserDto>({
-      API: `/api/user/updateDefaultLocale/?locale=${locale}`,
+      API: `/api/user/updateDefaultLocale?locale=${locale}`,
       method: 'PUT'
     });
   };
@@ -89,7 +87,6 @@ export default () => {
       API: '/api/user/findAllUserActiveByUserAuth',
       method: 'GET'
     });
-
   };
   return {
     getUserSessionData,

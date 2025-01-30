@@ -1,109 +1,112 @@
-import { useAppStorage } from '@/composables/UseAppStorage';
-import { CacheDateAndKey } from '@/types/Common';
-import {
-  NotificationCount
-} from '@/types/Models';
+import type { CacheDateAndKey } from '@/types/Common';
 import { isObjectEmpty } from '@/utils/AppUtil';
 import {
   CacheDateCheckKey,
-  CacheKey,
-  FcmTokenKey,
-  LatestDeviceActiveKey,
-  NotifyKey,
-  RefreshTokenProcessAtt
+  NotifyKey
 } from '@/utils/Constant';
 import { getDateNow, getMonthNow, getYearNow } from '@/utils/DateUtil';
-import { removeStorage } from '@/utils/StorageUtil';
+import { loadStorage, removeStorage, saveStorage } from '@/utils/StorageUtil';
 
 export const useCache = () => {
-  const { storage: latestDeviceActive } = useAppStorage<number>(LatestDeviceActiveKey, 0, false);
-  const { storage: refreshTokenProcessing } = useAppStorage<boolean>(RefreshTokenProcessAtt, false, false);
-  const { storage: cacheKeyCheckList } = useAppStorage<CacheDateAndKey[]>(CacheDateCheckKey, []);
-  const { storage: fcmSetting } = useAppStorage<boolean>(CacheKey.FCM_SETTING, true, false);
-  const { storage: fcmToken } = useAppStorage<string>(FcmTokenKey, '', false);
-  const { storage: cacheNotifyCount } = useAppStorage<NotificationCount>(NotifyKey, { lastestId: 0, totalNotify: 0 });
-
-  const findByKey = (k: string): CacheDateAndKey | undefined => {
-    if (cacheKeyCheckList.value && cacheKeyCheckList.value.length > 0) {
-      return cacheKeyCheckList.value.find((e: CacheDateAndKey) => e.key == k);
+  const getCacheKeyList = async (): Promise<CacheDateAndKey[]> => {
+    const cacheKeyCheckList = await loadStorage<CacheDateAndKey[]>(CacheDateCheckKey, true);
+    if (cacheKeyCheckList && cacheKeyCheckList.length > 0) {
+      return new Promise(resolve => resolve(cacheKeyCheckList));
     }
-    return undefined;
+    return new Promise(resolve => resolve([]));
   };
-  const findIndexByKey = (k: string): number => {
-    if (!cacheKeyCheckList.value) {
-      return -1;
+  const saveCacheKeyList = async (items: CacheDateAndKey[]) => {
+    await saveStorage(CacheDateCheckKey, items, true);
+  }
+  const findByKey = async (k: string): Promise<CacheDateAndKey | undefined> => {
+    const cacheKeyCheckList = await getCacheKeyList();
+    if (cacheKeyCheckList && cacheKeyCheckList.length > 0) {
+      const items = cacheKeyCheckList.find((e: CacheDateAndKey) => e.key == k)
+      return new Promise(resolve => resolve(items));
     }
-    return cacheKeyCheckList.value.findIndex(
-      (e: CacheDateAndKey) => e.key == k
-    );
+    return new Promise(resolve => resolve(undefined));
+  };
+  const findIndexByKey = async (k: string): Promise<number> => {
+    const cacheKeyCheckList = await getCacheKeyList();
+    if (cacheKeyCheckList.length == 0) {
+      return new Promise(resolve => resolve(-1));
+    }
+    const items = cacheKeyCheckList.findIndex((e: CacheDateAndKey) => e.key == k)
+    return new Promise(resolve => resolve(items));
   };
 
-  const onRemoveKey = (k: string): void => {
-    const index = findIndexByKey(k);
+  const onRemoveKey = async (k: string): Promise<void> => {
+    const index = await findIndexByKey(k);
     if (index >= 0) {
-      cacheKeyCheckList.value.splice(index, 1);
+      const cacheKeyCheckList = await getCacheKeyList();
+      cacheKeyCheckList.splice(index, 1);
+      await saveCacheKeyList(cacheKeyCheckList);
     }
   };
-  const onAddNewKey = (k: string): void => {
-    const item = findByKey(k);
-    if (!cacheKeyCheckList.value) {
-      cacheKeyCheckList.value = [];
+  const onAddNewKey = async (k: string): Promise<void> => {
+    const item = await findByKey(k);
+    let cacheKeyCheckList = await getCacheKeyList();
+    if (!cacheKeyCheckList) {
+      cacheKeyCheckList = [];
     }
     if (!item) {
       const d = getDateNow();
-      cacheKeyCheckList.value.push({
+      cacheKeyCheckList.push({
         key: k,
         date: d.toLocaleDateString()
       });
+      await saveCacheKeyList(cacheKeyCheckList);
     }
   };
-  const onUpdateKey = (
+  const onUpdateKey = async (
     k: string,
     period: 'DAY' | 'MONTH' | 'YEAR' = 'DAY'
-  ): void => {
-    onRemoveKey(k);
+  ): Promise<void> => {
+    await onRemoveKey(k);
     if (period == 'DAY') {
-      onAddNewKey(k);
+      await onAddNewKey(k);
     } else if (period == 'YEAR') {
-      onAddNewYearKey(k);
+      await onAddNewYearKey(k);
     }
   };
-  const canFecthToServerToday = (k: string): boolean => {
-    const item = findByKey(k);
+  const canFecthToServerToday = async (k: string): Promise<boolean> => {
+    const item = await findByKey(k);
     if (!item) {
       return true;
     }
 
     const d = getDateNow();
-    return item.date != d.toLocaleDateString();
+    return new Promise(resolve => resolve(item.date != d.toLocaleDateString()));
   };
-  const canFecthToServerMonth = (k: string): boolean => {
-    const item = findByKey(k);
+  const canFecthToServerMonth = async (k: string): Promise<boolean> => {
+    const item = await findByKey(k);
     if (!item) {
       return true;
     }
     const m = getMonthNow();
-    return item.date != m;
+    return new Promise(resolve => resolve(item.date != m));
   };
-  const canFecthToServerYear = (k: string): boolean => {
-    const item = findByKey(k);
+  const canFecthToServerYear = async (k: string): Promise<boolean> => {
+    const item = await findByKey(k);
     if (!item) {
-      return true;
+      return new Promise(resolve => resolve(true));
     }
     const y = getYearNow();
-    return item.date != y;
+    return new Promise(resolve => resolve(item.date != y));
   };
-  const onAddNewYearKey = (k: string): void => {
-    const item = findByKey(k);
+  const onAddNewYearKey = async (k: string): Promise<void> => {
+    const item = await findByKey(k);
     if (!item) {
-      cacheKeyCheckList.value.push({
+      const cacheKeyCheckList = await getCacheKeyList();
+      cacheKeyCheckList.push({
         key: k,
         date: getYearNow()
       });
+      await saveCacheKeyList(cacheKeyCheckList);
     }
   };
   const destroyCache = async () => {
-    cacheKeyCheckList.value = [];
+    await removeStorage(CacheDateCheckKey);
     return new Promise((resolve) => {
       resolve(true);
     });
@@ -134,14 +137,9 @@ export const useCache = () => {
     destroyCache,
     canFecthToServerToday,
     canFecthToServerYear,
-    fcmSetting,
-    fcmToken,
-    cacheNotifyCount,
     logoutClear,
-    latestDeviceActive,
     fetchFromCacheToday,
     fetchFromCacheMonth,
     fetchFromCacheList,
-    refreshTokenProcessing
   };
 };

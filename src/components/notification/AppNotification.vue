@@ -5,13 +5,13 @@
   ></notification-badge>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted, watch } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useNotificationStore } from '@/stores/NotificationStore';
-import { useDeviceStore } from '@/stores/DeviceStore';
+import NotificationBadge from '@/components/notification/Badge.vue';
 import { useBase } from '@/composables/UseBase';
 import { useNotification } from '@/composables/UseNotification';
-import NotificationBadge from '@/components/notification/Badge.vue';
+import { useDeviceStore } from '@/stores/DeviceStore';
+import { useNotificationStore } from '@/stores/NotificationStore';
+import { storeToRefs } from 'pinia';
+import { onMounted, watch } from 'vue';
 const deviceStore = useDeviceStore();
 const { isActive } = storeToRefs(deviceStore);
 

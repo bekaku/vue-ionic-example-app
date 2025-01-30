@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T">
-import { ISortMode, ILabelValue } from '@/types/Common';
-import { LabelValue } from '@/types/Models';
+import type { ISortMode } from '@/types/Common';
+import type { LabelValue } from '@/types/Models';
 /*
 import TempComp from '@/components/test/TempComp.vue';
 const textVal = ref();
@@ -9,20 +9,20 @@ const textVal = ref();
 */
 
 const props = defineProps<{
-  modelValue: string;
-  overlay?: boolean;
-  meta: ISortMode;
-  items: LabelValue<T>[];
+  modelValue: string
+  overlay?: boolean
+  meta: ISortMode
+  items: LabelValue<T>[]
 }>();
-const modelValue = defineModel<string>();
 // const emit = defineEmits<{
 //   (e: 'change', id: number): void
 //   (e: 'update', value: string): void
 // }>()
 const emit = defineEmits<{
-  change: [id: number];
-  update: [value: string];
+  change: [id: number]
+  update: [value: string]
 }>();
+const modelValue = defineModel<string>();
 const onSubmit = () => {
   emit('change', 1);
   emit('update', 'Test');

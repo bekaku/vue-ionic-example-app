@@ -1,9 +1,11 @@
 import { useAxios } from '@/composables/UseAxios';
-import {
+import type {
   NotificationCount,
   RefreshTokenRequest,
-  NotifyFunctionType,
   NotificationDto
+} from '@/types/Models';
+import {
+  NotifyFunctionType
 } from '@/types/Models';
 export default () => {
   const { callAxiosV2 } = useAxios();
@@ -11,7 +13,7 @@ export default () => {
     page: number,
     size: number,
   ): Promise<NotificationDto[] | null> => {
-    return new Promise(async (resolve /*reject*/) => {
+    return new Promise((resolve /* reject */) => {
       resolve([]);
     });
     // return await callAxiosV2<NotificationDto[]>({
@@ -42,8 +44,7 @@ export default () => {
   const findCountAllNotRead = async (
     lastNOtifyId: number
   ): Promise<NotificationCount | null> => {
-
-    return new Promise(async (resolve /*reject*/) => {
+    return new Promise((resolve /* reject */) => {
       resolve(null);
     });
     // return await callAxiosV2<NotificationCount>({
@@ -52,7 +53,7 @@ export default () => {
     // });
   };
   const updateReadNotify = async (notifyId: number): Promise<void | null> => {
-    return new Promise(async (resolve /*reject*/) => {
+    return new Promise((resolve /* reject */) => {
       resolve(null);
     });
     // return await callAxiosV2<void>({
@@ -61,7 +62,7 @@ export default () => {
     // });
   };
   const updateReadNotifyAll = async (): Promise<void | null> => {
-    return new Promise(async (resolve /*reject*/) => {
+    return new Promise((resolve /* reject */) => {
       resolve(null);
     });
     // return await callAxiosV2<void>({

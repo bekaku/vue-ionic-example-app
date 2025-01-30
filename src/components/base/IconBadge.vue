@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
+import type { PropType } from 'vue';
 import { IonButton, IonIcon, IonBadge } from '@ionic/vue';
 defineProps({
   no: {

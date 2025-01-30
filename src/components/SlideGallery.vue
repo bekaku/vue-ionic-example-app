@@ -5,41 +5,22 @@
         style="height: 100vh" -->
   <ion-row class="ion-align-items-center">
     <ion-col class="ion-no-padding">
-      <base-swiper-slides
-        :paramiters="slideOpts"
-        @on-slide-change="onSlideChange"
-      >
+      <base-swiper-slides :paramiters="slideOpts" @on-slide-change="onSlideChange">
         <template v-if="items.length > 0">
           <swiper-slide v-for="(item, index) in items" :key="index">
-            <ion-row
-              class="ion-align-items-center"
-              style="height: 90vh; max-height: 90%"
-            >
+            <ion-row class="ion-align-items-center" style="height: 90vh; max-height: 90%">
               <div class="swiper-zoom-container">
-                <img
-                  class="swiper-zoom-target"
-                  style="width: 100%; height: auto"
-                  :src="item.filePath"
-                />
+                <img class="swiper-zoom-target" style="width: 100%; height: auto" :src="item.filePath" />
               </div>
             </ion-row>
           </swiper-slide>
         </template>
         <template v-else-if="images.length > 0">
           <swiper-slide v-for="(item, index) in images" :key="index">
-            <ion-row
-              class="ion-align-items-center"
-              style="height: 90vh; max-height: 90%"
-              :style="
-                isAppPlatfrom('ios') ? 'height: -webkit-fill-available' : ''
-              "
-            >
+            <ion-row class="ion-align-items-center" style="height: 90vh; max-height: 90%" :style="isAppPlatfrom('ios') ? 'height: -webkit-fill-available' : ''
+              ">
               <div class="swiper-zoom-container">
-                <ion-img
-                  style="width: 100%; height: auto"
-                  class="swiper-zoom-target"
-                  :src="item.image"
-                ></ion-img>
+                <ion-img style="width: 100%; height: auto" class="swiper-zoom-target" :src="item.image"></ion-img>
               </div>
             </ion-row>
           </swiper-slide>
@@ -49,22 +30,15 @@
   </ion-row>
 </template>
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, PropType, ref } from 'vue';
-import { FileManagerDto, ImageDto } from '@/types/Models';
-import {
-  Autoplay,
-  Keyboard,
-  Scrollbar,
-  Zoom,
-  Navigation,
-  Pagination,
-} from 'swiper/modules';
-import { useLangugeAndThemeStore } from '@/stores/LangugeAndThemeStore';
-import { useDevice } from '@/composables/UseDevice';
 import BaseSwiperSlides from '@/components/base/SwiperElementSlides.vue';
+import { useDevice } from '@/composables/UseDevice';
+import type { FileManagerDto, ImageDto } from '@/types/Models';
+import type { PropType } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
-import { IonRow, IonCol, IonImg } from '@ionic/vue';
-import { SlideOptions } from '@/types/Common';
+import { useTheme } from '@/composables/UseTheme';
+import type { SlideOptions } from '@/types/Common';
+import { IonCol, IonImg, IonRow } from '@ionic/vue';
 const props = defineProps({
   items: {
     type: Array as PropType<FileManagerDto[]>,
@@ -79,6 +53,7 @@ const props = defineProps({
     default: 0,
   },
 });
+const emit = defineEmits(['on-slide-change']);
 const slideOpts = ref<SlideOptions>({
   speed: 400,
   slidesPerView: 1,
@@ -88,17 +63,16 @@ const slideOpts = ref<SlideOptions>({
   initialSlide: props.selectedIndex,
   zoom: true,
 });
-const langugeAndThemeStore = useLangugeAndThemeStore();
 const { isAppPlatfrom } = useDevice();
-const currentThemeSetting = ref<string>('');
-const emit = defineEmits(['on-slide-change']);
+const defaultDark = ref<boolean>(false);
+const { isDark, onSetTheme } = useTheme();
 onMounted(() => {
-  currentThemeSetting.value = langugeAndThemeStore.theme;
-  langugeAndThemeStore.setThemeSetting('dark');
+  defaultDark.value = isDark.value;
+  onSetTheme('dark');
 });
 onBeforeUnmount(() => {
-  if (currentThemeSetting.value) {
-    langugeAndThemeStore.setThemeSetting(currentThemeSetting.value);
+  if (!defaultDark.value) {
+    onSetTheme('light');
   }
 });
 

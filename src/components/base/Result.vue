@@ -75,8 +75,8 @@
   </ion-grid>
 </template>
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { IResult, IconSetType } from '@/types/Common';
+import type { PropType } from 'vue';
+import type { IResult, IconSetType } from '@/types/Common';
 import {
   handRightOutline,
   informationCircleOutline,
@@ -93,11 +93,11 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: '', //OH OH! You're lost.
+    default: '', // OH OH! You're lost.
   },
   description: {
     type: String,
-    default: '', //The page you are looking for does not exist.
+    default: '', // The page you are looking for does not exist.
   },
   icon: {
     type: String,
@@ -134,8 +134,8 @@ const props = defineProps({
 });
 const { t } = useLang();
 const getIcon = (): string => {
-  let icon = undefined;
-  //404, 403, 500, 418, info, success, error, warning
+  let icon;
+  // 404, 403, 500, 418, info, success, error, warning
   switch (props.status) {
     case '403':
       icon = handRightOutline;

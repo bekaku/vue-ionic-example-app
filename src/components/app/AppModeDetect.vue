@@ -5,9 +5,9 @@
   </ion-chip>
 </template>
 <script setup lang="ts">
-import {IonChip, IonLabel, IonIcon} from '@ionic/vue'
-import {useConfig} from '@/composables/UseConfig';
-import {bugOutline} from 'ionicons/icons'
+import { IonChip, IonLabel, IonIcon } from '@ionic/vue'
+import { useConfig } from '@/composables/UseConfig';
+import { bugOutline } from 'ionicons/icons'
 
-const {isTestMode, isDevelopMode} = useConfig();
+const { isTestMode, isDevelopMode } = useConfig();
 </script>

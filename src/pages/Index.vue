@@ -38,10 +38,9 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-declare let window: any;
 import { useAuthenStore } from '@/stores/AuthenStore';
 import { defineAsyncComponent, onMounted, ref } from 'vue';
-import { useInitAuthen } from '@/composables/UseInitAuthen';
+import { useInitApp } from '@/composables/useInitApp';
 import { useAuthen } from '@/composables/UseAuthen';
 import { useBase } from '@/composables/UseBase';
 import { useConfig } from '@/composables/UseConfig';
@@ -55,6 +54,7 @@ import {
   IonPage,
 } from '@ionic/vue';
 import { useLang } from '@/composables/UseLang';
+declare let window: any;
 
 const VersionCheck = defineAsyncComponent(
   () => import('@/components/VersionCheck.vue'),
@@ -63,12 +63,12 @@ const BaseResult = defineAsyncComponent(
   () => import('@/components/base/Result.vue'),
 );
 const { t } = useLang();
-const { initAuth } = useInitAuthen();
+const { initAuthen } = useInitApp();
 const { destroyAuthDataAndRedirect } = useAuthen();
 const { WeeGoTo } = useBase();
 const { isDevMode } = useConfig();
-const { checkVersion, appVersion, platForm, haveVersionUpdate, userVersion } =
-  useCheckVersion();
+const { checkVersion, appVersion, platForm, haveVersionUpdate, userVersion }
+  = useCheckVersion();
 const authenStore = useAuthenStore();
 const loading = ref(true);
 const isDeviceRooted = ref(false);
@@ -115,7 +115,7 @@ const checkAuth = async () => {
   let auth = authenStore.auth;
 
   if (!auth) {
-    const initItem = await initAuth();
+    const initItem = await initAuthen();
     if (initItem) {
       auth = initItem;
     }

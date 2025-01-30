@@ -1,15 +1,18 @@
-import { computed, Ref, ref, watch } from 'vue';
+
+/* eslint-disable ts/no-unused-vars */
+import type { Ref } from 'vue';
+import { computed, ref } from 'vue';
 import { usePaging } from '@/composables/UsePaging';
 import { useSort } from '@/composables/UseSort';
-import { ICrudListApiOptions } from '@/types/Common';
+import type { ICrudListApiOptions } from '@/types/Common';
 import { useAxios } from '@/composables/UseAxios';
 import { isAppException, isArray, isEmpty, isListResponse, isServerResponseMessage } from '@/utils/AppUtil';
-import { ApiListResponse } from '@/types/Models';
+import type { ApiListResponse } from '@/types/Models';
 
 export const usePagefecth = <T>(options: ICrudListApiOptions) => {
     const { callAxios } = useAxios();
     const { pages, resetPaging } = usePaging(options?.itemsPerPage ? options.itemsPerPage : 10);
-    const { sort, sortMode } = useSort(options?.defaultSort);
+    const { sort } = useSort(options?.defaultSort);
     const dataList = ref<T[]>([]) as Ref<T[]>;
     const isInfiniteDisabled = ref(false);
     const firstLoaded = ref(false);
@@ -41,7 +44,7 @@ export const usePagefecth = <T>(options: ICrudListApiOptions) => {
         return !isEmpty(q) ? q : undefined;
     });
     const apiEndpoint = computed(
-        () => `${urlEndpoint.value}${queryParam.value ? '?' + queryParam.value : ''}`
+      () => `${urlEndpoint.value}${queryParam.value ? '?' + queryParam.value : ''}`
     );
     const loadData = async () => {
         loading.value = true;
@@ -49,18 +52,15 @@ export const usePagefecth = <T>(options: ICrudListApiOptions) => {
             API: apiEndpoint.value,
             method: 'GET'
         });
-        if (!firstLoaded.value) {
-            firstLoaded.value = true;
-        }
-        loading.value = false;
+        let list: T[] = [];
         if (!isAppException(response) && !isServerResponseMessage(response)) {
             if (isListResponse(response)) {
-                if (!options.concatList) {
-                    dataList.value = response.dataList;
+                if (!options.reverseList) {
+                    list = response.dataList;
                 } else {
-                    dataList.value.push(...response.dataList);
+                    list = response.dataList.reverse();
                 }
-
+                await setDataList(list);
                 if (response.totalPages != undefined) {
                     pages.value.totalPages = response.totalPages;
                 }
@@ -68,25 +68,56 @@ export const usePagefecth = <T>(options: ICrudListApiOptions) => {
                     pages.value.totalElements = response.totalElements;
                     if (response.totalElements == 0 || response.totalElements < pages.value.itemsPerPage) {
                         isInfiniteDisabled.value = true;
+                    } else {
+                        isInfiniteDisabled.value = false;
                     }
                 }
                 if (response.last != undefined) {
                     pages.value.last = response.last;
                     isInfiniteDisabled.value = response.last;
                 }
-
-            } else if (isArray(response)) {
-                if (!options.concatList) {
-                    dataList.value = response as any;
+            } else if (response && isArray(response)) {
+                const responseList: T[] = response as unknown as T[];
+                if (responseList.length == 0 || responseList.length < pages.value.itemsPerPage) {
+                    isInfiniteDisabled.value = true;
                 } else {
-                    dataList.value.push(...response as any);
+                    isInfiniteDisabled.value = false;
                 }
+                if (!options.reverseList) {
+                    list = responseList;
+                } else {
+                    list = responseList.reverse();
+                }
+                await setDataList(list);
             }
         }
+        if (!firstLoaded.value) {
+            firstLoaded.value = true;
+        }
+
+        loading.value = false;
         return new Promise((resolve) => {
             resolve(true);
         });
     };
+    const setDataList = (list: T[]) => {
+        return new Promise((resolve) => {
+            if (pages.value.current == 1) {
+                dataList.value = list;
+            } else {
+                if (!options.concatList) {
+                    dataList.value = list;
+                } else {
+                    if (!options.addUnshift) {
+                        dataList.value.push(...list);
+                    } else {
+                        dataList.value.unshift(...list);
+                    }
+                }
+            }
+            resolve(true)
+        })
+    }
     const resetData = (resetPage: boolean = true) => {
         if (resetPage) {
             resetPaging();
@@ -97,48 +128,44 @@ export const usePagefecth = <T>(options: ICrudListApiOptions) => {
     };
     const onReload = async () => {
         resetPaging();
-        dataList.value = [];
-        firstLoaded.value = false;
+        if (!options.preventResetListReload) {
+            firstLoaded.value = false;
+            dataList.value = [];
+        }
         isInfiniteDisabled.value = false;
         await loadData();
-        return new Promise((resolve) => resolve(true));
+        return new Promise(resolve => resolve(true));
     };
 
     const onNextPage = async () => {
-        pages.value.current++;
-        await loadData();
-        return new Promise((resolve) => resolve(true));
+        if (firstLoaded.value) {
+            pages.value.current++;
+            await loadData();
+        }
+        return new Promise(resolve => resolve(true));
     };
 
     const loadPageChange = async (resetPage: boolean = false) => {
         resetData(resetPage);
         await loadData();
-        return new Promise((resolve) => resolve(true));
+        return new Promise(resolve => resolve(true));
     };
 
     const onPageChange = async (value: number | undefined) => {
         await loadPageChange(false);
-        return new Promise((resolve) => resolve(true));
+        return new Promise(resolve => resolve(true));
     };
 
     const onPerPageChange = async (value: number | undefined) => {
         await loadPageChange(false);
-        return new Promise((resolve) => resolve(true));
+        return new Promise(resolve => resolve(true));
     };
-    watch(sort.value, async (s) => {
-        if (s) {
-            if (firstLoaded.value) {
-                await onReload();
-            }
-        }
-    });
     return {
         isInfiniteDisabled,
         firstLoaded,
         loading,
         pages,
         sort,
-        sortMode,
         dataList,
         urlEndpoint,
         additionalUri,

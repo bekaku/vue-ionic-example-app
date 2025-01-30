@@ -1,29 +1,20 @@
 export const config = {
-  //Development
-  apiBaseUrl: 'http://localhost:8080',
-  cdnBaseUrl: 'http://localhost:8080',
-  //
-  //Production Test
-  // apiBaseUrl: 'https://testapi.mydomain.com',
-  // cdnBaseUrl: 'https://testapi.mydomain.com',
+  // Development
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL,
+  cdnBaseUrl: import.meta.env.VITE_CDN_BASE_URL,
 
-  //Production
-  // apiBaseUrl: 'https://api.mydomain.com',
-  // cdnBaseUrl: 'https://cdn.mydomain.com',
-
-  timeOut: 5 * 60000, // 60000 = 1 minute, 0 = no timeout
-  feedPostPerPage: 3,
-  commentsPerPage: 3,
+  timeOut: import.meta.env.VITE_API_TIMOUT, // 60000 = 1 minute, 0 = no timeout
+  feedPostPerPage: import.meta.env.VITE_FEED_POST_PER_PAGE,
+  commentsPerPage: import.meta.env.VITE_COMMENT_PER_PAGE,
   token: '',
-  webAppUrl: 'https://app.mydomain.com',
-  appVersion: '1.0.0.dev',
-  codeVersion: 1,
-  androidStoreLink:
-    'https://play.google.com/store/apps/details?id=com.mobile.myapp',
-  iOSStoreLink:
-    'https://apps.apple.com/th/app/myapp/id00000000000',
-  apkLink:
-    'https://cdn.mydomain.com/app-release.apk?v=1.0.5'
+  webAppDomain: import.meta.env.VITE_WEB_APP_DOMAIN,
+  webAppUrl: import.meta.env.VITE_WEB_APP_URL,
+  webAppTestUrl: import.meta.env.VITE_WEB_APP_TEST_URL,
+  appVersion: import.meta.env.VITE_APP_VERSION,
+  codeVersion: import.meta.env.VITE_CODE_VERSION,
+  androidStoreLink: import.meta.env.VITE_ANDROID_STORE,
+  iOSStoreLink: import.meta.env.VITE_IOS_STORE,
+  apkLink: import.meta.env.VITE_APK_STORE,
 };
 
 export const Devmode = true;
@@ -43,13 +34,15 @@ export const FcmSettingKey = PrefixKey + 'mb_fcm_setting';
 export const NotifyKey = PrefixKey + 'mb_notify';
 export const LatestDeviceActiveKey = PrefixKey + 'mb_latest_active';
 export const DefaultColor = '#3880ff';
-export const SucureDeviceIdAtt = PrefixKey + '_device_jid';
+export const SucureDeviceIdAtt = PrefixKey + 'device_jid';
 export const RefreshTokenProcessAtt = '_refresh_token_processing';
-export const FileImageNameAtt = PrefixKey + '_image';
-export const DeviceIdAtt = PrefixKey + '_device_id';
+export const FileImageNameAtt = PrefixKey + 'image';
+export const DeviceIdAtt = PrefixKey + 'device_id';
+export const LatestSyncActiveStatusKey = PrefixKey + 'mb_latest_sync_active_status';
 export const CacheKey = {
   FCM_SETTING: PrefixKey + 'mb_fcm_setting',
 };
+export const AppAlbumName = 'myappalbum';
 export const ExpireCookieDays = 365;
 export const autoRefeshTokenDays = 30;
 export const SearchParamiter = '_q';
@@ -59,8 +52,9 @@ export const BackendRootPath = 'backend';
 export const CompanyIdAtt = 'companyId';
 export const UserIdAtt = 'userId';
 export const ProfileNameAtt = 'userProfileId';
-export const FileExtensionAccept =
-  '.png,.jpg,.jpeg,.gif,.doc,.docx,.pdf,.xls,.xlsx,.ppt,.pptx,.pps';
+export const FileNamePrefix = 'my_file';
+export const FileExtensionAccept
+  = '.png,.jpg,.jpeg,.gif,.doc,.docx,.pdf,.xls,.xlsx,.ppt,.pptx,.pps';
 
 export const FileTypeAcceptList = [
   'application/pdf',
@@ -84,6 +78,8 @@ export const CrudAction = {
   NEW: 'new',
   COPY: 'copy'
 };
+export const LIMIT_FILE_SIZE_MB = 50;
+export const LIMIT_FILE_SIZE = LIMIT_FILE_SIZE_MB * 1024 * 1024;
 export const DEFULT_ITEM_PER_PAGET = 10;
 export const SearchOperation = {
   MATCH: ':',
@@ -96,8 +92,8 @@ export const SearchOperation = {
 };
 export const randomNo = (min: number, max: number) =>
   Math.floor(Math.random() * max) + min;
-export const AvatarPlaceHolder128 =
-  'https://i.pravatar.cc/128?img=' + randomNo(1, 70);
+export const AvatarPlaceHolder128
+  = 'https://i.pravatar.cc/128?img=' + randomNo(1, 70);
 export const FeedSectionWidth = 280;
 export const TabsName = {
   HOME: 'tabHome',

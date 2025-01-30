@@ -22,33 +22,20 @@
              maxlength="1"
              style="width:50px;border: 1px solid #ccc;background-color: transparent;border-radius: 5px;text-align: center">
     </ion-col>
-
-  </ion-row>
+</ion-row>
 </template>
 <script setup lang="ts">
-import {computed, onBeforeUpdate, ref, watch} from 'vue';
 import {
-  IonPage,
-  IonList,
-  IonItem,
-  IonButton,
-  IonInput,
-  IonIcon,
-  IonContent,
-  IonToggle,
-  IonButtons,
-  IonTitle,
-  IonHeader,
-  IonLabel,
-  IonRow,
-  IonCol
+  IonCol,
+  IonRow
 } from '@ionic/vue';
+import { computed, onBeforeUpdate, ref, watch } from 'vue';
 
 const props = defineProps<{
-  inputLength: number;
+  inputLength: number
 }>();
 const emit = defineEmits<{
-  onSubmit: [val: string | undefined];
+  onSubmit: [val: string | undefined]
 }>();
 // const length = 6;
 const length = computed(() => props.inputLength);
@@ -56,7 +43,7 @@ const fields = ref<any[]>([]);
 const fieldValues = ref([]);
 
 const composite = computed(() => {
-  const nonNullFields = fieldValues.value.filter((value) => value);
+  const nonNullFields = fieldValues.value.filter(value => value);
   if (length.value !== nonNullFields.length) {
     return '';
   }

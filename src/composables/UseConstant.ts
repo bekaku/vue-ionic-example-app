@@ -1,5 +1,5 @@
 import { useAuthenStore } from '@/stores/AuthenStore';
-import {
+import type {
   IMenuItem
 } from '@/types/Models';
 import {

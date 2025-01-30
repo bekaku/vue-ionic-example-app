@@ -1,43 +1,23 @@
 <template>
-  <base-layout
-    :page-title="t('base.appearance')"
-    fullscreen
-    :content-padding="false"
-    show-back-link
-  >
-    <ion-card>
+  <base-layout :page-title="t('base.appearance')" fullscreen :content-padding="false" show-back-link>
+    <IonicCard flat :title="t('base.mode')">
       <ion-list>
-        <ion-item lines="none">
-          <ion-label>
-            <h2 class="text-muted">{{ t('base.mode') }}</h2>
-          </ion-label>
-        </ion-item>
-        <ion-item
-          lines="none"
-          v-for="theme in availableThemes"
-          :key="theme.key"
-          @click="langugeAndThemeStore.setThemeSetting(theme.key)"
-        >
+        <ion-item lines="none" v-for="theme in availableThemes" :key="theme.key" @click="onSetTheme(theme.key)">
           <ion-icon :icon="theme.icon" slot="start"></ion-icon>
           <ion-label>{{ t(theme.text) }}</ion-label>
-          <ion-icon
-            v-if="theme.key == langugeAndThemeStore.themeSetting"
-            slot="end"
-            color="primary"
-            :icon="checkmarkCircle"
-          ></ion-icon>
+          <ion-icon v-if="theme.key == currentTheme" slot="end" color="primary" :icon="checkmarkCircle"></ion-icon>
         </ion-item>
       </ion-list>
-    </ion-card>
+    </IonicCard>
   </base-layout>
 </template>
 <script setup lang="ts">
+import BaseLayout from '@/components/base/BaseLayout.vue';
 import { useLang } from '@/composables/UseLang';
-import { useLangugeAndThemeStore } from '@/stores/LangugeAndThemeStore';
-import { availableThemes } from '@/utils/ThemeUtil';
+import { availableThemes, useTheme } from '@/composables/UseTheme';
+import { IonCard, IonIcon, IonItem, IonLabel, IonList } from '@ionic/vue';
 import { checkmarkCircle } from 'ionicons/icons';
-import BaseLayout from '@/components/base/Layout.vue';
-import { IonList, IonItem, IonLabel, IonIcon, IonCard } from '@ionic/vue';
-const langugeAndThemeStore = useLangugeAndThemeStore();
+import IonicCard from '@/components/ionic/IonicCard.vue';
 const { t } = useLang();
+const { onSetTheme, currentTheme } = useTheme();
 </script>

@@ -11,31 +11,24 @@
         </option-item>
  */
 import { computed, ref } from 'vue';
-import { LabelValue } from '@/types/Models';
+import type { LabelValue } from '@/types/Common';
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import { useLang } from '@/composables/UseLang';
-import {
-  IonChip,
-  IonCol,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonRow,
-} from '@ionic/vue';
+import { IonChip, IonCol, IonIcon, IonItem, IonLabel, IonRow, IonButtons, IonButton } from '@ionic/vue';
 import { close } from 'ionicons/icons';
 import OptionSelect from '@/components/base/OptionSelect.vue';
 import BaseSpinner from '@/components/base/Spinner.vue';
 
-const { t } = useLang();
 const props = withDefaults(
   defineProps<{
-    items: LabelValue<T>[];
-    label: string;
-    multiple?: boolean;
-    required?: boolean;
-    readonly?: boolean;
-    clearable?: boolean;
-    loading?: boolean;
+    items: LabelValue<any>[]
+    label: string
+    multiple?: boolean
+    required?: boolean
+    readonly?: boolean
+    clearable?: boolean
+    loading?: boolean
+    lines?: 'none'|'full'|'inset'
   }>(),
   {
     loading: false,
@@ -43,23 +36,28 @@ const props = withDefaults(
     required: false,
     readonly: false,
     clearable: true,
-  },
+    lines: 'none',
+  }
 );
+const emit = defineEmits(['on-change', 'on-single-chage', 'on-clear']);
+const { t } = useLang();
 const modelValue = defineModel<T[] | null>();
 const showOptions = ref(false);
-const emit = defineEmits(['on-change']);
 const optionsOrgSelectionChanged = (items: T[]) => {
   if (!modelValue.value) {
     return;
   }
   modelValue.value = items;
   emit('on-change', items);
+  if (!props.multiple && items && items.length>0) {
+    emit('on-single-chage', items[0]);
+  }
 };
 const getItemBySelectId = (val: T) => {
   if (!modelValue.value) {
     return;
   }
-  return props.items.find((t) => t.value == val);
+  return props.items.find(t => t.value == val);
 };
 const onDocOrgRemove = (event: any, index: number) => {
   if (event) {
@@ -82,6 +80,15 @@ const onClick = () => {
     showOptions.value = true;
   }
 };
+const onClear=(event: any) => {
+  if (event) {
+    event.stopPropagation();
+  }
+  if (modelValue.value) {
+    modelValue.value=[];
+  }
+  emit('on-clear');
+}
 </script>
 <template>
   <ion-item v-if="loading">
@@ -89,32 +96,24 @@ const onClick = () => {
       <base-spinner />
     </ion-label>
   </ion-item>
-  <ion-item v-else-if="modelValue != undefined" detail button @click="onClick">
+
+  <ion-item :lines="lines" v-if="!loading && modelValue!=undefined" detail button @click="onClick">
     <template v-if="!multiple && getItemBySelectId(modelValue[0])?.avatar">
-      <base-avatar
-        slot="start"
-        :src="getItemBySelectId(modelValue[0])?.avatar"
-        fetch-image
-      />
+      <base-avatar slot="start" :src="getItemBySelectId(modelValue[0])?.avatar" fetch-image />
     </template>
     <ion-label class="ion-text-wrap">
-      <h3>
-        {{ label }}
-        <span v-if="requireText" class="text-danger text-caption">{{
-          requireText
-        }}</span>
-      </h3>
-      <ion-row v-if="multiple && modelValue && modelValue.length > 0">
+      <slot name="label">
+      <h3>{{ label }} <span v-if="requireText" class="text-danger text-caption">{{ requireText }}</span></h3>
+      </slot>
+
+
+      <ion-row v-if="multiple && modelValue && modelValue.length>0">
         <ion-col>
           <ion-chip
             v-for="(orgId, orgIndex) in modelValue"
-            :key="`org-${orgId}-${orgIndex}`"
-          >
+            :key="`org-${orgId}-${orgIndex}`">
             <ion-label>{{ getItemBySelectId(orgId)?.label }}</ion-label>
-            <ion-icon
-              :icon="close"
-              @click="onDocOrgRemove($event, orgIndex)"
-            ></ion-icon>
+            <ion-icon :icon="close" @click="onDocOrgRemove($event, orgIndex)"></ion-icon>
           </ion-chip>
         </ion-col>
       </ion-row>
@@ -124,6 +123,11 @@ const onClick = () => {
         </p>
       </template>
     </ion-label>
+    <ion-buttons v-if="clearable && modelValue && modelValue.length>0" slot="end">
+      <ion-button color="danger" @click="onClear($event)">
+        <ion-icon slot="icon-only" :icon="close" />
+      </ion-button>
+    </ion-buttons>
   </ion-item>
   <option-select
     v-if="modelValue && showOptions"

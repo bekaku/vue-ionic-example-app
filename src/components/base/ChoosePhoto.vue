@@ -1,11 +1,10 @@
 <template>
   <base-modal
     v-if="show"
-    :model-value="show"
+    v-model="show"
     :title="t('base.chooseFromFile')"
     :initial-breakpoint="0.25"
     :breakpoints="[0, 0.25]"
-    @update:modelValue="(newVal: boolean) => (show = newVal)"
     @on-close="show = false"
   >
     <ion-list lines="none">
@@ -26,18 +25,11 @@
 </template>
 <script setup lang="ts">
 import { cameraOutline, imageOutline } from 'ionicons/icons';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { ChoosePhotoItem } from '@/types/Common';
-import { getCurrentTimestamp } from '@/utils/DateUtil';
-import { FileImageNameAtt } from '@/utils/Constant';
 import { computed, defineAsyncComponent, onMounted } from 'vue';
 import { useLang } from '@/composables/UseLang';
 import { IonIcon, IonItem, IonLabel, IonList } from '@ionic/vue';
-import { blobToFile, urlToBlob, imageUrlToBase64, imageUrlToFile } from '@/utils/AppUtil';
+import { useFileSystem } from '@/composables/UseFileSystem';
 
-const BaseModal = defineAsyncComponent(
-  () => import('@/components/base/Modal.vue')
-);
 const props = defineProps({
   modelValue: {
     type: Boolean,
@@ -50,103 +42,48 @@ const props = defineProps({
   multiple: {
     type: Boolean,
     default: false
+  },
+  limit: {
+    type: Number,
+    default: 6
   }
 });
-onMounted(() => {
-  requestPermissions();
-});
-
-const requestPermissions = () => {
-  const permitCamera = Camera.requestPermissions();
-};
-const { t } = useLang();
 const emit = defineEmits([
   'update:modelValue',
   'on-take-picture',
   'on-pick-picture'
 ]);
+const BaseModal = defineAsyncComponent(
+  () => import('@/components/base/Modal.vue')
+);
+const { requestCameraPermissions, onTakePicture, onPickPhoto } = useFileSystem();
+onMounted(() => {
+  requestCameraPermissions();
+});
+
+const { t } = useLang();
 const show = computed({
   get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
+  set: val => emit('update:modelValue', val)
 });
 
 const takePicture = async () => {
-  const image = await Camera.getPhoto({
-    quality: 99,
-    allowEditing: false,
-    saveToGallery: false,
-    resultType: CameraResultType.Uri,
-    source: CameraSource.Camera,
-    webUseInput: true,
-    promptLabelHeader: t('base.photo'),
-    promptLabelCancel: t('base.cancel'),
-    promptLabelPhoto: t('base.fromPhotos'),
-    promptLabelPicture: t('base.takePicture')
-  });
-
-  // image.webPath will contain a path that can be set as an image src.
-  // You can access the original file using image.path, which can be
-  // passed to the Filesystem API to read the raw data of the image,
-  // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
-  const f = await getFile(image.webPath);
-  emit('on-take-picture', f);
+  const file = await onTakePicture();
+  if (file) {
+    emit('on-take-picture', file);
+  }
 };
-const pickPhoto = () => {
+const pickPhoto = async () => {
   if (props.multiple) {
-    pickPhotoAlbum();
+    const files = await onPickPhoto(true);
+    if (files) {
+      emit('on-pick-picture', files);
+    }
   } else {
-    takePickSiglePicture();
+    const file = await onPickPhoto(false);
+    if (file) {
+      emit('on-take-picture', file);
+    }
   }
-};
-const takePickSiglePicture = async () => {
-  const image = await Camera.getPhoto({
-    quality: 100,
-    allowEditing: false,
-    saveToGallery: false,
-    resultType: CameraResultType.Uri,
-    source: CameraSource.Photos,
-    webUseInput: true,
-    promptLabelHeader: t('base.photo'),
-    promptLabelCancel: t('base.cancel'),
-    promptLabelPhoto: t('base.fromPhotos'),
-    promptLabelPicture: t('base.takePicture')
-  });
-
-  // image.webPath will contain a path that can be set as an image src.
-  // You can access the original file using image.path, which can be
-  // passed to the Filesystem API to read the raw data of the image,
-  // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
-  const f = await getFile(image.webPath);
-  emit('on-take-picture', f);
-};
-const pickPhotoAlbum = async () => {
-  const images = await Camera.pickImages({
-    quality: 100,
-    limit: 6
-  });
-  const items = images.photos;
-  const list: ChoosePhotoItem[] = [];
-  for (const item of items) {
-    const f = await getFile(item.webPath);
-    list.push(f);
-  }
-  emit('on-pick-picture', list);
-};
-const getFile = async (webPath: any): Promise<ChoosePhotoItem> => {
-  // const fileName = generateFileName();
-  // const file = await imageUrlToFile(webPath, fileName);
-  const file = await urlToBlob(webPath);
-  // const fileBase64 = await imageUrlToBase64(webPath);
-  return new Promise((resolve) => {
-    resolve({
-      webPath: webPath,
-      file: file
-      // fileBase64: fileBase64
-    });
-  });
-};
-const generateFileName = () => {
-  return `${getCurrentTimestamp()}.jpeg`;
-  // return `${FileImageNameAtt}_${getCurrentTimestamp()}.jpg`;
 };
 </script>

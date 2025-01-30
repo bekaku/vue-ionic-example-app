@@ -45,17 +45,18 @@
         >
         </chart-column>
    */
-import { PropType, ref, watchEffect, onUnmounted, onMounted, watch } from 'vue';
-import VueApexCharts from 'vue3-apexcharts';
-import {
-  PieChartType,
+import type {
   ChartMode,
   ChartThemePalete,
+  PieChartType,
   Position,
   Strokestyle,
 } from '@/types/Chart';
+import type { PropType } from 'vue';
+import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
+import VueApexCharts from 'vue3-apexcharts';
 // import { ApexCharts } from 'boot/apexcharts';
-import { useBase } from '@/composables/UseBase';
+import { useTheme } from '@/composables/UseTheme';
 const props = defineProps({
   modelValue: Object,
   chartId: {
@@ -88,7 +89,7 @@ const props = defineProps({
   },
   type: {
     type: String as PropType<PieChartType>,
-    default: 'bar', //area , line , bar
+    default: 'bar', // area , line , bar
   },
   mode: {
     type: String as PropType<ChartMode>,
@@ -161,7 +162,7 @@ const props = defineProps({
   },
   strokestyle: {
     type: String as PropType<Strokestyle>,
-    default: 'smooth', //smooth, straight, stepline
+    default: 'smooth', // smooth, straight, stepline
   },
   strokeWidth: {
     type: Number,
@@ -175,7 +176,7 @@ const props = defineProps({
 const chartSeries = ref(props.series);
 const options = ref<any>();
 // const chart = ref<any>(null);
-const { isDark } = useBase();
+const { isDark } = useTheme();
 
 watchEffect(() => {
   if (props.series && props.series.length > 0) {
@@ -290,7 +291,7 @@ const chartSetup = () => {
         },
       },
       grid: {
-        borderColor: props.dark ? '#282829' : '#f0f0f0', //transparent
+        borderColor: props.dark ? '#282829' : '#f0f0f0', // transparent
         row: {
           colors: [props.dark ? '#282829' : '#f0f0f0', 'transparent'], // takes an array which will be repeated on columns
           opacity: 0.2,
@@ -302,7 +303,7 @@ const chartSetup = () => {
       },
       tooltip: {
         y: {
-          formatter: function (val: any) {
+          formatter(val: any) {
             return val;
           },
         },

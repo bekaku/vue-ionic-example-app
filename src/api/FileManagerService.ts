@@ -1,13 +1,14 @@
-import { FileManagerDto } from '@/types/Models';
-import { ResponseDataType, ResponseMessage, UploadRequest } from '@/types/Common';
-import { FILES_UPLOAD_ATT, FILES_DIRECTORY_ID_ATT } from '@/utils/Constant';
 import { useAxios } from '@/composables/UseAxios';
 import { useConfig } from '@/composables/UseConfig';
-import { downloadFromArrayBuffer, getBlobFromAxiosResponse, getFileNameFromAxiosResponse } from '@/utils/AppUtil';
+import type { ResponseDataType, ResponseMessage, UploadRequest } from '@/types/Common';
+import type { FileManagerDto } from '@/types/Models';
+import { getBlobFromAxiosResponse, getFileNameFromAxiosResponse } from '@/utils/AppUtil';
+import { FILES_DIRECTORY_ID_ATT, FILES_UPLOAD_ATT } from '@/utils/Constant';
+import { base64FromArrayByffer, generateFileNameByExtesnsion, getFileExtension } from '@/utils/FileUtils';
 
 export default () => {
   const { callAxios, callAxiosV2, validateServerResponse, callAxiosFile } = useAxios();
-  const { getConfigPublicType } = useConfig();
+  const { getEnv } = useConfig();
   const uploadApi = async (
     file: any,
     fileDirectoryId: number = 0,
@@ -21,7 +22,7 @@ export default () => {
       API: '/api/fileManager/uploadApi',
       method: 'POST',
       body: postData,
-      baseURL: getConfigPublicType<string>('cdnBaseUrl'),
+      baseURL: getEnv<string>('VITE_CDN_BASE_URL'),
       contentType: 'multipart/form-data'
     });
     return await validateServerResponse<FileManagerDto>(res);
@@ -35,7 +36,7 @@ export default () => {
       body: {
         uploadRequest: req
       },
-      baseURL: getConfigPublicType<string>('cdnBaseUrl')
+      baseURL: getEnv<string>('VITE_CDN_BASE_URL')
     });
   };
 
@@ -43,7 +44,7 @@ export default () => {
     return await callAxios<ResponseMessage>({
       API: `/api/fileManager/deleteFileApi/${fileId}`,
       method: 'DELETE',
-      baseURL: getConfigPublicType<string>('cdnBaseUrl')
+      baseURL: getEnv<string>('VITE_CDN_BASE_URL')
     });
   };
   const updateUserAvatar = async (
@@ -52,7 +53,7 @@ export default () => {
     return await callAxios<ResponseMessage>({
       API: `/api/fileManager/updateUserAvatar?fileManagerId=${fileManagerId}`,
       method: 'PUT',
-      baseURL: getConfigPublicType<string>('cdnBaseUrl')
+      baseURL: getEnv<string>('VITE_CDN_BASE_URL')
     });
   };
   const updateUserCover = async (
@@ -61,41 +62,56 @@ export default () => {
     return await callAxios<ResponseMessage>({
       API: `/api/fileManager/updateUserCover?fileManagerId=${fileManagerId}`,
       method: 'PUT',
-      baseURL: getConfigPublicType<string>('cdnBaseUrl')
+      baseURL: getEnv<string>('VITE_CDN_BASE_URL')
     });
   };
   const fethCdnData = async (
     path: string,
     responseDataType: ResponseDataType = 'blob'
   ): Promise<any> => {
-    const cdnBase = getConfigPublicType<string>('cdnBaseUrl');
-    const src = path.replace(cdnBase, '');
+    const cdnBase = getEnv<string>('VITE_CDN_BASE_URL');
+    const src = path ? path.replace(cdnBase || '', '') : path;
     const response = await callAxiosFile<any>({
       API: src,
       baseURL: cdnBase,
       method: 'GET',
       responseType: 'arraybuffer'
     });
-    return new Promise(async (resolve /*reject*/) => {
-      if (response.data) {
-        if (responseDataType == 'blob') {
-          const imageUrlObject = await getBlobFromAxiosResponse(response);
-          resolve(imageUrlObject);
-        } else if (responseDataType == 'arraybuffer') {
-          resolve(response.data);
-        } else if (responseDataType == 'download') {
-          const contentType = response.headers['content-type'];
-          const fileName = await getFileNameFromAxiosResponse(response);
-          if (fileName) {
-            downloadFromArrayBuffer(response.data, fileName, contentType);
-          }
-          // const name = 'Test.'
-          resolve(response.data);
-        } else if (responseDataType == 'axiosresponse') {
-          resolve(response);
+    if (response.data) {
+      if (responseDataType == 'blob') {
+        const imageUrlObject = await getBlobFromAxiosResponse(response);
+        return new Promise(resolve => resolve(imageUrlObject));
+      } else if (responseDataType == 'arraybuffer') {
+        return new Promise(resolve => resolve(response.data));
+      } else if (responseDataType == 'axiosresponse') {
+        return new Promise(resolve => resolve(response));
+      }
+    }
+    return new Promise(resolve => resolve(null));
+  };
+  const downloadCdnData = async (
+    path: string,
+    downloadFileName?: string
+  ): Promise<any> => {
+    const response = await fethCdnData(path, 'axiosresponse');
+    if (response.data) {
+      const contentType = response.headers['content-type'];
+      // const contentDisposition = response.headers['content-disposition'];
+      let fileName = await getFileNameFromAxiosResponse(response);
+      if (!fileName) {
+        const fileExtension = getFileExtension(contentType);
+        fileName = generateFileNameByExtesnsion(fileExtension, downloadFileName);
+      }
+      if (fileName) {
+        // downloadFromArrayBuffer(response.data, fileName, contentType);
+        const base64 = await base64FromArrayByffer(response.data);
+        if (base64) {
+          // await saveFile(base64, fileName);
         }
       }
-    });
+      return new Promise(resolve => resolve(response.data));
+    }
+    return new Promise(resolve => resolve(null));
   };
   return {
     uploadApi,
@@ -103,6 +119,7 @@ export default () => {
     deleteFileApi,
     updateUserCover,
     updateUserAvatar,
-    fethCdnData
+    fethCdnData,
+    downloadCdnData
   };
 };

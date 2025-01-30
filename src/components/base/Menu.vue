@@ -5,7 +5,7 @@
   <ion-popover
     :is-open="popoverOpen"
     :event="event"
-    @didDismiss="popoverOpen = false"
+    @did-dismiss="popoverOpen = false"
   >
     <ion-content>
       <ion-list>
@@ -22,17 +22,18 @@
   </ion-popover>
 </template>
 <script setup lang="ts">
-import { PropType, defineAsyncComponent, ref } from 'vue';
-import { IMenuItem } from '@/types/Models';
+import MenuItem from '@/components/MenuItem.vue';
+import type { IMenuItem } from '@/types/Models';
 import {
   IonButton,
   IonContent,
-  IonPopover,
   IonIcon,
   IonList,
+  IonPopover,
 } from '@ionic/vue';
 import { ellipsisVertical } from 'ionicons/icons';
-import MenuItem from '@/components/MenuItem.vue';
+import type { PropType } from 'vue';
+import { ref } from 'vue';
 defineProps({
   icon: {
     type: String,
@@ -47,9 +48,9 @@ defineProps({
     default: () => [],
   },
 });
+const emit = defineEmits(['onSelect']);
 const popoverOpen = ref(false);
 const event = ref<Event>();
-const emit = defineEmits(['onSelect']);
 const openPopover = (e: Event) => {
   event.value = e;
   popoverOpen.value = true;

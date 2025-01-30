@@ -3,8 +3,9 @@
     :is-open="show"
     :initial-breakpoint="initialBreakpoint"
     :breakpoints="breakpoints"
-    @willDismiss="onClose"
-    @ionModalDidDismiss="onClose"
+    @will-dismiss="onClose"
+    @ion-modal-did-dismiss="onClose"
+    @did-present="onShow"
   >
     <slot name="header">
       <ion-header>
@@ -34,7 +35,7 @@
 /*
     <base-modal
       v-if="show"
-      :model-value="show"
+     v-model="show"
       :title="t('base.chooseFromFile')"
       :initial-breakpoint="0.25"
       :breakpoints="[0, 0.25, 0.5,0.7,1]"
@@ -43,25 +44,19 @@
     >
     </base-modal>
   */
-import { computed, defineAsyncComponent, PropType } from 'vue';
-import { close } from 'ionicons/icons';
 import {
-  IonModal,
-  IonHeader,
-  IonTitle,
-  IonButtons,
   IonButton,
-  IonIcon,
+  IonButtons,
   IonContent,
+  IonHeader,
+  IonIcon,
+  IonModal,
+  IonTitle,
 } from '@ionic/vue';
-const BaseToolbar = defineAsyncComponent(
-  () => import('@/components/base/Toolbar.vue'),
-);
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    require: true,
-  },
+import { close } from 'ionicons/icons';
+import type { PropType } from 'vue';
+import { defineAsyncComponent } from 'vue';
+ defineProps({
   initialBreakpoint: {
     type: Number,
     default: 0.5,
@@ -79,14 +74,21 @@ const props = defineProps({
     default: '',
   },
 });
-const emit = defineEmits(['on-close', 'update:modelValue']);
-const show = computed({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val),
-});
+const emit = defineEmits(['on-close', 'update:modelValue', 'on-present']);
+const BaseToolbar = defineAsyncComponent(
+  () => import('@/components/base/Toolbar.vue'),
+);
+const show = defineModel<boolean>();
+// const show = computed({
+//   get: () => props.modelValue,
+//   set: (val) => emit('update:modelValue', val),
+// });
 const onClose = () => {
   emit('on-close');
   show.value = false;
 };
+const onShow=() => {
+  emit('on-present');
+}
 </script>
 <style scoped lang="scss"></style>

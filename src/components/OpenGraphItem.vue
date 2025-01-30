@@ -28,20 +28,21 @@
   </ion-card>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, PropType } from 'vue';
-import { OgMeta } from '@/types/Models';
+import type { PropType } from 'vue';
+import { defineAsyncComponent } from 'vue';
+import type { OgMeta } from '@/types/Models';
 import { returnUpForward } from 'ionicons/icons';
 import { IonItem, IonLabel, IonText, IonCard } from '@ionic/vue';
 import BaseIcon from '@/components/base/Icon.vue';
-const BaseImage = defineAsyncComponent(
-  () => import('@/components/base/Image.vue'),
-);
 const { item } = defineProps({
   item: {
     type: Object as PropType<OgMeta>,
     default: () => null,
   },
 });
+const BaseImage = defineAsyncComponent(
+  () => import('@/components/base/Image.vue'),
+);
 </script>
 <style scoped lang="scss">
 ion-item {

@@ -5,7 +5,6 @@ import App from './App.vue';
 import appAxios from './plugins/Axios';
 import { AxiosKey } from './plugins/AxiosSymbols';
 import i18n from './plugins/I18n';
-import ionicConfig from './plugins/IonicConfig';
 import router from './router';
 
 /* Core CSS required for Ionic components to work properly */
@@ -38,10 +37,13 @@ startApp();
 
 // async start function to enable waiting for refresh token call
 async function startApp() {
-  const app = createApp(App).use(i18n())
-    .use(createPinia())
-    .use(IonicVue, ionicConfig)
-    .use(router);
+  const app = createApp(App).use(i18n()).use(createPinia()).use(IonicVue, {
+    rippleEffect: true,
+    animated: true,
+    hardwareBackButton: true,
+    swipeBackEnabled: false,
+    mode: 'ios'
+  }).use(router);
   // app.config.globalProperties.$appAxios = { ...appAxios };
   app.provide(AxiosKey, appAxios);
   router.isReady().then(async () => {

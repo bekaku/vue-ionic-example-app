@@ -1,14 +1,25 @@
 <template>
   <ion-modal
-    :is-open="show"
-    @willDismiss="onClose"
+    :is-open="modelValue"
+    @will-dismiss="onClose"
     :class="{ 'full-modal': isTablet }"
   >
     <ion-header :class="{ 'ion-no-border': headerNoBorder || dark }">
       <slot name="toolbar">
-        <base-toolbar :class="{ dark: dark }">
+        <base-toolbar :class="{ dark }">
           <slot name="start">
-            <slot name="start">
+            <ion-buttons slot="start">
+              <ion-button @click="onClose">
+                <ion-icon slot="icon-only" class="text-black" :icon="arrowBack" />
+              </ion-button>
+            </ion-buttons>
+            <slot name="actions-start"></slot>
+          </slot>
+          <slot name="title">
+            <ion-title v-if="title">{{ title }}</ion-title>
+          </slot>
+          <div slot="end">
+            <slot name="end">
               <slot name="avatar">
                 <base-icon
                   v-if="icon"
@@ -18,26 +29,15 @@
                   :color="iconColor"
                   :size="24"
                 />
-                <slot name="actions-start"> </slot>
               </slot>
-            </slot>
-          </slot>
-          <slot name="title">
-            <ion-title v-if="title">{{ title }}</ion-title>
-          </slot>
-          <div slot="end">
-            <slot name="end">
-              <ion-buttons slot="end">
-                <ion-button @click="onClose">
-                  <ion-icon slot="icon-only" :icon="closeOutline" />
-                </ion-button>
-              </ion-buttons>
             </slot>
           </div>
         </base-toolbar>
       </slot>
+      <slot name="secondToolbar">
+</slot>
     </ion-header>
-    <ion-content :class="{ dark: dark }">
+    <ion-content :class="{ dark }">
       <div :class="{ 'ion-padding': contentPadding }">
         <slot />
       </div>
@@ -57,99 +57,100 @@
 
   </base-dialog>
  */
-import { closeOutline } from 'ionicons/icons';
-import { computed, defineAsyncComponent } from 'vue';
 import {
-  IonModal,
+  IonButton,
+  IonButtons,
   IonContent,
   IonHeader,
-  IonTitle,
-  IonButtons,
-  IonButton,
   IonIcon,
+  IonModal,
+  IonTitle
 } from '@ionic/vue';
-const BaseIcon = defineAsyncComponent(
-  () => import('@/components/base/Icon.vue'),
-);
-const BaseToolbar = defineAsyncComponent(
-  () => import('@/components/base/Toolbar.vue'),
-);
-const props = defineProps({
-  modelValue: Boolean,
+import { arrowBack } from 'ionicons/icons';
+import { defineAsyncComponent } from 'vue';
+
+defineProps({
   dialog: {
     type: Boolean,
-    default: false,
+    default: false
   },
   headerNoBorder: {
     type: Boolean,
-    default: false,
+    default: false
   },
   persistent: {
     type: Boolean,
-    default: true,
+    default: true
   },
   fullWidth: {
     type: Boolean,
-    default: false,
+    default: false
   },
   maximized: {
     type: Boolean,
-    default: false,
+    default: false
   },
   dark: {
     type: Boolean,
-    default: false,
+    default: false
   },
   contentPadding: {
     type: Boolean,
-    default: true,
+    default: true
   },
   icon: {
     type: String,
-    default: '',
+    default: ''
   },
   iconColor: {
     type: String,
-    default: 'text-primary',
+    default: 'text-primary'
   },
   ionicIcon: {
     type: Boolean,
-    default: true,
+    default: true
   },
   title: {
     type: String,
-    default: '',
+    default: ''
   },
   dialogStyle: {
     type: String,
-    default: 'max-width: 480px',
+    default: 'max-width: 480px'
   },
   dialogClass: {
     type: String,
-    default: '',
+    default: ''
   },
   transitionShow: {
     type: String,
-    default: 'slide-up',
+    default: 'slide-up'
   },
   transitionHide: {
     type: String,
-    default: 'slide-down',
+    default: 'slide-down'
   },
   isTablet: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 });
-const emit = defineEmits(['on-close', 'update:modelValue']);
-const show = computed({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val),
-});
+const emit = defineEmits(['on-close']);
+const BaseIcon = defineAsyncComponent(
+  () => import('@/components/base/Icon.vue')
+);
+const BaseToolbar = defineAsyncComponent(
+  () => import('@/components/base/Toolbar.vue')
+);
+const modelValue = defineModel<boolean>();
+// const show = computed({
+//   get: () => props.modelValue,
+//   set: (val) => emit('update:modelValue', val),
+// });
 
 const onClose = () => {
   emit('on-close');
-  show.value = false;
+  modelValue.value = false;
 };
 </script>
 <style scoped lang="scss">
@@ -160,12 +161,16 @@ ion-content.dark {
   --background: var(--app-bg-color-theme-dark);
   --color: var(--v-main-text-body-theme-dark);
 }
+
 ion-toolbar.dark {
   --background: var(--second-bg-color-theme-dark);
   --color: var(--v-main-text-body-theme-dark);
 }
+
 ion-modal.full-modal {
   --height: -webkit-fill-available;
   --height: 90vh;
+  --max-width: 90vw;
+  --min-width: 90vw;
 }
 </style>

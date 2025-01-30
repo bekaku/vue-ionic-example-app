@@ -28,20 +28,26 @@
   </swiper-container>
 </template>
 <script setup lang="ts">
-import { PropType, ref, onMounted, watch } from 'vue';
-import { SlideOptions, SlidePaginationy } from '@/types/Common';
+import type { PropType } from 'vue';
+import { ref, onMounted, watch, useTemplateRef, onBeforeUnmount } from 'vue';
+import type { SlideOptions, SlidePaginationy } from '@/types/Common';
 import { register } from 'swiper/element/bundle';
+
+const props = withDefaults(defineProps<Props>(), {
+  max: 0
+});
+
+const emit = defineEmits(['on-slide-change']);
+
 register();
+
 interface Props {
-  paramiters: SlideOptions;
-  max?: number;
+  paramiters: SlideOptions
+  max?: number
 }
 
 type SlideAction = 'next' | 'prev';
-
-const props = withDefaults(defineProps<Props>(), {
-  max: 0,
-});
+const baseSwiperRef = useTemplateRef<any>('baseSwiperRef');
 const showSlide = ref(false);
 const opts = ref<SlideOptions>();
 const modules = ref<any[]>([]);
@@ -49,10 +55,10 @@ const swiperRef = ref<any>(undefined);
 const currentIndex = defineModel('currentIndex', { type: Number, default: 0 });
 const slideAction = defineModel('slideAction', {
   type: String as PropType<SlideAction | undefined>,
-  default: undefined,
+  default: undefined
 });
 const swiperEl = ref<any>();
-const emit = defineEmits(['on-slide-change']);
+const initialTimeout = ref<any>(null);
 onMounted(async () => {
   await onInitSwiper();
   await initSlides();
@@ -61,11 +67,11 @@ onMounted(async () => {
 const initSlides = () => {
   return new Promise((resolve) => {
     const params = props.paramiters;
-    let initPagination: SlidePaginationy | undefined = undefined;
+    let initPagination: SlidePaginationy | undefined;
     if (params?.pagination != undefined) {
-      if (typeof params?.pagination === 'boolean') {
+      if ((typeof params?.pagination === 'boolean')) {
         initPagination = {
-          enabled: params?.pagination,
+          enabled: params?.pagination
         };
       } else {
         initPagination = params?.pagination;
@@ -76,8 +82,7 @@ const initSlides = () => {
       pagination: initPagination,
       navigation: params?.navigation || false,
       scrollbar: params?.scrollbar || false,
-      allowTouchMove:
-        params?.allowTouchMove != undefined ? params.allowTouchMove : true,
+      allowTouchMove: params?.allowTouchMove != undefined ? params.allowTouchMove : true,
       updateOnWindowResize: params?.updateOnWindowResize || false,
       zoom: params?.zoom || false,
       initialSlide: params?.initialSlide || 0,
@@ -85,11 +90,11 @@ const initSlides = () => {
       freeMode: params?.freeMode || false,
       lazy: params?.lazy || true,
       style: params?.style || {
-        '--swiper-navigation-color': '#3880ff',
-        '--swiper-pagination-color': '#3880ff',
+        '--swiper-navigation-color': '#00aba9',
+        '--swiper-pagination-color': '#00aba9',
         '--swiper-navigation-size': '20px',
         '--swiper-navigation-top-offset': '50%',
-        '--swiper-navigation-sides-offset': '5px',
+        '--swiper-navigation-sides-offset': '5px'
       },
       speed: params?.speed || 300,
       slidesPerView: params?.slidesPerView || 1,
@@ -100,7 +105,7 @@ const initSlides = () => {
       paginationType: params?.paginationType || 'bullets',
       direction: params?.direction || 'horizontal',
       loop: params?.loop || false,
-      effect: params?.effect || 'slide',
+      effect: params?.effect || 'slide'
     };
     resolve(true);
   });
@@ -112,7 +117,9 @@ const onSlideChange = (e: any) => {
 };
 const onInitSwiper = () => {
   return new Promise((resolve) => {
-    swiperEl.value = document.querySelector('swiper-container');
+    initialTimeout.value = setTimeout(() => {
+      swiperEl.value = document.querySelector('swiper-container');
+    }, 500);
     resolve(true);
   });
 };
@@ -133,8 +140,17 @@ watch(slideAction, (newAction) => {
     } else if (newAction == 'prev') {
       onPrev();
     }
-    console.log('watch > newAction', newAction);
   }
   slideAction.value = undefined;
+});
+onBeforeUnmount(() => {
+  if (initialTimeout.value) {
+    clearTimeout(initialTimeout.value);
+    initialTimeout.value = null;
+  }
+});
+defineExpose({
+  onNext,
+  onPrev
 });
 </script>

@@ -12,8 +12,8 @@
 import { IonLabel, IonListHeader, IonIcon } from '@ionic/vue';
 
 interface Props {
-  label: string;
-  icon?: string;
+  label: string
+  icon?: string
 }
 
 withDefaults(defineProps<Props>(), {});

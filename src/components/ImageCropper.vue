@@ -1,11 +1,11 @@
 <template>
-  <ion-modal :is-open="show" @willDismiss="onClose">
+  <ion-modal :is-open="show" @will-dismiss="onClose">
     <ion-header>
       <base-toolbar>
         <ion-buttons slot="start">
-          <ion-button @click="onClose"
-            ><ion-icon :icon="close" slot="icon-only"></ion-icon
-          ></ion-button>
+          <ion-button @click="onClose">
+            <ion-icon :icon="close" slot="icon-only"></ion-icon>
+          </ion-button>
         </ion-buttons>
         <ion-title class="ion-text-capitalize" v-if="title">
           {{ title }}
@@ -19,65 +19,32 @@
     </ion-header>
     <ion-content>
       <ion-card class="no-shadow no-border-radius ion-no-margin">
-        <base-spinner
-          v-if="loading"
-          :label="t('base.pleaseWait')"
-        ></base-spinner>
+        <base-spinner v-if="loading" :label="t('base.pleaseWait')"></base-spinner>
         <div style="height: 350px; overflow: hidden" class="q-full-width">
           <img ref="canvasImg" alt="" class="q-full-width" />
         </div>
         <ion-card-content v-if="cropper">
-          <ion-button
-            size="small"
-            mode="ios"
-            fill="clear"
-            @click="cropper.zoom(0.1)"
-          >
+          <ion-button size="small" mode="ios" fill="clear" @click="cropper.zoom(0.1)">
             <ion-icon slot="start" :icon="addOutline"></ion-icon>
             {{ t('zoomIn') }}
           </ion-button>
-          <ion-button
-            size="small"
-            mode="ios"
-            fill="clear"
-            @click="cropper.zoom(-0.1)"
-          >
+          <ion-button size="small" mode="ios" fill="clear" @click="cropper.zoom(-0.1)">
             <ion-icon slot="start" :icon="removeOutline"></ion-icon>
             {{ t('zoomOut') }}
           </ion-button>
-          <ion-button
-            size="small"
-            mode="ios"
-            fill="clear"
-            @click="cropper.rotate(-45)"
-          >
+          <ion-button size="small" mode="ios" fill="clear" @click="cropper.rotate(-45)">
             <ion-icon slot="start" :icon="returnUpBackOutline"></ion-icon>
             {{ t('rotateLeft') }}
           </ion-button>
-          <ion-button
-            size="small"
-            mode="ios"
-            fill="clear"
-            @click="cropper.rotate(45)"
-          >
+          <ion-button size="small" mode="ios" fill="clear" @click="cropper.rotate(45)">
             <ion-icon slot="start" :icon="returnUpForwardOutline"></ion-icon>
             {{ t('rotateRight') }}
           </ion-button>
-          <ion-button
-            size="small"
-            mode="ios"
-            fill="clear"
-            @click="flipHorizontal"
-          >
+          <ion-button size="small" mode="ios" fill="clear" @click="flipHorizontal">
             <ion-icon slot="start" :icon="repeatOutline"></ion-icon>
             {{ t('flipHorizontal') }}
           </ion-button>
-          <ion-button
-            size="small"
-            mode="ios"
-            fill="clear"
-            @click="flipVertical"
-          >
+          <ion-button size="small" mode="ios" fill="clear" @click="flipVertical">
             <ion-icon slot="start" :icon="arrowUpOutline"></ion-icon>
             {{ t('flipVorizontal') }}
           </ion-button>
@@ -85,11 +52,7 @@
         <ion-row v-if="initFinished" class="ion-justify-content-center q-pa-md">
           <ion-col size="12">
             <!-- <div class="cropper-img-preview" :style="previewStyle"></div> -->
-            <img
-              v-if="priviewImage"
-              :src="priviewImage"
-              :style="previewStyle"
-            />
+            <img v-if="priviewImage" :src="priviewImage" :style="previewStyle" />
           </ion-col>
         </ion-row>
       </ion-card>
@@ -142,15 +105,15 @@ const props = defineProps({
   },
   ratio: {
     type: Number,
-    default: 1, //1, 16/9
+    default: 1, // 1, 16/9
   },
   previewStyle: {
     type: String,
     default: 'overflow: hidden;width: 100px;height: 100px;border-radius: 100%;',
   },
 });
-const { t } = useLang();
 const emit = defineEmits(['on-close', 'update:modelValue', 'on-okay']);
+const { t } = useLang();
 const canvasImg = ref(null); // ref to <canvas ref="canvasImg" width="120" height="100"></canvas>
 const cropper = ref(null);
 const originalimagFile = ref(null);
@@ -178,7 +141,7 @@ watchEffect(() => {
 
 const show = computed({
   get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val),
+  set: val => emit('update:modelValue', val),
 });
 const onClose = () => {
   clearCropper();
@@ -199,24 +162,24 @@ const onInitCroper = () => {
     const options = {
       aspectRatio: props.ratio,
       preview: '.cropper-img-preview',
-      ready: function (/*e*/) {
+      ready(/* e */) {
         /* */
         cropData();
       },
-      cropstart: function (/*e*/) {
+      cropstart(/* e */) {
         /* */
       },
-      cropmove: function (/*e*/) {
+      cropmove(/* e */) {
         /* */
       },
-      cropend: function (/*e*/) {
+      cropend(/* e */) {
         /* */
         cropData();
       },
-      crop: function (/*e*/) {
+      crop(/* e */) {
         /* */
       },
-      zoom: function (/*e*/) {
+      zoom(/* e */) {
         /* */
       },
     };
@@ -238,15 +201,15 @@ const flipHorizontal = () => {
     cropper.value.scaleX(verticalScale.value);
   }
 };
-const flipVertical = (/*e*/) => {
+const flipVertical = (/* e */) => {
   if (cropper.value) {
     horizontalScale.value = horizontalScale.value * -1;
     cropper.value.scaleY(horizontalScale.value);
   }
 };
-const zoomIn = (/*e*/) => {
+const zoomIn = (/* e */) => {
   if (cropper.value) {
-    cropper.zoom(0.1);
+    cropper.value.zoom(0.1);
   }
 };
 const onOkay = () => {

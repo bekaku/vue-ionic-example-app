@@ -12,9 +12,8 @@
   </ion-row>
 </template>
 <script setup lang="ts">
-import { useBase } from '@/composables/UseBase';
-import { PropType } from 'vue';
-import { IonRow, IonSpinner, IonCol } from '@ionic/vue';
+import { IonCol, IonRow, IonSpinner } from '@ionic/vue';
+import type { PropType } from 'vue';
 defineProps({
   label: {
     type: String,
@@ -44,5 +43,4 @@ defineProps({
     default: false,
   },
 });
-const { isDark } = useBase();
 </script>

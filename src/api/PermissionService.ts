@@ -1,5 +1,5 @@
 import { useAxios } from '@/composables/UseAxios';
-import { ApiListResponse, IAcl, Permission } from '@/types/Models';
+import type { ApiListResponse, IAcl, Permission } from '@/types/Models';
 export default () => {
   const { callAxiosV2 } = useAxios();
   const userAcl = async (getMenuList: number = 0): Promise<IAcl | null> => {

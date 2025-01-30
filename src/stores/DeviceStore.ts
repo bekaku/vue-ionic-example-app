@@ -1,24 +1,25 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { useCache } from '@/composables/UseCache';
 import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/DateUtil';
+import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import { LatestDeviceActiveKey } from '@/utils/Constant';
 export const useDeviceStore = defineStore('deviceStore', () => {
   const isActive = ref(false);
   const deviceFourceReloadData = ref(false);
-  const { latestDeviceActive } = useCache();
-  const setAppStateChange = (state: boolean) => {
+  const setAppStateChange =async (state: boolean) => {
+    const latestDeviceActive = await loadStorage<number>(LatestDeviceActiveKey, false);
     isActive.value = state;
     if (state) {
       const currentTimeTamp = getCurrentTimestamp();
       const diffminutes = getDateDiffMinutes(
-        latestDeviceActive.value,
+        latestDeviceActive || 0,
         currentTimeTamp
       );
       if (diffminutes >= 30) {
         deviceFourceReloadData.value = true;
       }
     } else {
-      latestDeviceActive.value = getCurrentTimestamp();
+      await saveStorage(LatestDeviceActiveKey, getCurrentTimestamp(), false);
       deviceFourceReloadData.value = false;
     }
   };

@@ -55,19 +55,19 @@
   </ion-card>
 </template>
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { chatboxEllipsesOutline } from 'ionicons/icons';
-import { useLang } from '@/composables/UseLang';
-import { useBase } from '@/composables/UseBase';
 import BaseImage from '@/components/base/Image.vue';
+import { useLang } from '@/composables/UseLang';
+import { useTheme } from '@/composables/UseTheme';
 import {
-  IonItem,
-  IonLabel,
   IonButton,
-  IonIcon,
   IonCard,
   IonCardContent,
+  IonIcon,
+  IonItem,
+  IonLabel,
 } from '@ionic/vue';
+import { chatboxEllipsesOutline } from 'ionicons/icons';
+import type { PropType } from 'vue';
 defineProps({
   coverImage: {
     type: String,
@@ -118,9 +118,9 @@ defineProps({
     default: '',
   },
 });
-const { isDark } = useBase();
-const { t } = useLang();
 const emit = defineEmits(['on-change-avatar', 'on-change-cover']);
+const { isDark } = useTheme();
+const { t } = useLang();
 const onChangeAvatar = (event: any = undefined) => {
   emit('on-change-avatar');
   if (event) {

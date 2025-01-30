@@ -1,9 +1,5 @@
 <template>
-  <ion-popover
-    :trigger="triggerClass"
-    trigger-action="click"
-    ref="baseAppPopup"
-  >
+  <ion-popover :trigger="triggerClass" trigger-action="click" ref="baseAppPopup">
     <ion-content>
       <ion-card>
         <ion-card-content>
@@ -23,7 +19,6 @@
             </ion-button>
           </ion-col>
         </ion-row>
-
       </ion-card>
     </ion-content>
   </ion-popover>
@@ -49,20 +44,6 @@ import { IonButton, IonCard, IonContent, IonIcon, IonPopover, IonCardContent, Io
 import { checkmarkOutline } from 'ionicons/icons';
 import { ref } from 'vue';
 
-const { t } = useLang();
-
-interface Props {
-  title?: string;
-  width?: number;
-  showConfirm?: boolean;
-  confirmColor?: string;
-  labelConfirm?: string;
-  showCancel?: boolean;
-  labelCancel?: string;
-  cancelColor?: string;
-  triggerClass: string;
-}
-
 withDefaults(defineProps<Props>(), {
   showConfirm: true,
   showCancel: true,
@@ -70,9 +51,25 @@ withDefaults(defineProps<Props>(), {
   cancelColor: 'danger',
   width: 250
 });
+
 const emit = defineEmits<{
-  onChange: [boolean];
+  onChange: [boolean]
 }>();
+
+const { t } = useLang();
+
+interface Props {
+  title?: string
+  width?: number
+  showConfirm?: boolean
+  confirmColor?: string
+  labelConfirm?: string
+  showCancel?: boolean
+  labelCancel?: string
+  cancelColor?: string
+  triggerClass: string
+}
+
 const baseAppPopup = ref();
 const onClosePopup = () => {
   if (baseAppPopup.value) {

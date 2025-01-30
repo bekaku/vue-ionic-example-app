@@ -1,7 +1,10 @@
 import { Device } from '@capacitor/device';
-import { OsPlatForm } from '@/types/Common';
-import { IPlatForm, PlatformType } from '@/types/Models';
+import type { OsPlatForm } from '@/types/Common';
+import type { IPlatForm, PlatformType } from '@/types/Models';
 import { isPlatform, getPlatforms } from '@ionic/vue';
+import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import { LatestSyncActiveStatusKey } from '@/utils/Constant';
+import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/DateUtil';
 
 export const useDevice = () => {
   const isIOS = async (): Promise<boolean> => {
@@ -45,7 +48,28 @@ export const useDevice = () => {
       resolve(isIos ? 'IOS' : 'ANDROID');
     });
   };
-
+  const canSyncActiveStatusToServer = async (): Promise<boolean> => {
+    const latestSyncActiveStatus = await loadStorage<number>(LatestSyncActiveStatusKey, false);
+    const currentTimeTamp = getCurrentTimestamp();
+    let diffminutes;
+    if (latestSyncActiveStatus && latestSyncActiveStatus > 0) {
+      diffminutes = getDateDiffMinutes(latestSyncActiveStatus,
+        currentTimeTamp
+      );
+    } else {
+      await setSysncActiveStatus();
+      return new Promise(resolve => resolve(true));
+    }
+    if (diffminutes && diffminutes >= 5) {
+      await setSysncActiveStatus();
+      return new Promise(resolve => resolve(true));
+    }
+    return new Promise(resolve => resolve(false));
+  };
+  const setSysncActiveStatus = async () => {
+    await saveStorage(LatestSyncActiveStatusKey, getCurrentTimestamp(), false);
+    return new Promise(resolve => resolve(true));
+  };
   return {
     isIOS,
     isAppPlatfrom,
@@ -54,6 +78,7 @@ export const useDevice = () => {
     getDeviceInfo,
     isWeb,
     getPlatformType,
-    getDeviceId
+    getDeviceId,
+    canSyncActiveStatusToServer
   };
 };

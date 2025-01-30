@@ -6,77 +6,40 @@
       @ion-img-will-load="onImgWillLoad"
     /> -->
 
-  <div class="q-img q-img--menu" role="img" v-bind="$attrs">
+  <div v-if="src" class="q-img q-img--menu" role="img" v-bind="$attrs">
     <div :style="{ paddingBottom: imgRatio + '%' }"></div>
-    <div
-      class="q-img__container q-absolute-full"
-      :class="{ 'bg-black': !completed }"
-    >
-      <ion-img
-        :src="srcUrl"
-        class="q-img__image q-img__image--with-transition q-img__image--loaded"
-        :class="{ 'q-absolute-center': !completed }"
-        loading="lazy"
-        fetchpriority="auto"
-        aria-hidden="true"
-        draggable="false"
-        :style="
-          !completed
-            ? 'width: 0px'
-            : 'object-fit: cover; object-position: 50% 50%'
-        "
-        @ion-error="onError"
-        @ion-img-did-load="onImgDidLoad"
-        @ion-img-will-load="onImgWillLoad"
-      ></ion-img>
-
-      <slot />
+    <div class="q-img__container q-absolute-full" :class="{ 'bg-black': !completed }">
+      <ion-img :src="srcUrl" class="q-img__image q-img__image--with-transition q-img__image--loaded img-bg"
+        :class="{ 'q-absolute-center': !completed, 'img-bg': imageBg }" loading="lazy" fetchpriority="auto"
+        aria-hidden="true" draggable="false" :style="!completed
+          ? 'width: 0px'
+          : `object-fit: ${fit}; object-position: 50% 50%`
+          " @ion-error="onError" @ion-img-did-load="onImgDidLoad" @ion-img-will-load="onImgWillLoad"></ion-img>
     </div>
-    <ion-spinner
-      v-if="!completed || loading"
-      name="crescent"
-      class="q-absolute-center text-white"
-      :class="loadingColor"
-    ></ion-spinner>
+    <ion-spinner v-if="!completed || loading" name="crescent" class="q-absolute-center text-white"
+      :class="loadingColor"></ion-spinner>
     <div class="q-img__content q-absolute-full q-anchor--skip"></div>
+    <slot></slot>
   </div>
 </template>
 <script setup lang="ts">
 // <base-image v-if="src" :class="`shadow-${shadow}`" :src="src" ratio="4/3"></base-image>
-import { computed, onBeforeUnmount, onMounted, PropType, ref } from 'vue';
-import { ImgRatioType } from '@/types/Common';
-import { IonImg, IonSpinner } from '@ionic/vue';
 import FileManagerService from '@/api/FileManagerService';
-const props = defineProps({
-  src: {
-    type: String,
-    default: '',
-  },
-  placeHolder: {
-    type: String,
-    default: '',
-  },
-  alt: {
-    type: String,
-    default: 'img',
-  },
-  ratio: {
-    type: String as PropType<ImgRatioType>,
-    default: '1',
-  },
-  loadingColor: {
-    type: String,
-    default: 'text-white',
-  },
-  appImage: {
-    type: Boolean,
-    default: false,
-  },
-  fetch: {
-    type: Boolean,
-    default: false,
-  },
-});
+import type { ImgRatioType } from '@/types/Common';
+import { IonImg, IonSpinner } from '@ionic/vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+
+const { src, alt = 'img', ratio = '1', loadingColor = 'text-white', appImage = false, fetch = false, fit = 'cover', imageBg = false } = defineProps<{
+  src?: string
+  placeHolder?: string
+  alt?: string
+  ratio?: ImgRatioType
+  loadingColor?: string
+  appImage?: boolean
+  fetch?: boolean
+  imageBg?: boolean
+  fit?: 'cover' | 'fill' | 'contain' | 'none' | 'scale-down'// 4 / 3
+}>();
 const { fethCdnData } = FileManagerService();
 
 const completed = ref(false);
@@ -92,25 +55,35 @@ const onError = () => {
 const onImgDidLoad = () => {
   completed.value = true;
 };
-const onImgWillLoad = () => {};
+const onImgWillLoad = () => { };
 const imgRatio = computed(() =>
-  props.ratio == '1' ? '100' : props.ratio == '4/3' ? '75' : '56.25',
+  ratio == '1' ? '100' : ratio == '4/3' ? '75' : '56.25',
 );
 onMounted(() => {
-  if (props.appImage || props.fetch) {
-    onFetchImage();
-  } else {
-    srcUrl.value = props.src;
-    onLoad();
-    loading.value = false;
-  }
-});
-const onFetchImage = async () => {
-  if (!props.src) {
+  if (!src) {
     loading.value = false;
     return;
   }
-  const res = await fethCdnData(props.src);
+
+  // TODO next fix due slow load
+  // if (appImage || fetch) {
+  //   onFetchImage();
+  // } else {
+  //   srcUrl.value = src;
+  //   onLoad();
+  //   loading.value = false;
+  // }
+
+  srcUrl.value = src;
+  onLoad();
+  loading.value = false;
+});
+const onFetchImage = async () => {
+  if (!src) {
+    loading.value = false;
+    return;
+  }
+  const res = await fethCdnData(src);
   if (res) {
     srcUrl.value = res;
   }
@@ -123,7 +96,7 @@ const onLoad = () => {
       onImgDidLoad();
     } else {
       img.addEventListener('load', onImgDidLoad);
-      img.addEventListener('error', function () {
+      img.addEventListener('error', () => {
         onError();
       });
     }
@@ -137,5 +110,60 @@ onBeforeUnmount(() => {
 });
 </script>
 <style lang="sass" scoped>
-@import '@/assets/css/image.sass'
+// @import '@/assets/css/image.sass'
+$img-loading-font-size: 50px !default
+$img-content-position: absolute !default
+$img-content-padding: 16px !default
+$img-content-color: #fff !default
+$img-content-background: rgba(0, 0, 0, .47) !default
+.q-img
+  position: relative
+  width: 100%
+  display: inline-block
+  vertical-align: middle
+  overflow: hidden
+
+  &__loading .q-spinner
+    font-size: $img-loading-font-size
+
+  &__container
+    border-radius: inherit
+    font-size: 0
+
+  &__image
+    border-radius: inherit
+    width: 100%
+    height: 100%
+    opacity: 0
+
+    &--with-transition
+      transition: opacity .28s ease-in
+
+    &--loaded
+      opacity: 1
+
+  &__content
+    border-radius: inherit
+    pointer-events: none
+
+    > div
+      pointer-events: all
+      position: $img-content-position
+      padding: $img-content-padding
+      color: $img-content-color
+      background: $img-content-background
+
+  &--no-menu
+    .q-img__image,
+    .q-img__placeholder
+      pointer-events: none
+
+.img-bg
+  background: #000000
+  background: -webkit-linear-gradient(to bottom, #434343, #000000)
+  background: linear-gradient(to bottom, #434343, #000000)
+
+body[color-theme='dark']
+  .img-bg
+    background: #000000
 </style>

@@ -22,8 +22,8 @@ npm-debug.log*
 /.sass-cache
 /.sourcemaps
 /.versions
-/.vscode/*
-!/.vscode/extensions.json
+# /.vscode/*
+# !/.vscode/extensions.json
 /coverage
 /dist
 /node_modules
@@ -36,3 +36,6 @@ package-lock.json
 android/app/src/main/assets/public/
 ios/App/public/
 android/.idea/compiler.xml
+.env.development
+pnpm-lock.yaml
+public/assets/sql-wasm.wasm

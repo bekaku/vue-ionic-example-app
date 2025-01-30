@@ -1,18 +1,16 @@
 import { defineStore } from 'pinia';
-export const usePermissionStore = defineStore('permissionStore', {
-  state: () => {
-    return {
-      permissions: [] as string[],
-      frontendPermissions: [] as string[]
-    };
-  },
-  getters: {},
-  actions: {
-    setPermissions(items: string[]) {
-      this.permissions = items;
-    },
-    isHavePermission(code: string) {
-      return this.permissions.find((t: string) => t === code);
-    },
+import { ref } from 'vue';
+export const usePermissionStore = defineStore('permissionStore', () => {
+  const permissions = ref<string[]>([]);
+  const setPermissions = (items: string[]) => {
+    permissions.value = items;
+  }
+  const isHavePermission = (code: string) => {
+    permissions.value.find((t: string) => t === code);
+  }
+  return {
+    permissions,
+    setPermissions,
+    isHavePermission
   }
 });

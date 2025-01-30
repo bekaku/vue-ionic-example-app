@@ -17,7 +17,7 @@
         :pull-factor="0.5"
         :pull-min="100"
         :pull-max="200"
-        @ionRefresh="doRefresh($event)"
+        @ion-refresh="doRefresh($event)"
       >
         <ion-refresher-content class="refresher"></ion-refresher-content>
       </ion-refresher>
@@ -54,12 +54,12 @@
 </template>
 <script setup lang="ts">
 import PermissionService from '@/api/PermissionService';
-import { Permission } from '@/types/Models';
+import type { Permission } from '@/types/Models';
 import { useLang } from '@/composables/UseLang';
 import { usePaging } from '@/composables/UsePaging';
 import { useSort } from '@/composables/UseSort';
 import BaseToolbar from '@/components/base/Toolbar.vue';
-import BaseBackButton from '@/components/base/BackButton.vue';
+import BaseBackButton from '@/components/base/BaseBackButton.vue';
 import {
   IonPage,
   IonRow,

@@ -1,11 +1,11 @@
-import {
+import type {
   LoginRequest,
   RefreshTokenRequest,
   RefreshTokenResponse
 } from '@/types/Models';
-import { AppException, ForgotPasswordRequest, ResponseMessage } from '@/types/Common';
+import type { AppException, ForgotPasswordRequest, ResponseMessage } from '@/types/Common';
 import { useAxios } from '@/composables/UseAxios';
-import { AxiosResponse } from "axios";
+import type { AxiosResponse } from 'axios';
 export default () => {
   const { callAxios, callAxiosProcess } = useAxios();
 
@@ -45,7 +45,7 @@ export default () => {
       method: 'DELETE'
     });
   };
-  //Forgot password
+  // Forgot password
   const requestVerifyCodeToResetPwd = async (
     req: ForgotPasswordRequest
   ): Promise<AxiosResponse<ResponseMessage | AppException>> => {

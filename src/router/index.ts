@@ -1,73 +1,69 @@
 import { AppAuthTokenKey } from '@/utils/Constant';
-import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
 import { loadStorage } from '@/utils/StorageUtil';
+import { createRouter, createWebHistory } from '@ionic/vue-router';
+import type { RouteRecordRaw } from 'vue-router';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '',
     meta: { noRequireAuth: true },
-    component: () => import('@/pages/Index.vue')
+    component: () => import('@/pages/index.vue')
   },
   {
     path: '/about',
-    component: () => import('@/pages/About.vue')
+    component: () => import('@/pages/about.vue')
   },
   {
     path: '/auth/login',
     meta: { noRequireAuth: true },
-    component: () => import('@/pages/auth/LoginPage.vue')
+    component: () => import('@/pages/auth/login.vue')
   },
   {
     path: '/auth/forgot-password',
     meta: { noRequireAuth: true },
-    component: () => import('@/pages/auth/ForgotPassword.vue')
-  },
-  {
-    path: '/notifications',
-    component: () => import('@/pages/Notifications.vue')
+    component: () => import('@/pages/auth/forgot-password.vue')
   },
   {
     path: '/settings/account-settings',
-    component: () => import('@/pages/settings/accountSettings/Index.vue')
+    component: () => import('@/pages/settings/account-settings/index.vue')
   },
   {
     path: '/settings/account-settings/auth-session',
-    component: () => import('@/pages/settings/accountSettings/AuthSession.vue')
+    component: () => import('@/pages/settings/account-settings/auth-session.vue')
   },
   {
     path: '/settings/account-settings/email',
-    component: () => import('@/pages/settings/accountSettings/Email.vue')
+    component: () => import('@/pages/settings/account-settings/email.vue')
   },
   {
     path: '/settings/account-settings/password',
-    component: () => import('@/pages/settings/accountSettings/Password.vue')
+    component: () => import('@/pages/settings/account-settings/password.vue')
   },
   {
     path: '/settings/account-settings/personal',
-    component: () => import('@/pages/settings/accountSettings/Personal.vue')
+    component: () => import('@/pages/settings/account-settings/personal.vue')
   },
   {
     path: '/settings/account-settings/phone',
-    component: () => import('@/pages/settings/accountSettings/Phone.vue')
+    component: () => import('@/pages/settings/account-settings/phone.vue')
   },
   {
     path: '/settings/account-settings/photo',
-    component: () => import('@/pages/settings/accountSettings/Photo.vue')
+    component: () => import('@/pages/settings/account-settings/photo.vue')
   },
   {
     path: '/settings/languge',
     meta: { noRequireAuth: true },
-    component: () => import('@/pages/settings/Languge.vue')
+    component: () => import('@/pages/settings/languge.vue')
   },
   {
     path: '/settings/appearance',
     meta: { noRequireAuth: true },
-    component: () => import('@/pages/settings/Appearance.vue')
+    component: () => import('@/pages/settings/appearance.vue')
   },
   {
     path: '/tabs/',
-    component: () => import('@/pages/TabsHome.vue'),
+    component: () => import('@/pages/tabs/index.vue'),
     children: [
       {
         path: '',
@@ -75,22 +71,22 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'home',
-        component: () => import('@/pages/tabsHome/Home.vue')
+        component: () => import('@/pages/tabs/home.vue')
       },
       {
         path: 'chat',
-        component: () => import('@/pages/tabsHome/Chat.vue')
+        component: () => import('@/pages/tabs/chat.vue')
       },
       {
         path: 'other',
-        component: () => import('@/pages/tabsHome/Other.vue')
+        component: () => import('@/pages/tabs/other.vue')
       }
     ]
   },
   {
     path: '/test',
     meta: { noRequireAuth: true },
-    component: () => import('@/pages/test/TestPage.vue')
+    component: () => import('@/pages/test/index.vue')
   },
   {
     path: '/:catchAll(.*)*',

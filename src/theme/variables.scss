@@ -11,7 +11,8 @@ http://ionicframework.com/docs/theming/ */
 /** Ionic CSS Variables **/
 :root {
   // --app-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Prompt', sans-serif !important;
-  --app-font-family: 'Prompt', sans-serif !important;
+  // --app-font-family: 'Prompt', sans-serif !important;
+  --app-font-family: "Helvetica Neue", "Segoe UI", Arial, sans-serif;
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -87,10 +88,7 @@ http://ionicframework.com/docs/theming/ */
 
   /* Custom variables */
   --app-bg-color: #f1f1f1;
-  // --app-bg-color: #f9f9f9;
 
-  // --app-bg-color-theme-dark: #171717;
-  // --second-bg-color-theme-dark: #1c1c1d;
   --app-bg-color-theme-dark: #1d232a;
   --second-bg-color-theme-dark: #242b34;
   --third-bg-color-theme-dark: #161b20;
@@ -98,10 +96,8 @@ http://ionicframework.com/docs/theming/ */
   --app-border-color: #e9e9ec;
   --app-border-color-theme-dark: #394552;
 
-  // --border-light-color: #f0f0f0;
   --border-light-color: var(--app-border-color);
   --border-lighter-color: #f8f8f8;
-  // --border-light-color-theme-dark: #282829;
   --border-light-color-theme-dark: var(--app-border-color-theme-dark);
 
   --v-color-white: #fff;
@@ -185,6 +181,7 @@ http://ionicframework.com/docs/theming/ */
     --padding-start: 10px;
     --padding-end: 10px;
     margin: 5px 0;
+    --placeholder-color: var(--v-text-muted);
     //border: 1px solid var(--border-light-color);
     //border-radius: 10px;
   }
@@ -208,6 +205,17 @@ http://ionicframework.com/docs/theming/ */
   .radio-checked.ios::part(container) {
     border-color: var(--ion-color-primary);
   }
+
+  ion-label p {
+    color: var(--v-text-muted);
+  }
+
+  ion-badge.outline-primary {
+    --background: none;
+    --color: var(--ion-color-primary);
+    font-weight: lighter;
+    border: 1px solid var(--ion-color-primary);
+  }
 }
 
 .ios {
@@ -220,28 +228,13 @@ http://ionicframework.com/docs/theming/ */
 //   }
 // }
 
-body[color-theme='synapse'] {
-  --app-bg-color: #3a9ec1;
-  --ion-background-color: var(--app-bg-color);
-  --refresher-color: var(--v-color-white);
-
-  .loadingspinner {
-    --color: var(--v-color-white);
-
-    .infinite-loading-text {
-      --color: var(--v-color-white);
-    }
-  }
-
-}
-
-body[color-theme='synapse'],
 body[color-theme='light'] {
   ion-tab-button {
-    --color: var(--v-text-muted);
-    // --color-selected: var(--v-text-black);
-    --color-selected: var(--ion-color-primary);
-  }
+    --color-selected: var(--v-text-black);
+   --color: var(--v-text-black);
+   //--color: var(--v-text-muted);
+   //--color-selected: var(--ion-color-primary);
+ }
 
   ion-alert {
     --background: var(--v-color-white);
@@ -264,23 +257,6 @@ body[color-theme='light'] {
   ion-segment-button::part(indicator-background) {
     background: #fff;
   }
-}
-
-.ios body[color-theme='synapse'] {
-  ion-segment-button {
-    --color-checked: var(--v-color-white);
-  }
-}
-
-.md body[color-theme='synapse'] {
-  ion-modal {
-    --background: var(--v-color-white);
-
-    ion-content {
-      --background: var(--v-color-white);
-    }
-  }
-
 }
 
 /* @media (prefers-color-scheme: dark) { */
@@ -645,17 +621,6 @@ body[color-theme='dark'] {
   // border-radius: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
-}
-
-.theme-name {
-  padding: 2px;
-  border-radius: 15px;
-  /* background-color: var(--blue-1); */
-  // border: 1px solid var(--ion-color-primary);
-  width: fit-content;
-  color: var(--ion-color-primary);
-  display: inline-block;
-  font-size: 0.85em;
 }
 
 .app-ripple-parent {

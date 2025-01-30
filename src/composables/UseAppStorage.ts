@@ -1,5 +1,6 @@
-import { onBeforeMount, onMounted, Ref, ref, UnwrapRef, watch, watchEffect } from 'vue';
 import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import type { UnwrapRef } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
 
 export const useAppStorage = <T>(key: string, defaults: T, isJson: boolean = true) => {
   const storage = ref<T>(defaults);

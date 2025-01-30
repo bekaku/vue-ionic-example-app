@@ -102,18 +102,18 @@
   </form>
 </template>
 <script setup lang="ts">
-import {useLang} from '@/composables/UseLang';
-import {useValidation} from '@/composables/UseValidation';
-import {computed, ref} from 'vue';
-import {IonButton, IonCard, IonCardContent, IonIcon, IonInput, IonItem, IonLabel, IonList,} from '@ionic/vue';
-import {eyeOffOutline, eyeOutline, lockClosedOutline, shieldOutline, checkmarkOutline} from 'ionicons/icons';
+import { useLang } from '@/composables/UseLang';
+import { useValidation } from '@/composables/UseValidation';
+import { computed, ref } from 'vue';
+import { IonButton, IonCard, IonCardContent, IonIcon, IonInput, IonItem, IonLabel, IonList, } from '@ionic/vue';
+import { eyeOffOutline, eyeOutline, lockClosedOutline, shieldOutline, checkmarkOutline } from 'ionicons/icons';
 import AppAlert from '@/components/base/Alert.vue';
 
 interface Props {
-  submitLabel?: string;
-  actionAlign?: 'center' | 'left' | 'right';
-  showCurrentPassword?: boolean;
-  showLogout?: boolean;
+  submitLabel?: string
+  actionAlign?: 'center' | 'left' | 'right'
+  showCurrentPassword?: boolean
+  showLogout?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -122,8 +122,11 @@ const props = withDefaults(defineProps<Props>(), {
   showLogout: false,
   submitLabel: undefined
 });
-const {t} = useLang();
-const {validatePasswordStrongV2, requireField} = useValidation();
+const emit = defineEmits<{
+  onSubmit: [void]
+}>();
+const { t } = useLang();
+const { validatePasswordStrongV2, requireField } = useValidation();
 const showPassword = ref(false);
 
 const currentPassword = defineModel<string>('currentPassword');
@@ -132,22 +135,19 @@ const logoutAllDevice = defineModel<boolean>('logoutAllDevice');
 const loading = defineModel<boolean>('loading');
 
 const confirmPassword = ref('');
-const emit = defineEmits<{
-  onSubmit: [void];
-}>();
 const isStrong = computed(() => newPassword.value ? validatePasswordStrongV2(newPassword.value) : false);
 const isSamePwd = computed(
     () =>
-        confirmPassword.value &&
-        newPassword.value &&
-        newPassword.value === confirmPassword.value,
+        confirmPassword.value
+        && newPassword.value
+        && newPassword.value === confirmPassword.value,
 );
 const canSubmit = computed(
     () =>
-        (props.showCurrentPassword ? currentPassword.value : true) &&
-        confirmPassword.value &&
-        newPassword.value &&
-        isSamePwd.value,
+        (props.showCurrentPassword ? currentPassword.value : true)
+        && confirmPassword.value
+        && newPassword.value
+        && isSamePwd.value,
 );
 const onSubmit = () => {
   if (!newPassword.value) {

@@ -14,14 +14,8 @@
     </ion-label>
     <ion-icon slot="end" :icon="calendarOutline"></ion-icon>
   </ion-item>
-  <base-modal
-    :model-value="show"
-    @on-close="show = false"
-    :initial-breakpoint="1"
-    :breakpoints="[1]"
-    :content-padding="false"
-    :title="t('base.chooseDate')"
-  >
+  <base-modal :model-value="show" @on-close="show = false" :initial-breakpoint="1" :breakpoints="[1]"
+    :content-padding="false" :title="t('base.chooseDate')">
     <ion-grid>
       <ion-row class="ion-justify-content-center">
         <ion-col size="12">
@@ -30,14 +24,8 @@
               presentation="date"
               color="danger"
             ></ion-datetime> -->
-          <ion-datetime
-            presentation="date"
-            v-model="modelValue"
-            :min="min"
-            :max="max"
-            @ionChange="onSelect"
-            color="danger"
-          ></ion-datetime>
+          <ion-datetime presentation="date" v-model="modelValue" :min="min" :max="max" @ion-change="onSelect"
+            color="danger"></ion-datetime>
         </ion-col>
         <ion-col size="12" class="ion-text-center q-text-weight-bold q-text-h6">
           <!-- <ion-input
@@ -55,12 +43,8 @@
           </p>
         </ion-col>
         <ion-col size="12">
-          <ion-button
-            @click="show = false"
-            mode="ios"
-            expand="block"
-            class="text-white"
-            >{{ t('base.done') }}
+          <ion-button @click="show = false" mode="ios" expand="block" class="text-white">
+            {{ t('base.done') }}
           </ion-button>
         </ion-col>
       </ion-row>
@@ -68,30 +52,27 @@
   </base-modal>
 </template>
 <script setup lang="ts">
-import { computed, defineAsyncComponent, PropType, ref } from 'vue';
-import { calendarOutline } from 'ionicons/icons';
-import {
-  formatIso,
-  FORMAT_DATE14,
-  formatDateBy,
-  getDateNow,
-  convertDateFormatToThai,
-} from '@/utils/DateUtil';
 import { useLang } from '@/composables/UseLang';
 import {
-  IonItem,
-  IonLabel,
-  IonIcon,
-  IonGrid,
+  convertDateFormatToThai,
+  FORMAT_DATE14,
+  formatDateBy,
+  formatIso,
+  getDateNow,
+} from '@/utils/DateUtil';
+import {
+  IonButton,
   IonCol,
   IonDatetime,
-  IonInput,
-  IonButton,
-  IonRow,
+  IonGrid,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonRow
 } from '@ionic/vue';
-const BaseModal = defineAsyncComponent(
-  () => import('@/components/base/Modal.vue'),
-);
+import { calendarOutline } from 'ionicons/icons';
+import type { PropType } from 'vue';
+import { defineAsyncComponent, ref } from 'vue';
 const props = defineProps({
   modelValue: {
     type: String,
@@ -117,14 +98,16 @@ const props = defineProps({
     default: false,
   },
 });
-
-const { t } = useLang();
 const emit = defineEmits([
   'on-close',
   'update:modelValue',
   'update:show',
   'on-select',
 ]);
+const BaseModal = defineAsyncComponent(
+  () => import('@/components/base/Modal.vue'),
+);
+const { t } = useLang();
 const show = ref(false);
 // const date = ref();
 const modelValue = defineModel<string | undefined>();

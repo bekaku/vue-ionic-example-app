@@ -1,5 +1,5 @@
 import { useAxios } from '@/composables/UseAxios';
-import { ISearch } from '@/types/Models';
+import type { ISearch } from '@/types/Models';
 import { SearchParamiter } from '@/utils/Constant';
 export default () => {
   const { callAxios, validateServerResponse } = useAxios();

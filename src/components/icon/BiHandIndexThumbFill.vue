@@ -20,7 +20,7 @@ defineProps({
   },
   color: {
     type: String,
-    default: 'currentColor', //#2196f3
+    default: 'currentColor', // #2196f3
   },
 });
 </script>

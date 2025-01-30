@@ -1,5 +1,5 @@
 <template>
-  <ion-toolbar>
+  <ion-toolbar v-bind="$attrs">
     <slot />
   </ion-toolbar>
   <!-- <ion-toolbar :class="{ 'q-pl-xs q-pr-xs': !isIosPlatform }">
@@ -10,12 +10,9 @@
 import { IonToolbar } from '@ionic/vue';
 import { useDevice } from '@/composables/UseDevice';
 import { onMounted, ref } from 'vue';
-defineProps({
-  setPadding: {
-    type: Boolean,
-    default: true,
-  },
-});
+const { setPadding = true } = defineProps<{
+  setPadding?: boolean
+}>()
 const { isIOS } = useDevice();
 const isIosPlatform = ref(false);
 onMounted(async () => {
@@ -34,5 +31,4 @@ onMounted(async () => {
 //   --padding-start: 5px !important;
 //   --padding-end: 5px !important;
 // }
-// }
-</style>
+// }</style>

@@ -21,18 +21,18 @@ export type ChartThemePalete =
   | 'palette9'
   | 'palette10';
 export interface IChartSeries {
-  name: string;
-  data: number[];
-  type?: string | null;
+  name: string
+  data: number[]
+  type?: string | null
 }
 export interface ISeriresCategories {
-  series: IChartSeries[];
-  categories: string[];
-  colors?: string[];
-  max?: number;
+  series: IChartSeries[]
+  categories: string[]
+  colors?: string[]
+  max?: number
 }
 export interface ISimpleChartSeries {
-  series: number[];
-  categories: string[];
-  colors?: string[];
+  series: number[]
+  categories: string[]
+  colors?: string[]
 }

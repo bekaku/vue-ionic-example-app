@@ -1,63 +1,34 @@
 <template>
-  <base-layout
-    :page-title="t('base.language')"
-    fullscreen
-    :content-padding="false"
-    show-back-link
-  >
-    <ion-card>
+  <base-layout :page-title="t('base.language')" fullscreen :content-padding="false" show-back-link>
+    <IonicCard flat :title="t('base.chooseLanguge')">
       <ion-list>
-        <ion-item lines="none">
-          <ion-label>
-            <h2 class="text-muted">{{ t('base.chooseLanguge') }}</h2>
-          </ion-label>
-        </ion-item>
-        <ion-item
-          lines="none"
-          v-for="lang in availableLocales"
-          :key="lang.iso"
-          @click="langugeAndThemeStore.setLocale(lang.iso)"
-        >
+        <ion-item lines="none" v-for="lang in availableLocales" :key="lang.iso" @click="onSwichLanguge(lang.iso)">
           <ion-label>{{ lang.name }}</ion-label>
-          <ion-icon
-            v-if="lang.iso == langugeAndThemeStore.locale"
-            slot="end"
-            color="primary"
-            :icon="checkmarkCircle"
-          ></ion-icon>
+          <ion-icon v-if="lang.iso == locale" slot="end" color="primary" :icon="checkmarkCircle"></ion-icon>
         </ion-item>
       </ion-list>
-    </ion-card>
+    </IonicCard>
   </base-layout>
 </template>
 <script setup lang="ts">
-import { useLangugeAndThemeStore } from '@/stores/LangugeAndThemeStore';
-import { availableLocales } from '@/utils/LangUtil';
-import { AppLocale } from '@/types/Models';
-import { checkmarkCircle } from 'ionicons/icons';
 import UserService from '@/api/UserService';
+import BaseLayout from '@/components/base/BaseLayout.vue';
+import IonicCard from '@/components/ionic/IonicCard.vue';
+import { availableLocales, useLang } from '@/composables/UseLang';
 import { useAuthenStore } from '@/stores/AuthenStore';
-import { watch } from 'vue';
-import { useLang } from '@/composables/UseLang';
-import { useCache } from '@/composables/UseCache';
-import { IonList, IonItem, IonLabel, IonIcon, IonCard } from '@ionic/vue';
-import BaseLayout from '@/components/base/Layout.vue';
+import type { AppLocale } from '@/types/Common';
+import { IonIcon, IonItem, IonLabel, IonList } from '@ionic/vue';
+import { checkmarkCircle } from 'ionicons/icons';
+
+
 const authenStore = useAuthenStore();
 const { updateDefaultLocale } = UserService();
-const langugeAndThemeStore = useLangugeAndThemeStore();
-const { destroyCache } = useCache();
-const { t } = useLang();
-const onChangeToServer = async () => {
+const { t, setLocale, locale } = useLang();
+const onSwichLanguge = async (l: AppLocale) => {
+  setLocale(l);
   if (authenStore.auth) {
-    await updateDefaultLocale(langugeAndThemeStore.locale as AppLocale);
-  }
-};
-watch(langugeAndThemeStore, (state) => {
-  if (state.locale) {
-    onChangeToServer();
-    destroyCache();
-
+    await updateDefaultLocale(l);
     window.location.replace('/');
   }
-});
+}
 </script>

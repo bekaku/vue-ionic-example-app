@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
-export const useFourceReloadStore = defineStore('fourceReloadStore', {
-  state: () => ({
-    companyTheme: false as boolean,
-    companyThemeLeader: false as boolean
-  }),
-  getters: {},
-  actions: {}
+import { ref } from 'vue';
+export const useFourceReloadStore = defineStore('fourceReloadStore', () => {
+  const companyTheme = ref<boolean>(false);
+  const companyThemeLeader = ref<boolean>(false);
+  return {
+    companyTheme,
+    companyThemeLeader
+  }
 });

@@ -11,7 +11,7 @@
         <div class="q-text-subtitle1 q-my-md">
           {{
             $t('base.appVersionChanged', {
-              userVersion: userVersion,
+              userVersion,
               storeVersion:
                 platForm == 'IOS' ? item.appVersionIos : item.appVersionAndroid,
             })
@@ -58,8 +58,9 @@
   </template>
 </template>
 <script setup lang="ts">
-import { PropType, ref } from 'vue';
-import { AppVersionDto, PlatformType } from '@/types/Models';
+import type { PropType } from 'vue';
+import { ref } from 'vue';
+import type { AppVersionDto, PlatformType } from '@/types/Models';
 import { cloudDownloadOutline } from 'ionicons/icons';
 import { useLang } from '@/composables/UseLang';
 import { useConfig } from '@/composables/UseConfig';
@@ -89,10 +90,10 @@ defineProps({
     default: true,
   },
 });
-const { getConfigPublic } = useConfig();
-const androidStoreLink = ref<any>(getConfigPublic('androidStoreLink'));
-const iOSStoreLink = ref<any>(getConfigPublic('iOSStoreLink'));
-const apkLink = ref<any>(getConfigPublic('apkLink'));
-const { t } = useLang();
 defineEmits(['update-later']);
+const { getEnv } = useConfig();
+const androidStoreLink = ref<any>(getEnv('VITE_ANDROID_STORE'));
+const iOSStoreLink = ref<any>(getEnv('VITE_IOS_STORE'));
+const apkLink = ref<any>(getEnv('VITE_APK_STORE'));
+const { t } = useLang();
 </script>

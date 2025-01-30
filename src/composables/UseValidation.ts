@@ -2,7 +2,7 @@ import { validateEmail, isNumber } from '@/utils/AppUtil';
 import { useLang } from './UseLang';
 export const useValidation = () => {
   const { t } = useLang();
-  const rePwdStrong = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  const rePwdStrong = /^(?=.*[A-Z])(?=.*\d)[A-Z\d]{8,}$/i;
 
   const required = (val: any) =>
     (val && val.length > 0) || t('error.validateRequireField');
@@ -11,14 +11,14 @@ export const useValidation = () => {
     isNumber(val) || t('error.validateNumber');
 
   const requiredPositiveNumber = (val: string) =>
-    (isNumber(val) && parseInt(val) > 0) || t('error.validateNumber');
+    (isNumber(val) && Number.parseInt(val) > 0) || t('error.validateNumber');
 
   const requireField = (val: string, fieldName: string) =>
     (val && val.length > 0) || t('error.validateRequire', [fieldName]);
 
   const requireEmail = (val: any) =>
-    (val && val.length > 0 && validateEmail(val) != null) ||
-    t('error.emailValidate');
+    (val && val.length > 0 && validateEmail(val) != null)
+    || t('error.emailValidate');
 
   const validateMax = (val: string, max: number, fieldName: string) =>
     val.length <= max || t('error.validateMax', [fieldName, max]);
@@ -56,10 +56,9 @@ export const useValidation = () => {
     }
 
     // Check for special characters
-    if (password.match(/[^a-zA-Z\d]/)) {
+    if (password.match(/[^a-z\d]/i)) {
       strength += 1;
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       tips += 'Include at least one special character. ';
     }
 

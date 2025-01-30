@@ -44,16 +44,17 @@
           ]"
         />
   */
-import { PropType, ref, watchEffect, onUnmounted, onMounted, watch } from 'vue';
-import {
-  PieChartType,
+import { useTheme } from '@/composables/UseTheme';
+import type {
   ChartMode,
   ChartThemePalete,
-  Strokestyle,
+  PieChartType,
   Position,
+  Strokestyle,
 } from '@/types/Chart';
+import type { PropType } from 'vue';
+import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
-import { useBase } from '@/composables/UseBase';
 const props = defineProps({
   modelValue: Object,
   chartId: {
@@ -86,7 +87,7 @@ const props = defineProps({
   },
   type: {
     type: String as PropType<PieChartType>,
-    default: 'area', //area , line , bar
+    default: 'area', // area , line , bar
   },
   mode: {
     type: String as PropType<ChartMode>,
@@ -142,7 +143,7 @@ const props = defineProps({
   },
   strokestyle: {
     type: String as PropType<Strokestyle>,
-    default: 'smooth', //smooth, straight, stepline
+    default: 'smooth', // smooth, straight, stepline
   },
   strokeWidth: {
     type: Number,
@@ -169,7 +170,7 @@ const props = defineProps({
     default: undefined,
   },
 });
-const { isDark } = useBase();
+const { isDark } = useTheme();
 const chartSeries = ref(props.series);
 const options = ref<any>();
 watchEffect(() => {
@@ -268,7 +269,7 @@ const chartSetup = () => {
         },
       },
       grid: {
-        borderColor: props.dark ? '#282829' : '#f0f0f0', //transparent
+        borderColor: props.dark ? '#282829' : '#f0f0f0', // transparent
         // row: {
         //   colors: [props.dark ? '#353537' : '#e9ebec', 'transparent'], // takes an array which will be repeated on columns
         //   opacity: 0.2,
@@ -276,7 +277,7 @@ const chartSetup = () => {
       },
       tooltip: {
         y: {
-          formatter: function (val: any) {
+          formatter(val: any) {
             return val;
           },
         },

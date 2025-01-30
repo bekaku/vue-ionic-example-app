@@ -1,11 +1,15 @@
-import { config, Devmode } from "@/utils/Constant";
-import {getConfig as getAppConfig} from "@/utils/AppUtil";
+import { config } from '@/utils/Constant';
+import { getConfig as getAppConfig } from '@/utils/AppUtil';
 export const useConfig = () => {
+  const getEnv = <T>(key: string) => {
+    const env = import.meta.env;
+    return env[key] as unknown as T || undefined;
+  };
   const getConfig = (key: string) => {
     return config[key as keyof typeof config] || undefined;
   };
   const isDevMode = () => {
-    return process.env.NODE_ENV == 'development';
+    return import.meta.env.DEV;
   };
   const getConfigPublic = (key: string) => {
     return config[key as keyof typeof config] || undefined;
@@ -14,15 +18,16 @@ export const useConfig = () => {
     return getAppConfig<T>(key) as T;
   };
   const isTestMode = () => {
-    return Devmode && !isDevMode();
+    return import.meta.env.VITE_DEV_MODE == 'true' && !isDevMode();
   }
   const isDevelopMode = () => {
-    return Devmode && isDevMode();
+    return import.meta.env.VITE_DEV_MODE == 'true' && isDevMode();
   }
   const isProdMode = () => {
-    return !Devmode && !isDevMode();
+    return import.meta.env.VITE_DEV_MODE == 'false' && !isDevMode();
   }
   return {
+    getEnv,
     getConfig,
     getConfigPublic,
     isDevMode,

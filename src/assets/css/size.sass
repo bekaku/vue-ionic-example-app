@@ -1,3 +1,4 @@
+@use 'sass:map'
 $space-base: 16px !default
 $space-x-base: $space-base !default
 $space-y-base: $space-base !default
@@ -57,38 +58,38 @@ $flex-gutter: ('none': 0, 'xs': $flex-gutter-xs, 'sm': $flex-gutter-sm, 'md': $f
 @each $space, $value in $spaces
 
   .q-pa-#{$space}
-    padding: map-get($value, "y") map-get($value, "x") !important
+    padding: map.get($value, "y") map.get($value, "x") !important
   .q-pl-#{$space}
-    padding-left: map-get($value, "x") !important
+    padding-left: map.get($value, "x") !important
   .q-pr-#{$space}
-    padding-right: map-get($value, "x") !important
+    padding-right: map.get($value, "x") !important
   .q-pt-#{$space}
-    padding-top: map-get($value, "y") !important
+    padding-top: map.get($value, "y") !important
   .q-pb-#{$space}
-    padding-bottom: map-get($value, "y") !important
+    padding-bottom: map.get($value, "y") !important
   .q-px-#{$space}
-    padding-left: map-get($value, "x") !important
-    padding-right: map-get($value, "x") !important
+    padding-left: map.get($value, "x") !important
+    padding-right: map.get($value, "x") !important
   .q-py-#{$space}
-    padding-top: map-get($value, "y") !important
-    padding-bottom: map-get($value, "y") !important
+    padding-top: map.get($value, "y") !important
+    padding-bottom: map.get($value, "y") !important
 
   .q-ma-#{$space}
-    margin: map-get($value, "y") map-get($value, "x") !important
+    margin: map.get($value, "y") map.get($value, "x") !important
   .q-ml-#{$space}
-    margin-left: map-get($value, "x") !important
+    margin-left: map.get($value, "x") !important
   .q-mr-#{$space}
-    margin-right: map-get($value, "x") !important
+    margin-right: map.get($value, "x") !important
   .q-mt-#{$space}
-    margin-top: map-get($value, "y") !important
+    margin-top: map.get($value, "y") !important
   .q-mb-#{$space}
-    margin-bottom: map-get($value, "y") !important
+    margin-bottom: map.get($value, "y") !important
   .q-mx-#{$space}
-    margin-left: map-get($value, "x") !important
-    margin-right: map-get($value, "x") !important
+    margin-left: map.get($value, "x") !important
+    margin-right: map.get($value, "x") !important
   .q-my-#{$space}
-    margin-top: map-get($value, "y") !important
-    margin-bottom: map-get($value, "y") !important
+    margin-top: map.get($value, "y") !important
+    margin-bottom: map.get($value, "y") !important
 
 .q-mt-auto, .q-my-auto
   margin-top: auto !important

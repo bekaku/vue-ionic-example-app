@@ -1,23 +1,11 @@
 <template>
   <div class="file-input">
-    <input
-      type="file"
-      :ref="refName"
-      v-on:change="onSelected"
-      class="file"
-      :id="refName"
-      :multiple="multiple"
-      :accept="allowMimeType.join(',')"
-    />
+    <input type="file" :ref="refName" @change="onSelected" class="file" :id="refName" :multiple="multiple"
+      :accept="allowMimeType.join(',')" />
     <label :for="refName">
       <slot name="label">
         <slot name="icon">
-          <base-icon
-            :icon="icon"
-            :icon-set="iconSet"
-            :color="iconColor"
-            :size="iconSize"
-          ></base-icon>
+          <base-icon :icon="icon" :icon-set="iconSet" :color="iconColor" :size="iconSize"></base-icon>
         </slot>
         <span v-if="showLabelName" class="q-ml-sm">{{
           t('base.chooseFile')
@@ -25,7 +13,7 @@
       </slot>
     </label>
     <slot name="name">
-      <template strong v-if="fileNameDisplay && showName">
+      <template v-if="fileNameDisplay && showName">
         <div style="width: 100%; overflow: auto">
           {{ fileNameDisplay }}
         </div>
@@ -37,9 +25,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, PropType, ref } from 'vue';
+import type { PropType } from 'vue';
+import { computed, ref } from 'vue';
 import { addOutline } from 'ionicons/icons';
-import { IconSetType } from '@/types/Common';
+import type { IconSetType } from '@/types/Common';
 import { useLang } from '@/composables/UseLang';
 import BaseIcon from '@/components/base/Icon.vue';
 const props = defineProps({
@@ -85,15 +74,15 @@ const props = defineProps({
   },
 });
 
-const { t } = useLang();
 const emit = defineEmits([
   'update:modelValue',
   'on-pick-file',
   'on-delete-file',
 ]);
+const { t } = useLang();
 const show = computed({
   get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val),
+  set: val => emit('update:modelValue', val),
 });
 const isAllowFile = ref(true);
 const fileNameDisplay = ref('');
@@ -107,14 +96,14 @@ const onSelected = (e: any) => {
     // Convert size in bytes to kilo bytes
     const fileSize = (size / 1000).toFixed(2);
 
-    if (props.allowMimeType.indexOf(type) > -1) {
+    if (props.allowMimeType.includes(type)) {
       // Set the text content
       fileNameDisplay.value = `${fileName} - ${fileSize}KB`;
       isAllowFile.value = true;
       if (props.multiple) {
-        emit('on-pick-file', e.target.files); //File[]
+        emit('on-pick-file', e.target.files); // File[]
       } else {
-        emit('on-pick-file', e.target.files[0]); //File
+        emit('on-pick-file', e.target.files[0]); // File
       }
     } else {
       isAllowFile.value = false;

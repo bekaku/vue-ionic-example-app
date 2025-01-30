@@ -106,8 +106,8 @@ defineProps({
     default: '',
   },
 });
-const divRef = ref(null);
 const emit = defineEmits(['onSend']);
+const divRef = ref(null);
 const isTextFocus = ref(false);
 const text = ref('');
 onMounted(() => {

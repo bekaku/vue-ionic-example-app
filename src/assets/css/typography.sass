@@ -1,3 +1,4 @@
+@use 'sass:map'
 // $typography-font-family: 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif !default
 $body-font-size: 14px !default
 $body-line-height: 1.4 !default
@@ -27,53 +28,62 @@ $caption: (size: .75rem, line-height: 1.25rem, letter-spacing: .03333em, weight:
 $headings: ('h1': $h1, 'h2': $h2, 'h3': $h3, 'h4': $h4, 'h5': $h5, 'h6': $h6, 'subtitle1': $subtitle1, 'subtitle2': $subtitle2, 'body1': $body1, 'body2': $body2, 'overline': $overline, 'caption': $caption) !default
 
 // sorry for long line; we need .sass and it doesn't support multi-line list
-$h-tags: (h1: map-get($headings, "h1"), h2: map-get($headings, "h2"), h3: map-get($headings, "h3"), h4: map-get($headings, "h4"), h5: map-get($headings, "h5"), h6: map-get($headings, "h6")) !default
+$h-tags: (h1: map.get($headings, "h1"), h2: map.get($headings, "h2"), h3: map.get($headings, "h3"), h4: map.get($headings, "h4"), h5: map.get($headings, "h5"), h6: map.get($headings, "h6")) !default
 
-body
-  // min-width: 100px
-  // min-height: 100%
-  // -ms-text-size-adjust: 100%
-  // -webkit-text-size-adjust: 100%
-  // -webkit-font-smoothing: antialiased
-  // -moz-osx-font-smoothing: grayscale
-  // font-smoothing: antialiased
-  // color: var(--v-main-text-body)
-  // font-size: $body-font-size
-   // font-family: $typography-font-family
+//body
+// min-width: 100px
+// min-height: 100%
+// -ms-text-size-adjust: 100%
+// -webkit-text-size-adjust: 100%
+// -webkit-font-smoothing: antialiased
+// -moz-osx-font-smoothing: grayscale
+// font-smoothing: antialiased
+// color: var(--v-main-text-body)
+// font-size: $body-font-size
+ // font-family: $typography-font-family
 
 // @each $heading, $value in $h-tags
 //   #{$heading}
-//     font-size: map-get($value, "size")
-//     font-weight: map-get($value, "weight")
-//     line-height: map-get($value, "line-height")
-//     letter-spacing: map-get($value, "letter-spacing")
+//     font-size: map.get($value, "size")
+//     font-weight: map.get($value, "weight")
+//     line-height: map.get($value, "line-height")
+//     letter-spacing: map.get($value, "letter-spacing")
+h1, h2, h3, h4, h5, h6
+  line-height: 1.5
 
 .q-text-
   @each $heading, $value in $headings
     &#{$heading}
-      font-size: map-get($value, "size")
-      font-weight: map-get($value, "weight")
-      line-height: map-get($value, "line-height")
-      letter-spacing: map-get($value, "letter-spacing")
+      font-size: map.get($value, "size")
+      font-weight: map.get($value, "weight")
+      line-height: map.get($value, "line-height")
+      letter-spacing: map.get($value, "letter-spacing")
+
   &uppercase
     text-transform: uppercase
+
   &lowercase
     text-transform: lowercase
+
   &capitalize
     text-transform: capitalize
 
   &center
     text-align: center
+
   &left
     text-align: left
+
   &right
     text-align: right
+
   &justify
     text-align: justify
     hyphens: auto !important
 
   &italic
     font-style: italic !important
+
   &bold
     font-weight: bold !important
 
@@ -89,20 +99,27 @@ body
 
 small
   font-size: 80%
+
 big
   font-size: 170%
+
 sub
   bottom: -.25em
+
 sup
   top: -.5em
 
 .rounded-borders
   border-radius: 4px !important
+
 .border-radius-inherit
   border-radius: inherit
 
+.q-text-medium
+  font-size: 1em !important
+
 .q-text-caption, .text-caption
-  font-size: 0.85em
+  font-size: 0.85em !important
 
 .text-caption-smaller
   font-size: 0.75em
@@ -113,7 +130,8 @@ sup
 
 .q-text-muted2
   color: var(--v-text-muted2) !important
-.q-text-white
+
+.q-text-white, .text-white
   color: #fff !important
 
 .q-text-black
@@ -121,12 +139,14 @@ sup
 
 .q-text-small
   font-size: 0.8em !important
+
 .q-text-smaller
   font-size: 0.75em !important
+
 .q-text-extra-small
   font-size: 0.7em !important
 
-  /*class="q-text-max-2-lines"*/
+/*class="q-text-max-2-lines"*/
 .q-text-max-
   &1-line
     overflow: hidden
@@ -138,6 +158,7 @@ sup
     -webkit-box-orient: vertical
     -moz-box-orient: vertical
     -o-box-orient: vertical
+
   &2-lines
     overflow: hidden
     display: -webkit-box
@@ -148,6 +169,7 @@ sup
     -webkit-box-orient: vertical
     -moz-box-orient: vertical
     -o-box-orient: vertical
+
   &3-lines
     overflow: hidden
     display: -webkit-box
@@ -158,6 +180,7 @@ sup
     -webkit-box-orient: vertical
     -moz-box-orient: vertical
     -o-box-orient: vertical
+
   &4-lines
     overflow: hidden
     display: -webkit-box
@@ -169,7 +192,8 @@ sup
     -moz-box-orient: vertical
     -o-box-orient: vertical
 
-.app-text-link
+
+.app-text-link, a
   // color: var(--ion-color-primary);
   text-decoration: none
 
@@ -182,6 +206,7 @@ sup
 .app-auto-newline
   word-wrap: break-word
   white-space: pre-wrap
+
 .icon-size
   font-size: 24px
 
@@ -193,6 +218,7 @@ sup
   /* These are technically the same, but use both */
   overflow-wrap: break-word
   word-wrap: break-word
+  white-space: pre-wrap
 
   -ms-word-break: break-all
   /* This is the dangerous one in WebKit, as it breaks things wherever */
@@ -210,3 +236,9 @@ sup
   overflow: hidden
   white-space: nowrap
   text-overflow: ellipsis
+
+.q-text-muted a
+  color: var(--v-text-muted) !important
+
+.q-text-black a
+  color: var(--v-text-black) !important

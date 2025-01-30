@@ -1,22 +1,16 @@
-import { PushNotifications } from '@capacitor/push-notifications';
-import { FCM } from '@capacitor-community/fcm';
-import { NotificationCount, NotifyFunctionType } from '@/types/Models';
-import { AppAuthRefeshTokenKey, FCM_USER_TOPIC, FcmTokenKey, NotifyKey } from '@/utils/Constant';
 import UserNotifyService from '@/api/UserNotifyService';
 import { useNotificationStore } from '@/stores/NotificationStore';
+import type { NotificationCount, NotifyFunctionType } from '@/types/Models';
+import { AppAuthRefeshTokenKey, FCM_USER_TOPIC, FcmTokenKey, NotifyKey } from '@/utils/Constant';
+import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import { FCM } from '@capacitor-community/fcm';
+import { PushNotifications } from '@capacitor/push-notifications';
 import { toastController } from '@ionic/vue';
-import { useCache } from './UseCache';
+import { useBase } from './UseBase';
 import { useDevice } from './UseDevice';
 import { useLang } from './UseLang';
-import { useBase } from './UseBase';
-import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 
 export const useNotification = () => {
-  const {
-    // fcmToken,
-    // refeshTokenKey,
-    cacheNotifyCount
-  } = useCache();
   const {
     updateFcmSetting,
     refreshFcmToken,
@@ -38,7 +32,7 @@ export const useNotification = () => {
     await refreshFcmToken({
       refreshToken: {
         refreshToken: refeshTokenKey,
-        fcmToken: fcmToken
+        fcmToken
       }
     });
     return new Promise((resolve) => {
@@ -51,7 +45,7 @@ export const useNotification = () => {
     await updateFcmSetting({
       refreshToken: {
         refreshToken: refeshTokenKey,
-        fcmToken: fcmToken,
+        fcmToken,
         fcmEnable: isON
       }
     });
@@ -127,18 +121,18 @@ export const useNotification = () => {
         // );
         const title = notification.title;
         const message = notification.body;
-        const notificatoinId =
-          notification.data && notification?.data?.notificatoinId
+        const notificatoinId
+          = notification.data && notification?.data?.notificatoinId
             ? (notification?.data?.notificatoinId as number)
             : undefined;
 
-        const functionId =
-          notification.data && notification.data.functionId
+        const functionId
+          = notification.data && notification.data.functionId
             ? (notification.data.functionId as number)
             : undefined;
 
-        const functionCode =
-          notification.data && notification.data.functionCode
+        const functionCode
+          = notification.data && notification.data.functionCode
             ? (notification.data.functionCode as NotifyFunctionType)
             : undefined;
 
@@ -162,26 +156,26 @@ export const useNotification = () => {
         //   'Push notification action performed Data',
         //   JSON.stringify(res)
         // );
-        const notificatoinId =
-          res &&
-            res.notification &&
-            res.notification.data &&
-            res.notification.data.notificatoinId
+        const notificatoinId
+          = res
+            && res.notification
+            && res.notification.data
+            && res.notification.data.notificatoinId
             ? res.notification.data.notificatoinId
             : undefined;
-        const functionId =
-          res &&
-            res.notification &&
-            res.notification.data &&
-            res.notification.data.functionId
+        const functionId
+          = res
+            && res.notification
+            && res.notification.data
+            && res.notification.data.functionId
             ? res.notification.data.functionId
             : undefined;
 
-        const functionCode =
-          res &&
-            res.notification &&
-            res.notification.data &&
-            res.notification.data.functionCode
+        const functionCode
+          = res
+            && res.notification
+            && res.notification.data
+            && res.notification.data.functionCode
             ? (res.notification.data.functionCode as NotifyFunctionType)
             : undefined;
 
@@ -207,7 +201,7 @@ export const useNotification = () => {
       if (message) {
         const toast = await toastController.create({
           header: title,
-          message: message,
+          message,
           duration: 1000 * 3,
           position: 'top',
           buttons: [
@@ -241,10 +235,11 @@ export const useNotification = () => {
     }
     if (functionCode && functionId) {
       if (
-        functionCode == 'SYSTEM_ANNOUNMENT' ||
-        functionCode == 'LIKE_POST'
+        functionCode == 'SYSTEM_ANNOUNMENT'
+        || functionCode == 'LIKE_POST'
       ) {
         WeeGoTo(`/post/view/${functionId}`);
+      // eslint-disable-next-line no-empty
       } else if (functionCode == 'CHAT') {
       }
     }
@@ -291,7 +286,7 @@ export const useNotification = () => {
   };
   const subscribeTopic = async (topic: string) => {
     try {
-      FCM.subscribeTo({ topic: topic });
+      FCM.subscribeTo({ topic });
     } catch (error) {
       console.error('subscribeTopic', error);
     }
@@ -302,7 +297,7 @@ export const useNotification = () => {
   };
   const unSubscribeTopic = async (topic: string) => {
     try {
-      FCM.unsubscribeFrom({ topic: topic });
+      FCM.unsubscribeFrom({ topic });
     } catch (error) {
       console.error('unSubscribeTopic', error);
     }
@@ -416,7 +411,6 @@ export const useNotification = () => {
     if (!web) {
       await PushNotifications.removeAllDeliveredNotifications();
     }
-
   };
   const fetchNotReadNotify = async () => {
     const notifyCount = await loadStorage<NotificationCount>(NotifyKey, true);

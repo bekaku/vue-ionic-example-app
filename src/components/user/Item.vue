@@ -19,8 +19,8 @@
   </ion-item>
 </template>
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { UserDto } from '@/types/Models';
+import type { PropType } from 'vue';
+import type { UserDto } from '@/types/Models';
 import { IonItem, IonLabel, IonAvatar, IonImg } from '@ionic/vue';
 defineProps({
   item: {

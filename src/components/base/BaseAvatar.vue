@@ -1,76 +1,113 @@
-<template>
-  <ion-avatar
-    v-bind="$attrs"
-    :style="`width: ${size}px; height: ${size}px;`"
-    :class="{ rounded: rounded }"
-  >
-    <slot>
-      <template v-if="!fetchImage">
-        <ion-img v-if="src" :src="src"></ion-img>
-      </template>
-      <template v-else>
-        <app-image
-          :src="src"
-          :style="`width: ${size}px; height: ${size}px;`"
-          :circle="!rounded"
-          :rounded="rounded"
-        ></app-image>
-      </template>
-
-      <slot name="extra"></slot>
-    </slot>
-
-    <!-- <img v-if="src" :src="src" /> -->
-
-    <!-- <base-image v-if="src" :class="`shadow-${shadow}`" :src="src" ratio="4/3"></base-image> -->
-  </ion-avatar>
-</template>
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { IonAvatar, IonImg } from '@ionic/vue';
-import BaseImage from '@/components/base/Image.vue';
-import AppImage from '@/components/base/AppImage.vue';
-defineProps({
-  src: {
-    type: String as PropType<string>,
-    default: undefined,
-  },
-  spinnerColor: {
-    type: String as PropType<string>,
-    default: 'white',
-  },
-  imgBg: {
-    type: String as PropType<string>,
-    default: 'bg-grey-8',
-  },
-  ratio: {
-    type: Number as PropType<number | undefined>,
-    default: 4 / 3,
-  },
-  size: {
-    type: Number,
-    default: 32,
-  },
-  square: {
-    type: Boolean,
-    default: false,
-  },
-  rounded: {
-    type: Boolean,
-    default: false,
-  },
-  fetchImage: {
-    type: Boolean,
-    default: false,
-  },
-  shadow: {
-    type: Number,
-    default: 0,
-  },
+/*
+ <base-avatar  v-if="item.avatar" :src="item.avatar" :fetch-image="fecthImage"/>
+
+ // Ionic Align Avatar On Top Item
+   <base-avatar
+          class="ion-align-self-stretch"
+          slot="start"
+          v-if="itemApprove.approveBy?.avatar?.thumbnail"
+          fetch-image
+          :src="itemApprove.approveBy.avatar.thumbnail"
+        />
+ */
+import FileManagerService from '@/api/FileManagerService';
+import { IonAvatar, IonImg, IonSkeletonText } from '@ionic/vue';
+import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue';
+const {
+  top = false,
+  fetchImage = false,
+  rounded = false,
+  square = false,
+  round = true,
+  size = 32,
+  src,
+  bordered = false,
+  borderedColor = '#fff',
+  borderedWidth = '2px',
+} = defineProps<{
+  src: string
+  shadow?: number
+  top?: boolean
+  fetchImage?: boolean
+  rounded?: boolean
+  round?: boolean
+  square?: boolean
+  size?: number
+  ratio?: number
+  imgBg?: string
+  spinnerColor?: string
+  bordered?: boolean
+  borderedColor?: string
+  borderedWidth?: string
+}>();
+const { fethCdnData } = FileManagerService();
+const loading = ref(true);
+const firstLoaded = ref(false);
+const srcUrl = ref<any>();
+onMounted(async () => {
+  onFetchImage();
+});
+watchEffect(() => {
+  if (firstLoaded.value) {
+    onFetchImage();
+  }
+});
+const onFetchImage = async () => {
+  if (!src) {
+    loading.value = false;
+    return;
+  }
+  if (fetchImage) {
+    const res = await fethCdnData(src);
+    if (res) {
+      srcUrl.value = res;
+    }
+  } else {
+    srcUrl.value = src;
+  }
+  srcUrl.value = src;
+  loading.value = false;
+  if (!firstLoaded.value) {
+    firstLoaded.value = true;
+  }
+};
+onBeforeUnmount(() => {
+  srcUrl.value = undefined;
 });
 </script>
+<template>
+  <ion-avatar v-if="src" v-bind="$attrs" :style="`width: ${size}px; height: ${size}px;`"
+    :class="{ 'bordered': bordered, 'avatar-top': top }">
+    <slot>
+      <ion-skeleton-text v-if="loading" :class="{
+        'avatar-round': round && !square,
+        'avatar-rounded': rounded && !square,
+        'avatar-square': square
+      }
+        " :animated="true"></ion-skeleton-text>
+      <Transition>
+        <ion-img v-if="!loading" :src="srcUrl"
+          :class="{ 'avatar-rounded': !square && rounded, 'avatar-round': !square && !rounded, 'avatar-square': square }"></ion-img>
+      </Transition>
+    </slot>
+    <slot name="extra"></slot>
+  </ion-avatar>
+</template>
 <style scoped>
-ion-avatar.rounded {
-  --border-radius: 4px;
+.bordered {
+  border: v-bind(borderedWidth) solid v-bind(borderedColor)
+}
+
+.avatar-round {
+  border-radius: 50%;
+}
+
+.avatar-rounded {
+  border-radius: 5px;
+}
+
+.avatar-square {
+  border-radius: 0;
 }
 </style>

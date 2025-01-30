@@ -10,15 +10,16 @@
   </div>
 </template>
 <script setup lang="ts">
-import { PropType, ref, watchEffect, onUnmounted, onMounted, watch } from 'vue';
-import {
-  PieChartType,
+import { useTheme } from '@/composables/UseTheme';
+import type {
   ChartMode,
   ChartThemePalete,
+  PieChartType,
   Position,
 } from '@/types/Chart';
+import type { PropType } from 'vue';
+import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
-import { useBase } from '@/composables/UseBase';
 const props = defineProps({
   modelValue: Object,
   chartId: {
@@ -119,7 +120,7 @@ const props = defineProps({
   },
   stokeLineCap: {
     type: String as PropType<'round' | 'square' | 'butt'>,
-    default: 'round', //round, square, butt
+    default: 'round', // round, square, butt
   },
   fillType: {
     type: String as PropType<'fill' | 'gradient'>,
@@ -160,7 +161,7 @@ const props = defineProps({
 });
 const chartSeries = ref(props.series);
 const options = ref<any>();
-const { isDark } = useBase();
+const { isDark } = useTheme();
 watchEffect(() => {
   if (props.series && props.series.length > 0) {
     chartSeries.value = props.series;
@@ -277,7 +278,7 @@ const chartSetup = () => {
                   : props.semi
                     ? -20
                     : 5,
-              formatter: function (val: any) {
+              formatter(val: any) {
                 return val + (props.valUnit ? props.valUnit : '');
               },
               // color: props.dark ? '#fff' : '#000',
@@ -293,7 +294,7 @@ const chartSetup = () => {
         lineCap: props.stokeLineCap,
       },
       fill: {
-        type: props.fillType, //fill, gradient
+        type: props.fillType, // fill, gradient
         gradient: {
           shade: 'light',
           type: 'horizontal',
@@ -332,7 +333,7 @@ const chartSetup = () => {
       },
       tooltip: {
         y: {
-          formatter: function (val: any) {
+          formatter(val: any) {
             return val;
           },
         },

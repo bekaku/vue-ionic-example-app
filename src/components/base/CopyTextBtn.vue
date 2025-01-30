@@ -1,5 +1,10 @@
 <template>
-  <ion-button @click="onCopy($event)" size="small" fill="clear">
+  <ion-button
+    @click="onCopy($event)"
+    size="small"
+    fill="clear"
+    class="ion-no-margin ion-no-padding"
+  >
     <ion-icon
       slot="icon-only"
       class="text-muted icon-size"
@@ -30,7 +35,7 @@ const onCopy = (event: any) => {
 <style scoped>
 ion-button {
   --padding-top: 0px;
-  --padding-bottom: 10px;
+  /* --padding-bottom: 10px; */
   --padding-end: 0px;
   --padding-start: 0px;
 }

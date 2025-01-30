@@ -1,3 +1,4 @@
+@use 'sass:list'
 $shadow-transition: box-shadow .28s cubic-bezier(.4, 0, .2, 1) !default
 $shadow-color: #000 !default
 $shadow-transition: box-shadow .28s cubic-bezier(.4, 0, .2, 1) !default
@@ -70,9 +71,9 @@ $z-fullscreen: 6000 !default
 
 @for $z from 1 through 24
   .shadow-#{$z}
-    box-shadow: nth($shadows, $z)
+    box-shadow: list.nth($shadows, $z)
   .shadow-up-#{$z}
-    box-shadow: nth($shadows-up, $z)
+    box-shadow: list.nth($shadows-up, $z)
 
 .no-shadow, .shadow-0
   box-shadow: none !important

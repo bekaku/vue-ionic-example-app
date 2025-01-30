@@ -1,37 +1,32 @@
-import { useRoute, useRouter } from 'vue-router';
-import {
-  toastController,
-  alertController,
-  loadingController,
-  useIonRouter
-} from '@ionic/vue';
-import {
-  formatDateTime,
-  formatDate,
-  formatDistanceFromNow,
-  FORMAT_DATE,
-  FORMAT_DATE17
-} from '@/utils/DateUtil';
-import {
-  AppToastOptions,
+import type {
   AppAlertOptions,
+  AppToastOptions,
   GenerateLinkType
 } from '@/types/Common';
-import { useLangugeAndThemeStore } from '@/stores/LangugeAndThemeStore';
+import {
+  FORMAT_DATE,
+  FORMAT_DATE17,
+  formatDate,
+  formatDateTime,
+  formatDistanceFromNow
+} from '@/utils/DateUtil';
 import { Clipboard } from '@capacitor/clipboard';
-import sanitizeHtml from 'sanitize-html';
-import { useLang } from './UseLang';
+import {
+  alertController,
+  loadingController,
+  toastController,
+  useIonRouter
+} from '@ionic/vue';
+import DOMPurify from 'dompurify';
+import { useRoute, useRouter } from 'vue-router';
 import { useConfig } from './UseConfig';
-import { computed } from 'vue';
-import {UserProfileDto} from "@/types/Models";
+import { useLang } from './UseLang';
 export const useBase = () => {
-  const langugeAndThemeStore = useLangugeAndThemeStore();
   const router = useIonRouter();
   const route = useRoute();
   const routerVue = useRouter();
   const { t, locale } = useLang();
-  const { getConfigPublic } = useConfig();
-  const isDark = computed(() => langugeAndThemeStore.isDark);
+  const { getEnv } = useConfig();
   const getCurrentPath = (fullPath = true) => {
     return fullPath ? route.fullPath : route.path;
   };
@@ -151,15 +146,15 @@ export const useBase = () => {
       alertController
         .create({
           header: confirmHeader,
-          message: text, //Message <strong>text</strong>!!!
+          message: text, // Message <strong>text</strong>!!!
           buttons: [
             {
-              text: cancelText ? cancelText : t('base.cancel'),
+              text: cancelText || t('base.cancel'),
               cssClass: 'text-muted',
               handler: () => resolve(false)
             },
             {
-              text: okayText ? okayText : t('base.submit'),
+              text: okayText || t('base.submit'),
               handler: () => resolve(true)
             }
           ]
@@ -198,9 +193,9 @@ export const useBase = () => {
   const WeeLoading = async (text?: string, spinnerType?: any) => {
     const loading = await loadingController.create({
       cssClass: 'my-custom-class',
-      message: text ? text : t('base.pleaseWait'),
+      message: text || t('base.pleaseWait'),
       // duration: 3000,
-      spinner: spinnerType ? spinnerType : 'lines' //bubbles" | "circles" | "circular" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+      spinner: spinnerType || 'lines' // bubbles" | "circles" | "circular" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
     });
     return new Promise((resolve) => {
       resolve(loading);
@@ -232,16 +227,16 @@ export const useBase = () => {
       { value: 1, symbol: '' },
       { value: 1e3, symbol: 'k' }
     ];
-    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    const rx = /\.0+$|(\.\d*[1-9])0+$/;
     const item = lookup
       .slice()
       .reverse()
-      .find(function (item) {
+      .find((item) => {
         return num >= item.value;
       });
     return item
-      ? (num / item.value).toFixed(digits).replace(rx, '$1') +
-      (item.symbol ? t('readableNum.' + item.symbol) : '')
+      ? (num / item.value).toFixed(digits).replace(rx, '$1')
+      + (item.symbol ? t('readableNum.' + item.symbol) : '')
       : '0';
   };
   /**
@@ -266,14 +261,22 @@ export const useBase = () => {
     });
   };
   const generateWebLink = (params: string, type: GenerateLinkType) => {
-    let appUrl = getConfigPublic('webAppUrl');
+    let appUrl = getEnv<string>('VITE_WEB_APP_URL');
     if (type == 'post') {
       appUrl += `/post/view/${params}`;
     }
     return appUrl;
   };
-  const inputSanitizeHtml = (str: string) => {
-    return sanitizeHtml(str);
+  const inputSanitizeHtml = (str: string | undefined) => {
+    if (!str) {
+      return '';
+    }
+    return DOMPurify.sanitize(str,
+      {
+        ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'],
+        ALLOWED_ATTR: ['href', 'class']
+      }
+    );
   };
   return {
     WeeGoTo,
@@ -296,7 +299,6 @@ export const useBase = () => {
     getCurrentPath,
     onReplaceUrl,
     readableNumber,
-    isDark,
     onOpenProfile,
     writeToClipboard,
     generateWebLink,

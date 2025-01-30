@@ -1,36 +1,36 @@
 <template>
   <swiper
-    ref="swiperRef"
-    v-if="showSlide"
-    :modules="modules"
-    :keyboard="opts?.keyboard"
-    :pagination="opts?.pagination"
-    :navigation="opts?.navigation"
-    :scrollbar="opts?.scrollbar"
-    :zoom="opts?.zoom"
-    :initial-slide="opts?.initialSlide"
-    :lazy="opts?.lazy"
-    :style="opts?.style"
-    :autoplay="opts?.autoplay"
-    :speed="opts?.speed"
-    :slides-per-view="opts?.slidesPerView"
-    :space-between="opts?.spaceBetween"
-    :centered-slides="opts?.centeredSlides"
-    :allow-touch-move="opts?.allowTouchMove"
-    @slideChange="onSlideChange"
+      ref="swiperRef"
+      v-if="showSlide"
+      :modules="modules"
+      :keyboard="opts?.keyboard"
+      :pagination="opts?.pagination"
+      :navigation="opts?.navigation"
+      :scrollbar="opts?.scrollbar"
+      :zoom="opts?.zoom"
+      :initial-slide="opts?.initialSlide"
+      :lazy="opts?.lazy"
+      :style="opts?.style"
+      :autoplay="opts?.autoplay"
+      :speed="opts?.speed"
+      :slides-per-view="opts?.slidesPerView"
+      :space-between="opts?.spaceBetween"
+      :centered-slides="opts?.centeredSlides"
+      :allow-touch-move="opts?.allowTouchMove"
+      @slide-change="onSlideChange"
   >
     <slot />
   </swiper>
   <ion-row
-    v-if="paramiters?.navigationCustom"
-    class="ion-justify-content-between"
+      v-if="paramiters?.navigationCustom"
+      class="ion-justify-content-between"
   >
     <ion-col class="ion-no-padding ion-no-margin">
       <ion-button
-        :disabled="currentIndex == 0"
-        fill="clear"
-        class="ion-text-capitalize"
-        @click="onPrev"
+          :disabled="currentIndex == 0"
+          fill="clear"
+          class="ion-text-capitalize"
+          @click="onPrev"
       >
         {{ t('base.previous') }}
         <ion-icon slot="start" :icon="arrowBackOutline"></ion-icon>
@@ -38,10 +38,10 @@
     </ion-col>
     <ion-col class="ion-no-padding ion-no-margin ion-text-right">
       <ion-button
-        v-if="currentIndex < max"
-        fill="clear"
-        class="ion-text-capitalize"
-        @click="onNext"
+          v-if="currentIndex < max"
+          fill="clear"
+          class="ion-text-capitalize"
+          @click="onNext"
       >
         {{ t('base.continue') }}
         <ion-icon slot="end" :icon="arrowForwardOutline"></ion-icon>
@@ -50,8 +50,9 @@
   </ion-row>
 </template>
 <script setup lang="ts">
-import { onMounted, PropType, ref, watch } from 'vue';
-import { SlideOptions } from '@/types/Common';
+import type { PropType } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import type { SlideOptions } from '@/types/Common';
 import {
   Autoplay,
   Keyboard,
@@ -77,8 +78,8 @@ import { arrowForwardOutline, arrowBackOutline } from 'ionicons/icons';
 import { useLang } from '@/composables/UseLang';
 
 interface Props {
-  paramiters: SlideOptions;
-  max?: number;
+  paramiters: SlideOptions
+  max?: number
 }
 
 type SlideAction = 'next' | 'prev';
@@ -93,10 +94,7 @@ const modules = ref<any[]>([]);
 const swiperRef = ref<any>(undefined);
 // const currentIndex = ref(0);
 const currentIndex = defineModel('currentIndex', { type: Number, default: 0 });
-const slideAction = defineModel('slideAction', {
-  type: String as PropType<SlideAction | undefined>,
-  default: undefined,
-});
+const slideAction = defineModel('slideAction', { type: String as PropType<SlideAction | undefined>, default: undefined });
 onMounted(async () => {
   await initSlides();
   showSlide.value = true;
@@ -131,24 +129,23 @@ const initSlides = () => {
     // }
     opts.value = {
       keyboard: params?.keyboard ? params.keyboard : false,
-      allowTouchMove:
-        params?.allowTouchMove != undefined ? params.allowTouchMove : true,
+      allowTouchMove: params?.allowTouchMove !=undefined ? params.allowTouchMove : true,
       pagination: params?.pagination ? params.pagination : false,
       navigation: params?.navigation ? params.navigation : false,
       scrollbar: params?.scrollbar ? params.scrollbar : false,
       updateOnWindowResize: params?.updateOnWindowResize
-        ? params.updateOnWindowResize
-        : false,
+          ? params.updateOnWindowResize
+          : false,
       zoom: params?.zoom ? params.zoom : false,
       initialSlide: params?.initialSlide ? params.initialSlide : 0,
       slidesPerGroup: params?.slidesPerGroup ? params.slidesPerGroup : 0,
       freeMode: params?.freeMode ? params.freeMode : false,
       lazy: params?.lazy ? params.lazy : true,
       style: params?.style
-        ? params.style
-        : {
-            '--swiper-navigation-color': '#3880ff',
-            '--swiper-pagination-color': '#3880ff',
+          ? params.style
+          : {
+            '--swiper-navigation-color': '#00aba9',
+            '--swiper-pagination-color': '#00aba9',
           },
       speed: params?.speed ? params.speed : 300,
       slidesPerView: params?.slidesPerView ? params.slidesPerView : 1,
@@ -176,7 +173,6 @@ watch(slideAction, (newAction) => {
     } else if (newAction == 'prev') {
       onPrev();
     }
-    console.log('watch > newAction', newAction);
   }
   slideAction.value = undefined;
 });

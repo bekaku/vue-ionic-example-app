@@ -26,7 +26,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { PropType, ref } from 'vue';
+import type { PropType } from 'vue';
+import { ref } from 'vue';
 import { close } from 'ionicons/icons';
 import { IonIcon } from '@ionic/vue';
 defineProps({
@@ -44,7 +45,7 @@ defineProps({
       | 'is-danger'
       | 'is-light'
     >,
-    default: 'is-light', //is-primary, is-link, is-info, is-success, is-warning, is-danger can add with is-light
+    default: 'is-light', // is-primary, is-link, is-info, is-success, is-warning, is-danger can add with is-light
   },
   icon: {
     type: String as PropType<string | undefined>,

@@ -24,22 +24,22 @@
       </template>
       <template v-else>
         <ion-spinner v-if="loading" color="primary" name="dots"></ion-spinner>
-        <base-link
+        <base-link-text
           v-else
           @click="$emit('on-next-page')"
           :label="label"
           :color="color"
-        ></base-link>
+        ></base-link-text>
       </template>
     </ion-col>
   </ion-row>
 </template>
 <script setup lang="ts">
-import { PropType } from 'vue';
+import BaseLinkText from '@/components/base/BaseLinkText.vue';
+import { useTheme } from '@/composables/UseTheme';
+import { IonButton, IonCol, IonIcon, IonRow, IonSpinner } from '@ionic/vue';
 import { chevronDownOutline } from 'ionicons/icons';
-import { useBase } from '@/composables/UseBase';
-import BaseLink from '@/components/base/Link.vue';
-import { IonRow, IonCol, IonButton, IonIcon, IonSpinner } from '@ionic/vue';
+import type { PropType } from 'vue';
 defineProps({
   fristLoaded: {
     type: Boolean,
@@ -70,6 +70,6 @@ defineProps({
     default: 'solid',
   },
 });
-const { isDark } = useBase();
 defineEmits(['on-next-page']);
+const { isDark } = useTheme();
 </script>

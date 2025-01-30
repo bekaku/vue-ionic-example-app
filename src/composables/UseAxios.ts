@@ -1,22 +1,24 @@
 import { AxiosKey } from '@/plugins/AxiosSymbols';
-import { AppException, RequestType, ResponseMessage } from '@/types/Common';
+import type { AppException, RequestType, ResponseMessage } from '@/types/Common';
 import { isAppException, isServerException, isServerResponseMessage } from '@/utils/AppUtil';
+import { AppAuthTokenKey } from '@/utils/Constant';
 import { injectStrict } from '@/utils/InjectTyped';
+import { loadStorage } from '@/utils/StorageUtil';
 import { App } from '@capacitor/app';
 import { toastController } from '@ionic/vue';
-import { AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
 import { alertCircle, closeOutline, exitOutline } from 'ionicons/icons';
 import { onUnmounted, ref } from 'vue';
 import { useBase } from './UseBase';
 import { useConfig } from './UseConfig';
-import { AppAuthTokenKey, LocaleKey } from '@/utils/Constant';
-import { loadStorage } from '@/utils/StorageUtil';
+import { useDevice } from './UseDevice';
 
 export const useAxios = () => {
   const sessionTimeOutRef = ref();
   const $appAxios = injectStrict(AxiosKey); // it's typed now
   const { WeeToast } = useBase();
-  const { isDevMode, getConfigPublicType } = useConfig();
+  const { canSyncActiveStatusToServer } = useDevice();
+  const { isDevMode, getEnv } = useConfig();
   onUnmounted(() => {
     if (sessionTimeOutRef.value) {
       clearTimeout(sessionTimeOutRef.value);
@@ -67,39 +69,39 @@ export const useAxios = () => {
     return await validateServerResponse<T>(res);
   };
   const callAxiosFile = async <T>(req: RequestType): Promise<any> => {
-    return new Promise(async (resolve /*reject*/) => {
-      const response = await callAxiosProcess<T>(req, false);
+    const response = await callAxiosProcess<T>(req, false);
+    return new Promise((resolve /* reject */) => {
       resolve(response);
     });
   };
   const callAxios = async <T>(req: RequestType): Promise<T> => {
-    return new Promise(async (resolve /*reject*/) => {
-      const response = await callAxiosProcess<T>(req);
-      if (response.status != 401 && response.status != 403) {
-        if (response.data) {
-          if (isAppException(response.data)) {
-            notifyException(response.data);
-          } else if (isServerResponseMessage(response.data)) {
-            notifyServerMessage(response.data);
+    const response = await callAxiosProcess<T>(req);
+    return new Promise((resolve /* reject */) => {
+        if (response.status != 401 && response.status != 403) {
+          if (response.data) {
+            if (isAppException(response.data)) {
+              notifyException(response.data);
+            } else if (isServerResponseMessage(response.data)) {
+              notifyServerMessage(response.data);
+            }
           }
         }
+        resolve(response.data as T);
       }
-      resolve(response.data as T);
-    }
     );
   };
-  const callAxiosProcess = <T>(req: RequestType, logDev: boolean = true): Promise<AxiosResponse<T>> => {
-    return new Promise(async (resolve /*reject*/) => {
-      const jwtKey = await loadStorage<string>(AppAuthTokenKey);
+  const callAxiosProcess = async <T>(req: RequestType, logDev: boolean = true): Promise<AxiosResponse<T>> => {
+    const jwtKey = await loadStorage<string>(AppAuthTokenKey);
+    const cahSyncOnlineStatus = await canSyncActiveStatusToServer();
+    return new Promise((resolve /* reject */) => {
       $appAxios.defaults.headers.Authorization = `Bearer ${jwtKey}`;
       // $appAxios.defaults.headers['Accept-Language'] = await loadStorage<string>(LocaleKey);
 
       if (req.baseURL != undefined) {
         $appAxios.defaults.baseURL = req.baseURL;
       } else {
-        $appAxios.defaults.baseURL = getConfigPublicType<string>('apiBaseUrl');
+        $appAxios.defaults.baseURL = getEnv<string>('VITE_API_BASE_URL');
       }
-
       if (req.contentType) {
         $appAxios.defaults.headers['Content-Type'] = req.contentType;
       } else {
@@ -110,7 +112,7 @@ export const useAxios = () => {
       } else {
         $appAxios.defaults.responseType = 'json';
       }
-
+      $appAxios.defaults.headers['X-Sync-Active'] = cahSyncOnlineStatus ?'1' :'0';
       $appAxios({
         method: req.method,
         url: req.API,
@@ -124,14 +126,10 @@ export const useAxios = () => {
         })
         .catch((error: any) => {
           if (isDevMode()) {
-            console.error(`api `, error.response.status);
-
             console.error(`api ${$appAxios.defaults.baseURL}${req.API}`, req, error);
           }
-          if (error?.response && error?.response?.status) {
-            if (error.response.status != 401 && error.response.status != 403) {
-              showErrorToast(error);
-            }
+          if (error?.response?.status != 401 && error?.response?.status != 403) {
+            showErrorToast(error);
           }
           resolve(error);
         });
@@ -140,11 +138,14 @@ export const useAxios = () => {
 
 
   const showErrorToast = async (error: any) => {
+    const responseData = error?.response?.data;
+    const message = responseData?.message;
+    const errors = responseData?.errors && responseData?.errors.length > 0 ? responseData?.errors.toString() : undefined;
     const toast = await toastController.create({
-      header: error.code,
-      message: error.message,
+      header: message || error.code,
+      message: errors || error.message,
       icon: alertCircle,
-      duration: 5 * 1000,
+      duration: 15 * 1000,
       mode: 'ios',
       color: 'danger',
       buttons: [

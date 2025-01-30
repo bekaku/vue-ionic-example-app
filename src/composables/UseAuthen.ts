@@ -1,36 +1,30 @@
-import { useAuthenStore } from '@/stores/AuthenStore';
 import AuthenService from '@/api/AuthenService';
-import { RefreshTokenResponse, UserDto } from '@/types/Models';
-import { useBase } from './UseBase';
-import { useLang } from './UseLang';
-import { useCache } from './UseCache';
-import { useNotification } from './UseNotification';
+import { useAuthenStore } from '@/stores/AuthenStore';
+import type { RefreshTokenResponse, UserDto } from '@/types/Models';
 import { cordovaClearCach } from '@/utils/AppUtil';
-import {
-  saveStorage,
-  loadStorage,
-  removeStorage
-} from '@/utils/StorageUtil';
 import {
   AppAuthRefeshTokenKey,
   AppAuthTokenCreatedKey,
   AppAuthTokenExpireKey,
   AppAuthTokenKey
 } from '@/utils/Constant';
+import {
+  loadStorage,
+  removeStorage,
+  saveStorage
+} from '@/utils/StorageUtil';
+import { useBase } from './UseBase';
+import { useCache } from './UseCache';
+import { useLang } from './UseLang';
+import { useNotification } from './UseNotification';
 
 export const useAuthen = () => {
   const authenStore = useAuthenStore();
-  const { WeeConfirm, WeeLoading, WeeGoTo } = useBase();
+  const { WeeConfirm, WeeLoading, } = useBase();
   const { t } = useLang();
   const { logoutClear } = useCache();
   const { userUnSubscribeFcm, unregisterNotifications } = useNotification();
-  const { singoutToServer, refreshToken } = AuthenService();
-  // const {
-  //   authTokenKey,
-  //   refeshTokenKey,
-  //   authTokenExpireKey,
-  //   authTokenCreatedKey
-  // } = useCache();
+  const { singoutToServer, } = AuthenService();
 
   const setAuthen = (auth: UserDto | null) => {
     if (auth != null) {
@@ -68,7 +62,6 @@ export const useAuthen = () => {
       loading.dismiss();
       await destroyAuthDataAndRedirect();
     }
-    return;
   };
   const logoutToServer = async (
     refeshTokenKey: string | null,
@@ -83,21 +76,21 @@ export const useAuthen = () => {
     await singoutToServer({
       refreshToken: {
         refreshToken: refeshTokenKey,
-        email: mail ? mail : ''
+        email: mail || ''
       }
     });
     return new Promise((resolve) => {
       resolve(true);
     });
   };
-  const destroyAuthData = () => {
-    return new Promise(async (resolve) => {
-      await removeStorage(AppAuthTokenKey);
-      await removeStorage(AppAuthRefeshTokenKey);
-      await removeStorage(AppAuthTokenExpireKey);
-      await removeStorage(AppAuthTokenCreatedKey);
-      await cordovaClearCach();
-      await logoutClear();
+  const destroyAuthData = async () => {
+    await removeStorage(AppAuthTokenKey);
+    await removeStorage(AppAuthRefeshTokenKey);
+    await removeStorage(AppAuthTokenExpireKey);
+    await removeStorage(AppAuthTokenCreatedKey);
+    await cordovaClearCach();
+    await logoutClear();
+    return new Promise((resolve) => {
       resolve(true);
     });
   };
