@@ -1,18 +1,18 @@
-import { useDevice } from '@/composables/UseDevice';
-import type { ChoosePhotoItem, FileSaveResult } from '@/types/Common';
-import { urlToBlob } from '@/utils/AppUtil';
-import { AppAlbumName } from '@/utils/Constant';
-import { base64FromPath, generateAutoName } from '@/utils/FileUtils';
+import { useDevice } from '@/composables/useDevice';
+import type { ChoosePhotoItem, FileSaveResult } from '@/types/common';
+import { urlToBlob } from '@/utils/appUtil';
+import { AppAlbumName } from '@/libs/constant';
+import { base64FromPath, generateAutoName } from '@/utils/fileUtils';
 import type { MediaSaveOptions } from '@capacitor-community/media';
 import { Media } from '@capacitor-community/media';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Directory, Filesystem } from '@capacitor/filesystem';
-import { useBase } from './UseBase';
-import { useLang } from './UseLang';
+import { useBase } from './useBase';
+import { useLang } from './useLang';
 
 export const useFileSystem = () => {
   const { t } = useLang();
-  const { WeeToast } = useBase();
+  const { appToast } = useBase();
   const { isWeb } = useDevice();
   const appAlbumName = AppAlbumName;
   const createAlbumIfNotExist = async () => {
@@ -96,7 +96,7 @@ export const useFileSystem = () => {
       Media
         .savePhoto(opts)
         .then((res) => {
-          WeeToast({
+          appToast({
             text: i18n('success.saved')
           });
         })
@@ -189,7 +189,7 @@ export const useFileSystem = () => {
         .savePhoto(opts)
         .then((res) => {
           console.log(JSON.stringify(res))
-          WeeToast({
+          appToast({
             text: i18n('success.saved')
           });
         })

@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import { IonToolbar } from '@ionic/vue';
-import { useDevice } from '@/composables/UseDevice';
+import { useDevice } from '@/composables/useDevice';
 import { onMounted, ref } from 'vue';
 const { setPadding = true } = defineProps<{
   setPadding?: boolean
@@ -31,4 +31,5 @@ onMounted(async () => {
 //   --padding-start: 5px !important;
 //   --padding-end: 5px !important;
 // }
-// }</style>
+// }
+</style>

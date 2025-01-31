@@ -43,10 +43,10 @@
 </template>
 
 <script setup lang="ts">
-import { useLang } from '@/composables/UseLang';
-import { useSort } from '@/composables/UseSort';
-import { useTheme } from '@/composables/UseTheme';
-import type { ISort, LabelValue } from '@/types/Common';
+import { useLang } from '@/composables/useLang';
+import { useSort } from '@/composables/useSort';
+import { useTheme } from '@/composables/useTheme';
+import type { ISort, LabelValue } from '@/types/common';
 import { IonButton, IonCol, IonIcon, IonItem, IonRow, IonSelect, IonSelectOption } from '@ionic/vue';
 import { biFunnel } from '@quasar/extras/bootstrap-icons';
 import { closeOutline } from 'ionicons/icons';

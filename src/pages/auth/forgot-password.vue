@@ -90,7 +90,7 @@ import { SwiperSlide as AppSwiperSlide } from 'swiper/vue';
 import { alertCircleOutline, closeOutline, keyOutline, mailOutline } from 'ionicons/icons';
 import { computed, ref, watch } from 'vue';
 import BaseSwiperSlides from '@/components/base/SwiperSlides.vue';
-import BaseToolbar from '@/components/base/Toolbar.vue';
+import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import BaseBackButton from '@/components/base/BaseBackButton.vue';
 import {
   IonButton,
@@ -107,13 +107,13 @@ import {
   IonTitle
 } from '@ionic/vue';
 import AuthenService from '@/api/AuthenService';
-import { useBase } from '@/composables/UseBase';
-import { useLang } from '@/composables/UseLang';
-import { useValidation } from '@/composables/UseValidation';
+import { useBase } from '@/composables/useBase';
+import { useLang } from '@/composables/useLang';
+import { useValidation } from '@/composables/useValidation';
 import PasswordForm from '@/components/app/PasswordForm.vue'
-import type { AppException, ForgotPasswordRequest, ResponseMessage } from '@/types/Common';
+import type { AppException, ForgotPasswordRequest, ResponseMessage } from '@/types/common';
 
-const { WeeLoading, WeeGoTo, WeeToast } = useBase();
+const { appLoading, appNavigateTo, appToast } = useBase();
 const { t } = useLang();
 const slideAction = ref<'next' | 'prev' | undefined>(undefined);
 
@@ -133,14 +133,14 @@ const requestVerifyCode = async () => {
   if (!entity.value.email) {
     return;
   }
-  const loading: any = await WeeLoading();
+  const loading: any = await appLoading();
   loading.present();
   const res = await requestVerifyCodeToResetPwd(entity.value);
   loading.dismiss();
   if (res && res.status && res.status == 200) {
     const responseData = res.data as ResponseMessage;
     if (responseData.message) {
-      WeeToast({
+      appToast({
         headerText: t('authen.verification'),
         text: responseData.message,
         icon: mailOutline,
@@ -160,7 +160,7 @@ const verifyCode = async (code?: string) => {
     return;
   }
   entity.value.token = code;
-  const loading: any = await WeeLoading();
+  const loading: any = await appLoading();
   loading.present();
   const res = await sendVerifyCodeToResetPwd(entity.value);
   loading.dismiss();
@@ -172,7 +172,7 @@ const verifyCode = async (code?: string) => {
 };
 const notifyError = async (error: AppException) => {
   if (error.errors) {
-    WeeToast({
+    appToast({
       headerText: t('authen.forgetPassword'),
       text: error.errors.toString(),
       icon: alertCircleOutline,
@@ -186,14 +186,14 @@ const setNewPassword = async () => {
   if (!entity.value.token || !entity.value.email || !entity.value.newPassword) {
     return;
   }
-  const loading: any = await WeeLoading();
+  const loading: any = await appLoading();
   loading.present();
   const res = await resetPassword(entity.value);
   loading.dismiss();
   if (res && res.status && res.status == 200) {
     const responseData = res.data as ResponseMessage;
     if (responseData.message) {
-      await WeeToast({
+      await appToast({
         headerText: t('authen.setPassword'),
         text: responseData.message,
         icon: mailOutline,
@@ -202,7 +202,7 @@ const setNewPassword = async () => {
         time: 3000
       });
     }
-    WeeGoTo('/auth/login');
+    appNavigateTo('/auth/login');
   } else if (res && res.data) {
     notifyError(res.data as AppException);
   }

@@ -40,8 +40,8 @@
 </template>
 <script setup lang="ts">
 import OptionSelectItems from '@/components/base/OptionSelectItems.vue';
-import { useLang } from '@/composables/UseLang';
-import type { LabelValue } from '@/types/Common';
+import { useLang } from '@/composables/useLang';
+import type { LabelValue } from '@/types/common';
 import type { SearchbarCustomEvent } from '@ionic/vue';
 import {
   IonButton,
@@ -73,7 +73,7 @@ const emit = defineEmits([
   'selection-change'
 ]);
 const BaseToolbar = defineAsyncComponent(
-  () => import('@/components/base/Toolbar.vue')
+  () => import('@/components/base/BaseToolbar.vue')
 );
 const { t } = useLang();
 const show = defineModel('show', { type: Boolean, default: false });

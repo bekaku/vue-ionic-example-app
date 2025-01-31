@@ -1,12 +1,12 @@
-import { useAxios } from '@/composables/UseAxios';
+import { useAxios } from '@/composables/useAxios';
 import type {
   NotificationCount,
   RefreshTokenRequest,
   NotificationDto
-} from '@/types/Models';
+} from '@/types/models';
 import {
   NotifyFunctionType
-} from '@/types/Models';
+} from '@/types/models';
 export default () => {
   const { callAxiosV2 } = useAxios();
   const findAllByUser = async (

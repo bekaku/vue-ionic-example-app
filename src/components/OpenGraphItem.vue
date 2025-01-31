@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import { defineAsyncComponent } from 'vue';
-import type { OgMeta } from '@/types/Models';
+import type { OgMeta } from '@/types/models';
 import { returnUpForward } from 'ionicons/icons';
 import { IonItem, IonLabel, IonText, IonCard } from '@ionic/vue';
 import BaseIcon from '@/components/base/Icon.vue';

@@ -1,4 +1,4 @@
-import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import type { UnwrapRef } from 'vue';
 import { onBeforeMount, ref, watch } from 'vue';
 

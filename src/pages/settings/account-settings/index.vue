@@ -55,7 +55,7 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { } from '@/types/Models';
+import { } from '@/types/models';
 import {
   pencilOutline,
   keyOutline,
@@ -63,8 +63,8 @@ import {
   mailOutline,
   callOutline,
 } from 'ionicons/icons';
-import { useAuthenStore } from '@/stores/AuthenStore';
-import { useLang } from '@/composables/UseLang';
+import { useAuthenStore } from '@/stores/authenStore';
+import { useLang } from '@/composables/useLang';
 import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
 import {
   IonPage,
@@ -81,7 +81,7 @@ import {
   IonTitle,
   IonCard,
 } from '@ionic/vue';
-import BaseToolbar from '@/components/base/Toolbar.vue';
+import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import BaseBackButton from '@/components/base/BaseBackButton.vue';
 const BaseResult = defineAsyncComponent(
   () => import('@/components/base/Result.vue'),

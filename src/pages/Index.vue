@@ -38,13 +38,13 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { useAuthenStore } from '@/stores/AuthenStore';
+import { useAuthenStore } from '@/stores/authenStore';
 import { defineAsyncComponent, onMounted, ref } from 'vue';
 import { useInitApp } from '@/composables/useInitApp';
-import { useAuthen } from '@/composables/UseAuthen';
-import { useBase } from '@/composables/UseBase';
-import { useConfig } from '@/composables/UseConfig';
-import { useCheckVersion } from '@/composables/UseCheckVersion';
+import { useAuthen } from '@/composables/useAuthen';
+import { useBase } from '@/composables/useBase';
+import { useConfig } from '@/composables/useConfig';
+import { useCheckVersion } from '@/composables/useCheckVersion';
 import {
   IonRow,
   IonCol,
@@ -53,7 +53,7 @@ import {
   IonSpinner,
   IonPage,
 } from '@ionic/vue';
-import { useLang } from '@/composables/UseLang';
+import { useLang } from '@/composables/useLang';
 declare let window: any;
 
 const VersionCheck = defineAsyncComponent(
@@ -65,7 +65,7 @@ const BaseResult = defineAsyncComponent(
 const { t } = useLang();
 const { initAuthen } = useInitApp();
 const { destroyAuthDataAndRedirect } = useAuthen();
-const { WeeGoTo } = useBase();
+const { appNavigateTo } = useBase();
 const { isDevMode } = useConfig();
 const { checkVersion, appVersion, platForm, haveVersionUpdate, userVersion }
   = useCheckVersion();
@@ -122,11 +122,11 @@ const checkAuth = async () => {
   }
 
   if (auth) {
-    WeeGoTo('/tabs/home', true);
+    appNavigateTo('/tabs/home', true);
   } else {
-    WeeGoTo('/auth/login', true);
+    appNavigateTo('/auth/login', true);
     // destroyAuthDataAndRedirect(false);
-    // WeeGoTo('/auth/login', true);
+    // appNavigateTo('/auth/login', true);
   }
   return new Promise((resolve) => {
     resolve(true);

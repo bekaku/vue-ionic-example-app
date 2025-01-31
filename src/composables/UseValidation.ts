@@ -1,5 +1,5 @@
-import { validateEmail, isNumber } from '@/utils/AppUtil';
-import { useLang } from './UseLang';
+import { validateEmail, isNumber } from '@/utils/appUtil';
+import { useLang } from './useLang';
 export const useValidation = () => {
   const { t } = useLang();
   const rePwdStrong = /^(?=.*[A-Z])(?=.*\d)[A-Z\d]{8,}$/i;

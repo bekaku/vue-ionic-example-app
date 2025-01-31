@@ -51,12 +51,12 @@ import type {
   PieChartType,
   Position,
   Strokestyle,
-} from '@/types/Chart';
+} from '@/types/chart';
 import type { PropType } from 'vue';
 import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 // import { ApexCharts } from 'boot/apexcharts';
-import { useTheme } from '@/composables/UseTheme';
+import { useTheme } from '@/composables/useTheme';
 const props = defineProps({
   modelValue: Object,
   chartId: {

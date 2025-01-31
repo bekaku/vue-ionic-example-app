@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import { onMounted, ref, watch } from 'vue';
-import type { SlideOptions } from '@/types/Common';
+import type { SlideOptions } from '@/types/common';
 import {
   Autoplay,
   Keyboard,
@@ -75,7 +75,7 @@ import 'swiper/css/thumbs';
 // import 'swiper/css/lazy';
 import '@ionic/vue/css/ionic-swiper.css';
 import { arrowForwardOutline, arrowBackOutline } from 'ionicons/icons';
-import { useLang } from '@/composables/UseLang';
+import { useLang } from '@/composables/useLang';
 
 interface Props {
   paramiters: SlideOptions

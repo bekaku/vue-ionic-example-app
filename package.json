@@ -4,7 +4,7 @@
   "version": "1.0.3",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=8001",
+    "dev": "vite --port=3004",
     "ion-dev": "ionic serve --port=8001 --browser 'none'",
     "build": "vue-tsc && vite build",
     "build:prod": "ionic build --prod",

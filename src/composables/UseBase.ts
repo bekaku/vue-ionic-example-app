@@ -2,14 +2,14 @@ import type {
   AppAlertOptions,
   AppToastOptions,
   GenerateLinkType
-} from '@/types/Common';
+} from '@/types/common';
 import {
   FORMAT_DATE,
   FORMAT_DATE17,
   formatDate,
   formatDateTime,
   formatDistanceFromNow
-} from '@/utils/DateUtil';
+} from '@/utils/dateUtil';
 import { Clipboard } from '@capacitor/clipboard';
 import {
   alertController,
@@ -19,8 +19,8 @@ import {
 } from '@ionic/vue';
 import DOMPurify from 'dompurify';
 import { useRoute, useRouter } from 'vue-router';
-import { useConfig } from './UseConfig';
-import { useLang } from './UseLang';
+import { useConfig } from './useConfig';
+import { useLang } from './useLang';
 export const useBase = () => {
   const router = useIonRouter();
   const route = useRoute();
@@ -39,7 +39,7 @@ export const useBase = () => {
   const onReplaceUrl = (url: string = '') => {
     history.pushState({}, '', url);
   };
-  const WeeGoTo = (link: string, replace?: boolean): void => {
+  const appNavigateTo = (link: string, replace?: boolean): void => {
     if (!link) {
       return;
     }
@@ -82,14 +82,14 @@ export const useBase = () => {
   const getIonContent = () => {
     return document.querySelector('ion-content');
   };
-  const WeeScrollToBottom = () => {
+  const appScrollToBottom = () => {
     const content = getIonContent();
     if (!content) {
       return;
     }
     content.scrollToBottom(500);
   };
-  const WeeScrollToTop = () => {
+  const appScrollToTop = () => {
     const content = getIonContent();
     if (!content) {
       return;
@@ -97,7 +97,7 @@ export const useBase = () => {
     content.scrollToTop(500);
   };
   /*
-   WeeToast({
+   appToast({
     headerText: 'Title',
     text: 'Test app toast message! <br><strong>Beka</strong>',
     icon: colorPaletteOutline,
@@ -106,7 +106,7 @@ export const useBase = () => {
     time:3000
   });
   */
-  const WeeToast = async (options: AppToastOptions) => {
+  const appToast = async (options: AppToastOptions) => {
     const toast = await toastController.create({
       header: options.headerText || '',
       message: options.text,
@@ -131,12 +131,12 @@ export const useBase = () => {
    * @param confirmHeader
    * @param text
    * @returns
-   *   const confirm = await WeeConfirm(
+   *   const confirm = await appConfirm(
         t("app.monogram"),
         t("base.deleteConfirm")
       );
    */
-  const WeeConfirm = async (
+  const appConfirm = async (
     confirmHeader: string,
     text: string,
     cancelText: string | undefined = undefined,
@@ -170,7 +170,7 @@ export const useBase = () => {
     alertHeader: string | undefined,
     type: string | undefined = undefined //wee-alert-danger, wee-alert-warning
   */
-  const WeeAlert = async (options: AppAlertOptions) => {
+  const appAlert = async (options: AppAlertOptions) => {
     const alert = await alertController.create({
       cssClass: options.type ? `wee-alert-${options.type}` : undefined,
       header: options.header || t('app.monogram'),
@@ -186,11 +186,11 @@ export const useBase = () => {
    * @param text
    * @param spinnerType
    * @returns
-   *  const loading : any = await WeeLoading();
+   *  const loading : any = await appLoading();
       loading.present();
       loading.dismiss();
    */
-  const WeeLoading = async (text?: string, spinnerType?: any) => {
+  const appLoading = async (text?: string, spinnerType?: any) => {
     const loading = await loadingController.create({
       cssClass: 'my-custom-class',
       message: text || t('base.pleaseWait'),
@@ -201,13 +201,13 @@ export const useBase = () => {
       resolve(loading);
     });
   };
-  const AppFormatDateTime = (d: string, fmt: string = FORMAT_DATE17) => {
+  const appFormatDateTime = (d: string, fmt: string = FORMAT_DATE17) => {
     return d ? formatDateTime(d, fmt, locale.value) : '';
   };
-  const AppFormatDate = (d: string, fmt: string = FORMAT_DATE) => {
+  const appFormatDate = (d: string, fmt: string = FORMAT_DATE) => {
     return formatDate(d, fmt, locale.value);
   };
-  const AppFormatDateDistance = (d: string) => {
+  const appFormatDateDistance = (d: string) => {
     return formatDistanceFromNow(d, locale.value);
   };
 
@@ -246,7 +246,7 @@ export const useBase = () => {
    */
   const onOpenProfile = (event: any, userId: number | null | undefined) => {
     if (userId) {
-      WeeGoTo(`/user/view/${userId}`);
+      appNavigateTo(`/user/view/${userId}`);
     }
     if (event) {
       event.stopImmediatePropagation();
@@ -256,7 +256,7 @@ export const useBase = () => {
     await Clipboard.write({
       string: text
     });
-    WeeToast({
+    appToast({
       text: t('success.copy')
     });
   };
@@ -279,23 +279,23 @@ export const useBase = () => {
     );
   };
   return {
-    WeeGoTo,
+    appNavigateTo,
     getParam,
     getQuery,
     getParamNumber,
     getQueryNumber,
     getIonContent,
-    WeeScrollToBottom,
-    WeeScrollToTop,
-    WeeToast,
-    WeeConfirm,
-    WeeAlert,
-    WeeLoading,
+    appScrollToBottom,
+    appScrollToTop,
+    appToast,
+    appConfirm,
+    appAlert,
+    appLoading,
     onBack,
     scrollToTop,
-    AppFormatDateTime,
-    AppFormatDate,
-    AppFormatDateDistance,
+    appFormatDateTime,
+    appFormatDate,
+    appFormatDateDistance,
     getCurrentPath,
     onReplaceUrl,
     readableNumber,

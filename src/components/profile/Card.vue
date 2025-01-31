@@ -56,8 +56,8 @@
 </template>
 <script setup lang="ts">
 import BaseImage from '@/components/base/Image.vue';
-import { useLang } from '@/composables/UseLang';
-import { useTheme } from '@/composables/UseTheme';
+import { useLang } from '@/composables/useLang';
+import { useTheme } from '@/composables/useTheme';
 import {
   IonButton,
   IonCard,

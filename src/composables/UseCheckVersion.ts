@@ -1,8 +1,8 @@
 import UtilService from '@/api/UtilService';
-import type { AppVersionDto, PlatformType } from '@/types/Models';
+import type { AppVersionDto, PlatformType } from '@/types/models';
 import { ref } from 'vue';
-import { useConfig } from './UseConfig';
-import { useDevice } from './UseDevice';
+import { useConfig } from './useConfig';
+import { useDevice } from './useDevice';
 export const useCheckVersion = () => {
   const { getEnv } = useConfig();
   const { getPlatformType } = useDevice();

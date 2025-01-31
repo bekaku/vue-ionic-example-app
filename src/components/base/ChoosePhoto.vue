@@ -26,10 +26,10 @@
 <script setup lang="ts">
 import { cameraOutline, imageOutline } from 'ionicons/icons';
 import { computed, defineAsyncComponent, onMounted } from 'vue';
-import { useLang } from '@/composables/UseLang';
+import { useLang } from '@/composables/useLang';
 import { IonIcon, IonItem, IonLabel, IonList } from '@ionic/vue';
-import { useFileSystem } from '@/composables/UseFileSystem';
-
+import { useFileSystem } from '@/composables/useFileSystem';
+const BaseModal = defineAsyncComponent(() => import('@/components/base/BaseModal.vue'));
 const props = defineProps({
   modelValue: {
     type: Boolean,
@@ -53,9 +53,7 @@ const emit = defineEmits([
   'on-take-picture',
   'on-pick-picture'
 ]);
-const BaseModal = defineAsyncComponent(
-  () => import('@/components/base/Modal.vue')
-);
+
 const { requestCameraPermissions, onTakePicture, onPickPhoto } = useFileSystem();
 onMounted(() => {
   requestCameraPermissions();

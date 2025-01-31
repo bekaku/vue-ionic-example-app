@@ -1,6 +1,6 @@
 import { Preferences } from '@capacitor/preferences';
-import { DeviceIdAtt, FcmTokenKey, LocaleKey, RefreshTokenProcessAtt, ThemeKey } from '@/utils/Constant';
-import type { KeyValue } from '@/types/Common';
+import { DeviceIdAtt, FcmTokenKey, LocaleKey, RefreshTokenProcessAtt, ThemeKey } from '@/libs/constant';
+import type { KeyValue } from '@/types/common';
 
 export const saveStorage = async (key: string, value: any, isJson = false): Promise<boolean> => {
   await Preferences.set({

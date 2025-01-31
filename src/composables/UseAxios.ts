@@ -1,22 +1,22 @@
-import { AxiosKey } from '@/plugins/AxiosSymbols';
-import type { AppException, RequestType, ResponseMessage } from '@/types/Common';
-import { isAppException, isServerException, isServerResponseMessage } from '@/utils/AppUtil';
-import { AppAuthTokenKey } from '@/utils/Constant';
-import { injectStrict } from '@/utils/InjectTyped';
-import { loadStorage } from '@/utils/StorageUtil';
+import { AxiosKey } from '@/plugins/axiosSymbols';
+import type { AppException, RequestType, ResponseMessage } from '@/types/common';
+import { isAppException, isServerException, isServerResponseMessage } from '@/utils/appUtil';
+import { AppAuthTokenKey } from '@/libs/constant';
+import { injectStrict } from '@/utils/injectTyped';
+import { loadStorage } from '@/utils/storageUtil';
 import { App } from '@capacitor/app';
 import { toastController } from '@ionic/vue';
 import type { AxiosResponse } from 'axios';
 import { alertCircle, closeOutline, exitOutline } from 'ionicons/icons';
 import { onUnmounted, ref } from 'vue';
-import { useBase } from './UseBase';
-import { useConfig } from './UseConfig';
-import { useDevice } from './UseDevice';
+import { useBase } from './useBase';
+import { useConfig } from './useConfig';
+import { useDevice } from './useDevice';
 
 export const useAxios = () => {
   const sessionTimeOutRef = ref();
   const $appAxios = injectStrict(AxiosKey); // it's typed now
-  const { WeeToast } = useBase();
+  const { appToast } = useBase();
   const { canSyncActiveStatusToServer } = useDevice();
   const { isDevMode, getEnv } = useConfig();
   onUnmounted(() => {
@@ -40,7 +40,7 @@ export const useAxios = () => {
     });
   };
   const notifyException = (response: AppException): void => {
-    WeeToast({
+    appToast({
       text: `${response.message} : ${response.errors?.join(
         ','
       )}`,
@@ -54,7 +54,7 @@ export const useAxios = () => {
     if (!response.message) {
       return;
     }
-    WeeToast({
+    appToast({
       text: response.message,
       closeIcon: closeOutline,
       time: 3 * 1000,

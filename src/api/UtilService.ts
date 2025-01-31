@@ -1,5 +1,5 @@
-import { useAxios } from '@/composables/UseAxios';
-import type { OgMeta, AppVersionDto } from '@/types/Models';
+import { useAxios } from '@/composables/useAxios';
+import type { OgMeta, AppVersionDto } from '@/types/models';
 export default () => {
   const { callAxiosV2, validateServerResponse } = useAxios();
   const getOgMeta = async (link: string): Promise<OgMeta | null> => {

@@ -1,5 +1,5 @@
-import type { IChartSeries, ISeriresCategories } from './Chart';
-import type { AppLocale } from './Common';
+import type { IChartSeries, ISeriresCategories } from './chart';
+import type { AppLocale } from './common';
 export type IPlatForm = 1 | 2 | 3; // 1=web, 2=ios, 3=android
 export type IPermissionOperationType = 1 | 2 | 3; // 1=crud, 2=report, 3=other
 export type SearchType = 'POST' | 'PROFILE' | 'HASHTAG' | 'THEME';
@@ -17,20 +17,7 @@ export type NotifyFunctionType =
 export interface Id {
   id: number | null
 }
-export interface LabelValue<Type> {
-  label: string
-  value: Type
-  description?: string
-  avatar?: string
-  icon?: string
-  fetch?: boolean
-}
-export interface ApiListResponse<Type> {
-  totalPages: number
-  totalElements: number
-  last: boolean
-  dataList: Type[]
-}
+
 export interface Todo {
   id: number
   content: string

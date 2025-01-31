@@ -102,8 +102,8 @@
   </form>
 </template>
 <script setup lang="ts">
-import { useLang } from '@/composables/UseLang';
-import { useValidation } from '@/composables/UseValidation';
+import { useLang } from '@/composables/useLang';
+import { useValidation } from '@/composables/useValidation';
 import { computed, ref } from 'vue';
 import { IonButton, IonCard, IonCardContent, IonIcon, IonInput, IonItem, IonLabel, IonList, } from '@ionic/vue';
 import { eyeOffOutline, eyeOutline, lockClosedOutline, shieldOutline, checkmarkOutline } from 'ionicons/icons';

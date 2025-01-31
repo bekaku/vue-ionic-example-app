@@ -1,6 +1,6 @@
-import type { NotificationCount } from '@/types/Models';
-import { NotifyKey } from '@/utils/Constant';
-import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import type { NotificationCount } from '@/types/models';
+import { NotifyKey } from '@/libs/constant';
+import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 

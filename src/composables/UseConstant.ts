@@ -1,19 +1,13 @@
-import { useAuthenStore } from '@/stores/AuthenStore';
+import { useAuthenStore } from '@/stores/authenStore';
 import type {
   IMenuItem
-} from '@/types/Models';
+} from '@/types/models';
 import {
   personOutline,
   searchOutline
 } from 'ionicons/icons';
-import { useLang } from './UseLang';
 
 export const useConstant = () => {
-  const { t } = useLang();
-  const ssIconSize = 42;
-  const iconSize = 24;
-  const primaryColor = '#3880ff';
-  const primaryColorText = 'text-primary';
   const authenStore = useAuthenStore();
   const myMenuItems: IMenuItem[] = [
     {

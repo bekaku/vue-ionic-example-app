@@ -39,7 +39,7 @@
         >
         </app-pop-over>
  */
-import { useLang } from '@/composables/UseLang';
+import { useLang } from '@/composables/useLang';
 import { IonButton, IonCard, IonContent, IonIcon, IonPopover, IonCardContent, IonRow, IonCol } from '@ionic/vue';
 import { checkmarkOutline } from 'ionicons/icons';
 import { ref } from 'vue';

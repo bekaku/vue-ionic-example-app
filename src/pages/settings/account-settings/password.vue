@@ -27,9 +27,9 @@
 </template>
 <script setup lang="ts">
 import UserService from '@/api/UserService';
-import { useAuthen } from '@/composables/UseAuthen';
-import { useBase } from '@/composables/UseBase';
-import { useLang } from '@/composables/UseLang';
+import { useAuthen } from '@/composables/useAuthen';
+import { useBase } from '@/composables/useBase';
+import { useLang } from '@/composables/useLang';
 import { onBeforeUnmount, ref } from 'vue';
 import {
   IonButtons,
@@ -38,12 +38,12 @@ import {
   IonPage,
   IonTitle,
 } from '@ionic/vue';
-import BaseToolbar from '@/components/base/Toolbar.vue';
+import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import BaseBackButton from '@/components/base/BaseBackButton.vue';
 import PasswordForm from '@/components/app/PasswordForm.vue';
 
 const { t } = useLang();
-const { WeeLoading } = useBase();
+const { appLoading } = useBase();
 const { selfUpdatePassword } = UserService();
 const { signOut } = useAuthen();
 const currentPassword = ref<string>('');
@@ -54,7 +54,7 @@ const timeout = ref<any>(null);
 const loading = ref(false);
 
 const onSubmit = async () => {
-  const loading: any = await WeeLoading();
+  const loading: any = await appLoading();
   loading.present();
   const res = await selfUpdatePassword({
     userChangePasswordRequest: {

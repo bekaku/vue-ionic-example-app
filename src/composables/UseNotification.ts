@@ -1,14 +1,14 @@
 import UserNotifyService from '@/api/UserNotifyService';
-import { useNotificationStore } from '@/stores/NotificationStore';
-import type { NotificationCount, NotifyFunctionType } from '@/types/Models';
-import { AppAuthRefeshTokenKey, FCM_USER_TOPIC, FcmTokenKey, NotifyKey } from '@/utils/Constant';
-import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import { useNotificationStore } from '@/stores/notificationStore';
+import type { NotificationCount, NotifyFunctionType } from '@/types/models';
+import { AppAuthRefeshTokenKey, FCM_USER_TOPIC, FcmTokenKey, NotifyKey } from '@/libs/constant';
+import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import { FCM } from '@capacitor-community/fcm';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { toastController } from '@ionic/vue';
-import { useBase } from './UseBase';
-import { useDevice } from './UseDevice';
-import { useLang } from './UseLang';
+import { useBase } from './useBase';
+import { useDevice } from './useDevice';
+import { useLang } from './useLang';
 
 export const useNotification = () => {
   const {
@@ -20,7 +20,7 @@ export const useNotification = () => {
   const { isWeb } = useDevice();
   const { notify, setNotify } = useNotificationStore();
   const { t } = useLang();
-  const { WeeGoTo } = useBase();
+  const { appNavigateTo } = useBase();
   const onRefreshFcmToken = async () => {
     const refeshTokenKey = await loadStorage<string>(AppAuthRefeshTokenKey);
     const fcmToken = await loadStorage<string>(FcmTokenKey);
@@ -238,7 +238,7 @@ export const useNotification = () => {
         functionCode == 'SYSTEM_ANNOUNMENT'
         || functionCode == 'LIKE_POST'
       ) {
-        WeeGoTo(`/post/view/${functionId}`);
+        appNavigateTo(`/post/view/${functionId}`);
       // eslint-disable-next-line no-empty
       } else if (functionCode == 'CHAT') {
       }

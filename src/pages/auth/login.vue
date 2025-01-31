@@ -73,7 +73,7 @@
                               </a>
                             </ion-checkbox>
                           </ion-item>
-                          <ion-item button @click="WeeGoTo('/settings/languge')" :detail="true" lines="none">
+                          <ion-item button @click="appNavigateTo('/settings/languge')" :detail="true" lines="none">
                             <ion-icon :icon="globeOutline" slot="start"></ion-icon>
                             <ion-label>
                               {{ t('base.language') }}
@@ -121,22 +121,22 @@
 <script setup lang="ts">
 import AuthenService from '@/api/AuthenService';
 import AppModeDetect from '@/components/app/AppModeDetect.vue';
-import { useAuthen } from '@/composables/UseAuthen';
-import { useBase } from '@/composables/UseBase';
-import { useConfig } from '@/composables/UseConfig';
-import { useDevice } from '@/composables/UseDevice';
-import { useLang } from '@/composables/UseLang';
-import { useNotification } from '@/composables/UseNotification';
-import { useTheme } from '@/composables/UseTheme';
-import { isAppException } from '@/utils/AppUtil';
+import { useAuthen } from '@/composables/useAuthen';
+import { useBase } from '@/composables/useBase';
+import { useConfig } from '@/composables/useConfig';
+import { useDevice } from '@/composables/useDevice';
+import { useLang } from '@/composables/useLang';
+import { useNotification } from '@/composables/useNotification';
+import { useTheme } from '@/composables/useTheme';
+import { isAppException } from '@/utils/appUtil';
 import {
   DefaultColor,
   DeviceIdAtt,
   FcmTokenKey,
   PolicyLink,
-} from '@/utils/Constant';
-import { getYearNow } from '@/utils/DateUtil';
-import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+} from '@/libs/constant';
+import { getYearNow } from '@/utils/dateUtil';
+import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import {
   IonButton,
   IonCard,
@@ -186,7 +186,7 @@ const { singin } = AuthenService();
 const { getEnv } = useConfig();
 const { setAuthenticationCookies, destroyAuthDataAndRedirect } = useAuthen();
 const { t, currenLocaleItem } = useLang();
-const { WeeGoTo, WeeToast } = useBase();
+const { appNavigateTo, appToast } = useBase();
 const { isDark } = useTheme();
 const { getPlatformType, getDeviceId } = useDevice();
 const email = ref<string | undefined>('admin@mydomain.com');
@@ -232,7 +232,7 @@ const onSubmit = async () => {
     return;
   }
   if (!acceptedTerm.value) {
-    WeeToast({
+    appToast({
       text: t('error.termAcceptEnpty'),
     });
     return;
@@ -258,7 +258,7 @@ const onSubmit = async () => {
       await registerTopic(response.userId);
       window.location.replace('/');
       loading.value = false;
-      WeeToast({
+      appToast({
         text: t('success.loginSuccess'),
       });
     }

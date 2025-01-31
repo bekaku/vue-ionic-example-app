@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { AppLocale, AppTheme, IMenu } from '@/types/Common';
+import type { AppLocale, AppTheme, IMenu } from '@/types/common';
 
 export const useAppStore = defineStore('appStore', () => {
     const permissions = ref<string[]>([]);
-    const drawers = ref<IMenu[]>([]);
-    const leftDrawerOpen = ref<boolean>(true);
+    const appNavs = ref<IMenu[]>([]);
     const currentLocale = ref<AppLocale>('th');
     const currentTheme = ref<AppTheme>('light');
 
@@ -37,11 +36,8 @@ export const useAppStore = defineStore('appStore', () => {
         })
     }
 
-    const setDrawers = (items: IMenu[]) => {
-        drawers.value = items;
-    }
-    const setLeftDrawer = (open: boolean) => {
-        leftDrawerOpen.value = open;
+    const setAppNavs = (items: IMenu[]) => {
+        appNavs.value = items;
     }
     const setCurrentLocale = (l: AppLocale) => {
         currentLocale.value = l;
@@ -54,10 +50,8 @@ export const useAppStore = defineStore('appStore', () => {
         setPermissions,
         isHavePermission,
         isHavePermissionLazy,
-        drawers,
-        setDrawers,
-        leftDrawerOpen,
-        setLeftDrawer,
+        appNavs,
+        setAppNavs,
         currentLocale,
         setCurrentLocale,
         currentTheme,

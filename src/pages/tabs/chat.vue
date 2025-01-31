@@ -22,7 +22,7 @@
       <ion-list-header> Online </ion-list-header>
 
       <ion-item
-        @click="WeeGoTo('/chat')"
+        @click="appNavigateTo('/chat')"
         v-for="(item, index) in filterOnlines"
         :key="`chat-item-${index}`"
         lines="none"
@@ -56,7 +56,7 @@
 
       <ion-list-header> Offline </ion-list-header>
       <ion-item
-        @click="WeeGoTo('/chat')"
+        @click="appNavigateTo('/chat')"
         v-for="(item, index) in filterOfflines"
         :key="`chat-item-offline-${index}`"
         lines="none"
@@ -102,8 +102,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { addOutline } from 'ionicons/icons';
-import { useLang } from '@/composables/UseLang';
-import { useBase } from '@/composables/UseBase';
+import { useLang } from '@/composables/useLang';
+import { useBase } from '@/composables/useBase';
 import {
   IonList,
   IonItem,
@@ -120,7 +120,7 @@ import {
 } from '@ionic/vue';
 import BaseLayout from '@/components/base/BaseLayout.vue';
 import BaseError from '@/components/base/Error.vue';
-const { WeeGoTo } = useBase();
+const { appNavigateTo } = useBase();
 const { t } = useLang();
 const count = ref(0);
 const filterText = ref<string | null | undefined>('');

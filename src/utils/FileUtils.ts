@@ -1,6 +1,6 @@
 /* eslint-disable ts/no-unused-vars */
-import { FileNamePrefix } from '@/utils/Constant';
-import { getCurrentFormattedDatetime } from '@/utils/DateUtil';
+import { FileNamePrefix } from '@/libs/constant';
+import { getCurrentFormattedDatetime } from '@/utils/dateUtil';
 import JSZip from 'jszip';
 
 export const fileToBlob = (file: File): Promise<any> => {

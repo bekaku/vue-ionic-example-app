@@ -3,8 +3,8 @@ import en from '../locales/en';
 import th from '../locales/th';
 // import en from "../locales/en.json";
 // import th from "../locales/th.json";
-import { DefaultLocale, LocaleKey } from '@/utils/Constant';
-import { loadStorage } from '@/utils/StorageUtil';
+import { DefaultLocale, LocaleKey } from '@/libs/constant';
+import { loadStorage } from '@/utils/storageUtil';
 
 // export default createI18n({
 //   legacy: false,

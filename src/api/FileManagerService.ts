@@ -1,10 +1,10 @@
-import { useAxios } from '@/composables/UseAxios';
-import { useConfig } from '@/composables/UseConfig';
-import type { ResponseDataType, ResponseMessage, UploadRequest } from '@/types/Common';
-import type { FileManagerDto } from '@/types/Models';
-import { getBlobFromAxiosResponse, getFileNameFromAxiosResponse } from '@/utils/AppUtil';
-import { FILES_DIRECTORY_ID_ATT, FILES_UPLOAD_ATT } from '@/utils/Constant';
-import { base64FromArrayByffer, generateFileNameByExtesnsion, getFileExtension } from '@/utils/FileUtils';
+import { useAxios } from '@/composables/useAxios';
+import { useConfig } from '@/composables/useConfig';
+import type { ResponseDataType, ResponseMessage, UploadRequest } from '@/types/common';
+import type { FileManagerDto } from '@/types/models';
+import { getBlobFromAxiosResponse, getFileNameFromAxiosResponse } from '@/utils/appUtil';
+import { FILES_DIRECTORY_ID_ATT, FILES_UPLOAD_ATT } from '@/libs/constant';
+import { base64FromArrayByffer, generateFileNameByExtesnsion, getFileExtension } from '@/utils/fileUtils';
 
 export default () => {
   const { callAxios, callAxiosV2, validateServerResponse, callAxiosFile } = useAxios();

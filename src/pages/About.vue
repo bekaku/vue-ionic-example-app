@@ -3,7 +3,7 @@
     <template #content>
       <ion-content :scroll-events="true" fullscreen scroll-y>
         <ion-row class="ion-align-items-center" style="height: 100%;">
-          <IonicCard flat>
+          <BaseCard flat>
             <ion-card-content>
               <div class="q-pa-md ion-text-center">
                 <div class="q-text-h5 q-text-weight-bold">
@@ -43,21 +43,21 @@
                 </div>
               </div>
             </ion-card-content>
-          </IonicCard>
+          </BaseCard>
         </ion-row>
       </ion-content>
     </template>
   </base-layout>
 </template>
 <script setup lang="ts">
-import { useCheckVersion } from '@/composables/UseCheckVersion';
-import { useLang } from '@/composables/UseLang';
+import { useCheckVersion } from '@/composables/useCheckVersion';
+import { useLang } from '@/composables/useLang';
 import { defineAsyncComponent, onMounted, ref } from 'vue';
 
 import BaseLayout from '@/components/base/BaseLayout.vue';
 import BaseLink from '@/components/base/BaseLink.vue';
-import IonicCard from '@/components/ionic/IonicCard.vue';
-import { PolicyLink } from '@/utils/Constant';
+import BaseCard from '@/components/base/BaseCard.vue';
+import { PolicyLink } from '@/libs/constant';
 import {
   IonCardContent,
   IonRow,

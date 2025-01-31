@@ -1,16 +1,18 @@
-import { useAuthenStore } from '@/stores/AuthenStore';
-import type { UserDto } from '@/types/Models';
-import { AppAuthTokenKey, FcmTokenKey } from '@/utils/Constant';
-import { loadStorage } from '@/utils/StorageUtil';
-import { useNotification } from './UseNotification';
-import { useLang } from '@/composables/UseLang';
-import { useTheme } from './UseTheme';
+import { useAuthenStore } from '@/stores/authenStore';
+import type { UserDto } from '@/types/models';
+import { AppAuthTokenKey, FcmTokenKey } from '@/libs/constant';
+import { loadStorage } from '@/utils/storageUtil';
+import { useNotification } from './useNotification';
+import { useLang } from '@/composables/useLang';
+import { useTheme } from './useTheme';
+import { useMenu } from './useMenu';
 
 export const useInitApp = () => {
   const authenStore = useAuthenStore();
   const { addListeners, onRefreshFcmToken } = useNotification();
   const { initLang } = useLang();
   const { initTheme } = useTheme();
+  const { initialAppNav } = useMenu();
   const initAuthen = async (): Promise<UserDto | null | undefined> => {
     const jwtKey = await loadStorage<string>(AppAuthTokenKey);
     if (jwtKey) {
@@ -19,6 +21,7 @@ export const useInitApp = () => {
       }
       if (authenStore.auth) {
         manageNotificationToken(authenStore.auth);
+        await initialAppNav();
       }
       return new Promise((resolve) => {
         resolve(authenStore.auth);

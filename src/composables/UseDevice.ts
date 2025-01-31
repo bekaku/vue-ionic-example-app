@@ -1,10 +1,10 @@
 import { Device } from '@capacitor/device';
-import type { OsPlatForm } from '@/types/Common';
-import type { IPlatForm, PlatformType } from '@/types/Models';
+import type { OsPlatForm } from '@/types/common';
+import type { IPlatForm, PlatformType } from '@/types/models';
 import { isPlatform, getPlatforms } from '@ionic/vue';
-import { loadStorage, saveStorage } from '@/utils/StorageUtil';
-import { LatestSyncActiveStatusKey } from '@/utils/Constant';
-import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/DateUtil';
+import { loadStorage, saveStorage } from '@/utils/storageUtil';
+import { LatestSyncActiveStatusKey } from '@/libs/constant';
+import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/dateUtil';
 
 export const useDevice = () => {
   const isIOS = async (): Promise<boolean> => {

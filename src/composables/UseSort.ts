@@ -1,4 +1,4 @@
-import type { ISort, ISortMode } from '@/types/Common';
+import type { ISort, ISortMode } from '@/types/common';
 import { ref } from 'vue';
 export const useSort = (defaultSort?: ISort) => {
   const sortMode = ref<ISortMode[]>([

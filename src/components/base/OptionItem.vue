@@ -11,9 +11,9 @@
         </option-item>
  */
 import { computed, ref } from 'vue';
-import type { LabelValue } from '@/types/Common';
+import type { LabelValue } from '@/types/common';
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
-import { useLang } from '@/composables/UseLang';
+import { useLang } from '@/composables/useLang';
 import { IonChip, IonCol, IonIcon, IonItem, IonLabel, IonRow, IonButtons, IonButton } from '@ionic/vue';
 import { close } from 'ionicons/icons';
 import OptionSelect from '@/components/base/OptionSelect.vue';

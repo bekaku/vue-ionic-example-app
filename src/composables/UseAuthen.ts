@@ -1,26 +1,26 @@
 import AuthenService from '@/api/AuthenService';
-import { useAuthenStore } from '@/stores/AuthenStore';
-import type { RefreshTokenResponse, UserDto } from '@/types/Models';
-import { cordovaClearCach } from '@/utils/AppUtil';
+import { useAuthenStore } from '@/stores/authenStore';
+import type { RefreshTokenResponse, UserDto } from '@/types/models';
+import { cordovaClearCach } from '@/utils/appUtil';
 import {
   AppAuthRefeshTokenKey,
   AppAuthTokenCreatedKey,
   AppAuthTokenExpireKey,
   AppAuthTokenKey
-} from '@/utils/Constant';
+} from '@/libs/constant';
 import {
   loadStorage,
   removeStorage,
   saveStorage
-} from '@/utils/StorageUtil';
-import { useBase } from './UseBase';
-import { useCache } from './UseCache';
-import { useLang } from './UseLang';
-import { useNotification } from './UseNotification';
+} from '@/utils/storageUtil';
+import { useBase } from './useBase';
+import { useCache } from './useCache';
+import { useLang } from './useLang';
+import { useNotification } from './useNotification';
 
 export const useAuthen = () => {
   const authenStore = useAuthenStore();
-  const { WeeConfirm, WeeLoading, } = useBase();
+  const { appConfirm, appLoading, } = useBase();
   const { t } = useLang();
   const { logoutClear } = useCache();
   const { userUnSubscribeFcm, unregisterNotifications } = useNotification();
@@ -48,9 +48,9 @@ export const useAuthen = () => {
     });
   };
   const signOut = async () => {
-    const conf = await WeeConfirm(t('app.monogram'), t('helper.logoutConfirm'));
+    const conf = await appConfirm(t('app.monogram'), t('helper.logoutConfirm'));
     if (conf) {
-      const loading: any = await WeeLoading();
+      const loading: any = await appLoading();
       loading.present();
       await unregisterNotifications();
       if (authenStore.auth?.id) {
@@ -101,7 +101,7 @@ export const useAuthen = () => {
     authenStore.logout();
     if (forceRedirectToLoginPage) {
       window.location.replace('/auth/login');
-      // WeeGoTo('/auth/login', true);
+      // appNavigateTo('/auth/login', true);
     }
     return new Promise((resolve) => {
       resolve(true);

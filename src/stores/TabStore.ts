@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { TabsName } from '@/utils/Constant';
+import { TabsName } from '@/libs/constant';
 import { ref } from 'vue';
 export const useTabStore = defineStore('tabStore', () => {
   const currentTab = ref<string>(TabsName.HOME)

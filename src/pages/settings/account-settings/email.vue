@@ -30,14 +30,14 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { useAuthenStore } from '@/stores/AuthenStore';
-import type { UserPersonalEditRequest } from '@/types/Models';
-import { validateEmail } from '@/utils/AppUtil';
+import { useAuthenStore } from '@/stores/authenStore';
+import type { UserPersonalEditRequest } from '@/types/models';
+import { validateEmail } from '@/utils/appUtil';
 import UserService from '@/api/UserService';
 import { checkmarkOutline } from 'ionicons/icons';
 import { computed, onMounted, ref } from 'vue';
-import { useBase } from '@/composables/UseBase';
-import { useLang } from '@/composables/UseLang';
+import { useBase } from '@/composables/useBase';
+import { useLang } from '@/composables/useLang';
 import {
   IonPage,
   IonList,
@@ -52,10 +52,10 @@ import {
   IonCardContent,
   IonCard,
 } from '@ionic/vue';
-import BaseToolbar from '@/components/base/Toolbar.vue';
+import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import BaseBackButton from '@/components/base/BaseBackButton.vue';
 const { t } = useLang();
-const { onBack, WeeLoading } = useBase();
+const { onBack, appLoading } = useBase();
 const authenStore = useAuthenStore();
 const { updateEmail } = UserService();
 const entity = ref<UserPersonalEditRequest>({
@@ -74,7 +74,7 @@ const emailValid = computed(() => {
   return entity.value.email ? validateEmail(entity.value.email) : false;
 });
 const onSubmit = async () => {
-  const loading: any = await WeeLoading();
+  const loading: any = await appLoading();
   loading.present();
   const res = await updateEmail(entity.value);
   loading.dismiss();

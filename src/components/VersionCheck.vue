@@ -60,10 +60,10 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import { ref } from 'vue';
-import type { AppVersionDto, PlatformType } from '@/types/Models';
+import type { AppVersionDto, PlatformType } from '@/types/models';
 import { cloudDownloadOutline } from 'ionicons/icons';
-import { useLang } from '@/composables/UseLang';
-import { useConfig } from '@/composables/UseConfig';
+import { useLang } from '@/composables/useLang';
+import { useConfig } from '@/composables/useConfig';
 import { IonRow, IonCol, IonButton, IonIcon, IonImg } from '@ionic/vue';
 defineProps({
   userVersion: {

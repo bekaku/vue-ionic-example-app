@@ -1,12 +1,14 @@
 import { useAppStore } from '@/stores/appStore';
-import { appNavs } from '@/libs/navs';
-import type { IMenu, IMenuPage, IMenuPageItem } from '@/types/Common';
+import { appNavs as initNav } from '@/libs/navs';
+import type { IMenu, IMenuPage, IMenuPageItem } from '@/types/common';
+import { storeToRefs } from 'pinia';
 export const useMenu = () => {
     const appStore = useAppStore();
+    const { appNavs } = storeToRefs(appStore)
     const initialAppNav = async (): Promise<boolean> => {
         const aclFinal: IMenu[] = [];
         let menu: IMenu | null = {};
-        for (const menuLevel1 of appNavs) {
+        for (const menuLevel1 of initNav) {
             menu = {};
             // Level 1
             if (menuLevel1) {
@@ -49,7 +51,7 @@ export const useMenu = () => {
             }
         }
         if (aclFinal && aclFinal.length > 0) {
-            appStore.setDrawers(aclFinal);
+            appStore.setAppNavs(aclFinal);
         }
 
         return new Promise(resolve => resolve(true));
@@ -104,6 +106,7 @@ export const useMenu = () => {
         return await appStore.isHavePermissionLazy([permission]);
     }
     return {
-        initialAppNav
+        initialAppNav,
+        appNavs
     };
 };

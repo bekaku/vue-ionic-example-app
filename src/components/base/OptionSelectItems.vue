@@ -59,8 +59,8 @@
       </option-select-items>
  */
 import { ref, watch } from 'vue';
-import type { LabelValue } from '@/types/Common';
-import { useLang } from '@/composables/UseLang';
+import type { LabelValue } from '@/types/common';
+import { useLang } from '@/composables/useLang';
 import type { CheckboxCustomEvent } from '@ionic/vue';
 import { IonCheckbox, IonItem, IonLabel, IonList } from '@ionic/vue';
 import BaseAvatar from '@/components/base/BaseAvatar.vue';

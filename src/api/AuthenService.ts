@@ -2,9 +2,9 @@ import type {
   LoginRequest,
   RefreshTokenRequest,
   RefreshTokenResponse
-} from '@/types/Models';
-import type { AppException, ForgotPasswordRequest, ResponseMessage } from '@/types/Common';
-import { useAxios } from '@/composables/UseAxios';
+} from '@/types/models';
+import type { AppException, ForgotPasswordRequest, ResponseMessage } from '@/types/common';
+import { useAxios } from '@/composables/useAxios';
 import type { AxiosResponse } from 'axios';
 export default () => {
   const { callAxios, callAxiosProcess } = useAxios();

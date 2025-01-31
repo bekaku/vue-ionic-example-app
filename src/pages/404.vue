@@ -20,8 +20,8 @@
 </template>
 <script setup lang="ts">
 import BaseLayout from '@/components/base/BaseLayout.vue';
-import { useBase } from '@/composables/UseBase';
-import { useLang } from '@/composables/UseLang';
+import { useBase } from '@/composables/useBase';
+import { useLang } from '@/composables/useLang';
 import {
   IonButton,
   IonIcon,

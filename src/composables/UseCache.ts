@@ -1,11 +1,11 @@
-import type { CacheDateAndKey } from '@/types/Common';
-import { isObjectEmpty } from '@/utils/AppUtil';
+import type { CacheDateAndKey } from '@/types/common';
+import { isObjectEmpty } from '@/utils/appUtil';
 import {
   CacheDateCheckKey,
   NotifyKey
-} from '@/utils/Constant';
-import { getDateNow, getMonthNow, getYearNow } from '@/utils/DateUtil';
-import { loadStorage, removeStorage, saveStorage } from '@/utils/StorageUtil';
+} from '@/libs/constant';
+import { getDateNow, getMonthNow, getYearNow } from '@/utils/dateUtil';
+import { loadStorage, removeStorage, saveStorage } from '@/utils/storageUtil';
 
 export const useCache = () => {
   const getCacheKeyList = async (): Promise<CacheDateAndKey[]> => {

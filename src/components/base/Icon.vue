@@ -24,7 +24,7 @@
 import type { PropType } from 'vue';
 import { computed, onMounted, ref } from 'vue';
 import { IonIcon } from '@ionic/vue';
-import type { IconSetType } from '@/types/Common';
+import type { IconSetType } from '@/types/common';
 const props = defineProps({
   icon: {
     type: String,

@@ -1,6 +1,6 @@
-import { useAxios } from '@/composables/UseAxios';
-import type { ISearch } from '@/types/Models';
-import { SearchParamiter } from '@/utils/Constant';
+import { useAxios } from '@/composables/useAxios';
+import type { ISearch } from '@/types/models';
+import { SearchParamiter } from '@/libs/constant';
 export default () => {
   const { callAxios, validateServerResponse } = useAxios();
   const searchApi = async (

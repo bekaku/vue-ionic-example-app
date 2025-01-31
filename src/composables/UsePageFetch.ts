@@ -2,12 +2,12 @@
 /* eslint-disable ts/no-unused-vars */
 import type { Ref } from 'vue';
 import { computed, ref } from 'vue';
-import { usePaging } from '@/composables/UsePaging';
-import { useSort } from '@/composables/UseSort';
-import type { ICrudListApiOptions } from '@/types/Common';
-import { useAxios } from '@/composables/UseAxios';
-import { isAppException, isArray, isEmpty, isListResponse, isServerResponseMessage } from '@/utils/AppUtil';
-import type { ApiListResponse } from '@/types/Models';
+import { usePaging } from '@/composables/usePaging';
+import { useSort } from '@/composables/useSort';
+import type { ICrudListApiOptions } from '@/types/common';
+import { useAxios } from '@/composables/useAxios';
+import { isAppException, isArray, isEmpty, isListResponse, isServerResponseMessage } from '@/utils/appUtil';
+import type { ApiListResponse } from '@/types/common';
 
 export const usePagefecth = <T>(options: ICrudListApiOptions) => {
     const { callAxios } = useAxios();

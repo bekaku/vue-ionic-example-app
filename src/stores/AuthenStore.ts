@@ -1,12 +1,12 @@
-import appAxios from '@/plugins/Axios';
-import type { UserDto } from '@/types/Models';
-import { canRefreshToken } from '@/utils/JwtUtil';
+import appAxios from '@/plugins/axios';
+import type { UserDto } from '@/types/models';
+import { canRefreshToken } from '@/utils/jwtUtil';
 import { defineStore } from 'pinia';
 // import router from '@/router';
-import { useConfig } from '@/composables/UseConfig';
-import type { RefeshTokenStatus } from '@/types/Common';
-import { AppAuthRefeshTokenKey, AppAuthTokenKey, RefreshTokenProcessAtt } from '@/utils/Constant';
-import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import { useConfig } from '@/composables/useConfig';
+import type { RefeshTokenStatus } from '@/types/common';
+import { AppAuthRefeshTokenKey, AppAuthTokenKey, RefreshTokenProcessAtt } from '@/libs/constant';
+import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import { computed, ref } from 'vue';
 import { useAppStore } from './appStore';
 

@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { useLang } from '@/composables/UseLang';
+import { useLang } from '@/composables/useLang';
 import { fileTray, alertCircle } from 'ionicons/icons';
 import { IonGrid, IonRow, IonCol, IonIcon } from '@ionic/vue';
 defineProps({

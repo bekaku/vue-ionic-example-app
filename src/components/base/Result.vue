@@ -76,14 +76,14 @@
 </template>
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import type { IResult, IconSetType } from '@/types/Common';
+import type { IResult, IconSetType } from '@/types/common';
 import {
   handRightOutline,
   informationCircleOutline,
   warningOutline,
   checkmarkOutline,
 } from 'ionicons/icons';
-import { useLang } from '@/composables/UseLang';
+import { useLang } from '@/composables/useLang';
 import BaseIcon from '@/components/base/Icon.vue';
 import { IonGrid, IonRow, IonCol, IonIcon } from '@ionic/vue';
 const props = defineProps({

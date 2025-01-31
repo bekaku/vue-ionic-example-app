@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useDevice } from '@/composables/UseDevice';
+import { useDevice } from '@/composables/useDevice';
 import { IonButtons, IonContent, IonHeader, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/vue';
 import { defineAsyncComponent, ref } from 'vue';
 
@@ -90,7 +90,7 @@ const {
     titleSize?: 'large' | 'small' | undefined
   }>();
 const emit = defineEmits(['on-scroll-up', 'on-scroll-down']);
-const BaseToolbar = defineAsyncComponent(() => import('@/components/base/Toolbar.vue'));
+const BaseToolbar = defineAsyncComponent(() => import('@/components/base/BaseToolbar.vue'));
 const BaseBackButton = defineAsyncComponent(() => import('@/components/base/BaseBackButton.vue'));
 const BaseAvatar = defineAsyncComponent(() => import('@/components/base/BaseAvatar.vue'));
 

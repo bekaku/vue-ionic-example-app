@@ -72,15 +72,15 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { useAuthenStore } from '@/stores/AuthenStore';
-import type { UserPersonalEditRequest } from '@/types/Models';
-import type { CountryCode, Country } from '@/types/Common';
+import { useAuthenStore } from '@/stores/authenStore';
+import type { UserPersonalEditRequest } from '@/types/models';
+import type { CountryCode, Country } from '@/types/common';
 import UserService from '@/api/UserService';
 import { checkmarkOutline, chevronDownOutline } from 'ionicons/icons';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { computed, onMounted, ref } from 'vue';
-import { useBase } from '@/composables/UseBase';
-import { useLang } from '@/composables/UseLang';
+import { useBase } from '@/composables/useBase';
+import { useLang } from '@/composables/useLang';
 import {
   IonPage,
   IonList,
@@ -96,10 +96,10 @@ import {
   IonCardContent,
   IonCard,
 } from '@ionic/vue';
-import BaseToolbar from '@/components/base/Toolbar.vue';
+import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import BaseBackButton from '@/components/base/BaseBackButton.vue';
 const { t } = useLang();
-const { onBack, WeeLoading } = useBase();
+const { onBack, appLoading } = useBase();
 const authenStore = useAuthenStore();
 const { updatePersonalData } = UserService();
 
@@ -134,7 +134,7 @@ const phoneValid = computed(() => {
     : false;
 });
 const onSubmit = async () => {
-  const loading: any = await WeeLoading();
+  const loading: any = await appLoading();
   loading.present();
   const res = await updatePersonalData(entity.value);
   loading.dismiss();

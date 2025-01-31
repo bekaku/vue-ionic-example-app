@@ -6,17 +6,17 @@
 </template>
 <script setup lang="ts">
 import NotificationBadge from '@/components/notification/Badge.vue';
-import { useBase } from '@/composables/UseBase';
-import { useNotification } from '@/composables/UseNotification';
-import { useDeviceStore } from '@/stores/DeviceStore';
-import { useNotificationStore } from '@/stores/NotificationStore';
+import { useBase } from '@/composables/useBase';
+import { useNotification } from '@/composables/useNotification';
+import { useDeviceStore } from '@/stores/deviceStore';
+import { useNotificationStore } from '@/stores/notificationStore';
 import { storeToRefs } from 'pinia';
 import { onMounted, watch } from 'vue';
 const deviceStore = useDeviceStore();
 const { isActive } = storeToRefs(deviceStore);
 
 const { notify, setLastNotify } = useNotificationStore();
-const { WeeGoTo } = useBase();
+const { appNavigateTo } = useBase();
 const { fetchNotReadNotify } = useNotification();
 onMounted(() => {
   // fetchNotReadNotify();
@@ -27,7 +27,7 @@ const onGo = () => {
     notify.totalNotify = 0;
   }
 
-  WeeGoTo('/notifications');
+  appNavigateTo('/notifications');
 };
 watch(isActive, (state) => {
   if (state) {

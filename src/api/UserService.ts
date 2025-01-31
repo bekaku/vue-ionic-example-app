@@ -1,11 +1,11 @@
-import { useAxios, } from '@/composables/UseAxios';
-import type { AppLocale, ResponseMessage } from '@/types/Common';
+import { useAxios, } from '@/composables/useAxios';
+import type { AppLocale, ResponseMessage } from '@/types/common';
 import type {
   AccessTokenDto,
   UserChangePasswordRequest,
   UserDto,
   UserPersonalEditRequest
-} from '@/types/Models';
+} from '@/types/models';
 
 export default () => {
   const { callAxiosV2 } = useAxios();

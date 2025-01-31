@@ -40,7 +40,7 @@
                   {{
                     t('lastestActive')
                     + ' '
-                    + AppFormatDateTime(item.lastestActive, FORMAT_DATETIME)
+                    + appFormatDateTime(item.lastestActive, FORMAT_DATETIME)
                   }}
                 </p>
               </ion-label>
@@ -61,14 +61,14 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import type { AccessTokenDto } from '@/types/Models';
-import { FORMAT_DATETIME } from '@/utils/DateUtil';
+import type { AccessTokenDto } from '@/types/models';
+import { FORMAT_DATETIME } from '@/utils/dateUtil';
 import UserService from '@/api/UserService';
 import AuthenService from '@/api/AuthenService';
 import { logoAndroid, logoApple, laptop, ellipse, trash } from 'ionicons/icons';
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
-import { useBase } from '@/composables/UseBase';
-import { useLang } from '@/composables/UseLang';
+import { useBase } from '@/composables/useBase';
+import { useLang } from '@/composables/useLang';
 import {
   IonPage,
   IonList,
@@ -82,15 +82,15 @@ import {
   IonTitle,
   IonCard,
 } from '@ionic/vue';
-import BaseToolbar from '@/components/base/Toolbar.vue';
+import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import BaseBackButton from '@/components/base/BaseBackButton.vue';
 import Spinner from '@/components/base/Spinner.vue';
-import { usePaging } from '@/composables/UsePaging';
+import { usePaging } from '@/composables/usePaging';
 const LoadMore = defineAsyncComponent(
   () => import('@/components/LoadMore.vue'),
 );
 const { t } = useLang();
-const { WeeLoading, WeeConfirm, AppFormatDateTime } = useBase();
+const { appLoading, appConfirm, appFormatDateTime } = useBase();
 const { removeAccessTokenSession } = AuthenService();
 const { currentAuthSession } = UserService();
 const { pages } = usePaging(10);
@@ -131,11 +131,11 @@ onMounted(() => {
   loadSeesionLogined();
 });
 const onDeleteSession = async (index: number) => {
-  const conf = await WeeConfirm(t('authSessions'), t('base.deleteConfirm'));
+  const conf = await appConfirm(t('authSessions'), t('base.deleteConfirm'));
   if (conf) {
     const item = sessionList.value[index];
     if (item) {
-      const loading: any = await WeeLoading();
+      const loading: any = await appLoading();
       loading.present();
       const res = await removeAccessTokenSession(item.id);
       loading.dismiss();

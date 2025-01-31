@@ -14,23 +14,28 @@
       </base-toolbar>
     </ion-header>
     <ion-content fullscreen ref="contentTapHome">
-      Tab Home
+      <BaseCard title="Tab Home">
+        <IonCardContent>
+          Ionic and Vue js 3 Starter template
+        </IonCardContent>
+      </BaseCard>
     </ion-content>
   </ion-page>
 </template>
 <script setup lang="ts">
-import { useAuthenStore } from '@/stores/AuthenStore';
-import { useDeviceStore } from '@/stores/DeviceStore';
+import { useAuthenStore } from '@/stores/authenStore';
+import { useDeviceStore } from '@/stores/deviceStore';
 import { ref } from 'vue';
 
-import BaseToolbar from '@/components/base/Toolbar.vue';
+import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import NotificationAppNotification from '@/components/notification/AppNotification.vue';
-import { useLang } from '@/composables/UseLang';
-import { useTheme } from '@/composables/UseTheme';
+import { useLang } from '@/composables/useLang';
+import { useTheme } from '@/composables/useTheme';
 import { useAppStore } from '@/stores/appStore';
 import {
   IonButton,
   IonButtons,
+  IonCardContent,
   IonContent,
   IonHeader,
   IonIcon,
@@ -39,6 +44,7 @@ import {
   IonTitle
 } from '@ionic/vue';
 import { searchOutline } from 'ionicons/icons';
+import BaseCard from '@/components/base/BaseCard.vue';
 const authenStore = useAuthenStore();
 const appStore = useAppStore();
 const { t } = useLang();

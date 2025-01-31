@@ -45,15 +45,15 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { useAuthenStore } from '@/stores/AuthenStore';
+import { useAuthenStore } from '@/stores/authenStore';
 import { cameraOutline } from 'ionicons/icons';
-import type { FileManagerDto } from '@/types/Models';
-import type { ChoosePhotoItem } from '@/types/Common';
+import type { FileManagerDto } from '@/types/models';
+import type { ChoosePhotoItem } from '@/types/common';
 import FileManagerService from '@/api/FileManagerService';
 import UserService from '@/api/UserService';
 import { defineAsyncComponent, ref } from 'vue';
-import { useBase } from '@/composables/UseBase';
-import { useLang } from '@/composables/UseLang';
+import { useBase } from '@/composables/useBase';
+import { useLang } from '@/composables/useLang';
 import {
   IonPage,
   IonButtons,
@@ -64,10 +64,10 @@ import {
   IonTitle,
   IonCard,
 } from '@ionic/vue';
-import BaseToolbar from '@/components/base/Toolbar.vue';
+import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import BaseBackButton from '@/components/base/BaseBackButton.vue';
 import ImageCropper from '@/components/ImageCropper.vue';
-import { useTheme } from '@/composables/UseTheme';
+import { useTheme } from '@/composables/useTheme';
 
 const ProfileCard = defineAsyncComponent(
   () => import('@/components/profile/Card.vue'),
@@ -80,7 +80,7 @@ const { uploadApi } = FileManagerService();
 const { updateUserAvatar, updateUserCover } = UserService();
 const authenStore = useAuthenStore();
 const { t } = useLang();
-const { WeeLoading } = useBase();
+const { appLoading } = useBase();
 const { isDark } = useTheme();
 const dialog = ref(false);
 const isAvatar = ref(true);
@@ -112,7 +112,7 @@ const conSubmit = (f: any) => {
   }
 };
 const onUploadAvatar = async (f: any) => {
-  const l: any = await WeeLoading();
+  const l: any = await appLoading();
   l.present();
   isLoading.value = true;
   const response = await onUploadFileProcess(f);
@@ -129,7 +129,7 @@ const onUploadAvatar = async (f: any) => {
   l.dismiss();
 };
 const onUploadCover = async (f: any) => {
-  const l: any = await WeeLoading();
+  const l: any = await appLoading();
   l.present();
   isLoading.value = true;
   const response = await onUploadFileProcess(f);

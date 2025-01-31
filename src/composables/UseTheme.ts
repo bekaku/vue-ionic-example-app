@@ -1,8 +1,8 @@
-import { useDevice } from '@/composables/UseDevice';
+import { useDevice } from '@/composables/useDevice';
 import { useAppStore } from '@/stores/appStore';
-import type { AppTheme } from '@/types/Common';
-import { ThemeKey } from '@/utils/Constant';
-import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import type { AppTheme } from '@/types/common';
+import { ThemeKey } from '@/libs/constant';
+import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { isPlatform } from '@ionic/vue';
 import { moonOutline, sunnyOutline } from 'ionicons/icons';

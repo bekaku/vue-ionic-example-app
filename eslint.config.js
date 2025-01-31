@@ -74,5 +74,6 @@ export default antfu({
     'vue/comma-dangle': 'off',
     'jsonc/sort-keys': 'off',
     'style/quote-props': 'off',
+    // 'vue/v-on-event-hyphenation': 'off',
   },
 });

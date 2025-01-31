@@ -1,5 +1,5 @@
-import { AppAuthTokenKey } from '@/utils/Constant';
-import { loadStorage } from '@/utils/StorageUtil';
+import { AppAuthTokenKey } from '@/libs/constant';
+import { loadStorage } from '@/utils/storageUtil';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import type { RouteRecordRaw } from 'vue-router';
 
@@ -82,6 +82,26 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/tabs/other.vue')
       }
     ]
+  },
+  {
+    path: '/example/ui/avatar',
+    component: () => import('@/pages/example/ui/avatar.vue')
+  },
+  {
+    path: '/example/ui/button',
+    component: () => import('@/pages/example/ui/button.vue')
+  },
+  {
+    path: '/example/ui/date-picker',
+    component: () => import('@/pages/example/ui/date-picker.vue')
+  },
+  {
+    path: '/example/ui/dialog',
+    component: () => import('@/pages/example/ui/dialog.vue')
+  },
+  {
+    path: '/example/ui/dropdown-menu',
+    component: () => import('@/pages/example/ui/dropdown-menu.vue')
   },
   {
     path: '/test',

@@ -6,7 +6,7 @@
 </template>
 <script setup lang="ts">
 import { IonChip, IonLabel, IonIcon } from '@ionic/vue'
-import { useConfig } from '@/composables/UseConfig';
+import { useConfig } from '@/composables/useConfig';
 import { bugOutline } from 'ionicons/icons'
 
 const { isTestMode, isDevelopMode } = useConfig();

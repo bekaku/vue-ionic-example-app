@@ -25,7 +25,7 @@
 <script setup lang="ts">
 // <base-image v-if="src" :class="`shadow-${shadow}`" :src="src" ratio="4/3"></base-image>
 import FileManagerService from '@/api/FileManagerService';
-import type { ImgRatioType } from '@/types/Common';
+import type { ImgRatioType } from '@/types/common';
 import { IonImg, IonSpinner } from '@ionic/vue';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 

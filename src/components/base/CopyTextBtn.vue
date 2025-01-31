@@ -13,7 +13,7 @@
   </ion-button>
 </template>
 <script setup lang="ts">
-import { useBase } from '@/composables/UseBase';
+import { useBase } from '@/composables/useBase';
 import { copyOutline } from 'ionicons/icons';
 import { IonButton, IonIcon } from '@ionic/vue';
 const props = defineProps({

@@ -54,11 +54,11 @@
 </template>
 <script setup lang="ts">
 import PermissionService from '@/api/PermissionService';
-import type { Permission } from '@/types/Models';
-import { useLang } from '@/composables/UseLang';
-import { usePaging } from '@/composables/UsePaging';
-import { useSort } from '@/composables/UseSort';
-import BaseToolbar from '@/components/base/Toolbar.vue';
+import type { Permission } from '@/types/models';
+import { useLang } from '@/composables/useLang';
+import { usePaging } from '@/composables/usePaging';
+import { useSort } from '@/composables/useSort';
+import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import BaseBackButton from '@/components/base/BaseBackButton.vue';
 import {
   IonPage,

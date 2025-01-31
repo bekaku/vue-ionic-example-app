@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import { ref, onMounted, watch, useTemplateRef, onBeforeUnmount } from 'vue';
-import type { SlideOptions, SlidePaginationy } from '@/types/Common';
+import type { SlideOptions, SlidePaginationy } from '@/types/common';
 import { register } from 'swiper/element/bundle';
 
 const props = withDefaults(defineProps<Props>(), {

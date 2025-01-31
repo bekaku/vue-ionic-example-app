@@ -11,14 +11,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useTheme } from '@/composables/UseTheme';
+import { useTheme } from '@/composables/useTheme';
 import type {
   ChartMode,
   ChartThemePalete,
   PieChartType,
   Position,
   Strokestyle,
-} from '@/types/Chart';
+} from '@/types/chart';
 import type { PropType } from 'vue';
 import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';

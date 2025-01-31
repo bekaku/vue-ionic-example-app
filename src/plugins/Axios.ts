@@ -1,9 +1,9 @@
-import { AppAuthRefeshTokenKey, AppAuthTokenKey, DefaultApiCLient, LocaleKey } from '@/utils/Constant';
-import { loadStorage, saveStorage } from '@/utils/StorageUtil';
+import { AppAuthRefeshTokenKey, AppAuthTokenKey, DefaultApiCLient, LocaleKey } from '@/libs/constant';
+import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 // import authInterceptor from './AxiosInterceptor';
-import { getTokenStatus } from '@/utils/JwtUtil';
+import { getTokenStatus } from '@/utils/jwtUtil';
 import router from '../router';
 
 declare module '@vue/runtime-core' {

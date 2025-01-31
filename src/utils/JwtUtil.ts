@@ -1,4 +1,4 @@
-import type { JwtStatus } from '@/types/Common';
+import type { JwtStatus } from '@/types/common';
 import type { JwtPayload } from 'jwt-decode';
 import { jwtDecode } from 'jwt-decode';
 export const decodeJWT = (token: string): Promise<JwtPayload | null> => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IHrefTarget } from '@/types/Common';
+import type { IHrefTarget } from '@/types/common';
 const { external = false, color = 'primary' } = defineProps<{
     label?: string
     external?: boolean

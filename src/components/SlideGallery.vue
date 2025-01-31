@@ -31,13 +31,13 @@
 </template>
 <script setup lang="ts">
 import BaseSwiperSlides from '@/components/base/SwiperElementSlides.vue';
-import { useDevice } from '@/composables/UseDevice';
-import type { FileManagerDto, ImageDto } from '@/types/Models';
+import { useDevice } from '@/composables/useDevice';
+import type { FileManagerDto, ImageDto } from '@/types/models';
 import type { PropType } from 'vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
-import { useTheme } from '@/composables/UseTheme';
-import type { SlideOptions } from '@/types/Common';
+import { useTheme } from '@/composables/useTheme';
+import type { SlideOptions } from '@/types/common';
 import { IonCol, IonImg, IonRow } from '@ionic/vue';
 const props = defineProps({
   items: {

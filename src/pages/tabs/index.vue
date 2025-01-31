@@ -1,33 +1,30 @@
 <script setup lang="ts">
-import { useBase } from '@/composables/UseBase';
-import { useLang } from '@/composables/UseLang';
-import { useTabStore } from '@/stores/TabStore';
-import { TabsName } from '@/utils/Constant';
+import { useLang } from '@/composables/useLang';
+import { TabsName } from '@/libs/constant';
+import { useTabStore } from '@/stores/tabStore';
 import {
-  IonPage,
+  IonBadge,
   IonIcon,
+  IonLabel,
+  IonPage,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
-  IonTabs,
-  IonLabel,
-  IonBadge
+  IonTabs
 } from '@ionic/vue';
 import {
-  homeOutline,
+  chatbubble,
   chatbubbleOutline,
+  ellipsisHorizontal,
   ellipsisHorizontalOutline,
   home,
-  chatbubble,
-  ellipsisHorizontal
+  homeOutline
 } from 'ionicons/icons';
 import { onUnmounted, ref } from 'vue';
 const { t } = useLang();
-const { WeeGoTo } = useBase();
 const tabStore = useTabStore();
 const to = ref();
-const iconSize = 40;
-const beforeTabChange = (ev: any) => {
+const beforeTabChange = (/* ev: any */) => {
   // do something before tab change
   if (tabStore.countClick == 0) {
     tabStore.setCountClick(2);
@@ -39,7 +36,7 @@ const afterTabChange = (ev: any) => {
   // do something after tab change
   tabStore.setCurrentTab(ev.tab);
 };
-const onTabClick = (ev: any) => {
+const onTabClick = (/* ev: any */) => {
   to.value = setTimeout(() => {
     if (tabStore.currentTab != 'TabsName.POST') {
       tabStore.increaseCount();

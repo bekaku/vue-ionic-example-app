@@ -36,7 +36,7 @@
 </template>
 <script setup lang="ts">
 import BaseLinkText from '@/components/base/BaseLinkText.vue';
-import { useTheme } from '@/composables/UseTheme';
+import { useTheme } from '@/composables/useTheme';
 import { IonButton, IonCol, IonIcon, IonRow, IonSpinner } from '@ionic/vue';
 import { chevronDownOutline } from 'ionicons/icons';
 import type { PropType } from 'vue';

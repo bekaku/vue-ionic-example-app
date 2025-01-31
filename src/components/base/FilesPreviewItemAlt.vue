@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { formatBytes, getFileTypeIcon } from '@/utils/AppUtil';
-import type { FileManagerDto } from '@/types/Models';
+import { formatBytes, getFileTypeIcon } from '@/utils/appUtil';
+import type { FileManagerDto } from '@/types/models';
 import BaseImage from '@/components/base/Image.vue';
 import { IonButton, IonButtons, IonIcon, IonItem, IonLabel } from '@ionic/vue';
 import { trashOutline } from 'ionicons/icons';
