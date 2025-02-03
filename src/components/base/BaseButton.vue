@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseIcon from '@/components/base/Icon.vue';
+import BaseIcon from '@/components/base/BaseIcon.vue';
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import type { ButtonFill, IconSetType, IHrefTarget } from '@/types/common';
 import { IonButton } from '@ionic/vue';
@@ -9,16 +9,18 @@ const {
     type = 'button',
     iconOnly = false,
     iconSet = 'ion',
-    iconSize = 20,
+    iconSize = 24,
     round = false,
     outline = false,
-    avatarSize = 32
+    avatarSize = 32,
+    full =false
 } = defineProps<{
     color?: 'danger' | 'dark' | 'light' | 'medium' | 'primary' | 'secondary' | 'success' | 'tertiary' | 'warning' | string | undefined
     clear?: boolean
     disabled?: boolean
     expand?: 'block' | 'full'
     fill?: ButtonFill
+    full?: boolean
     label?: string
     href?: string
     avatar?: string
@@ -35,11 +37,12 @@ const {
     size?: 'default' | 'large' | 'small'
     strong?: boolean
     type?: 'button' | 'reset' | 'submit'
+    to?: string
 }>();
 </script>
 <template>
-    <ion-button v-bind="$attrs" :color :disabled :fill="clear ? 'clear' : outline ? 'outline' : 'solid'" :expand :href
-        :target :type :shape="round ? 'round' : undefined" :size>
+    <ion-button v-bind="$attrs" :color :disabled :fill="clear ? 'clear' : outline ? 'outline' : 'solid'" :expand="full ? 'block' : undefined" :href
+        :target :type :shape="round ? 'round' : undefined" :size :router-link="to || undefined">
         <slot>
             <template v-if="avatar">
                 <base-avatar class="q-mr-xs" slot="start" :src="avatar" :size="avatarSize" />

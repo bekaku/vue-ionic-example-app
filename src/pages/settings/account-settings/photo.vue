@@ -72,9 +72,7 @@ import { useTheme } from '@/composables/useTheme';
 const ProfileCard = defineAsyncComponent(
   () => import('@/components/profile/Card.vue'),
 );
-const BaseChoosePhoto = defineAsyncComponent(
-  () => import('@/components/base/ChoosePhoto.vue'),
-);
+const BaseChoosePhoto = defineAsyncComponent(() => import('@/components/base/BaseChoosePhoto.vue'));
 
 const { uploadApi } = FileManagerService();
 const { updateUserAvatar, updateUserCover } = UserService();
@@ -95,13 +93,13 @@ const openCover = () => {
   isAvatar.value = false;
   showChoosePhoto.value = true;
 };
-const onTakePicture = (file: ChoosePhotoItem) => {
+const onTakePicture = (file: ChoosePhotoItem | null) => {
   imageFile.value = file;
   showChoosePhoto.value = false;
   dialog.value = true;
 };
-const onPickPicture = (images: ChoosePhotoItem[]) => {
-  imageFile.value = images[0];
+const onPickPicture = (images: ChoosePhotoItem[] | null) => {
+  imageFile.value =images!=null ? images[0] :null;
   showChoosePhoto.value = false;
 };
 const conSubmit = (f: any) => {

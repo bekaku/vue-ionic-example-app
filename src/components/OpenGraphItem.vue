@@ -33,7 +33,7 @@ import { defineAsyncComponent } from 'vue';
 import type { OgMeta } from '@/types/models';
 import { returnUpForward } from 'ionicons/icons';
 import { IonItem, IonLabel, IonText, IonCard } from '@ionic/vue';
-import BaseIcon from '@/components/base/Icon.vue';
+import BaseIcon from '@/components/base/BaseIcon.vue';
 const { item } = defineProps({
   item: {
     type: Object as PropType<OgMeta>,
@@ -41,7 +41,7 @@ const { item } = defineProps({
   },
 });
 const BaseImage = defineAsyncComponent(
-  () => import('@/components/base/Image.vue'),
+  () => import('@/components/base/BaseImage.vue'),
 );
 </script>
 <style scoped lang="scss">

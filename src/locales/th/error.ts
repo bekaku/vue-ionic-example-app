@@ -48,6 +48,10 @@ export default {
         'notAllowFIleError': 'ไฟล์ที่อนุญาต {mimes}',
         'termAcceptEnpty': 'กรุณารับทราบ \'เงื่อนไขการให้บริการ\' และ \'นโยบายความเป็นส่วนตัว\' ก่อน',
         'validateStartDateGreterThenEndDate': 'วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด',
-        'deviceRootDetect': 'ขออภัยเครื่องของท่านมีการ ROOT ไว้ไม่สามารถใช้งาน Vue Ionic ได้'
+        'deviceRootDetect': 'ขออภัยเครื่องของท่านมีการ ROOT ไว้ไม่สามารถใช้งาน Vue Ionic ได้',
+        'limitFile2': 'จำกัดไฟล์ไม่เกิน {total} ไฟล์',
+        'usernameValidate': 'รูปแบบชื่อผู้ใช้ไม่ถูกต้อง',
+        'fileExcelError': 'กรุณาเลือกไฟล์นามสกุล .xlsx',
+        'percentageValueWrong': 'ค่าเปอร์เซ็นต์ไม่ถูกต้องกรุณาตรวจสอบ',
     },
 }

@@ -2,7 +2,7 @@
 import type { AppColor, ItemLines, LabelValue } from '@/types/common';
 import { IonIcon, IonItem, IonLabel, IonText } from '@ionic/vue';
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
-import BaseIcon from '@/components/base/Icon.vue';
+import BaseIcon from '@/components/base/BaseIcon.vue';
 
 const { item, iconSize = 20, avatarSize = 24, detail = false, lines = 'none' } = defineProps<{
     item: LabelValue<T>

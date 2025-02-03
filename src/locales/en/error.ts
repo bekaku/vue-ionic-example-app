@@ -48,6 +48,9 @@ export default {
         'notAllowFIleError': 'Allowed files {mimes}',
         'termAcceptEnpty': 'Please be aware of the \'Terms of Service\' and \'Privacy Policy\' first.',
         'validateStartDateGreterThenEndDate': 'The start date cannot be greater than the end date.',
-        'deviceRootDetect': 'Sorry, your device has ROOT installed and cannot use Vue Ionic.'
+        'deviceRootDetect': 'Sorry, your device has ROOT installed and cannot use Vue Ionic.',
+        'limitFile2': 'File limit: {total} files',
+        'usernameValidate': 'Invalid username format.',
+        'fileExcelError': 'Please select a file with the extension .xlsx.',
     },
 }

@@ -104,6 +104,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/example/ui/dropdown-menu.vue')
   },
   {
+    path: '/example/ui/file-picker',
+    component: () => import('@/pages/example/ui/file-picker.vue')
+  },
+  {
+    path: '/example/ui/input-text',
+    component: () => import('@/pages/example/ui/input-text.vue')
+  },
+  {
     path: '/test',
     meta: { noRequireAuth: true },
     component: () => import('@/pages/test/index.vue')

@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import { biDot } from '@quasar/extras/bootstrap-icons';
-import BaseIcon from '@/components/base/Icon.vue';
+import BaseIcon from '@/components/base/BaseIcon.vue';
 defineProps({
   size: {
     type: Number,

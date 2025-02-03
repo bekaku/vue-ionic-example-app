@@ -1,32 +1,26 @@
 <script setup lang="ts">
-import BaseAvatar from '@/components/base/BaseAvatar.vue';
-import BaseAvatarGroup from '@/components/base/BaseAvatarGroup.vue';
+import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseLayout from '@/components/base/BaseLayout.vue';
-import BaseButton from '@/components/base/BaseButton.vue';
-import { useAuthenStore } from '@/stores/authenStore';
+import BaseModal from '@/components/base/BaseModal.vue';
+import { useBase } from '@/composables/useBase';
+import { useLang } from '@/composables/useLang';
 import {
     IonCardContent,
-    IonIcon,
     IonRow
 } from '@ionic/vue';
-import { ellipse, pencilOutline, serverOutline, settingsOutline, trash } from 'ionicons/icons';
+import { serverOutline, settingsOutline } from 'ionicons/icons';
 import { defineAsyncComponent, ref } from 'vue';
-import { useLang } from '@/composables/useLang';
-import { useBase } from '@/composables/useBase';
-import BaseModal from '@/components/base/BaseModal.vue';
 
 const BaseDialog = defineAsyncComponent(() => import('@/components/base/BaseDialog.vue'));
 const { t } = useLang();
 const { appConfirm } = useBase();
-const authenStore = useAuthenStore();
 const dialog = ref<boolean>(false);
 const dialogConfirmToClose = ref<boolean>(false);
 
 const showModal = ref<boolean>(false);
 const modalConfirmToClose = ref<boolean>(false);
 
-const text = ref();
 const onConfirmToClose = async () => {
     const conf = await appConfirm(t('app.monogram'), 'Are you sure to close this dialog?');
     if (conf) {

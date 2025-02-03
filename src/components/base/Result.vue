@@ -84,7 +84,7 @@ import {
   checkmarkOutline,
 } from 'ionicons/icons';
 import { useLang } from '@/composables/useLang';
-import BaseIcon from '@/components/base/Icon.vue';
+import BaseIcon from '@/components/base/BaseIcon.vue';
 import { IonGrid, IonRow, IonCol, IonIcon } from '@ionic/vue';
 const props = defineProps({
   status: {

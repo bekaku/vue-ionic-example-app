@@ -171,7 +171,7 @@ import {
 declare let window: any;
 
 const BaseIcon = defineAsyncComponent(
-  () => import('@/components/base/Icon.vue'),
+  () => import('@/components/base/BaseIcon.vue'),
 );
 const BaseResult = defineAsyncComponent(
   () => import('@/components/base/Result.vue'),

@@ -7,7 +7,7 @@ import { ref } from 'vue';
 export const useNotificationStore = defineStore('notificationStore', () => {
   const notify = ref<NotificationCount>({
     lastestId: 0,
-    totalNotify: 0
+    totalNotify: 199
   });
   const setNotify = (n: NotificationCount) => {
     notify.value.totalNotify = n.totalNotify;

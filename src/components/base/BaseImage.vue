@@ -5,12 +5,11 @@
       @ion-img-did-load="onImgDidLoad"
       @ion-img-will-load="onImgWillLoad"
     /> -->
-
-  <div v-if="src" class="q-img q-img--menu" role="img" v-bind="$attrs">
+  <div v-if="src" v-bind="$attrs" class="q-img q-img--menu" role="img">
     <div :style="{ paddingBottom: imgRatio + '%' }"></div>
     <div class="q-img__container q-absolute-full" :class="{ 'bg-black': !completed }">
       <ion-img :src="srcUrl" class="q-img__image q-img__image--with-transition q-img__image--loaded img-bg"
-        :class="{ 'q-absolute-center': !completed, 'img-bg': imageBg }" loading="lazy" fetchpriority="auto"
+        :class="{ 'q-absolute-center': !completed, 'img-bg': imageBg }" :alt loading="lazy" fetchpriority="auto"
         aria-hidden="true" draggable="false" :style="!completed
           ? 'width: 0px'
           : `object-fit: ${fit}; object-position: 50% 50%`
@@ -19,7 +18,7 @@
     <ion-spinner v-if="!completed || loading" name="crescent" class="q-absolute-center text-white"
       :class="loadingColor"></ion-spinner>
     <div class="q-img__content q-absolute-full q-anchor--skip"></div>
-    <slot></slot>
+    <slot />
   </div>
 </template>
 <script setup lang="ts">
@@ -29,13 +28,12 @@ import type { ImgRatioType } from '@/types/common';
 import { IonImg, IonSpinner } from '@ionic/vue';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
-const { src, alt = 'img', ratio = '1', loadingColor = 'text-white', appImage = false, fetch = false, fit = 'cover', imageBg = false } = defineProps<{
+const { src, alt = 'img', ratio = '1', loadingColor = 'text-white', fetch = false, fit = 'cover', imageBg = false } = defineProps<{
   src?: string
   placeHolder?: string
   alt?: string
   ratio?: ImgRatioType
   loadingColor?: string
-  appImage?: boolean
   fetch?: boolean
   imageBg?: boolean
   fit?: 'cover' | 'fill' | 'contain' | 'none' | 'scale-down'// 4 / 3
@@ -60,23 +58,18 @@ const imgRatio = computed(() =>
   ratio == '1' ? '100' : ratio == '4/3' ? '75' : '56.25',
 );
 onMounted(() => {
+  console.log('BaseImage.vue', src);
   if (!src) {
     loading.value = false;
     return;
   }
-
-  // TODO next fix due slow load
-  // if (appImage || fetch) {
-  //   onFetchImage();
-  // } else {
-  //   srcUrl.value = src;
-  //   onLoad();
-  //   loading.value = false;
-  // }
-
-  srcUrl.value = src;
-  onLoad();
-  loading.value = false;
+  if (fetch) {
+    onFetchImage();
+  } else {
+    srcUrl.value = src;
+    onLoad();
+    loading.value = false;
+  }
 });
 const onFetchImage = async () => {
   if (!src) {

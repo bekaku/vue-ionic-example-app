@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseIcon from '@/components/base/Icon.vue';
+import BaseIcon from '@/components/base/BaseIcon.vue';
 import { useLang } from '@/composables/useLang';
 import type { IMenuPageItem, ItemLines } from '@/types/common';
 import { IonIcon, IonItem, IonLabel, IonText } from '@ionic/vue';

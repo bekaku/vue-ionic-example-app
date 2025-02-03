@@ -19,7 +19,7 @@ export const useDeviceStore = defineStore('deviceStore', () => {
         deviceFourceReloadData.value = true;
       }
     } else {
-      await saveStorage(LatestDeviceActiveKey, getCurrentTimestamp(), false);
+      await saveStorage(LatestDeviceActiveKey, getCurrentTimestamp());
       deviceFourceReloadData.value = false;
     }
   };

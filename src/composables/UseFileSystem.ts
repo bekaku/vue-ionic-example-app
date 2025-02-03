@@ -188,7 +188,7 @@ export const useFileSystem = () => {
       Media
         .savePhoto(opts)
         .then((res) => {
-          console.log(JSON.stringify(res))
+          console.warn('useFileSystem > saveProcess', JSON.stringify(res));
           appToast({
             text: i18n('success.saved')
           });
@@ -225,13 +225,13 @@ export const useFileSystem = () => {
         resolve(f);
       });
     } catch (e: any) {
-      console.warn(JSON.stringify(e))
+      console.warn('useFileSystem > onTakePicture', JSON.stringify(e));
       return new Promise((resolve) => {
         resolve(null);
       });
     }
   };
-  const onPickPhoto = async (multiple: boolean, limit: number = 10): Promise<ChoosePhotoItem | ChoosePhotoItem[] | null> => {
+  const onPickPhoto = async (multiple: boolean, limit: number = 10): Promise<ChoosePhotoItem[] | null> => {
     if (multiple) {
       const files = await pickPhotoAlbum(limit);
       return new Promise((resolve) => {
@@ -239,8 +239,13 @@ export const useFileSystem = () => {
       });
     } else {
       const file = await takePickSiglePicture().then(r => r);
+      if (file != null) {
+        return new Promise((resolve) => {
+          resolve([file]);
+        });
+      }
       return new Promise((resolve) => {
-        resolve(file);
+        resolve(null);
       });
     }
   };
@@ -268,7 +273,7 @@ export const useFileSystem = () => {
         resolve(f);
       });
     } catch (e: any) {
-      console.warn(JSON.stringify(e));
+      console.warn('useFileSystem > takePickSiglePicture', JSON.stringify(e));
       return new Promise((resolve) => {
         resolve(null);
       });
@@ -290,22 +295,18 @@ export const useFileSystem = () => {
         resolve(list);
       });
     } catch (e: any) {
-      console.warn(JSON.stringify(e))
+      console.warn('useFileSystem > pickPhotoAlbum', JSON.stringify(e));
       return new Promise((resolve) => {
         resolve(null);
       });
     }
   };
   const getFileFromWebPath = async (webPath: any): Promise<ChoosePhotoItem> => {
-    // const fileName = generateFileName();
-    // const file = await imageUrlToFile(webPath, fileName);
     const file = await urlToBlob(webPath);
-    // const fileBase64 = await imageUrlToBase64(webPath);
     return new Promise((resolve) => {
       resolve({
         webPath,
         file
-        // fileBase64: fileBase64
       });
     });
   };

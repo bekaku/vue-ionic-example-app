@@ -7,9 +7,7 @@
         <ion-title>{{ authenStore.loginedDisplay }}</ion-title>
         <ion-buttons slot="end">
           <notification-app-notification></notification-app-notification>
-          <ion-button fill="clear" router-link="/search">
-            <ion-icon slot="icon-only" :icon="searchOutline"></ion-icon>
-          </ion-button>
+          <BaseButton clear :icon="searchOutline" icon-only :icon-size="28" to="/search"/>
         </ion-buttons>
       </base-toolbar>
     </ion-header>
@@ -45,6 +43,7 @@ import {
 } from '@ionic/vue';
 import { searchOutline } from 'ionicons/icons';
 import BaseCard from '@/components/base/BaseCard.vue';
+import BaseButton from '@/components/base/BaseButton.vue';
 const authenStore = useAuthenStore();
 const appStore = useAppStore();
 const { t } = useLang();

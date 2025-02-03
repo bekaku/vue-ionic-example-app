@@ -49,7 +49,7 @@ const items = ref<string[]>([
           <base-avatar src="https://cdn.quasar.dev/img/avatar6.jpg" bordered bordered-color="#23d160" :size="42" />
         </ion-row>
 
-        <base-avatar-group class="q-mt-md" :fetch="true" :items="items" :limitUser="5" :avatarSize="42" />
+        <base-avatar-group class="q-mt-md" :items="items" :limitUser="5" :avatarSize="42" />
       </ion-card-content>
     </BaseCard>
   </base-layout>

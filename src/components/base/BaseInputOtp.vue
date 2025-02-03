@@ -1,28 +1,13 @@
 <template>
   <ion-row class="ion-align-items-center">
-    <!--    <ion-input-->
-    <!--        outlined-->
-    <!--        v-for="i in length"-->
-    <!--        v-model="fieldValues[i - 1]"-->
-    <!--        v-bind="$attrs"-->
-    <!--        @keyup="onKeyUp($event, i - 1)"-->
-    <!--        @update:model-value="onUpdate($event, i - 1)"-->
-    <!--        :key="i"-->
-    <!--        :ref="(el) => updateFieldRef(el, i - 1)"-->
-    <!--        maxlength="1"-->
-    <!--        style="width: 6ch;border: 1px solid #ccc"-->
-    <!--    ></ion-input>-->
-    <ion-col v-for="i in length" :key="i" class="ion-no-margin ion-no-padding">
-      <input type="number"
-             v-model="fieldValues[i - 1]"
-             v-bind="$attrs"
-             @keyup="onKeyUp($event, i - 1)"
-             @update:model-value="onUpdate($event, i - 1)"
-             :ref="(el) => updateFieldRef(el, i - 1)"
-             maxlength="1"
-             style="width:50px;border: 1px solid #ccc;background-color: transparent;border-radius: 5px;text-align: center">
+    <ion-col v-for="i in length" :key="i">
+      <ion-row class="ion-justify-content-center">
+        <input type="number" v-model="fieldValues[i - 1]" v-bind="$attrs" @keyup="onKeyUp($event, i - 1)"
+          @update:model-value="onUpdate($event, i - 1)" :ref="(el) => updateFieldRef(el, i - 1)" maxlength="1"
+          class="input">
+      </ion-row>
     </ion-col>
-</ion-row>
+  </ion-row>
 </template>
 <script setup lang="ts">
 import {
@@ -35,7 +20,7 @@ const props = defineProps<{
   inputLength: number
 }>();
 const emit = defineEmits<{
-  onSubmit: [val: string | undefined]
+  'on-submit': [val: string | undefined]
 }>();
 // const length = 6;
 const length = computed(() => props.inputLength);
@@ -53,7 +38,7 @@ const composite = computed(() => {
 watch(composite, () => {
   if (composite.value) {
     // You should emit this value, e.g.
-    emit('onSubmit', composite.value);
+    emit('on-submit', composite.value);
   }
 });
 
@@ -105,4 +90,13 @@ const onKeyUp = (evnt: any, index: number) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.input {
+  width: 80%;
+  height: 50px;
+  border: 1px solid #ccc;
+  background-color: transparent;
+  border-radius: 5px;
+  text-align: center
+}
+</style>

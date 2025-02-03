@@ -32,6 +32,7 @@
             </div>
           </base-toolbar>
         </slot>
+        <slot name="headerAfter"/>
       </ion-header>
     </slot>
 

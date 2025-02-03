@@ -1,19 +1,18 @@
 <template>
     <ion-item @click="onShow" :button="!disabled" :lines="lines" :detail="false">
         <slot name="start">
-            <ion-icon slot="start" :icon></ion-icon>
+            <ion-icon v-if="showIcon" slot="start" :icon></ion-icon>
         </slot>
         <ion-label>
             {{ label }}
             <span v-if="required" class="text-danger">*</span>
-            <br />
-            <span>
+            <p>
                 {{
                     modelValue
                         ? convertDateFormatToThai(modelValue)
                         : t('base.chooseDate')
                 }}
-            </span>
+            </p>
         </ion-label>
         <slot name="end">
             <ion-buttons slot="end">
@@ -27,7 +26,7 @@
         <BaseDatePicker v-model="modelValue" :min :max @on-select="onSelect">
             <template #after>
                 <ion-col size="12">
-                    <BaseButton :label="t('base.done')" expand="block" @click="show = false" />
+                    <BaseButton class="q-pa-sm" full :label="t('base.done')" @click="show = false" />
                 </ion-col>
             </template>
         </BaseDatePicker>
@@ -35,20 +34,20 @@
 </template>
 <script setup lang="ts">
 import { useLang } from '@/composables/useLang';
-import { ItemLines } from '@/types/common';
-import { convertDateFormatToThai, FORMAT_DATE14, formatDateBy, formatIso, getDateNow } from '@/utils/dateUtil';
-import { IonButtons, IonCol, IonDatetime, IonGrid, IonIcon, IonItem, IonLabel, IonRow } from '@ionic/vue';
+import type { ItemLines } from '@/types/common';
+import { convertDateFormatToThai, FORMAT_DATE14, formatDateBy, getDateNow } from '@/utils/dateUtil';
+import { IonButtons, IonCol, IonIcon, IonItem, IonLabel } from '@ionic/vue';
 import { calendarOutline, close } from 'ionicons/icons';
 import { defineAsyncComponent, ref } from 'vue';
 import BaseButton from './BaseButton.vue';
 import BaseDatePicker from './BaseDatePicker.vue';
-const BaseModal = defineAsyncComponent(() => import('@/components/base/BaseModal.vue'));
 const {
     required = false,
     disabled = false,
     clearable = true,
-    lines = 'none',
-    icon = calendarOutline
+    lines = 'full',
+    icon = calendarOutline,
+    showIcon = true
 } = defineProps<{
     min?: string
     max?: string
@@ -58,13 +57,14 @@ const {
     clearable?: boolean
     lines?: ItemLines
     icon?: string
+    showIcon?: boolean
 }>();
 const emit = defineEmits([
     'on-close',
     'on-select',
     'on-clear'
 ]);
-
+const BaseModal = defineAsyncComponent(() => import('@/components/base/BaseModal.vue'));
 const { t } = useLang();
 const show = ref(false);
 // const date = ref();

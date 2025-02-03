@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseDatePickerItem from '@/components/base/BaseDatePickerItem.vue';
 import BaseLayout from '@/components/base/BaseLayout.vue';
+import { getCurrentDateByFormat } from '@/utils/dateUtil';
 import {
-    IonCardContent,
-    IonRow
+    IonCardContent
 } from '@ionic/vue';
-import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
 import { ref } from 'vue';
 const date1 = ref<string>();
+const dateMin = ref<string>();
+const dateMax = ref<string>();
 </script>
 <template>
     <base-layout page-title="Date-time picker" fullscreen show-back-link>
         <BaseCard flat title="Date picker" subtitle="Date and Time picker">
-            <ion-card-content>
-                <ion-row class="q-gutter-md">
-                </ion-row>
-            </ion-card-content>
-            <ion-card-content>
+            <ion-card-content class="q-gutter-md">
                 <BaseDatePickerItem label="Simple" v-model="date1" required />
+                <BaseDatePickerItem label="Min date" v-model="dateMin" :min="getCurrentDateByFormat()" />
+                <BaseDatePickerItem label="Max date" v-model="dateMax" max="2025-03-04" />
             </ion-card-content>
         </BaseCard>
     </base-layout>

@@ -12,8 +12,8 @@
   </base-dialog>
  */
 import BaseToolbar from '@/components/base/BaseToolbar.vue';
-import BaseIcon from '@/components/base/Icon.vue';
-import { AppColor, IconSetType } from '@/types/common';
+import BaseIcon from '@/components/base/BaseIcon.vue';
+import type { AppColor, IconSetType } from '@/types/common';
 import {
   IonButton,
   IonButtons,

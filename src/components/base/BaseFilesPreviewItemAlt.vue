@@ -1,12 +1,22 @@
 <script setup lang="ts">
 import { formatBytes, getFileTypeIcon } from '@/utils/appUtil';
 import type { FileManagerDto } from '@/types/models';
-import BaseImage from '@/components/base/Image.vue';
+import BaseImage from '@/components/base/BaseImage.vue';
 import { IonButton, IonButtons, IonIcon, IonItem, IonLabel } from '@ionic/vue';
 import { trashOutline } from 'ionicons/icons';
-import BaseIcon from '@/components/base/Icon.vue';
+import BaseIcon from '@/components/base/BaseIcon.vue';
+import type { ItemLines } from '@/types/common';
 
-withDefaults(defineProps<{
+const {
+  showDelete= true,
+  formatSize= false,
+  fetch= false,
+  imageSize= '75px',
+  iconSize= 32,
+  wrapText= true,
+  lines= 'none',
+  button= true,
+}=defineProps<{
   showDelete?: boolean
   col?: string
   item: FileManagerDto
@@ -15,18 +25,15 @@ withDefaults(defineProps<{
   imageSize?: string
   iconSize?: number
   fetch?: boolean
-  dense?: boolean
   wrapText?: boolean
-}>(), {
-  showDelete: true,
-  formatSize: false,
-  fetch: true,
-  dense: false,
-  imageSize: '125px',
-  iconSize: 32,
-  wrapText: true,
-});
-const emit = defineEmits(['on-remove', 'on-click']);
+  button?: boolean
+  lines?: ItemLines
+}>();
+// const emit = defineEmits(['on-remove', 'on-click']);
+const emit = defineEmits<{
+'on-remove': [index: number]
+'on-click': [index: number, event: any]
+}>();
 const onRemove = (event: any, index: number) => {
   if (event) {
     event.stopImmediatePropagation();
@@ -42,7 +49,7 @@ const onClick = (event: any, index: number) => {
 </script>
 
 <template>
-  <ion-item v-bind="$attrs" lines="none" button @click="onClick($event, index)" :detail="false">
+  <ion-item v-bind="$attrs" :lines="lines" :button @click="onClick($event, index)" :detail="false">
     <div slot="start">
       <template v-if="item.isImage || item.image">
         <div :style="{ height: `${imageSize}`, width: `${imageSize}` }">

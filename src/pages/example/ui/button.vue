@@ -54,8 +54,7 @@ import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
         <div class="q-text-h5 q-text-weight-bold q-my-sm">
           Expend
         </div>
-        <BaseButton expand="block" label="Block" />
-        <BaseButton expand="full" label="Full" />
+        <BaseButton full label="Full" />
       </ion-card-content>
     </BaseCard>
   </base-layout>
