@@ -57,10 +57,14 @@ const onSelect = (item: LabelValue<T> | undefined) => {
 </template>
 <style scoped lang="scss">
 ion-popover {
-
     /* --width: 355px; */
     &::part(content) {
         min-width: v-bind(witdh);
     }
+}
+body[color-theme='dark'] {
+  ion-content {
+    --background: var(--color-dark-900) !important;
+  }
 }
 </style>

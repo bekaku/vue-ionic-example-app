@@ -43,15 +43,15 @@ const {
     rules?: any[]
     type?: 'date' | 'datetime-local' | 'email' | 'month' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'time' | 'url' | 'week'
 }>();
-const modelValue = defineModel<number | string | null | undefined>();
+const modelValue = defineModel<number | string | undefined>();
 const emit = defineEmits<{
-    'on-change': [value: number | string | undefined | null]
+    'on-change': [value: any]
     'on-input': [value: number | string | undefined | null]
     'on-focus': [event: any]
     'on-blur': [event: any]
     'on-clear': [value: number | string | undefined]
 }>()
-const appInputRef = useTemplateRef<InstanceType<typeof IonInput>>('appInputRef');
+const appInputRef = useTemplateRef<any>('appInputRef');
 const errorText = ref<string>();
 const validateRules = (value: number | string | undefined | null) => {
     if (rules.length > 0) {
@@ -90,13 +90,14 @@ defineExpose({
 </script>
 <template>
     <IonItem v-bind="$attrs" :lines>
+        <slot name="before" />
         <IonLabel class="ion-no-margin">
             <ion-input ref="appInputRef" v-model="modelValue" :autofocus :clearInput :counter :color
                 :clearInputIcon="clearInputIcon" :debounce :disabled :helper-text="helperText" :inputmode :placeholder
                 autocomplete="off" :label-placement="labelPlacement" :max :maxlength :min :minlength :readonly :required
                 :shape="round ? 'round' : undefined" :type @ion-change="$emit('on-change', $event)" @ion-blur="onBlur"
                 @ion-focus="($event: any) => $emit('on-focus', $event)" @ion-input="onInput"
-                :class="{ 'bordered': bordered }">
+                :class="{ bordered }">
                 <slot name="start">
                     <div v-if="icon" slot="start">
                         <BaseIcon :icon="icon" :icon-set="iconSet" />
@@ -114,8 +115,8 @@ defineExpose({
                     {{ errorText }}
                 </p>
             </slot>
-
         </IonLabel>
+        <slot name="after" />
     </IonItem>
 </template>
 <style lang="scss" scoped>

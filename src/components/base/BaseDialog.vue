@@ -21,9 +21,10 @@ import {
   IonHeader,
   IonIcon,
   IonModal,
-  IonTitle
+  IonTitle,
 } from '@ionic/vue';
 import { arrowBack } from 'ionicons/icons';
+import { useTemplateRef } from 'vue';
 
 const {
   autoClose = true,
@@ -34,35 +35,56 @@ const {
   iconSet = 'ion',
   isTablet = false,
 } = defineProps<{
-  autoClose?: boolean
-  headerNoBorder?: boolean
-  dark?: boolean
-  contentPadding?: boolean
-  icon?: string
-  iconColor?: AppColor
-  iconSet?: IconSetType
-  title?: string
-  isTablet?: boolean
+  autoClose?: boolean;
+  headerNoBorder?: boolean;
+  dark?: boolean;
+  contentPadding?: boolean;
+  icon?: string;
+  iconColor?: AppColor;
+  iconSet?: IconSetType;
+  title?: string;
+  isTablet?: boolean;
+  presentingElement?: any;
 }>();
 
 const emit = defineEmits(['on-close', 'on-before-hide']);
 const modelValue = defineModel<boolean>({ default: false });
+const baseDialogRef = useTemplateRef<any>('baseDialogRef');
 const onClose = () => {
   emit('on-close');
   if (autoClose) {
     modelValue.value = false;
+    dismiss();
   }
 };
+const dismiss = () => {
+  if (baseDialogRef.value) {
+    baseDialogRef.value.$el.dismiss();
+  }
+};
+defineExpose({
+  dismiss,
+});
 </script>
 <template>
-  <ion-modal :is-open="modelValue" @will-dismiss="onClose" :class="{ 'full-modal': isTablet }">
+  <ion-modal
+    ref="baseDialogRef"
+    :is-open="modelValue"
+    @will-dismiss="onClose"
+    :class="{ 'full-modal': isTablet }"
+    :presenting-element="presentingElement"
+  >
     <ion-header :class="{ 'ion-no-border': headerNoBorder || dark }">
       <slot name="toolbar">
         <base-toolbar :class="{ dark }">
           <slot name="start">
             <ion-buttons slot="start">
               <ion-button @click="onClose">
-                <ion-icon slot="icon-only" class="text-black" :icon="arrowBack" />
+                <ion-icon
+                  slot="icon-only"
+                  class="text-black"
+                  :icon="arrowBack"
+                />
               </ion-button>
             </ion-buttons>
             <slot name="actions-start"></slot>
@@ -73,14 +95,20 @@ const onClose = () => {
           <div slot="end">
             <slot name="end">
               <slot name="avatar">
-                <base-icon v-if="icon" slot="start" :icon-set="iconSet" :icon="icon" :color="iconColor" :size="24" />
+                <base-icon
+                  v-if="icon"
+                  slot="start"
+                  :icon-set="iconSet"
+                  :icon="icon"
+                  :color="iconColor"
+                  :size="24"
+                />
               </slot>
             </slot>
           </div>
         </base-toolbar>
       </slot>
-      <slot name="secondToolbar">
-      </slot>
+      <slot name="secondToolbar"> </slot>
     </ion-header>
     <ion-content :class="{ dark }">
       <div :class="{ 'ion-padding': contentPadding }">

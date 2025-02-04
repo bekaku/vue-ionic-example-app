@@ -2,40 +2,29 @@
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseIcon from '@/components/base/BaseIcon.vue';
 import BaseInput from '@/components/base/BaseInput.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BaseInputMoney from '@/components/base/BaseInputMoney.vue';
 import BaseInputOtp from '@/components/base/BaseInputOtp.vue';
+import BaseLayout from '@/components/base/BaseLayout.vue';
+import BaseSearchBar from '@/components/base/BaseSearchBar.vue';
+import BaseTextarea from '@/components/base/BaseTextarea.vue';
 import { useValidation } from '@/composables/useValidation';
 import {
-    IonButtons,
-    IonCardContent,
     IonItem,
-    IonList,
-    IonRow,
-    IonInput,
     IonLabel,
+    IonList,
     IonToolbar
 } from '@ionic/vue';
-import { biPencil } from '@quasar/extras/bootstrap-icons';
-import { ellipsisHorizontal, heart, mailOutline, pencilOutline, personAddOutline, personOutline, videocam, wallet } from 'ionicons/icons';
+import { mailOutline, personOutline } from 'ionicons/icons';
 import { ref } from 'vue';
-import BaseTextarea from '@/components/base/BaseTextarea.vue';
-import BaseInputMoney from '@/components/base/BaseInputMoney.vue';
-import BaseSearchBar from '@/components/base/BaseSearchBar.vue';
 const { required, requireEmail } = useValidation();
 const name = ref<string>('');
 const surname = ref<string>('Bekaku');
 const email = ref<string>('bekaku@gmail.com');
 const title = ref<string>('Test');
 const amount = ref<number>(0);
-const amount2 = ref<number>(0);
 const money = ref<number>(5000);
 const text = ref<string>('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat');
-const pickDate = ref<string>('');
-const pickTime = ref<string>('');
-const showPassword = ref<boolean>(false);
-const editMode = ref<boolean>(true);
 
 const onInputChange = (ev: any) => {
     console.log('onInputChange', ev);
@@ -83,7 +72,10 @@ const onSearchChange = (val: string | undefined) => {
                     <template #end>
                         <BaseButton slot="end" label="Slot end" />
                     </template>
-                </BaseInput>
+                    <template #after>
+                        <BaseButton slot="end" label="Slot after" color="warning" />
+                    </template>
+                    </BaseInput>
                 <BaseInput v-model="amount" label="Amount" type="number" :min="0" :max="10" :bordered="false"
                     helper-text="Limit 0 to 10" />
                 <IonItem lines="none">
@@ -99,9 +91,7 @@ const onSearchChange = (val: string | undefined) => {
                         <BaseInputOtp :input-length="5" @on-submit="onOptSubmit" />
                     </IonLabel>
                 </IonItem>
-
             </IonList>
-
             <BaseButton class="q-pa-sm" label="Submit" full />
         </BaseCard>
     </base-layout>

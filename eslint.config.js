@@ -76,5 +76,6 @@ export default antfu({
     'style/quote-props': 'off',
     // 'vue/v-on-event-hyphenation': 'off',
     'style/eol-last': 'off',
+    'style/member-delimiter-style': 'off',
   },
 });

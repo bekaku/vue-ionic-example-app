@@ -6,7 +6,6 @@ import {
     biArrowsMove,
     biBack,
     biBarChart,
-    biBrush,
     biBug,
     biCalendar,
     biChatDots,
@@ -29,10 +28,9 @@ import {
     biShieldCheck,
     biToggleOff,
     biUpload,
-    biWindowFullscreen,
     biWindowSidebar
 } from '@quasar/extras/bootstrap-icons';
-import { bugOutline, warningOutline } from 'ionicons/icons';
+import { brushOutline, warningOutline } from 'ionicons/icons';
 
 export const appNavs: IMenu[] = [
     {
@@ -114,7 +112,8 @@ export const additionalMenu: IMenu[] = [
                 ]
             },
             {
-                icon: biBrush,
+                icon: brushOutline,
+                iconSet: 'ion',
                 title: 'UI',
                 translate: false,
                 items: [
@@ -150,7 +149,7 @@ export const additionalMenu: IMenu[] = [
                         iconSet: 'bootstrap-icons',
                         permission: '',
                         title: 'Dialog/Modal',
-                        caption: 'dialog, modal',
+                        caption: 'dialog, modal, popover',
                         translate: false,
                         translateCaption: false,
                         to: '/example/ui/dialog'

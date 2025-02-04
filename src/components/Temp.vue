@@ -80,7 +80,7 @@ To disable all rules on a specific line
   // line-clamp: v-bind(lines);
 }
 
-body.body--dark {
+body[color-theme='dark'] {
   .text-holder-fitcontent {
     background-color: var(--dark-900);
   }

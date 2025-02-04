@@ -13,7 +13,7 @@
         aria-hidden="true" draggable="false" :style="!completed
           ? 'width: 0px'
           : `object-fit: ${fit}; object-position: 50% 50%`
-          " @ion-error="onError" @ion-img-did-load="onImgDidLoad" @ion-img-will-load="onImgWillLoad"></ion-img>
+          " @ion-error="onError" @ion-img-did-load="onImgDidLoad" @ion-img-will-load="onImgWillLoad" />
     </div>
     <ion-spinner v-if="!completed || loading" name="crescent" class="q-absolute-center text-white"
       :class="loadingColor"></ion-spinner>
