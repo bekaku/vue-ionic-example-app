@@ -16,7 +16,8 @@ const {
     readonly = false,
     round = true,
     type = 'text',
-    rules = []
+    rules = [],
+    maxHeight='125px'
 } = defineProps<{
     autoGrow?: boolean
     autofocus?: boolean
@@ -49,25 +50,25 @@ const {
     type?: 'date' | 'datetime-local' | 'email' | 'month' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'time' | 'url' | 'week',
     wrap?: 'hard' | 'off' | 'soft'
 }>();
-const modelValue = defineModel<number | string | null | undefined>();
+const modelValue = defineModel<string | undefined>();
 const emit = defineEmits<{
-    'on-change': [value: number | string | undefined | null]
+    'on-change': [value: any]
     'on-input': [value: number | string | undefined | null]
     'on-focus': [event: any]
     'on-blur': [event: any]
     'on-clear': [value: number | string | undefined]
 }>()
-const appTextareaRef = useTemplateRef<InstanceType<typeof IonTextarea>>('appTextareaRef');
+const appTextareaRef = useTemplateRef<any>('appTextareaRef');
 const errorText = ref<string>();
 const validateRules = (value: number | string | undefined | null) => {
     if (rules.length > 0) {
         for (const validFunc of rules) {
             const validateResult = validFunc(value);
             if (validateResult == true) {
-                appTextareaRef.value.$el.classList.add('ion-valid');
+                appTextareaRef.value?.$el.classList.add('ion-valid');
                 errorText.value = undefined;
             } else {
-                appTextareaRef.value.$el.classList.add('ion-invalid');
+                appTextareaRef.value?.$el.classList.add('ion-invalid');
                 errorText.value = validateResult;
                 break;
             }
@@ -76,14 +77,14 @@ const validateRules = (value: number | string | undefined | null) => {
 }
 const onInput = (event: any) => {
     const value = event.target.value;
-    appTextareaRef.value.$el.classList.remove('ion-valid');
-    appTextareaRef.value.$el.classList.remove('ion-invalid');
+    appTextareaRef.value?.$el.classList.remove('ion-valid');
+    appTextareaRef.value?.$el.classList.remove('ion-invalid');
     validateRules(value);
     emit('on-input', value)
 }
 const onBlur = (event: any) => {
     emit('on-blur', event)
-    appTextareaRef.value.$el.classList.add('ion-touched');
+    appTextareaRef.value?.$el.classList.add('ion-touched');
 }
 const onSetFocus = () => {
     if (appTextareaRef.value) {
@@ -101,9 +102,9 @@ defineExpose({
                 :color :clearInputIcon="clearInputIcon" :debounce :disabled :helper-text="helperText" :inputmode
                 :placeholder :label-placement="labelPlacement" :max :maxlength :min :minlength
                 :readonly :required :rows :shape="round ? 'round' : undefined" :type :wrap
-                @ion-change="$emit('on-change', $event)" @ion-blur="onBlur"
-                @ion-focus="($event: any) => $emit('on-focus', $event)" @ion-input="onInput"
-                :class="{ 'bordered': bordered, 'limit-height': maxHeight != undefined }">
+                :class="{ 'bordered': bordered, 'limit-height': maxHeight != undefined }" @ion-change="$emit('on-change', $event)"
+                @ion-blur="onBlur" @ion-focus="($event: any) => $emit('on-focus', $event)"
+                @ion-input="onInput">
                 <slot name="start">
                     <div v-if="icon" slot="start">
                         <BaseIcon :icon="icon" :icon-set="iconSet" />
@@ -121,8 +122,7 @@ defineExpose({
                     {{ errorText }}
                 </p>
             </slot>
-
-        </IonLabel>
+</IonLabel>
     </IonItem>
 </template>
 <style lang="scss" scoped>

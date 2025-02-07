@@ -1,22 +1,26 @@
 <script setup lang="ts">
-import { formatBytes, getFileTypeIcon } from '@/utils/appUtil';
+import { formatBytes, } from '@/utils/appUtil';
+import { getFileTypeIcon } from '@/utils/fileUtils';
 import type { FileManagerDto } from '@/types/models';
 import BaseImage from '@/components/base/BaseImage.vue';
 import { IonButton, IonButtons, IonIcon, IonItem, IonLabel } from '@ionic/vue';
 import { trashOutline } from 'ionicons/icons';
 import BaseIcon from '@/components/base/BaseIcon.vue';
 import type { ItemLines } from '@/types/common';
+import BaseEllipsis from './BaseEllipsis.vue';
 
 const {
-  showDelete= true,
-  formatSize= false,
-  fetch= false,
-  imageSize= '75px',
-  iconSize= 32,
-  wrapText= true,
-  lines= 'none',
-  button= true,
-}=defineProps<{
+  showDelete = true,
+  formatSize = false,
+  fetch = false,
+  imageSize = '75px',
+  iconSize = 32,
+  wrapText = true,
+  lines = 'none',
+  button = true,
+  detail = false,
+  limitLinesName = 2,
+} = defineProps<{
   showDelete?: boolean
   col?: string
   item: FileManagerDto
@@ -28,11 +32,13 @@ const {
   wrapText?: boolean
   button?: boolean
   lines?: ItemLines
+  detail?: boolean
+  limitLinesName?: number
 }>();
 // const emit = defineEmits(['on-remove', 'on-click']);
 const emit = defineEmits<{
-'on-remove': [index: number]
-'on-click': [index: number, event: any]
+  'on-remove': [index: number]
+  'on-click': [index: number, event: any]
 }>();
 const onRemove = (event: any, index: number) => {
   if (event) {
@@ -49,31 +55,23 @@ const onClick = (event: any, index: number) => {
 </script>
 
 <template>
-  <ion-item v-bind="$attrs" :lines="lines" :button @click="onClick($event, index)" :detail="false">
+  <ion-item v-bind="$attrs" :lines="lines" :button :detail @click="onClick($event, index)">
     <div slot="start">
       <template v-if="item.isImage || item.image">
-        <div :style="{ height: `${imageSize}`, width: `${imageSize}` }">
-          <base-image
-            v-if="item.filePath"
-                      :fetch="fetch"
-                      :src="item.filePath" ratio="4/3">
-          </base-image>
-        </div>
+        <base-image v-if="item.filePath" :style="{ height: `${imageSize}`, width: `${imageSize}` }" :fetch="fetch"
+          :src="item.filePath" ratio="4/3" />
       </template>
       <template v-else>
-        <base-icon
-          :icon="getFileTypeIcon(item.fileMime)"
-          icon-set="bootstrap-icons"
-          color="text-primary"
-          :size="iconSize"
-        />
+        <base-icon :icon="getFileTypeIcon(item.fileMime)" icon-set="bootstrap-icons" :size="iconSize" />
       </template>
     </div>
     <ion-label :class="{ 'ion-text-nowrap': !wrapText }">
       <slot name="fileName">
-        <h4>
-          {{ item.fileName }}
-        </h4>
+        <BaseEllipsis :lines="limitLinesName">
+          <!-- <h4> -->
+            {{ item.fileName }}
+          <!-- </h4> -->
+        </BaseEllipsis>
       </slot>
       <slot name="size">
         <p>
@@ -84,13 +82,11 @@ const onClick = (event: any, index: number) => {
     <slot name="end">
       <ion-buttons v-if="showDelete" slot="end">
         <ion-button fill="clear" color="danger" @click="onRemove($event, index)">
-          <ion-icon :icon="trashOutline" slot="icon-only" />
+          <ion-icon slot="icon-only" :icon="trashOutline" />
         </ion-button>
       </ion-buttons>
     </slot>
   </ion-item>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

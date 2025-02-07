@@ -3,13 +3,13 @@
     :initial-breakpoint="0.25" :breakpoints="[0, 0.25]" @on-close="modelValue = false">
     <ion-list lines="none">
       <ion-item button :detail="false" @click="pickPhoto">
-        <ion-icon :icon="imageOutline" slot="start"></ion-icon>
+        <ion-icon slot="start" :icon="imageOutline"></ion-icon>
         <ion-label>
           <h2>{{ t('base.chooseFromGallery') }}</h2>
         </ion-label>
       </ion-item>
       <ion-item button :detail="false" @click="takePicture">
-        <ion-icon :icon="cameraOutline" slot="start"></ion-icon>
+        <ion-icon slot="start" :icon="cameraOutline"></ion-icon>
         <ion-label>
           <h2>{{ t('base.chooseFromCamera') }}</h2>
         </ion-label>

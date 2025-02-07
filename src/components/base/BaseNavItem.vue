@@ -15,17 +15,17 @@ defineEmits<{
 const { t } = useLang();
 </script>
 <template>
-    <ion-item v-if="item" :button="item.button == true || item?.to != undefined" :detail="item.button == true || item?.to != undefined"
+    <ion-item v-if="item" v-bind="$attrs" :button="item.button == true || item?.to != undefined" :detail="item.button == true || item?.to != undefined"
         :lines="lines" :router-link="item?.to ? item.to : undefined" @click="$emit('on-select', item)">
         <slot name="start">
-            <base-avatar slot="start" v-if="item.image" rounded :src="item.image" :size="42" />
+            <base-avatar v-if="item.image" slot="start" rounded :src="item.image" :size="42" />
             <template v-if="item.icon">
-                <ion-icon v-if="item.iconSet == 'ion'" :icon="item.icon"
-                    :style="item.iconSize ? `font-size:${item.iconSize}px` : `${iconSize}px`"
-                    :class="item.iconColor ? item.iconColor : ''" slot="start"></ion-icon>
+                <ion-icon v-if="item.iconSet == 'ion'" slot="start"
+                    :icon="item.icon"
+                    :style="item.iconSize ? `font-size:${item.iconSize}px` : `${iconSize}px`" :class="item.iconColor ? item.iconColor : ''"></ion-icon>
                 <span v-else slot="start">
                     <base-icon :icon="item.icon" :size="item.iconSize ? item.iconSize : iconSize"
-                        :icon-set="item.iconSet" :color="item.iconColor ? item.iconColor : ''" />
+                        :icon-set="item.iconSet" :color="item.iconColor ? item.iconColor : undefined" />
                 </span>
             </template>
         </slot>

@@ -87,7 +87,7 @@ import {
   IonFabButton
 } from '@ionic/vue';
 import BaseLayout from '@/components/base/BaseLayout.vue';
-import BaseResult from '@/components/base/Result.vue';
+import BaseResult from '@/components/base/BaseResult.vue';
 import BaseDropdownMenu from '@/components/base/BaseDropdownMenu.vue';
 import { biCopy, biPencil, biTrash } from '@quasar/extras/bootstrap-icons';
 import { LabelValue } from '@/types/common';

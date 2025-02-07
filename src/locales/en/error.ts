@@ -52,5 +52,6 @@ export default {
         'limitFile2': 'File limit: {total} files',
         'usernameValidate': 'Invalid username format.',
         'fileExcelError': 'Please select a file with the extension .xlsx.',
+        'validateRequireChoose': 'Please select this information.',
     },
 }

@@ -1,6 +1,6 @@
 <template>
   <ion-app>
-    <ion-router-outlet />
+    <ion-router-outlet :aria-hidden="true" />
   </ion-app>
 </template>
 

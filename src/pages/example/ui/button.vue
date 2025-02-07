@@ -2,6 +2,7 @@
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseLayout from '@/components/base/BaseLayout.vue';
+import BaseTextHeader from '@/components/base/BaseTextHeader.vue';
 import {
   IonCardContent,
   IonRow
@@ -9,8 +10,8 @@ import {
 import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
 </script>
 <template>
-  <base-layout page-title="Button" fullscreen show-back-link>
-    <BaseCard flat title="Button" subtitle="Button components">
+  <BaseLayout page-title="Button" fullscreen show-back-link>
+    <BaseCard title="Button" subtitle="Button components">
       <ion-card-content>
         <BaseButton icon-only :icon="heart" shape="round" />
         <ion-row class="q-gutter-md">
@@ -24,9 +25,7 @@ import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
         </ion-row>
       </ion-card-content>
       <ion-card-content>
-        <div class="q-text-h5 q-text-weight-bold q-my-sm">
-          Colors
-        </div>
+        <BaseTextHeader label="Colors" />
         <ion-row class="q-gutter-md">
           <BaseButton color="primary" label="Primary" />
           <BaseButton color="secondary" label="Secondary" />
@@ -40,9 +39,7 @@ import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
         </ion-row>
       </ion-card-content>
       <ion-card-content>
-        <div class="q-text-h5 q-text-weight-bold q-my-sm">
-          Fill
-        </div>
+        <BaseTextHeader label="Fill" />
         <ion-row class="q-gutter-md">
           <BaseButton label="Default" />
           <BaseButton clear label="Clear" />
@@ -51,11 +48,8 @@ import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
         </ion-row>
       </ion-card-content>
       <ion-card-content>
-        <div class="q-text-h5 q-text-weight-bold q-my-sm">
-          Expend
-        </div>
         <BaseButton full label="Full" />
       </ion-card-content>
     </BaseCard>
-  </base-layout>
+  </BaseLayout>
 </template>

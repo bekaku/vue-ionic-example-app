@@ -38,18 +38,18 @@ const changeField = (ev: any) => {
 <template>
     <div v-bind="$attrs"
         class="sc-ion-input-ios-h sc-ion-input-ios-s ios label-floating input-label-placement-stacked num-holder"
-        :class="{ 'bordered': bordered }">
+        :class="{ bordered }">
         <label class="input-wrapper sc-ion-input-ios" for="ion-input-0">
             <div class="label-text-wrapper sc-ion-input-ios">
                 <div class="label-text sc-ion-input-ios q-ml-md">{{ label }}</div>
             </div>
             <div class="native-wrapper sc-ion-input-ios sc-ion-input-ios-s">
-                <vue-number class="num-input" :placeholder="placeholder" :disabled="readonly"
-                    @input="updateField($event)" @change="changeField($event)" :class="{
+                <vue-number v-model="modelValue" class="num-input" :placeholder="placeholder"
+                    :disabled="readonly" :class="{
                         'text-right': textAlign == 'right',
                         'text-left': textAlign == 'left',
                         'text-center': textAlign == 'center',
-                    }" v-model="modelValue" v-bind="config">
+                    }" v-bind="config" @input="updateField($event)" @change="changeField($event)">
                 </vue-number>
             </div>
         </label>

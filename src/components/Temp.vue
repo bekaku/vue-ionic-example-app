@@ -1,6 +1,7 @@
 <script setup lang="ts" generic="T">
 import type { IonButton } from '@ionic/vue';
 import { useTemplateRef } from 'vue';
+// const BaseModal = defineAsyncComponent(() => import('@/components/base/BaseModal.vue'));
 // const { count = 0, message = 'hello' } = defineProps<{
 //   count?: number
 //   message?: string

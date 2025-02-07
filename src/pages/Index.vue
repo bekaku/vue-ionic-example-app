@@ -60,7 +60,7 @@ const VersionCheck = defineAsyncComponent(
   () => import('@/components/VersionCheck.vue'),
 );
 const BaseResult = defineAsyncComponent(
-  () => import('@/components/base/Result.vue'),
+  () => import('@/components/base/BaseResult.vue'),
 );
 const { t } = useLang();
 const { initAuthen } = useInitApp();

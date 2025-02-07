@@ -24,7 +24,8 @@ import {
   IonTitle,
 } from '@ionic/vue';
 import { arrowBack } from 'ionicons/icons';
-import { useTemplateRef } from 'vue';
+import { computed, useTemplateRef } from 'vue';
+import { useDevice } from '@/composables/useDevice';
 
 const {
   autoClose = true,
@@ -33,7 +34,6 @@ const {
   contentPadding = true,
   iconColor = 'primary',
   iconSet = 'ion',
-  isTablet = false,
 } = defineProps<{
   autoClose?: boolean;
   headerNoBorder?: boolean;
@@ -46,10 +46,11 @@ const {
   isTablet?: boolean;
   presentingElement?: any;
 }>();
-
+const { isAppPlatfrom } = useDevice();
 const emit = defineEmits(['on-close', 'on-before-hide']);
 const modelValue = defineModel<boolean>({ default: false });
 const baseDialogRef = useTemplateRef<any>('baseDialogRef');
+const fullMode = computed(() => isAppPlatfrom('tablet') || isAppPlatfrom('desktop'))
 const onClose = () => {
   emit('on-close');
   if (autoClose) {
@@ -67,24 +68,15 @@ defineExpose({
 });
 </script>
 <template>
-  <ion-modal
-    ref="baseDialogRef"
-    :is-open="modelValue"
-    @will-dismiss="onClose"
-    :class="{ 'full-modal': isTablet }"
-    :presenting-element="presentingElement"
-  >
+  <ion-modal ref="baseDialogRef" :is-open="modelValue" :class="{ 'full-modal': fullMode }"
+    :presenting-element="presentingElement" :aria-hidden="true" :show-backdrop="false" @will-dismiss="onClose">
     <ion-header :class="{ 'ion-no-border': headerNoBorder || dark }">
       <slot name="toolbar">
         <base-toolbar :class="{ dark }">
           <slot name="start">
             <ion-buttons slot="start">
-              <ion-button @click="onClose">
-                <ion-icon
-                  slot="icon-only"
-                  class="text-black"
-                  :icon="arrowBack"
-                />
+              <ion-button :color="dark ? 'light' : undefined" @click="onClose">
+                <ion-icon slot="icon-only" :class="dark ? 'light' : 'text-black'" :icon="arrowBack" />
               </ion-button>
             </ion-buttons>
             <slot name="actions-start"></slot>
@@ -95,20 +87,13 @@ defineExpose({
           <div slot="end">
             <slot name="end">
               <slot name="avatar">
-                <base-icon
-                  v-if="icon"
-                  slot="start"
-                  :icon-set="iconSet"
-                  :icon="icon"
-                  :color="iconColor"
-                  :size="24"
-                />
+                <base-icon v-if="icon" slot="start" :icon-set="iconSet" :icon="icon" :color="iconColor" :size="24" />
               </slot>
             </slot>
           </div>
         </base-toolbar>
       </slot>
-      <slot name="secondToolbar"> </slot>
+      <slot name="headerBottom" />
     </ion-header>
     <ion-content :class="{ dark }">
       <div :class="{ 'ion-padding': contentPadding }">

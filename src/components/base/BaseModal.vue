@@ -64,6 +64,7 @@ defineExpose({
 <template>
   <ion-modal
     ref="baseModalRef"
+    :aria-hidden="true"
     :is-open="modelValue"
     :initial-breakpoint="initialBreakpoint"
     :breakpoints="breakpoints"

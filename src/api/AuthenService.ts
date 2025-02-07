@@ -11,7 +11,7 @@ export default () => {
 
   const singin = async (
     loginRequest: LoginRequest
-  ): Promise<RefreshTokenResponse> => {
+  ): Promise<RefreshTokenResponse | null> => {
     return await callAxios<RefreshTokenResponse>({
       API: '/api/auth/login',
       method: 'POST',
@@ -21,7 +21,7 @@ export default () => {
 
   const singoutToServer = async (
     refreshToken: RefreshTokenRequest
-  ): Promise<ResponseMessage> => {
+  ): Promise<ResponseMessage | null> => {
     return await callAxios<ResponseMessage>({
       API: '/api/auth/logout',
       method: 'POST',
@@ -30,7 +30,7 @@ export default () => {
   };
   const refreshToken = async (
     refreshToken: RefreshTokenRequest
-  ): Promise<RefreshTokenResponse> => {
+  ): Promise<RefreshTokenResponse | null> => {
     return await callAxios<RefreshTokenResponse>({
       API: '/api/auth/refreshToken',
       method: 'POST',
@@ -39,7 +39,7 @@ export default () => {
   };
   const removeAccessTokenSession = async (
     id: number
-  ): Promise<ResponseMessage> => {
+  ): Promise<ResponseMessage | null> => {
     return await callAxios<ResponseMessage>({
       API: `/api/auth/removeAccessTokenSession?id=${id}`,
       method: 'DELETE'

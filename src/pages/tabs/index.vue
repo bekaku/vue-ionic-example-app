@@ -54,7 +54,7 @@ onUnmounted(() => {
 <template>
   <ion-page>
     <ion-tabs @ion-tabs-will-change="beforeTabChange" @ion-tabs-did-change="afterTabChange">
-      <ion-router-outlet></ion-router-outlet>
+      <ion-router-outlet :aria-hidden="true"></ion-router-outlet>
       <ion-tab-bar slot="bottom" @click="onTabClick">
         <ion-tab-button :tab="TabsName.HOME" href="/tabs/home">
           <ion-icon v-if="TabsName.HOME === tabStore.currentTab" :icon="home" />

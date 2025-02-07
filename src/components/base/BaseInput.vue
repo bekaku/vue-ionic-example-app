@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IconSetType, IonicColor, ItemLines } from '@/types/common';
-import { IonInput, IonItem, IonLabel, } from '@ionic/vue';
+import { IonInput, IonItem, IonLabel, IonRow, } from '@ionic/vue';
 import { ref, useTemplateRef } from 'vue';
 import BaseIcon from './BaseIcon.vue';
 const {
@@ -91,24 +91,26 @@ defineExpose({
 <template>
     <IonItem v-bind="$attrs" :lines>
         <slot name="before" />
-        <IonLabel class="ion-no-margin">
+        <IonLabel>
             <ion-input ref="appInputRef" v-model="modelValue" :autofocus :clearInput :counter :color
                 :clearInputIcon="clearInputIcon" :debounce :disabled :helper-text="helperText" :inputmode :placeholder
                 autocomplete="off" :label-placement="labelPlacement" :max :maxlength :min :minlength :readonly :required
-                :shape="round ? 'round' : undefined" :type @ion-change="$emit('on-change', $event)" @ion-blur="onBlur"
-                @ion-focus="($event: any) => $emit('on-focus', $event)" @ion-input="onInput"
-                :class="{ bordered }">
-                <slot name="start">
-                    <div v-if="icon" slot="start">
-                        <BaseIcon :icon="icon" :icon-set="iconSet" />
-                    </div>
-                </slot>
+                :shape="round ? 'round' : undefined" :type :class="{ bordered }"
+                @ion-change="$emit('on-change', $event)" @ion-blur="onBlur"
+                @ion-focus="($event: any) => $emit('on-focus', $event)" @ion-input="onInput">
+                <IonRow slot="start">
+                    <slot name="start">
+                        <BaseIcon v-if="icon" class="q-mr-sm" :icon="icon" :icon-set="iconSet" />
+                    </slot>
+                </IonRow>
                 <slot name="label">
                     <div slot="label">
                         {{ label }} <template v-if="required"><span class="text-danger">*</span></template>
                     </div>
                 </slot>
-                <slot name="end" />
+                <IonRow slot="end">
+                    <slot name="end" />
+                </IonRow>
             </ion-input>
             <slot name="hint">
                 <p v-if="errorText" class="text-danger q-text-caption">

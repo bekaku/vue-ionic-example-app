@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import FilesPreviewItemAlt from '@/components/base/BaseFilesPreviewItemAlt.vue';
+import BaseFilePreviewItemAlt from '@/components/base/BaseFilePreviewItemAlt.vue';
 import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
-import type { FileManagerDto } from '@/types/models';
-import { generateUUID, getImgUrlFromFile, isImageFile } from '@/utils/appUtil';
 import { FileTypeAcceptList, LIMIT_FILE_SIZE, LIMIT_FILE_SIZE_MB } from '@/libs/constant';
-import { zipFile } from '@/utils/fileUtils';
-import { IonIcon, IonItem, IonLabel, IonList, IonNote } from '@ionic/vue';
-import { attachOutline } from 'ionicons/icons';
-import { ref } from 'vue';
 import type { ItemLines } from '@/types/common';
+import type { FileManagerDto } from '@/types/models';
+import { generateUUID } from '@/utils/appUtil';
+import { getImgUrlFromFile, zipFile, isImageFile } from '@/utils/fileUtils';
+import { IonIcon, IonItem, IonLabel, IonList, IonNote } from '@ionic/vue';
+import { documentAttachOutline } from 'ionicons/icons';
+import { ref } from 'vue';
 
 const {
     multiple = false,
     showPreview = true,
     showDelete = true,
     wildcard = false,
-    icon = attachOutline,
+    icon = documentAttachOutline,
     imageSize = '75px',
     accept = [
         'image/png',
         'image/jpeg'
     ],
-    lines = 'full'
+    lines = 'none'
 } = defineProps<{
     multiple?: boolean
     showPreview?: boolean
@@ -174,9 +174,9 @@ defineExpose({
 </script>
 
 <template>
-    <div v-bind="$attrs" v-if="modelValue">
+    <div v-if="modelValue" v-bind="$attrs">
         <slot name="button">
-            <ion-item button :lines @click="openFilePicker">
+            <ion-item class="input" button :lines @click="openFilePicker">
                 <ion-icon slot="start" :icon="icon" />
                 <ion-label>
                     {{ label || t('base.chooseFromFile') }}
@@ -184,17 +184,24 @@ defineExpose({
                 <ion-note slot="end">{{ modelValue.length }}</ion-note>
             </ion-item>
         </slot>
-        <ion-list v-if="showPreview && fileItems.length > 0 && modelValue && modelValue.length > 0">
+        <ion-list v-if="showPreview && fileItems.length > 0 && modelValue && modelValue.length > 0" class="q-my-md">
             <template v-for="(f, fileIndex) in fileItems" :key="`f-${fileIndex}-${f.uniqueId}-${f.id}`">
-                <files-preview-item-alt :item="f" :index="fileIndex" @on-remove="onRemoveNewImage"
-                     dense :image-size="imageSize" :icon-size="iconSize"
-                    :show-delete="showDelete" />
+                <BaseFilePreviewItemAlt :item="f" :index="fileIndex" dense
+                     :image-size="imageSize" :icon-size="iconSize" :show-delete="showDelete"
+                    @on-remove="onRemoveNewImage" />
             </template>
         </ion-list>
 
-        <input style="display: none" type="file" ref="filePickerInputRef" @change="onFileAdded" :multiple
-            :accept="!wildcard ? accept.toString() : undefined">
+        <input ref="filePickerInputRef" style="display: none" type="file" :multiple :accept="!wildcard ? accept.toString() : undefined"
+            @change="onFileAdded">
     </div>
 </template>
 
 <style scoped lang="scss"></style>
+<style scoped lang="scss">
+ion-item.input {
+    border: 1px solid var(--app-border-color);
+    border-radius: 10px;
+    --background: var(--app-input-backgroud);
+}
+</style>

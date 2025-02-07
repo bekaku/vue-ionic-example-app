@@ -26,11 +26,10 @@ import {
     biPersonCircle,
     biPieChart,
     biShieldCheck,
-    biToggleOff,
     biUpload,
     biWindowSidebar
 } from '@quasar/extras/bootstrap-icons';
-import { brushOutline, warningOutline } from 'ionicons/icons';
+import { brushOutline, fingerPrintOutline, warningOutline } from 'ionicons/icons';
 
 export const appNavs: IMenu[] = [
     {
@@ -91,6 +90,15 @@ export const additionalMenu: IMenu[] = [
                 title: 'Composables',
                 translate: false,
                 items: [
+                    {
+                        icon: biDatabase,
+                        iconSet: 'bootstrap-icons',
+                        permission: '',
+                        title: 'useAxios',
+                        translate: false,
+                        translateCaption: false,
+                        to: '/example/composables/use-axios'
+                    },
                     {
                         icon: biChevronRight,
                         iconSet: 'bootstrap-icons',
@@ -184,6 +192,25 @@ export const additionalMenu: IMenu[] = [
                         to: '/example/ui/input-text'
                     },
                     {
+                        icon: biEmojiSmile,
+                        iconSet: 'bootstrap-icons',
+                        permission: '',
+                        title: 'Icon',
+                        translate: false,
+                        translateCaption: false,
+                        to: '/example/ui/icon'
+                    },
+                    {
+                        icon: fingerPrintOutline,
+                        iconSet: 'ion',
+                        permission: '',
+                        title: 'Long press',
+                        caption: 'Long press, Actionsheet',
+                        translate: false,
+                        translateCaption: false,
+                        to: '/example/ui/long-press'
+                    },
+                    {
                         icon: biChevronExpand,
                         iconSet: 'bootstrap-icons',
                         permission: '',
@@ -192,16 +219,6 @@ export const additionalMenu: IMenu[] = [
                         translate: false,
                         translateCaption: false,
                         to: '/example/ui/select'
-                    },
-                    {
-                        icon: biToggleOff,
-                        iconSet: 'bootstrap-icons',
-                        permission: '',
-                        caption: 'Toggle,Options,Radios',
-                        title: 'Options group',
-                        translate: false,
-                        translateCaption: false,
-                        to: '/example/ui/toggle'
                     },
                 ],
             },
@@ -249,25 +266,6 @@ export const additionalMenu: IMenu[] = [
                 translate: false,
                 translateCaption: false,
                 to: '/example/drag-drop'
-            },
-            {
-                icon: biEmojiSmile,
-                iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Icon/Emoji picker',
-                caption: 'Emoji and Icon',
-                translate: false,
-                translateCaption: false,
-                to: '/example/emoji-picker'
-            },
-            {
-                icon: biDatabase,
-                iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Fetch data',
-                translate: false,
-                translateCaption: false,
-                to: '/example/fetch-data'
             },
             {
                 icon: biCrop,

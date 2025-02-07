@@ -30,6 +30,7 @@ export default {
         'contactAdmin': 'เกิดข้อผิดพลาดกรุณาติดต่อผู้ดูแลระบบ',
         'errorLoginNotfound': 'เกิดข้อผิดพลาดกรุณาเข้าระบบอีกครั้ง',
         'dateGretterThanToday': 'วันที่ต้องไม่มากกว่าวันที่ปัจจุบัน',
+        'validateRequireChoose': 'กรุณาเลือกข้อมูลนี้',
         'validateMin': '{0} ต้องไม่น้อยกว่า {1} อักขระ',
         'validateMax': '{0} ต้องไม่มากกว่า {1} อักขระ',
         'validateMaxValue': '{0} ต้องไม่มากกว่า {1}',

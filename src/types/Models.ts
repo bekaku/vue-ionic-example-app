@@ -115,7 +115,7 @@ export interface FileManagerDto {
   filePath: string
   fileThumbnailPath: string
   fileSize: string
-  functionId: number
+  functionId?: number
   isImage?: boolean
   image?: boolean
   file?: any

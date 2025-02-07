@@ -4,15 +4,14 @@ import BaseCard from '@/components/base/BaseCard.vue';
 import BaseLayout from '@/components/base/BaseLayout.vue';
 import BaseModal from '@/components/base/BaseModal.vue';
 import BasePopover from '@/components/base/BasePopover.vue';
+import BaseSearchBar from '@/components/base/BaseSearchBar.vue';
 import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
-import { IonCardContent, IonRow } from '@ionic/vue';
+import { IonCardContent, IonRow, IonToolbar } from '@ionic/vue';
 import { serverOutline, settingsOutline } from 'ionicons/icons';
 import { defineAsyncComponent, ref, useTemplateRef } from 'vue';
 
-const BaseDialog = defineAsyncComponent(
-  () => import('@/components/base/BaseDialog.vue'),
-);
+const BaseDialog = defineAsyncComponent(() => import('@/components/base/BaseDialog.vue'));
 const { t } = useLang();
 const { appConfirm } = useBase();
 const dialog = ref<boolean>(false);
@@ -55,21 +54,13 @@ const onOpenPopover = (event: Event) => {
 };
 </script>
 <template>
-  <base-layout
-    ref="baseLayoutRef"
-    page-title="Dialog"
-    fullscreen
-    show-back-link
-  >
+  <base-layout ref="baseLayoutRef" page-title="Dialog" fullscreen show-back-link>
     <BaseCard flat title="Dialog">
       <ion-card-content>
         <ion-row class="q-gutter-md">
           <BaseButton label="Dialog 1" @click="dialog = true" />
           <BaseButton label="Dialog 2" @click="dialog2 = true" />
-          <BaseButton
-            label="Confirm to close"
-            @click="dialogConfirmToClose = true"
-          />
+          <BaseButton label="Confirm to close" @click="dialogConfirmToClose = true" />
         </ion-row>
       </ion-card-content>
     </BaseCard>
@@ -77,10 +68,7 @@ const onOpenPopover = (event: Event) => {
       <ion-card-content>
         <ion-row class="q-gutter-md">
           <BaseButton label="Simple dialog" @click="showModal = true" />
-          <BaseButton
-            label="Confirm to close"
-            @click="modalConfirmToClose = true"
-          />
+          <BaseButton label="Confirm to close" @click="modalConfirmToClose = true" />
         </ion-row>
       </ion-card-content>
     </BaseCard>
@@ -92,53 +80,34 @@ const onOpenPopover = (event: Event) => {
       </ion-card-content>
     </BaseCard>
 
-    <base-dialog
-      v-if="dialog"
-      v-model="dialog"
-      title="Dialog title"
-      :icon="settingsOutline"
-    >
-     {{ rolemText }}
+    <base-dialog v-if="dialog" v-model="dialog" title="Dialog title" :icon="settingsOutline">
+      <template #headerBottom>
+        <IonToolbar>
+          <BaseSearchBar placeholder="Search bar..." :animated="false" />
+        </IonToolbar>
+      </template>
+      {{ rolemText }}
     </base-dialog>
-    <base-dialog
-      v-if="dialog2"
-      v-model="dialog2"
-      title="Dialog title"
-      :icon="settingsOutline"
-      :presenting-element="baseLayoutRef?.$el"
-    >
-    {{ rolemText }}
+    <base-dialog v-if="dialog2" v-model="dialog2" title="Dialog title" :icon="settingsOutline"
+      :presenting-element="baseLayoutRef?.$el">
+      {{ rolemText }}
     </base-dialog>
-    <base-dialog
-      v-if="dialogConfirmToClose"
-      v-model="dialogConfirmToClose"
-      title="Confirm to close title"
-      :icon="serverOutline"
-      :auto-close="false"
-      @on-close="onConfirmToClose"
-    >
-    {{ rolemText }}
+    <base-dialog v-if="dialogConfirmToClose" v-model="dialogConfirmToClose" title="Confirm to close title"
+      :icon="serverOutline" :auto-close="false" @on-close="onConfirmToClose">
+      {{ rolemText }}
     </base-dialog>
 
     <BaseModal v-if="showModal" v-model="showModal" title="Modal">
-        {{ rolemText }}
+      {{ rolemText }}
     </BaseModal>
-    <BaseModal
-      ref="baseModalTestRef"
-      v-if="modalConfirmToClose"
-      v-model="modalConfirmToClose"
-      :auto-close="false"
-      title="Confirm to close"
-      :initial-breakpoint="1"
-      :breakpoints="[1]"
-      :presenting-element="baseLayoutRef?.$el"
-      @on-close="onConfirmToCloseModal"
-    >
-    {{ rolemText }}
+    <BaseModal v-if="modalConfirmToClose" ref="baseModalTestRef" v-model="modalConfirmToClose" :auto-close="false"
+      title="Confirm to close" :initial-breakpoint="1" :breakpoints="[1]" :presenting-element="baseLayoutRef?.$el"
+      @on-close="onConfirmToCloseModal">
+      {{ rolemText }}
     </BaseModal>
 
     <BasePopover v-model="popover" :event="popoverEvent" width="80%" @on-close="popover = false">
-        {{ rolemText }}
+      {{ rolemText }}
     </BasePopover>
   </base-layout>
 </template>

@@ -1,83 +1,3 @@
-<template>
-  <ion-page v-bind="$attrs">
-    <slot name="header">
-      <ion-header
-        :translucent="translucent"
-        :class="{ 'ion-no-border': headerNoBorder || dark }"
-      >
-        <slot name="toolbar">
-          <base-toolbar
-            v-show="!headerHidden"
-            :color="toolbarColor"
-            :class="{ dark }"
-          >
-            <slot name="start">
-              <div slot="start">
-                <ion-row>
-                  <slot name="avatar">
-                    <base-avatar
-                      v-if="avatar"
-                      :class="
-                        isAppPlatfrom('android') ? 'ion-margin-start' : ''
-                      "
-                      :src="avatar"
-                      :size="avatarSize"
-                    />
-                  </slot>
-                  <slot name="actions-start">
-                    <base-back-button
-                      v-if="showBackLink"
-                      :text="backText"
-                      :default-href="pageDefaultBackLink"
-                    ></base-back-button>
-                  </slot>
-                </ion-row>
-              </div>
-            </slot>
-            <slot name="title">
-              <ion-title
-                v-if="pageTitle"
-                :size="titleSize"
-                :style="{ fontWeight: pageTitleBold ? 'bold' : 'normal' }"
-              >
-                {{ pageTitle }}
-              </ion-title>
-            </slot>
-
-            <div slot="end">
-              <slot name="end">
-                <ion-buttons>
-                  <slot name="actions-end"></slot>
-                </ion-buttons>
-              </slot>
-            </div>
-          </base-toolbar>
-        </slot>
-        <slot name="headerAfter" />
-      </ion-header>
-    </slot>
-
-    <slot name="content">
-      <ion-content
-        :scroll-events="true"
-        @ion-scroll="logScrolling($event)"
-        :fullscreen="fullscreen"
-        :scroll-y="scrollY"
-        :class="{ 'ion-padding': contentPadding, 'dark': dark }"
-      >
-        <template v-if="collapse == 'condense'">
-          <ion-header mode="ios" collapse="condense">
-            <ion-toolbar :color="toolbarColor">
-              <ion-title size="large">{{ pageTitle }}</ion-title>
-            </ion-toolbar>
-          </ion-header>
-        </template>
-        <slot />
-      </ion-content>
-    </slot>
-  </ion-page>
-</template>
-
 <script lang="ts" setup>
 import { useDevice } from '@/composables/useDevice';
 import {
@@ -124,15 +44,9 @@ const {
   titleSize?: 'large' | 'small' | undefined
 }>();
 const emit = defineEmits(['on-scroll-up', 'on-scroll-down']);
-const BaseToolbar = defineAsyncComponent(
-  () => import('@/components/base/BaseToolbar.vue'),
-);
-const BaseBackButton = defineAsyncComponent(
-  () => import('@/components/base/BaseBackButton.vue'),
-);
-const BaseAvatar = defineAsyncComponent(
-  () => import('@/components/base/BaseAvatar.vue'),
-);
+const BaseToolbar = defineAsyncComponent(() => import('@/components/base/BaseToolbar.vue'));
+const BaseBackButton = defineAsyncComponent(() => import('@/components/base/BaseBackButton.vue'));
+const BaseAvatar = defineAsyncComponent(() => import('@/components/base/BaseAvatar.vue'));
 
 const { isAppPlatfrom } = useDevice();
 const headerHidden = ref(false);
@@ -150,6 +64,60 @@ const logScrolling = (event: any) => {
   }
 };
 </script>
+<template>
+  <ion-page v-bind="$attrs">
+    <slot name="header">
+      <ion-header :translucent="translucent" :class="{ 'ion-no-border': headerNoBorder || dark }">
+        <slot name="toolbar">
+          <base-toolbar v-show="!headerHidden" :color="toolbarColor" :class="{ dark }">
+            <slot name="start">
+              <div slot="start">
+                <ion-row>
+                  <slot name="avatar">
+                    <base-avatar v-if="avatar" :class="isAppPlatfrom('android') ? 'ion-margin-start' : ''
+                      " :src="avatar" :size="avatarSize" />
+                  </slot>
+                  <slot name="actions-start">
+                    <base-back-button v-if="showBackLink" :text="backText"
+                      :default-href="pageDefaultBackLink"></base-back-button>
+                  </slot>
+                </ion-row>
+              </div>
+            </slot>
+            <slot name="title">
+              <ion-title v-if="pageTitle" :size="titleSize" :style="{ fontWeight: pageTitleBold ? 'bold' : 'normal' }">
+                {{ pageTitle }}
+              </ion-title>
+            </slot>
+
+            <div slot="end">
+              <slot name="end">
+                <ion-buttons>
+                  <slot name="actions-end"></slot>
+                </ion-buttons>
+              </slot>
+            </div>
+          </base-toolbar>
+        </slot>
+        <slot name="headerBottom" />
+      </ion-header>
+    </slot>
+
+    <slot name="content">
+      <ion-content :scroll-events="true" :fullscreen="fullscreen" :scroll-y="scrollY"
+        :class="{ 'ion-padding': contentPadding, 'dark': dark }" @ion-scroll="logScrolling($event)">
+        <template v-if="collapse == 'condense'">
+          <ion-header mode="ios" collapse="condense">
+            <ion-toolbar :color="toolbarColor">
+              <ion-title size="large">{{ pageTitle }}</ion-title>
+            </ion-toolbar>
+          </ion-header>
+        </template>
+        <slot />
+      </ion-content>
+    </slot>
+  </ion-page>
+</template>
 <style scoped>
 ion-content.dark {
   --background: var(--app-bg-color-theme-dark);

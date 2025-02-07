@@ -1,8 +1,7 @@
-import type { AppException, IApiListResponse, IHrefTarget, ISortModeType, ResponseMessage, ServerException } from '@/types/common';
 import { config } from '@/libs/constant';
+import type { AppException, IApiListResponse, IHrefTarget, ISortModeType, ResponseMessage, ServerException } from '@/types/common';
 import { clearStorage } from '@/utils/storageUtil';
 import { Device } from '@capacitor/device';
-import { biFileEarmarkImage, biFileEarmarkPpt, biFileEarmarkZip, biFiletypePdf, biFiletypeXlsx, biFileWord, biPaperclip } from '@quasar/extras/bootstrap-icons';
 
 declare let window: any;
 
@@ -110,67 +109,7 @@ export const snakeToCamel = (str: string) =>
         group.toUpperCase().replace('-', '').replace('_', '')
       )
     : '';
-export const isImageFile = (f: File) => {
-  if (!f) {
-    return false;
-  }
-  return /^image\/\w+/.test(f.type);
-};
-export const getFileTypeIcon = (t: string) => {
-  if (!t) {
-    return biPaperclip;
-  }
-  const type = t.toLowerCase();
-  let icon = '';
-  switch (type) {
-    case 'pdf':
-    case 'application/pdf':
-      icon = biFiletypePdf;
-      break;
-    case 'xls':
-    case 'xlsx':
-    case 'application/vnd.ms-excel':
-    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-    case 'vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-      icon = biFiletypeXlsx;
-      break;
-    case 'doc':
-    case 'docx':
-    case 'application/msword':
-    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-    case 'vnd.openxmlformats-officedocument.wordprocessingml.document':
-      icon = biFileWord;
-      break;
-    case 'ppt':
-    case 'pptx':
-    case 'application/vnd.ms-powerpoint':
-    case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-    case 'vnd.openxmlformats-officedocument.presentationml.presentation':
-      icon = biFileEarmarkPpt;
-      break;
-    case 'jpg':
-    case 'jpeg':
-    case 'gif':
-    case 'png':
-    case 'image/png':
-    case 'image/jpeg':
-    case 'image/gif':
-    case 'image/webp':
-      icon = biFileEarmarkImage;
-      break;
-    case 'application/zip':
-    case 'application/x-zip-compressed':
-    case 'application/x-rar':
-    case 'application/vnd.rar':
-    case 'x-rar':
-      icon = biFileEarmarkZip;
-      break;
-    default:
-      icon = biPaperclip;
-      break;
-  }
-  return icon;
-};
+
 export const readableNumber = (num: number, digits: number = 2) => {
   if (num < 1000) {
     return num;
@@ -231,16 +170,14 @@ export const extractHashtagsFromStringV2 = (val: string): string[] => {
 };
 export const extractHashtagsFromString = (val: string): string[] => {
   if (!val) {
-    return [];
+      return [];
   }
-  // return val.split(/[\s\n\r]/gim).filter((v) => v.startsWith('#'));
-  // return extractHashtagsStartingWithLetter(val)
   return val.split(/\s/g).filter((v) => {
-    if (v.startsWith('#')) {
-      // Check if the character following '#' is not a digit (0-9)
-      return !(/^#\d/.test(v));
-    }
-    return false;
+      if (v.startsWith('#')) {
+          // Check if the character following '#' is not a digit (0-9)
+          return !(/^#\d/.test(v));
+      }
+      return false;
   });
 };
 export const extractHashtagsStartingWithLetter = (str: string): string[] => {
@@ -253,72 +190,9 @@ export const extractHashtagsStartingWithLetter = (str: string): string[] => {
 
   return hashtags || []; // Return an empty array if no hashtags are found
 };
-export const urlToBlob = async (imgPath: any): Promise<Blob> => {
-  const file = await fetch(imgPath).then(r => r.blob());
-  return new Promise((resolve) => {
-    resolve(file);
-  });
-};
-export const getImgUrlFromFile = (f: any): Promise<string | undefined> => {
-  if (!f) {
-    return new Promise((resolve) => {
-      resolve(undefined);
-    });
-  }
-  return new Promise((resolve) => {
-    if (/^image\/\w+/.test(f.type)) {
-      const url = URL.createObjectURL(f);
-      resolve(url);
-    }
-  });
-};
-export const blobToFile = (
-  b: Blob,
-  originalFileName: string
-): Promise<File> => {
-  return new Promise((resolve) => {
-    const file = new File([b as any], originalFileName, {
-      type: b.type
-    });
-    resolve(file);
-  });
-};
-export const imageUrlToFile =async (imageUrl: string, fileName: string): Promise<File> => {
-   // Fetch the image data
-   const response = await fetch(imageUrl);
-   // Check if the response is successful (status code 200)
-   if (!response.ok) {
-     throw new Error('Failed to fetch image');
-   }
-   // Convert the image data to a Blob
-   const blob = await response.blob();
-   const file = new File([blob], fileName, {
-     type: blob.type
-   });
-   return new Promise((resolve) => {
-     // console.log('File name:', JSON.stringify(file.name));
-     // console.log('File size:', file.size, 'bytes');
-     // console.log('File type:', JSON.stringify(file.type));
-     resolve(file);
-   });
-};
-export const imageUrlToBase64 = async (imageUrl: string) => {
-  // Fetch the image data
-  const response = await fetch(imageUrl);
-  // Check if the response is successful (status code 200)
-  if (!response.ok) {
-    throw new Error('Failed to fetch image');
-  }
-  // Convert the image data to a Blob
-  const blob = await response.blob();
-  // Read the blob as a data URL
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
-};
+
+
+
 export const randomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * max) + min;
 };
@@ -532,57 +406,7 @@ export const cordovaClearCach = async () => {
     resolve(true);
   });
 };
-export const downloadFromArrayBuffer = (
-  arrayBuffer: any,
-  fileName: string,
-  fileType: string
-) => {
-  // Create a Blob from the ArrayBuffer
-  const blob = new Blob([arrayBuffer], { type: fileType });
-  downloadFromBlob(blob, fileName, fileType);
-};
-export const downloadFromBlob = (
-  blob: any,
-  fileName: string,
-  fileType: string
-) => {
-  // Create a URL for the Blob
-  const url = URL.createObjectURL(blob);
-  // Create a link element
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = fileName;
-  // Append the link to the body
-  document.body.appendChild(link);
-  // Programmatically trigger the click event to start the download
-  link.click();
-  // Clean up: remove the link and revoke the URL
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-};
 
-export const getBlobFromAxiosResponse = (response: any) => {
-  return new Promise((resolve) => {
-    const blob = new Blob([response.data as BlobPart], {
-      type: response.headers['content-type']
-    });
-    const fileUrlObject = URL.createObjectURL(blob);
-    resolve(fileUrlObject);
-  });
-};
-export const getFileNameFromAxiosResponse = (response: any): Promise<string | undefined> => {
-  return new Promise((resolve) => {
-    const contentDisposition = response.headers['content-disposition'];
-    let fileName;
-    if (contentDisposition) {
-      const match = contentDisposition.match(/filename="(.+)"/);
-      if (match && match[1]) {
-        fileName = match[1];
-      }
-    }
-    resolve(fileName);
-  });
-};
 export const getConfig = <T>(key: string): T => {
   return config[key as keyof typeof config] as unknown as T;
 };
@@ -648,4 +472,15 @@ return '0 Bytes';
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
   return Number.parseFloat((bytes / k**i).toFixed(dm)) + ' ' + sizes[i];
+};
+export const appPreventDefult = async (event: any) => {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+};
+export const isLinkFromWebApp = (link: string): boolean => {
+  // const webDomain=import.meta.env.VITE_WEB_APP_URL
+  return link.includes(config.webAppDomain);
 };

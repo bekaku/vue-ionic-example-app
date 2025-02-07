@@ -250,6 +250,8 @@ export default {
         'remark': 'หมายเหตุ',
         'view2': 'ดู',
         'you': 'คุณ',
+        'refreshing': 'โหลดข้อมูลใหม่',
+        'pullToRefresh': 'ดึงลงเพื่อโหลดข้อมูลใหม่',
     },
     'theme': {
         'light': 'กลางวัน',

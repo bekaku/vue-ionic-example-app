@@ -64,17 +64,13 @@ export const useAxios = () => {
           : 'danger'
     });
   };
-  const callAxiosV2 = async <T>(req: RequestType): Promise<T | null> => {
-    const res = await callAxios<T>(req);
-    return await validateServerResponse<T>(res);
-  };
   const callAxiosFile = async <T>(req: RequestType): Promise<any> => {
     const response = await callAxiosProcess<T>(req, false);
     return new Promise((resolve /* reject */) => {
       resolve(response);
     });
   };
-  const callAxios = async <T>(req: RequestType): Promise<T> => {
+  const callAxios = async <T>(req: RequestType): Promise<T | null> => {
     const response = await callAxiosProcess<T>(req);
     return new Promise((resolve /* reject */) => {
         if (response.status != 401 && response.status != 403) {
@@ -89,11 +85,32 @@ export const useAxios = () => {
         resolve(response.data as T);
       }
     );
+
+
+    // return new Promise(async (resolve, reject) => {
+    //   callAxiosProcess<T>(req)
+    //     .then(async (response) => {
+    //       if (response.status != 401 && response.status != 403) {
+    //         if (response.data) {
+    //           if (isAppException(response.data)) {
+    //             notifyException(response.data);
+    //           } else if (isServerResponseMessage(response.data)) {
+    //             notifyServerMessage(response.data);
+    //           }
+    //         }
+    //       }
+    //       const finalResponse = await validateServerResponse<T>(response.data);
+    //       resolve(finalResponse);
+    //     })
+    //     .catch((error) => {
+    //       reject(error);
+    //     });
+    // });
   };
   const callAxiosProcess = async <T>(req: RequestType, logDev: boolean = true): Promise<AxiosResponse<T>> => {
     const jwtKey = await loadStorage<string>(AppAuthTokenKey);
     const cahSyncOnlineStatus = await canSyncActiveStatusToServer();
-    return new Promise((resolve /* reject */) => {
+    return new Promise((resolve, reject) => {
       $appAxios.defaults.headers.Authorization = `Bearer ${jwtKey}`;
       // $appAxios.defaults.headers['Accept-Language'] = await loadStorage<string>(LocaleKey);
 
@@ -112,7 +129,7 @@ export const useAxios = () => {
       } else {
         $appAxios.defaults.responseType = 'json';
       }
-      $appAxios.defaults.headers['X-Sync-Active'] = cahSyncOnlineStatus ?'1' :'0';
+      $appAxios.defaults.headers['X-Sync-Active'] = cahSyncOnlineStatus ? '1' : '0';
       $appAxios({
         method: req.method,
         url: req.API,
@@ -131,7 +148,7 @@ export const useAxios = () => {
           if (error?.response?.status != 401 && error?.response?.status != 403) {
             showErrorToast(error);
           }
-          resolve(error);
+          reject(error);
         });
     });
   };
@@ -168,5 +185,5 @@ export const useAxios = () => {
     });
     await toast.present();
   };
-  return { callAxios, callAxiosV2, validateServerResponse, callAxiosFile, callAxiosProcess };
+  return { callAxios, validateServerResponse, callAxiosFile, callAxiosProcess };
 };

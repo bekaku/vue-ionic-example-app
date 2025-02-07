@@ -38,7 +38,7 @@
           </ion-col>
         </ion-row>
         <template v-else>
-          <load-more
+          <BaseLoadMore
             v-if="fristLoaded && !isInfiniteDisabled"
             :loading="loading"
             :frist-loaded="fristLoaded"
@@ -46,7 +46,7 @@
             :label="t('base.loadMore')"
             @on-next-page="loadNextPage"
           >
-          </load-more>
+          </BaseLoadMore>
         </template>
       </template>
     </ion-content>
@@ -115,15 +115,9 @@ import {
   IonTabButton,
 } from '@ionic/vue';
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
-const BaseResult = defineAsyncComponent(
-  () => import('@/components/base/Result.vue'),
-);
-const LoadMore = defineAsyncComponent(
-  () => import('@/components/LoadMore.vue'),
-);
-const BaseSpinner = defineAsyncComponent(
-  () => import('@/components/base/Spinner.vue'),
-);
+const BaseResult = defineAsyncComponent(() => import('@/components/base/BaseResult.vue'));
+const BaseLoadMore = defineAsyncComponent(() => import('@/components/base/BaseLoadMore.vue'));
+const BaseSpinner = defineAsyncComponent(() => import('@/components/base/BaseSpinner.vue'));
 const { t } = useLang();
 const { pages, resetPaging } = usePaging(5);
 const { sort, sortMode } = useSort({

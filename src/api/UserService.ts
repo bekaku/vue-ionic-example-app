@@ -8,9 +8,9 @@ import type {
 } from '@/types/models';
 
 export default () => {
-  const { callAxiosV2 } = useAxios();
+  const { callAxios } = useAxios();
   const getUserSessionData = async (): Promise<UserDto | null> => {
-    return await callAxiosV2<UserDto>({
+    return await callAxios<UserDto>({
       API: '/api/user/currentUserData',
       method: 'GET'
     });
@@ -18,7 +18,7 @@ export default () => {
   const updateUserAvatar = async (
     fileManagerId: number
   ): Promise<ResponseMessage | null> => {
-    return await callAxiosV2<ResponseMessage>({
+    return await callAxios<ResponseMessage>({
       API: `/api/user/updateUserAvatar?fileManagerId=${fileManagerId}`,
       method: 'PUT'
     });
@@ -26,13 +26,13 @@ export default () => {
   const updateUserCover = async (
     fileManagerId: number
   ): Promise<ResponseMessage | null> => {
-    return await callAxiosV2<ResponseMessage>({
+    return await callAxios<ResponseMessage>({
       API: `/api/user/updateUserCover?fileManagerId=${fileManagerId}`,
       method: 'PUT'
     });
   };
   const updateDefaultLocale = async (locale: AppLocale): Promise<UserDto | null> => {
-    return await callAxiosV2<UserDto>({
+    return await callAxios<UserDto>({
       API: `/api/user/updateDefaultLocale?locale=${locale}`,
       method: 'PUT'
     });
@@ -40,7 +40,7 @@ export default () => {
   const findPublicUserData = async (
     userId: number
   ): Promise<UserDto | null> => {
-    return await callAxiosV2<UserDto>({
+    return await callAxios<UserDto>({
       API: `/api/user/findPublicUserData/${userId}`,
       method: 'GET'
     });
@@ -48,7 +48,7 @@ export default () => {
   const updatePersonalData = async (
     req: UserPersonalEditRequest
   ): Promise<ResponseMessage | null> => {
-    return await callAxiosV2<ResponseMessage>({
+    return await callAxios<ResponseMessage>({
       API: '/api/user/updatePersonalData',
       method: 'PUT',
       body: {
@@ -59,7 +59,7 @@ export default () => {
   const updateEmail = async (
     req: UserPersonalEditRequest
   ): Promise<ResponseMessage | null> => {
-    return await callAxiosV2<ResponseMessage>({
+    return await callAxios<ResponseMessage>({
       API: '/api/user/updateEmail',
       method: 'PUT',
       body: {
@@ -70,20 +70,20 @@ export default () => {
   const selfUpdatePassword = async (
     req: UserChangePasswordRequest
   ): Promise<ResponseMessage | null> => {
-    return await callAxiosV2<ResponseMessage>({
+    return await callAxios<ResponseMessage>({
       API: '/api/user/selfUpdatePassword',
       method: 'PUT',
       body: req
     });
   };
   const currentAuthSession = async (q: string): Promise<AccessTokenDto[] | null> => {
-    return await callAxiosV2<AccessTokenDto[]>({
+    return await callAxios<AccessTokenDto[]>({
       API: `/api/user/currentAuthSession${q}`,
       method: 'GET'
     });
   };
   const findAllUserActiveByUserAuth = async (): Promise<UserDto[] | null> => {
-    return await callAxiosV2<UserDto[]>({
+    return await callAxios<UserDto[]>({
       API: '/api/user/findAllUserActiveByUserAuth',
       method: 'GET'
     });

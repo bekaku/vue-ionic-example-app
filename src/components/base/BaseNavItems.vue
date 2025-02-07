@@ -14,7 +14,7 @@ const { t } = useLang();
 <template>
     <IonRow class="ion-no-margin ion-no-padding">
         <IonCol class="ion-no-margin ion-no-padding">
-            <slot name="before" />
+            <slot name="top" />
             <template v-if="menuItems.length > 0">
                 <template v-for="(item, index) in menuItems" :key="`parent-${index}`">
                     <BaseCard>
@@ -44,7 +44,7 @@ const { t } = useLang();
                     </BaseCard>
                 </template>
             </template>
-            <slot name="after" />
+            <slot name="bottom" />
         </IonCol>
     </IonRow>
 </template>

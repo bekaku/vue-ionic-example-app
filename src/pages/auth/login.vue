@@ -48,14 +48,14 @@
                         <ion-list lines="none">
                           <ion-item>
                             <div class="wee-login-input">
-                              <base-icon :icon="personOutline" icon-set="ion" color="text-grey-8"></base-icon>
+                              <base-icon :icon="personOutline" icon-set="ion" color="grey-8"></base-icon>
                               <ion-input class="q-ml-md" :disabled="loading" v-model="email"
                                 :placeholder="t('base.emailOrUsername')"></ion-input>
                             </div>
                           </ion-item>
                           <ion-item>
                             <div class="wee-login-input">
-                              <base-icon :icon="keyOutline" icon-set="ion" color="text-grey-8"></base-icon>
+                              <base-icon :icon="keyOutline" icon-set="ion" color="grey-8"></base-icon>
                               <ion-input class="q-ml-md" :disabled="loading" :type="!showPassword ? 'password' : 'text'"
                                 v-model="password" :placeholder="t('authen.password')"></ion-input>
                               <ion-button fill="clear" size="small" @click="showPassword = !showPassword">
@@ -174,7 +174,7 @@ const BaseIcon = defineAsyncComponent(
   () => import('@/components/base/BaseIcon.vue'),
 );
 const BaseResult = defineAsyncComponent(
-  () => import('@/components/base/Result.vue'),
+  () => import('@/components/base/BaseResult.vue'),
 );
 const {
   setStatusBarColor,

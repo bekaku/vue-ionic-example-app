@@ -33,8 +33,8 @@ export enum ICrudListHeaderOptionSearchType {
   DATETIME
 }
 // type
-export type IonicColor = 'danger' | 'dark' | 'accent' | 'light' | 'medium' | 'primary' | 'secondary' | 'success' | 'tertiary' | 'warning'
-export type AppColor =IonicColor & 'accent' | 'black' | 'white'
+export type IonicColor = 'danger' | 'danger' | 'dark' | 'accent' | 'light' | 'medium' | 'primary' | 'secondary' | 'success' | 'tertiary' | 'warning'
+export type AppColor = 'danger' | 'danger' | 'dark' | 'accent' | 'light' | 'medium' | 'primary' | 'secondary' | 'success' | 'tertiary' | 'warning' | 'black' | 'white' | 'muted'
   | 'red' | 'red-1' | 'red-2' | 'red-3' | 'red-4' | 'red-5' | 'red-6' | 'red-7' | 'red-8' | 'red-9' | 'red-10' | 'red-11' | 'red-12' | 'red-13' | 'red-14'
   | 'pink' | 'pink-1' | 'pink-2' | 'pink-3' | 'pink-4' | 'pink-5' | 'pink-6' | 'pink-7' | 'pink-8' | 'pink-9' | 'pink-10' | 'pink-11' | 'pink-12' | 'pink-13' | 'pink-14'
   | 'purple' | 'purple-1' | 'purple-2' | 'purple-3' | 'purple-4' | 'purple-5' | 'purple-6' | 'purple-7' | 'purple-8' | 'purple-9' | 'purple-10' | 'purple-11' | 'purple-12' | 'purple-13' | 'purple-14'
@@ -78,6 +78,7 @@ export type AppLocale = 'th' | 'en';
 export type AppTheme =
   | 'dark'
   | 'light';
+export type FileType = 'pdf' | 'msexcel' | 'msword' | 'mspowerpoint' | 'image' | 'zip' | 'unknown';
 export type ImgRatioType = '1' | '16/9' | '4/3';
 export type IHrefTarget = '_blank' | '_parent' | '_self' | '_top';
 export type IHttpStatus =
@@ -89,6 +90,7 @@ export type IHttpStatus =
   | 'FORBIDDEN'
   | 'INTERNAL_SERVER_ERROR';
 export type IResult =
+  | '400'
   | '404'
   | '403'
   | '500'
@@ -121,6 +123,17 @@ export type JwtStatus = 'VALID' | 'EXPIRED' | 'NO_EXPIRATION_TIME' | 'INVALID';
 export type ResponseDataType = 'arraybuffer' | 'blob' | 'json' | 'download' | 'axiosresponse';
 export type SearchOperation = ':' | '>' | '>=' | '<' | '<=' | '=' | '!=';
 // interface
+export interface AppActionSheet {
+  text?: string
+  icon?: string
+  cssClass?: string | string[];
+  id?: string;
+  disabled?: boolean;
+  data?: {
+    action: string | number | boolean
+  },
+  role?: 'cancel' | 'destructive' | 'selected'
+}
 export interface AppAlertOptions {
   text: string
   header?: string
@@ -157,6 +170,10 @@ export interface AppToastOptions {
     | undefined
   toastPosition?: 'bottom' | 'top' | 'middle' | undefined
 }
+export interface AppConfirmOptions {
+  cancelText?: string | undefined
+  okayText?: string | undefined
+}
 export interface CacheDateAndKey {
   key: string
   date: string | number
@@ -172,21 +189,29 @@ export interface ChoosePhotoItem {
   fileBase64?: any
 }
 export interface CrudListApiOptions {
-  apiEndpoint?: string
-  crudName?: string
-  actionList?: string
-  actionDelete?: string
-  actionPost?: string
-  actionPut?: string
-  actionGetOne?: string
-  additionalUri?: string
-  defaultSort?: ISort
-  itemsPerPage?: number
-  fetchListOnload?: boolean
-  pageAble?: boolean
-  pageStartZero?: boolean
-  sortAble?: boolean
-  concatList?: boolean
+  apiEndpoint?: string;
+  crudName?: string;
+  enpointList?: string;
+  enpointDelete?: string;
+  enpointPost?: string;
+  enpointPut?: string;
+  enpointGetOne?: string;
+  pathNew?: string;
+  pathView?: string;
+  pathCopy?: string;
+  additionalUri?: string;
+  defaultSort?: ISort;
+  defaultSorts?: ISort[];
+  itemsPerPage?: number;
+  fetchListOnload?: boolean;
+  pageAble?: boolean;
+  pageStartZero?: boolean;
+  sortAble?: boolean;
+  concatList?: boolean;
+  reverseList?: boolean;
+  addUnshift?: boolean;
+  preventResetListReload?: boolean;
+  headers?: ICrudListHeader[];
 }
 export interface ICrudListApiOptions extends CrudListApiOptions {
   urlEndpoint: string
@@ -301,7 +326,7 @@ export interface IMenuPageItem {
   imageSize?: number
   fetchImage?: boolean
   iconSize?: number
-  iconColor?: string
+  iconColor?: AppColor
   translate?: boolean
   translateCaption?: boolean
   button?: boolean
@@ -313,7 +338,7 @@ export interface LabelValue<Type> {
   icon?: string
   iconSet?: IconSetType
   fetch?: boolean
-  color?: string
+  color?: AppColor
   to?: string
   value?: Type
   border?: boolean
@@ -419,39 +444,45 @@ export interface SlidePaginationy {
   enabled?: boolean
   dynamicBullets?: boolean
 }
-
+export interface SwiperSlideChange {
+  activeIndex: number
+  realIndex: number
+}
 export type SlidePaginationType = 'progressbar' | 'bullets' | 'fraction' | 'custom';
 export type SlideDirectionType = 'horizontal' | 'vertical';
 export type SlideEffectType = 'slide' | 'fade' | 'cube' | 'coverflow' | 'flip' | 'creative' | 'cards';
 
 export interface SlideOptions {
-  autoplay?: boolean | SlideAutoplay
-  breakpoints?: any
-  centeredSlides?: boolean
-  allowTouchMove?: boolean
-  direction?: SlideDirectionType
-  effect?: SlideEffectType
-  freeMode?: boolean
-  initialSlide?: number
-  keyboard?: boolean
-  lazy?: boolean
-  loop?: boolean
-  modules?: SlideModule[]
-  navigation?: boolean
-  navigationType?: boolean
-  navigationCustom?: boolean
-  pagination?: boolean | SlidePaginationy
-  paginationType?: SlidePaginationType
-  paginationDynamic?: boolean
-  scrollbar?: boolean
-  style?: object
-  speed?: number
-  slidesPerView?: number | 'auto'
-  spaceBetween?: number
-  slidesPerGroup?: number
-  thumbs?: boolean
-  updateOnWindowResize?: boolean
-  zoom?: boolean | SlideZoom
+  autoplay?: boolean | SlideAutoplay;
+  breakpoints?: any;
+  centeredSlides?: boolean;
+  allowTouchMove?: boolean;
+  direction?: SlideDirectionType;
+  effect?: SlideEffectType;
+  freeMode?: boolean;
+  initialSlide?: number;
+  keyboard?: boolean;
+  lazy?: boolean;
+  loop?: boolean;
+  modules?: SlideModule[];
+  navigation?: boolean;
+  navigationType?: boolean;
+  navigationCustom?: boolean;
+  pagination?: boolean | SlidePaginationy;
+  paginationClickable?: boolean;
+  paginationType?: SlidePaginationType;
+  paginationDynamic?: boolean;
+  scrollbar?: boolean;
+  style?: any | object;
+  speed?: number;
+  slidesPerView?: number | 'auto';
+  spaceBetween?: number;
+  slidesPerGroup?: number;
+  thumbs?: boolean;
+  updateOnWindowResize?: boolean;
+  zoom?: boolean | SlideZoom;
+  gridRows?: number;
+  grabCursor?: boolean;
 }
 
 export type SlideModule =

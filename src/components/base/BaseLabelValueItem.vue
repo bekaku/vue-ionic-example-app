@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T">
 import type { AppColor, ItemLines, LabelValue } from '@/types/common';
-import { IonIcon, IonItem, IonLabel, IonText } from '@ionic/vue';
+import { IonIcon, IonItem, IonLabel, IonRow, IonText } from '@ionic/vue';
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import BaseIcon from '@/components/base/BaseIcon.vue';
 
@@ -8,6 +8,7 @@ const { item, iconSize = 20, avatarSize = 24, detail = false, lines = 'none' } =
     item: LabelValue<T>
     iconSize?: number
     avatarSize?: number
+    fetchImage?: boolean
     detail?: boolean
     clickable?: boolean
     color?: AppColor
@@ -25,17 +26,15 @@ const onClick = () => {
 <template>
     <ion-item v-if="item" :button="item?.value != undefined" :detail :lines="lines"
         :router-link="item?.to ? item.to : undefined" @click="onClick">
-        <slot name="start">
-            <base-avatar slot="start" v-if="item.avatar" :src="item.avatar" :size="avatarSize" />
-            <template v-if="item.icon">
-                <ion-icon v-if="item.iconSet == 'ion'" :icon="item.icon" :style="`${iconSize}px`"
-                    :class="color ? 'text-' + color : item.color ? 'text-' + item.color : ''" slot="start"></ion-icon>
-                <span v-else slot="start">
+        <IonRow slot="start">
+            <slot name="start">
+                <base-avatar v-if="item.avatar" :src="item.avatar" :fetch-image :size="avatarSize" />
+                <template v-else-if="item.icon">
                     <base-icon :icon="item.icon" :size="iconSize" :icon-set="item.iconSet"
-                        :color="color ? 'text-' + color : item.color ? 'text-' + item.color : ''" />
-                </span>
-            </template>
-        </slot>
+                        :color="color ? color : item.color ?  item.color : undefined" />
+                </template>
+            </slot>
+        </IonRow>
         <slot name="label">
             <ion-label>
                 <IonText :class="color ? 'text-' + color : item.color ? 'text-' + item.color : ''">
@@ -46,6 +45,8 @@ const onClick = () => {
                 </p>
             </ion-label>
         </slot>
-        <slot name="end" />
+        <IonRow slot="end">
+            <slot name="end" />
+        </IonRow>
     </ion-item>
 </template>

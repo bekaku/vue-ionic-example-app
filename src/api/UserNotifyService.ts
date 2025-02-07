@@ -8,7 +8,7 @@ import {
   NotifyFunctionType
 } from '@/types/models';
 export default () => {
-  const { callAxiosV2 } = useAxios();
+  const { callAxios } = useAxios();
   const findAllByUser = async (
     page: number,
     size: number,
@@ -16,7 +16,7 @@ export default () => {
     return new Promise((resolve /* reject */) => {
       resolve([]);
     });
-    // return await callAxiosV2<NotificationDto[]>({
+    // return await callAxios<NotificationDto[]>({
     //   API: `/api/userNotify/findAllByUser?page=${page}&size=${size}`,
     //   method: 'GET'
     // });
@@ -25,7 +25,7 @@ export default () => {
     refreshToken: RefreshTokenRequest
   ): Promise<void> => {
     if (refreshToken && refreshToken.refreshToken.fcmToken) {
-      await callAxiosV2<void>({
+      await callAxios<void>({
         API: '/api/user/refreshFcmToken',
         method: 'PUT',
         body: refreshToken
@@ -35,7 +35,7 @@ export default () => {
   const updateFcmSetting = async (
     refreshToken: RefreshTokenRequest
   ): Promise<void> => {
-    await callAxiosV2<void>({
+    await callAxios<void>({
       API: '/api/user/updateFcmSetting',
       method: 'PUT',
       body: refreshToken
@@ -47,7 +47,7 @@ export default () => {
     return new Promise((resolve /* reject */) => {
       resolve(null);
     });
-    // return await callAxiosV2<NotificationCount>({
+    // return await callAxios<NotificationCount>({
     //   API: `/api/userNotify/findCountAllNotRead?lastestNotifyId=${lastNOtifyId}`,
     //   method: 'GET'
     // });
@@ -56,7 +56,7 @@ export default () => {
     return new Promise((resolve /* reject */) => {
       resolve(null);
     });
-    // return await callAxiosV2<void>({
+    // return await callAxios<void>({
     //   API: `/api/userNotify/updateReadNotify/${notifyId}`,
     //   method: 'PUT'
     // });
@@ -65,7 +65,7 @@ export default () => {
     return new Promise((resolve /* reject */) => {
       resolve(null);
     });
-    // return await callAxiosV2<void>({
+    // return await callAxios<void>({
     //   API: '/api/userNotify/updateReadNotifyAll',
     //   method: 'PUT'
     // });

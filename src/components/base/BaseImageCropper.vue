@@ -1,67 +1,6 @@
-<template>
-  <ion-modal :is-open="show" @will-dismiss="onClose">
-    <ion-header>
-      <base-toolbar>
-        <ion-buttons slot="start">
-          <ion-button @click="onClose">
-            <ion-icon :icon="close" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-title class="ion-text-capitalize" v-if="title">
-          {{ title }}
-        </ion-title>
-        <ion-buttons slot="end">
-          <ion-button class="text-primary" @click="onOkay">
-            {{ t('base.submit') }}
-          </ion-button>
-        </ion-buttons>
-      </base-toolbar>
-    </ion-header>
-    <ion-content>
-      <ion-card class="no-shadow no-border-radius ion-no-margin">
-        <base-spinner v-if="loading" :label="t('base.pleaseWait')"></base-spinner>
-        <div style="height: 350px; overflow: hidden" class="q-full-width">
-          <img ref="canvasImg" alt="" class="q-full-width" />
-        </div>
-        <ion-card-content v-if="cropper">
-          <ion-button size="small" mode="ios" fill="clear" @click="cropper.zoom(0.1)">
-            <ion-icon slot="start" :icon="addOutline"></ion-icon>
-            {{ t('zoomIn') }}
-          </ion-button>
-          <ion-button size="small" mode="ios" fill="clear" @click="cropper.zoom(-0.1)">
-            <ion-icon slot="start" :icon="removeOutline"></ion-icon>
-            {{ t('zoomOut') }}
-          </ion-button>
-          <ion-button size="small" mode="ios" fill="clear" @click="cropper.rotate(-45)">
-            <ion-icon slot="start" :icon="returnUpBackOutline"></ion-icon>
-            {{ t('rotateLeft') }}
-          </ion-button>
-          <ion-button size="small" mode="ios" fill="clear" @click="cropper.rotate(45)">
-            <ion-icon slot="start" :icon="returnUpForwardOutline"></ion-icon>
-            {{ t('rotateRight') }}
-          </ion-button>
-          <ion-button size="small" mode="ios" fill="clear" @click="flipHorizontal">
-            <ion-icon slot="start" :icon="repeatOutline"></ion-icon>
-            {{ t('flipHorizontal') }}
-          </ion-button>
-          <ion-button size="small" mode="ios" fill="clear" @click="flipVertical">
-            <ion-icon slot="start" :icon="arrowUpOutline"></ion-icon>
-            {{ t('flipVorizontal') }}
-          </ion-button>
-        </ion-card-content>
-        <ion-row v-if="initFinished" class="ion-justify-content-center q-pa-md">
-          <ion-col size="12">
-            <!-- <div class="cropper-img-preview" :style="previewStyle"></div> -->
-            <img v-if="priviewImage" :src="priviewImage" :style="previewStyle" />
-          </ion-col>
-        </ion-row>
-      </ion-card>
-    </ion-content>
-  </ion-modal>
-</template>
 <script setup>
 import BaseToolbar from '@/components/base/BaseToolbar.vue';
-import BaseSpinner from '@/components/base/Spinner.vue';
+import BaseSpinner from '@/components/base/BaseSpinner.vue';
 import { useLang } from '@/composables/useLang';
 import { FileImageNameAtt } from '@/libs/constant';
 import { getCurrentTimestamp } from '@/utils/dateUtil';
@@ -70,7 +9,6 @@ import {
   IonButtons,
   IonCard,
   IonCardContent,
-  IonCol,
   IonContent,
   IonHeader,
   IonIcon,
@@ -89,13 +27,8 @@ import {
   returnUpBackOutline,
   returnUpForwardOutline
 } from 'ionicons/icons';
-import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
-
+import { onBeforeUnmount, ref, watchEffect } from 'vue';
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    require: true,
-  },
   title: {
     type: String,
   },
@@ -104,14 +37,14 @@ const props = defineProps({
   },
   ratio: {
     type: Number,
-    default: 1, // 1, 16/9
+    default: 1, // 1, 4/3, 16/9
   },
   previewStyle: {
     type: String,
-    default: 'overflow: hidden;width: 100px;height: 100px;border-radius: 100%;',
+    default: 'overflow: hidden;width: 100%;',
   },
 });
-const emit = defineEmits(['on-close', 'update:modelValue', 'on-okay']);
+const emit = defineEmits(['on-close', 'on-okay', 'on-cropend']);
 const { t } = useLang();
 const canvasImg = ref(null); // ref to <canvas ref="canvasImg" width="120" height="100"></canvas>
 const cropper = ref(null);
@@ -121,12 +54,10 @@ const verticalScale = ref(1);
 const maximizedToggle = ref(false);
 const loading = ref(false);
 const priviewImage = ref(null);
-// const imageUrl = ref(
-//   'https://images.pexels.com/photos/13896422/pexels-photo-13896422.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-// );
 const isInited = ref(false);
 const initFinished = ref(false);
 const initialTimeout = ref();
+const modelValue = defineModel({ type: Boolean, default: false });
 watchEffect(() => {
   if (canvasImg.value && props.src && !isInited.value) {
     isInited.value = true;
@@ -138,16 +69,12 @@ watchEffect(() => {
   }
 });
 
-const show = computed({
-  get: () => props.modelValue,
-  set: val => emit('update:modelValue', val),
-});
 const onClose = () => {
   clearCropper();
   originalimagFile.value = null;
   emit('on-close');
   maximizedToggle.value = false;
-  show.value = false;
+  modelValue.value = false;
 };
 const clearCropper = () => {
   if (cropper.value) {
@@ -231,6 +158,7 @@ const cropData = () => {
     priviewImage.value = cropper.value
       .getCroppedCanvas()
       .toDataURL('image/jpeg');
+    emit('on-cropend', priviewImage.value)
   }
 };
 onBeforeUnmount(() => {
@@ -240,6 +168,64 @@ onBeforeUnmount(() => {
   }
 });
 </script>
+<template>
+  <ion-modal :is-open="modelValue" :aria-hidden="true" @will-dismiss="onClose">
+    <ion-header>
+      <base-toolbar>
+        <ion-buttons slot="start">
+          <ion-button @click="onClose">
+            <ion-icon slot="icon-only" :icon="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title v-if="title" class="ion-text-capitalize">
+          {{ title }}
+        </ion-title>
+        <ion-buttons slot="end">
+          <ion-button class="text-primary" @click="onOkay">
+            {{ t('base.submit') }}
+          </ion-button>
+        </ion-buttons>
+      </base-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-card class="no-shadow no-border-radius ion-no-margin">
+        <base-spinner v-if="loading" :label="t('base.pleaseWait')"></base-spinner>
+        <div style="height: 350px; overflow: hidden" class="q-full-width">
+          <img ref="canvasImg" alt="" class="q-full-width" />
+        </div>
+        <ion-card-content v-if="cropper">
+          <ion-button size="small" mode="ios" fill="clear" @click="cropper.zoom(0.1)">
+            <ion-icon slot="start" :icon="addOutline"></ion-icon>
+            {{ t('zoomIn') }}
+          </ion-button>
+          <ion-button size="small" mode="ios" fill="clear" @click="cropper.zoom(-0.1)">
+            <ion-icon slot="start" :icon="removeOutline"></ion-icon>
+            {{ t('zoomOut') }}
+          </ion-button>
+          <ion-button size="small" mode="ios" fill="clear" @click="cropper.rotate(-45)">
+            <ion-icon slot="start" :icon="returnUpBackOutline"></ion-icon>
+            {{ t('rotateLeft') }}
+          </ion-button>
+          <ion-button size="small" mode="ios" fill="clear" @click="cropper.rotate(45)">
+            <ion-icon slot="start" :icon="returnUpForwardOutline"></ion-icon>
+            {{ t('rotateRight') }}
+          </ion-button>
+          <ion-button size="small" mode="ios" fill="clear" @click="flipHorizontal">
+            <ion-icon slot="start" :icon="repeatOutline"></ion-icon>
+            {{ t('flipHorizontal') }}
+          </ion-button>
+          <ion-button size="small" mode="ios" fill="clear" @click="flipVertical">
+            <ion-icon slot="start" :icon="arrowUpOutline"></ion-icon>
+            {{ t('flipVorizontal') }}
+          </ion-button>
+        </ion-card-content>
+        <ion-row v-if="initFinished" class="ion-justify-content-center q-pa-md">
+          <img v-if="priviewImage" :src="priviewImage" :style="previewStyle" />
+        </ion-row>
+      </ion-card>
+    </ion-content>
+  </ion-modal>
+</template>
 <style scoped lang="scss">
 .cropper-crop-box,
 .cropper-view-box {

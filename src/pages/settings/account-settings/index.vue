@@ -84,7 +84,7 @@ import {
 import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import BaseBackButton from '@/components/base/BaseBackButton.vue';
 const BaseResult = defineAsyncComponent(
-  () => import('@/components/base/Result.vue'),
+  () => import('@/components/base/BaseResult.vue'),
 );
 const { t } = useLang();
 const authenStore = useAuthenStore();

@@ -46,7 +46,7 @@ export default antfu({
     'perfectionist/sort-imports': 'off',
     'import/newline-after-import': 'off',
     'vue/html-self-closing': 'off',
-    'vue/attributes-order': 'off',
+    'vue/attributes-order': 'warn',
     'ts/no-explicit-any': 'off',
     'style/comma-dangle': 'off',
     'style/space-infix-ops': 'off',

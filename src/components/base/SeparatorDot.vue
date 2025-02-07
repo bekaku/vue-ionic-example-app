@@ -3,7 +3,7 @@
     class="text-muted q-text-smaller q-text-weight-light q-relative-position"
     style="top: 1px"
   >
-    <base-icon :icon="biDot" :size="size" color="text-muted" />
+    <base-icon :icon="biDot" :size="size" color="muted" />
   </span>
 </template>
 <script setup lang="ts">

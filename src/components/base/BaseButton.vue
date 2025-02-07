@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import BaseIcon from '@/components/base/BaseIcon.vue';
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
-import type { ButtonFill, IconSetType, IHrefTarget } from '@/types/common';
+import BaseIcon from '@/components/base/BaseIcon.vue';
+import type { AppColor, ButtonFill, IconSetType, IHrefTarget, IonicColor } from '@/types/common';
 import { IonButton } from '@ionic/vue';
 const {
     clear = false,
@@ -13,9 +13,9 @@ const {
     round = false,
     outline = false,
     avatarSize = 32,
-    full =false
+    full = false
 } = defineProps<{
-    color?: 'danger' | 'dark' | 'light' | 'medium' | 'primary' | 'secondary' | 'success' | 'tertiary' | 'warning' | string | undefined
+    color?: IonicColor
     clear?: boolean
     disabled?: boolean
     expand?: 'block' | 'full'
@@ -29,7 +29,7 @@ const {
     iconRight?: string
     iconOnly?: boolean
     iconSize?: number
-    iconColor?: string
+    iconColor?: AppColor
     iconSet?: IconSetType
     target?: IHrefTarget
     round?: boolean
@@ -41,26 +41,24 @@ const {
 }>();
 </script>
 <template>
-    <ion-button v-bind="$attrs" :color :disabled :fill="clear ? 'clear' : outline ? 'outline' : 'solid'" :expand="full ? 'block' : undefined" :href
-        :target :type :shape="round ? 'round' : undefined" :size :router-link="to || undefined">
+    <ion-button v-bind="$attrs" :color :disabled :fill="clear ? 'clear' : outline ? 'outline' : 'solid'"
+        :expand="full ? 'block' : undefined" :href :target :type :shape="round ? 'round' : undefined" :size
+        :router-link="to || undefined">
         <slot>
             <template v-if="avatar">
-                <base-avatar class="q-mr-xs" slot="start" :src="avatar" :size="avatarSize" />
+                <base-avatar slot="start" class="q-mr-xs" :src="avatar" :size="avatarSize" />
             </template>
-            <template v-else-if="icon">
-                <template v-if="!iconOnly">
-                    <base-icon slot="start" class="q-pb-xs" :icon="icon" :size="iconSize" :icon-set="iconSet"
-                        :color="iconColor ? 'text-' + iconColor : ''" />
-                </template>
-                <template v-else>
-                    <base-icon slot="icon-only" class="q-pb-xs" :icon="icon" :size="iconSize" :icon-set="iconSet"
-                        :color="iconColor ? 'text-' + iconColor : clear ? 'text-black' : ''" />
-                </template>
+            <template v-else-if="!iconOnly && icon">
+                <base-icon slot="start" class="q-pb-xs" :class="{ 'q-mr-xs': iconSet != 'ion' }" :icon="icon" :size="iconSize" :icon-set="iconSet"
+                    :color="iconColor || ''" />
             </template>
+            <base-icon v-if="iconOnly && icon" slot="icon-only" class="q-pb-xs" :icon="icon" :size="iconSize"
+                :icon-set="iconSet" :color="iconColor ? iconColor : clear ? 'black' : ''" />
+
             <template v-if="label">{{ label }}</template>
             <template v-if="iconRight">
                 <base-icon slot="end" class="q-pb-xs" :icon="iconRight" :size="iconSize" :icon-set="iconSet"
-                    :color="iconColor ? 'text-' + iconColor : ''" />
+                    :color="iconColor || ''" />
             </template>
         </slot>
     </ion-button>

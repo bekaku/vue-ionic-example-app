@@ -11,7 +11,7 @@
     <ion-content :fullscreen="true" :scroll-y="true">
       <ion-card class="ion-no-margin no-border-radius">
         <template v-if="!fristLoaded">
-          <Spinner />
+          <BaseSpinner />
         </template>
         <template v-else>
           <ion-list>
@@ -84,10 +84,10 @@ import {
 } from '@ionic/vue';
 import BaseToolbar from '@/components/base/BaseToolbar.vue';
 import BaseBackButton from '@/components/base/BaseBackButton.vue';
-import Spinner from '@/components/base/Spinner.vue';
+import BaseSpinner from '@/components/base/BaseSpinner.vue';
 import { usePaging } from '@/composables/usePaging';
 const LoadMore = defineAsyncComponent(
-  () => import('@/components/LoadMore.vue'),
+  () => import('@/components/base/BaseLoadMore.vue'),
 );
 const { t } = useLang();
 const { appLoading, appConfirm, appFormatDateTime } = useBase();

@@ -1,12 +1,4 @@
 <template>
-  <!-- <a
-      href="javascript:void(0)"
-      class="ion-activatable base-link-ripple-parent app-text-link"
-      :class="color"
-      >{{ label }}
-      <ion-ripple-effect></ion-ripple-effect>
-    </a> -->
-
   <ion-text v-bind="$attrs" class="ion-activatable ripple-parent radius" :class="color">
     <slot name="label">
       {{ label }}
@@ -16,21 +8,18 @@
 </template>
 <script setup lang="ts">
 import { IonText, IonRippleEffect } from '@ionic/vue';
-defineProps({
-  label: {
-    type: String,
-    default: '',
-  },
-  color: {
-    type: String,
-    default: 'text-muted',
-  },
-});
+const {
+  color = 'text-muted'
+} = defineProps<{
+  label?: string
+  color?: string
+}>()
 </script>
 <style scoped lang="scss">
-ion-text.radius{
-  border-radius: 18px;
+ion-text {
+  border-radius: 18px !important;
 }
+
 .ripple-parent {
   position: relative;
   overflow: hidden;

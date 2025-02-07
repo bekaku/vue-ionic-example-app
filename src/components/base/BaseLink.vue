@@ -11,7 +11,7 @@ const { external = false, color = 'primary' } = defineProps<{
 }>();
 </script>
 <template>
-    <a v-if="external" v-bind="$attrs" :href="to"  target="_blank" class="app-text-link" :class="!color ? 'q-text-black' : 'text-' + color">
+    <a v-if="external" v-bind="$attrs" :href="to" target="_blank" class="app-text-link" :class="!color ? 'q-text-black' : 'text-' + color">
         <slot />
     </a>
     <router-link v-else :to="to" :target="external ? '_blank' : undefined" class="app-text-link"

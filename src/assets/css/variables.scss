@@ -107,6 +107,7 @@ http://ionicframework.com/docs/theming/ */
   --app-segment-button-selected-dark: var(--app-bg-color-theme-dark);
   --app-segment-button-selected-text-dark: var(--ion-color-primary);
   --app-input-backgroud: #f8f9fc;
+  // --app-input-backgroud: #f0f2f5;
   --app-input-backgroud-dark: var(--app-bg-color-theme-dark);
 
 
@@ -180,30 +181,10 @@ http://ionicframework.com/docs/theming/ */
     --border-radius: 10px;
     --padding-start: 10px;
     --padding-end: 10px;
-    margin: 5px 0;
+    // margin: 5px 0;
     --placeholder-color: var(--v-text-muted);
     // border: 1px solid var(--border-light-color);
     // border-radius: 10px;
-  }
-
-  ion-radio {
-    --border-radius: 4px;
-    --inner-border-radius: 4px;
-
-    --color: #ddd;
-    --color-checked: var(--ion-color-primary);
-  }
-
-  ion-radio.ios::part(container) {
-    width: 20px;
-    height: 20px;
-
-    border: 2px solid #ddd;
-    border-radius: 4px;
-  }
-
-  .radio-checked.ios::part(container) {
-    border-color: var(--ion-color-primary);
   }
 
   ion-label p {
@@ -297,6 +278,8 @@ body[color-theme='dark'] {
 
   --ion-card-color: var(--v-main-text-body-theme-dark);
   --app-input-backgroud: var(--app-input-backgroud-dark);
+
+  --v-main-text-body: var(--v-main-text-body-theme-dark);
 
   /* Chat  */
   --wee-messenger-left-msg-bg: #2d2d2e;

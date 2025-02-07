@@ -1,5 +1,6 @@
 import type {
   AppAlertOptions,
+  AppConfirmOptions,
   AppToastOptions,
   GenerateLinkType
 } from '@/types/common';
@@ -111,7 +112,7 @@ export const useBase = () => {
       header: options.headerText || '',
       message: options.text,
       duration: options.time != undefined ? options.time : 5 * 1000,
-      position: options.toastPosition || 'bottom',
+      position: options.toastPosition || 'top',
       icon: options.icon || undefined,
       color: options.color || undefined,
       mode: 'ios',
@@ -139,8 +140,7 @@ export const useBase = () => {
   const appConfirm = async (
     confirmHeader: string,
     text: string,
-    cancelText: string | undefined = undefined,
-    okayText: string | undefined = undefined
+    options: AppConfirmOptions | undefined=undefined
   ) => {
     return new Promise((resolve) => {
       alertController
@@ -149,12 +149,12 @@ export const useBase = () => {
           message: text, // Message <strong>text</strong>!!!
           buttons: [
             {
-              text: cancelText || t('base.cancel'),
+              text: options?.cancelText || t('base.cancel'),
               cssClass: 'text-muted',
               handler: () => resolve(false)
             },
             {
-              text: okayText || t('base.submit'),
+              text: options?.okayText || t('base.submit'),
               handler: () => resolve(true)
             }
           ]

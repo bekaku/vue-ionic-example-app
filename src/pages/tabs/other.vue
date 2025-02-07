@@ -22,6 +22,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonRow,
   IonText,
   IonToggle
 } from '@ionic/vue';
@@ -77,8 +78,8 @@ watch(notification, async (newVal) => {
 <template>
   <BaseLayout :page-title="t('base.other')" fullscreen :show-back-link="false">
     <BaseNavItems v-if="appNavs.length > 0" :menu-items="appNavs">
-      <template v-if="authenStore.auth" #before>
-        <BaseNavItem :item="{
+      <template v-if="authenStore.auth" #top>
+        <BaseNavItem class="q-px-md q-pt-sm" :item="{
           image: authenStore?.auth?.avatar?.thumbnail,
         }">
           <template #label>
@@ -86,10 +87,10 @@ watch(notification, async (newVal) => {
               <h2 class="q-text-weight-bold">
                 {{ authenStore.loginedDisplay }}
               </h2>
-              <p>
-                <ion-icon :icon="mailOutline"></ion-icon>
+              <IonRow class="ion-align-items-center text-muted q-text-caption">
+                <ion-icon :icon="mailOutline" class="q-mr-xs" />
                 {{ authenStore.auth?.email }}
-              </p>
+              </IonRow>
             </ion-label>
           </template>
           <template #end>
@@ -102,7 +103,7 @@ watch(notification, async (newVal) => {
     </BaseNavItems>
     <BaseNavItems :menu-items="additionalMenu" />
 
-    <BaseCard :subtitle="t('base.setting')">
+    <BaseCard :title="t('base.setting')">
       <ion-list>
         <BaseNavItem :item="{
           title: 'base.appearance',
@@ -130,9 +131,8 @@ watch(notification, async (newVal) => {
           </template>
         </BaseNavItem>
         <ion-item button :detail="false" lines="none">
-          <ion-icon :icon="notification ? notificationsOutline : notificationsOffOutline
-            " slot="start"></ion-icon>
-          <ion-toggle justify="space-between" v-model="notification" :aria-label="t('nav.notification')"
+          <ion-icon slot="start" :icon="notification ? notificationsOutline : notificationsOffOutline" />
+          <ion-toggle v-model="notification" justify="space-between" :aria-label="t('nav.notification')"
             :enable-on-off-labels="true">
             {{ t('nav.notification') }}
           </ion-toggle>

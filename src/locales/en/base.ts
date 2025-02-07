@@ -250,6 +250,8 @@ export default {
         'remark': 'Note',
         'view2': 'View',
         'you': 'You',
+        'refreshing': 'Refreshing',
+        'pullToRefresh': 'Pull to refresh',
     },
     'theme': {
         'light': 'Light',

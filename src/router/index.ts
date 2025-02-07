@@ -84,6 +84,42 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: '/example/content-text',
+    component: () => import('@/pages/example/content-text.vue')
+  },
+  {
+    path: '/example/drag-drop',
+    component: () => import('@/pages/example/drag-drop.vue')
+  },
+  {
+    path: '/example/image-cropper',
+    component: () => import('@/pages/example/image-cropper.vue')
+  },
+  {
+    path: '/example/image-view',
+    component: () => import('@/pages/example/image-view.vue')
+  },
+  {
+    path: '/example/result',
+    component: () => import('@/pages/example/result.vue')
+  },
+  {
+    path: '/example/swiper',
+    component: () => import('@/pages/example/swiper.vue')
+  },
+  {
+    path: '/example/composables/use-axios',
+    component: () => import('@/pages/example/composables/use-axios.vue')
+  },
+  {
+    path: '/example/composables/use-base',
+    component: () => import('@/pages/example/composables/use-base.vue')
+  },
+  {
+    path: '/example/composables/use-pagefecth',
+    component: () => import('@/pages/example/composables/use-pagefecth.vue')
+  },
+  {
     path: '/example/ui/avatar',
     component: () => import('@/pages/example/ui/avatar.vue')
   },
@@ -108,8 +144,20 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/example/ui/file-picker.vue')
   },
   {
+    path: '/example/ui/icon',
+    component: () => import('@/pages/example/ui/icon.vue')
+  },
+  {
     path: '/example/ui/input-text',
     component: () => import('@/pages/example/ui/input-text.vue')
+  },
+  {
+    path: '/example/ui/long-press',
+    component: () => import('@/pages/example/ui/long-press.vue')
+  },
+  {
+    path: '/example/ui/select',
+    component: () => import('@/pages/example/ui/select.vue')
   },
   {
     path: '/test',

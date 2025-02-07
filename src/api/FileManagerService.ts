@@ -1,13 +1,12 @@
 import { useAxios } from '@/composables/useAxios';
 import { useConfig } from '@/composables/useConfig';
+import { FILES_DIRECTORY_ID_ATT, FILES_UPLOAD_ATT } from '@/libs/constant';
 import type { ResponseDataType, ResponseMessage, UploadRequest } from '@/types/common';
 import type { FileManagerDto } from '@/types/models';
-import { getBlobFromAxiosResponse, getFileNameFromAxiosResponse } from '@/utils/appUtil';
-import { FILES_DIRECTORY_ID_ATT, FILES_UPLOAD_ATT } from '@/libs/constant';
-import { base64FromArrayByffer, generateFileNameByExtesnsion, getFileExtension } from '@/utils/fileUtils';
+import { base64FromArrayByffer, generateFileNameByExtesnsion, getFileExtension, getBlobFromAxiosResponse, getFileNameFromAxiosResponse } from '@/utils/fileUtils';
 
 export default () => {
-  const { callAxios, callAxiosV2, validateServerResponse, callAxiosFile } = useAxios();
+  const { callAxios, callAxiosFile } = useAxios();
   const { getEnv } = useConfig();
   const uploadApi = async (
     file: any,
@@ -18,19 +17,18 @@ export default () => {
     postData.append(FILES_UPLOAD_ATT, file);
     postData.append(FILES_DIRECTORY_ID_ATT, fileDirectoryId.toString());
     postData.append('resizeImage', resizeImage ? '1' : '0');
-    const res = await callAxios<FileManagerDto>({
+    return await callAxios<FileManagerDto>({
       API: '/api/fileManager/uploadApi',
       method: 'POST',
       body: postData,
       baseURL: getEnv<string>('VITE_CDN_BASE_URL'),
       contentType: 'multipart/form-data'
     });
-    return await validateServerResponse<FileManagerDto>(res);
   };
   const uploadBase64Api = async (
     req: UploadRequest
   ): Promise<FileManagerDto | null> => {
-    return await callAxiosV2<FileManagerDto>({
+    return await callAxios<FileManagerDto>({
       API: '/api/fileManager/uploadBase64Api',
       method: 'POST',
       body: {
@@ -40,7 +38,7 @@ export default () => {
     });
   };
 
-  const deleteFileApi = async (fileId: number): Promise<ResponseMessage> => {
+  const deleteFileApi = async (fileId: number): Promise<ResponseMessage | null> => {
     return await callAxios<ResponseMessage>({
       API: `/api/fileManager/deleteFileApi/${fileId}`,
       method: 'DELETE',
@@ -49,7 +47,7 @@ export default () => {
   };
   const updateUserAvatar = async (
     fileManagerId: number
-  ): Promise<ResponseMessage> => {
+  ): Promise<ResponseMessage | null> => {
     return await callAxios<ResponseMessage>({
       API: `/api/fileManager/updateUserAvatar?fileManagerId=${fileManagerId}`,
       method: 'PUT',
@@ -58,7 +56,7 @@ export default () => {
   };
   const updateUserCover = async (
     fileManagerId: number
-  ): Promise<ResponseMessage> => {
+  ): Promise<ResponseMessage | null> => {
     return await callAxios<ResponseMessage>({
       API: `/api/fileManager/updateUserCover?fileManagerId=${fileManagerId}`,
       method: 'PUT',

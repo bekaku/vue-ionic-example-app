@@ -8,7 +8,7 @@
   <div v-if="src" v-bind="$attrs" class="q-img q-img--menu" role="img">
     <div :style="{ paddingBottom: imgRatio + '%' }"></div>
     <div class="q-img__container q-absolute-full" :class="{ 'bg-black': !completed }">
-      <ion-img :src="srcUrl" class="q-img__image q-img__image--with-transition q-img__image--loaded img-bg"
+      <ion-img :src="srcUrl" class="q-img__image q-img__image--with-transition q-img__image--loaded"
         :class="{ 'q-absolute-center': !completed, 'img-bg': imageBg }" :alt loading="lazy" fetchpriority="auto"
         aria-hidden="true" draggable="false" :style="!completed
           ? 'width: 0px'
@@ -26,7 +26,7 @@
 import FileManagerService from '@/api/FileManagerService';
 import type { ImgRatioType } from '@/types/common';
 import { IonImg, IonSpinner } from '@ionic/vue';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
 
 const { src, alt = 'img', ratio = '1', loadingColor = 'text-white', fetch = false, fit = 'cover', imageBg = false } = defineProps<{
   src?: string
@@ -43,10 +43,9 @@ const { fethCdnData } = FileManagerService();
 const completed = ref(false);
 const error = ref(false);
 const contentTimeOut = ref();
-
 const srcUrl = ref<any>();
 const loading = ref(true);
-
+const firstLoaded = ref(false);
 const onError = () => {
   error.value = true;
 };
@@ -57,30 +56,29 @@ const onImgWillLoad = () => { };
 const imgRatio = computed(() =>
   ratio == '1' ? '100' : ratio == '4/3' ? '75' : '56.25',
 );
-onMounted(() => {
-  console.log('BaseImage.vue', src);
-  if (!src) {
-    loading.value = false;
-    return;
-  }
-  if (fetch) {
-    onFetchImage();
-  } else {
-    srcUrl.value = src;
-    onLoad();
-    loading.value = false;
-  }
-});
+
 const onFetchImage = async () => {
   if (!src) {
     loading.value = false;
     return;
   }
-  const res = await fethCdnData(src);
-  if (res) {
-    srcUrl.value = res;
+  if (fetch) {
+    console.log('onFetchImage', src);
+    fethCdnData(src)
+      .then((res) => {
+        clearLoading();
+        if (res) {
+          srcUrl.value = res;
+        }
+      })
+      .catch(() => {
+        clearLoading();
+      });
+  } else {
+    srcUrl.value = src;
+    onLoad();
+    clearLoading();
   }
-  loading.value = false;
 };
 const onLoad = () => {
   const img = document.querySelector('img');
@@ -95,6 +93,17 @@ const onLoad = () => {
     }
   }
 };
+const clearLoading = () => {
+  loading.value = false;
+  if (!firstLoaded.value) {
+    firstLoaded.value = true;
+  }
+};
+watchEffect(() => {
+  if (src) {
+    onFetchImage();
+  }
+});
 onBeforeUnmount(() => {
   if (contentTimeOut.value) {
     clearTimeout(contentTimeOut.value);

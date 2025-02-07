@@ -1,8 +1,7 @@
 import { useDevice } from '@/composables/useDevice';
 import type { ChoosePhotoItem, FileSaveResult } from '@/types/common';
-import { urlToBlob } from '@/utils/appUtil';
 import { AppAlbumName } from '@/libs/constant';
-import { base64FromPath, generateAutoName } from '@/utils/fileUtils';
+import { base64FromPath, generateAutoName, urlToBlob } from '@/utils/fileUtils';
 import type { MediaSaveOptions } from '@capacitor-community/media';
 import { Media } from '@capacitor-community/media';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
