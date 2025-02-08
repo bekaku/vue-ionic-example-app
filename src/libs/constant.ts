@@ -17,7 +17,7 @@ export const config = {
   apkLink: import.meta.env.VITE_APK_STORE,
 };
 
-export const Devmode = true;
+export const Devmode = import.meta.env.VITE_DEV_MODE==='true';
 export const PrefixKey = '_vue_ionic_';
 export const DefaultLocale = 'th';
 export const LocaleKey = PrefixKey + 'mb_locale';

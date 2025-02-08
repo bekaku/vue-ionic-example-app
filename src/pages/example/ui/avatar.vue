@@ -28,8 +28,7 @@ const items = ref<string[]>([
     <BaseCard title="Avatar" subtitle="Avatart and Avatar group">
       <ion-card-content>
         <ion-row class="q-gutter-md">
-          <BaseAvatar v-if="authenStore.auth?.avatar?.thumbnail" fetch-image :src="authenStore.auth?.avatar?.thumbnail"
-            :size="42">
+          <BaseAvatar v-if="authenStore.auth?.avatar?.thumbnail" fetch-image :src="authenStore.auth?.avatar?.thumbnail" :size="42">
             <template #extra>
               <ion-icon class="q-absolute" style="top: 20px;left: 50px" :icon="ellipse" color="success" />
             </template>
