@@ -15,9 +15,9 @@ const dateMax = ref<string>();
     <base-layout page-title="Date-time picker" fullscreen show-back-link>
         <BaseCard flat title="Date picker" subtitle="Date and Time picker">
             <ion-card-content class="q-gutter-md">
-                <BaseDatePickerItem label="Simple" v-model="date1" required />
-                <BaseDatePickerItem label="Min date" v-model="dateMin" :min="getCurrentDateByFormat()" />
-                <BaseDatePickerItem label="Max date" v-model="dateMax" max="2025-03-04" />
+                <BaseDatePickerItem v-model="date1" label="Simple" required />
+                <BaseDatePickerItem v-model="dateMin" label="Min date" :min="getCurrentDateByFormat()" />
+                <BaseDatePickerItem v-model="dateMax" label="Max date" max="2025-03-04" />
             </ion-card-content>
         </BaseCard>
     </base-layout>

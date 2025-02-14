@@ -225,19 +225,11 @@ export const additionalMenu: IMenu[] = [
             {
                 icon: biPieChart,
                 iconSet: 'bootstrap-icons',
+                permission: '',
                 title: 'Charts',
                 translate: false,
-                items: [
-                    {
-                        icon: biBarChart,
-                        iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'Bar',
-                        translate: false,
-                        translateCaption: false,
-                        to: '/example/charts/bar'
-                    },
-                ]
+                translateCaption: false,
+                to: '/example/charts'
             },
             {
                 icon: biChatDots,

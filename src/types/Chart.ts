@@ -8,7 +8,7 @@ export type PieChartType =
   | 'radialBar';
 export type ChartMode = 'light' | 'dark';
 export type Strokestyle = 'smooth' | 'straight' | 'stepline';
-export type Position = 'top' | 'bottom' | 'left' | 'right';
+export type ChartPosition = 'top' | 'bottom' | 'left' | 'right';
 export type ChartThemePalete =
   | 'palette1'
   | 'palette2'
@@ -24,12 +24,14 @@ export interface IChartSeries {
   name: string
   data: number[]
   type?: string | null
+  year?: string | null
+  group?: string | null
 }
 export interface ISeriresCategories {
   series: IChartSeries[]
   categories: string[]
-  colors?: string[]
-  max?: number
+  colors?: string[] | undefined | null
+  max?: number | undefined
 }
 export interface ISimpleChartSeries {
   series: number[]

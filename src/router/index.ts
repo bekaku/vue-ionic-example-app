@@ -84,6 +84,10 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: '/example/charts',
+    component: () => import('@/pages/example/charts.vue')
+  },
+  {
     path: '/example/content-text',
     component: () => import('@/pages/example/content-text.vue')
   },
