@@ -22,12 +22,12 @@
       <ion-list-header> Online </ion-list-header>
 
       <ion-item
-        @click="appNavigateTo('/chat')"
         v-for="(item, index) in filterOnlines"
         :key="`chat-item-${index}`"
         lines="none"
         button
         :detail="false"
+        @click="appNavigateTo('/chat')"
       >
         <ion-avatar slot="start" class="wee-avatar-50 wee-image-border-success">
           <ion-img
@@ -56,12 +56,12 @@
 
       <ion-list-header> Offline </ion-list-header>
       <ion-item
-        @click="appNavigateTo('/chat')"
         v-for="(item, index) in filterOfflines"
         :key="`chat-item-offline-${index}`"
         lines="none"
         button
         :detail="false"
+        @click="appNavigateTo('/chat')"
       >
         <ion-avatar slot="start" class="wee-avatar-50 wee-image-border-light">
           <ion-img
@@ -92,7 +92,7 @@
       <base-error />
     </template>
 
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
       <ion-fab-button>
         <ion-icon :icon="addOutline" class="text-white"></ion-icon>
       </ion-fab-button>
