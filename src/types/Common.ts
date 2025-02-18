@@ -534,7 +534,12 @@ export interface VueMoneyConFig {
   nullValue: string
   reverseFill: boolean
 }
-
+export interface VirtualScrollerUpdate {
+  viewStartIndex: number
+  viewEndIndex: number
+  visibleStartIndex: number
+  visibleEndIndex: number
+}
 export type CountryCode =
   | 'AC'
   | 'AD'

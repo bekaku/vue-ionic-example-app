@@ -2,17 +2,17 @@
   <form>
     <ion-card class="q-ma-sm">
       <ion-card-content>
-        <app-alert
+        <base-alert
             type="is-warning"
             :icon="shieldOutline"
             :message="t('authen.helper2')"
             radius
             class="q-mb-md"
         >
-        </app-alert>
+        </base-alert>
         <ion-list>
           <ion-item v-if="showCurrentPassword">
-            <ion-icon :icon="shieldOutline" slot="start"></ion-icon>
+            <ion-icon slot="start" :icon="shieldOutline"></ion-icon>
             <ion-input
                 v-model="currentPassword"
                 :type="showPassword ? 'text' : 'password'"
@@ -28,13 +28,13 @@
                 @click="showPassword = !showPassword"
             >
               <ion-icon
-                  :icon="showPassword ? eyeOutline : eyeOffOutline"
                   slot="icon-only"
+                  :icon="showPassword ? eyeOutline : eyeOffOutline"
               ></ion-icon>
             </ion-button>
           </ion-item>
           <ion-item lines="none">
-            <ion-icon :icon="lockClosedOutline" slot="start"></ion-icon>
+            <ion-icon slot="start" :icon="lockClosedOutline"></ion-icon>
             <ion-input
                 v-model="newPassword"
                 :type="showPassword ? 'text' : 'password'"
@@ -50,8 +50,8 @@
                 @click="showPassword = !showPassword"
             >
               <ion-icon
-                  :icon="showPassword ? eyeOutline : eyeOffOutline"
                   slot="icon-only"
+                  :icon="showPassword ? eyeOutline : eyeOffOutline"
               ></ion-icon>
             </ion-button>
           </ion-item>
@@ -63,7 +63,7 @@
             </ion-label>
           </ion-item>
           <ion-item lines="none">
-            <ion-icon :icon="lockClosedOutline" slot="start"></ion-icon>
+            <ion-icon slot="start" :icon="lockClosedOutline"></ion-icon>
             <ion-input
                 v-model="confirmPassword"
                 :type="showPassword ? 'text' : 'password'"
@@ -79,8 +79,8 @@
                 @click="showPassword = !showPassword"
             >
               <ion-icon
-                  :icon="showPassword ? eyeOutline : eyeOffOutline"
                   slot="icon-only"
+                  :icon="showPassword ? eyeOutline : eyeOffOutline"
               ></ion-icon>
             </ion-button>
           </ion-item>
@@ -93,8 +93,8 @@
           </ion-item>
         </ion-list>
 
-        <ion-button :disabled="!canSubmit" @click="onSubmit" expand="block">
-          <ion-icon :icon="checkmarkOutline" slot="start"></ion-icon>
+        <ion-button :disabled="!canSubmit" expand="block" @click="onSubmit">
+          <ion-icon slot="start" :icon="checkmarkOutline"></ion-icon>
           {{ t('base.submit') }}
         </ion-button>
       </ion-card-content>
@@ -107,7 +107,7 @@ import { useValidation } from '@/composables/useValidation';
 import { computed, ref } from 'vue';
 import { IonButton, IonCard, IonCardContent, IonIcon, IonInput, IonItem, IonLabel, IonList, } from '@ionic/vue';
 import { eyeOffOutline, eyeOutline, lockClosedOutline, shieldOutline, checkmarkOutline } from 'ionicons/icons';
-import AppAlert from '@/components/base/Alert.vue';
+import BaseAlert from '@/components/base/BaseAlert.vue';
 
 interface Props {
   submitLabel?: string
@@ -126,7 +126,7 @@ const emit = defineEmits<{
   onSubmit: [void]
 }>();
 const { t } = useLang();
-const { validatePasswordStrongV2, requireField } = useValidation();
+const { validatePasswordStrongV2 } = useValidation();
 const showPassword = ref(false);
 
 const currentPassword = defineModel<string>('currentPassword');

@@ -1,65 +1,10 @@
-<template>
-  <ion-page>
-    <ion-header>
-      <base-toolbar>
-        <ion-buttons slot="start">
-          <base-back-button
-            text=""
-            default-href="/tabs/home"
-          ></base-back-button>
-        </ion-buttons>
-        <ion-title> Reward History</ion-title>
-      </base-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true" :scroll-y="true">
-      <ion-refresher
-        slot="fixed"
-        :pull-factor="0.5"
-        :pull-min="100"
-        :pull-max="200"
-        @ion-refresh="doRefresh($event)"
-      >
-        <ion-refresher-content class="refresher"></ion-refresher-content>
-      </ion-refresher>
-      <template v-if="!fristLoaded">
-        <base-spinner></base-spinner>
-      </template>
-      <template v-else>
-        <ion-row v-if="items.length == 0">
-          <ion-col>
-            <base-result
-              :icon-size-alt="32"
-              :show-icon="true"
-              status="empty"
-              :description="t('cartEmpty')"
-              full-height
-            >
-            </base-result>
-          </ion-col>
-        </ion-row>
-        <template v-else>
-          <BaseLoadMore
-            v-if="fristLoaded && !isInfiniteDisabled"
-            :loading="loading"
-            :frist-loaded="fristLoaded"
-            :is-infinite-disabled="isInfiniteDisabled"
-            :label="t('base.loadMore')"
-            @on-next-page="loadNextPage"
-          >
-          </BaseLoadMore>
-        </template>
-      </template>
-    </ion-content>
-  </ion-page>
-</template>
 <script setup lang="ts">
 import PermissionService from '@/api/PermissionService';
 import type { Permission } from '@/types/models';
 import { useLang } from '@/composables/useLang';
 import { usePaging } from '@/composables/usePaging';
 import { useSort } from '@/composables/useSort';
-import BaseToolbar from '@/components/base/BaseToolbar.vue';
-import BaseBackButton from '@/components/base/BaseBackButton.vue';
+import BaseRefresher from '@/components/base/BaseRefresher.vue';
 import {
   IonPage,
   IonRow,
@@ -115,13 +60,15 @@ import {
   IonTabButton,
 } from '@ionic/vue';
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
+import BaseLayout from '@/components/base/BaseLayout.vue';
+import BaseCard from '@/components/base/BaseCard.vue';
 const BaseResult = defineAsyncComponent(() => import('@/components/base/BaseResult.vue'));
 const BaseLoadMore = defineAsyncComponent(() => import('@/components/base/BaseLoadMore.vue'));
 const BaseSpinner = defineAsyncComponent(() => import('@/components/base/BaseSpinner.vue'));
 const { t } = useLang();
 const { pages, resetPaging } = usePaging(5);
 const { sort, sortMode } = useSort({
-  column: 'quantity',
+  column: 'id',
   mode: 'desc',
 });
 const { findAll } = PermissionService();
@@ -132,8 +79,7 @@ const loading = ref(false);
 const items = ref<Permission[]>([]);
 const pageParam = computed(
   () =>
-    `?page=${pages.value.current > 0 ? pages.value.current - 1 : 0}&size=${
-      pages.value.itemsPerPage
+    `?page=${pages.value.current > 0 ? pages.value.current - 1 : 0}&size=${pages.value.itemsPerPage
     }&sort=${sort.value.column},${sort.value.mode}`,
 );
 onMounted(async () => {
@@ -174,3 +120,29 @@ const loadNextPage = async () => {
   await loadData();
 };
 </script>
+<template>
+  <base-layout page-title="Temp fetch" fullscreen show-back-link>
+    <BaseRefresher @on-refresh="doRefresh" />
+    <BaseCard flat title="Test Page" subtitle="Just test page">
+      <ion-card-content>
+        <template v-if="!fristLoaded">
+          <base-spinner></base-spinner>
+        </template>
+        <template v-else>
+          <ion-row v-if="items.length == 0">
+            <ion-col>
+              <base-result :icon-size-alt="32" :show-icon="true" status="empty" :description="t('cartEmpty')"
+                full-height>
+              </base-result>
+            </ion-col>
+          </ion-row>
+          <template v-else>
+            <BaseLoadMore v-if="fristLoaded && !isInfiniteDisabled" :loading="loading" :frist-loaded="fristLoaded"
+              :is-infinite-disabled="isInfiniteDisabled" @on-next-page="loadNextPage">
+            </BaseLoadMore>
+          </template>
+        </template>
+      </ion-card-content>
+    </BaseCard>
+  </base-layout>
+</template>

@@ -25,7 +25,8 @@ import '@ionic/vue/css/text-transformation.css';
 
 /* Theme variables */
 import { useAuthenStore } from '@/stores/authenStore';
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
+// import { DynamicScroller, DynamicScrollerItem, RecycleScroller } from 'vue-virtual-scroller';
+// import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 import './assets/css/color.scss';
 import './assets/css/elevation.sass';
 import './assets/css/positioning.sass';
@@ -44,6 +45,9 @@ async function startApp() {
     swipeBackEnabled: false,
     mode: 'ios'
   }).use(router);
+  // app.component('DynamicScroller', DynamicScroller);
+  // app.component('DynamicScrollerItem', DynamicScrollerItem);
+  // app.component('RecycleScroller', RecycleScroller);
   // app.config.globalProperties.$appAxios = { ...appAxios };
   app.provide(AxiosKey, appAxios);
   router.isReady().then(async () => {

@@ -17,7 +17,7 @@ const authenStore = useAuthenStore();
 </script>
 <template>
   <base-layout page-title="Test Page" fullscreen show-back-link>
-    <BaseCard flat title="Test Page" subtitle="Just test page">
+    <BaseCard title="Test Page" subtitle="Just test page">
       <ion-card-content>
       </ion-card-content>
     </BaseCard>

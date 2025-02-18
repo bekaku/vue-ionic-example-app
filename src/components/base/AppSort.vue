@@ -8,9 +8,9 @@
       </ion-item>
       <ion-item :detail="false" button>
         <ion-select
+          v-model="modelValue.column"
           :label="t('sort.by')"
           interface="action-sheet"
-          v-model="modelValue.column"
           :cancel-text="t('base.cancel')"
         >
           <ion-select-option
@@ -24,9 +24,9 @@
       </ion-item>
       <ion-item :detail="false" button>
         <ion-select
+          v-model="modelValue.mode"
           :label="t('sort.sort')"
           interface="action-sheet"
-          v-model="modelValue.mode"
           :cancel-text="t('base.cancel')"
         >
           <ion-select-option

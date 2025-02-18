@@ -7,7 +7,7 @@
   >
     <template #actions-end>
       <ion-buttons>
-        <BaseDropdownMenu :items="menus"/>
+        <BaseDropdownMenu :items="menus" />
       </ion-buttons>
     </template>
     <ion-searchbar
@@ -90,7 +90,7 @@ import BaseLayout from '@/components/base/BaseLayout.vue';
 import BaseResult from '@/components/base/BaseResult.vue';
 import BaseDropdownMenu from '@/components/base/BaseDropdownMenu.vue';
 import { biCopy, biPencil, biTrash } from '@quasar/extras/bootstrap-icons';
-import { LabelValue } from '@/types/common';
+import type { LabelValue } from '@/types/common';
 
 const { appNavigateTo } = useBase();
 const { t } = useLang();

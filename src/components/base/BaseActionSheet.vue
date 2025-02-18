@@ -1,8 +1,3 @@
-<template>
-    <ion-action-sheet :is-open="modelValue" :mode :header="header" :sub-header="subHeader" :buttons="buttons"
-        @did-dismiss="logResult($event)"></ion-action-sheet>
-</template>
-
 <script setup lang="ts" generic="T">
 import type { AppActionSheet } from '@/types/common';
 // import type { ActionSheetButton } from '@ionic/vue';
@@ -33,7 +28,10 @@ const logResult = (ev: CustomEvent) => {
     }
 };
 </script>
-
+<template>
+    <ion-action-sheet :is-open="modelValue" :mode :header="header" :sub-header="subHeader" :buttons="buttons"
+        @did-dismiss="logResult($event)"></ion-action-sheet>
+</template>
 <style scoped lang="scss">
 ion-action-sheet {
     --button-color: var(--v-main-text-body);

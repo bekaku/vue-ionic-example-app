@@ -5,7 +5,6 @@ import {
     biArrowLeftRight,
     biArrowsMove,
     biBack,
-    biBarChart,
     biBug,
     biCalendar,
     biChatDots,
@@ -291,7 +290,7 @@ export const additionalMenu: IMenu[] = [
                 iconSet: 'bootstrap-icons',
                 permission: '',
                 title: 'Result',
-                caption: 'Error, Success, 404',
+                caption: 'Error, Success, 404, Alert',
                 translate: false,
                 translateCaption: false,
                 to: '/example/result'

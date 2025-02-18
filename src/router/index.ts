@@ -124,6 +124,10 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/example/composables/use-pagefecth.vue')
   },
   {
+    path: '/example/virtual-scroller',
+    component: () => import('@/pages/example/virtual-scroller.vue')
+  },
+  {
     path: '/example/ui/avatar',
     component: () => import('@/pages/example/ui/avatar.vue')
   },
