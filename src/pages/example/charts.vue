@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import { useTheme } from '@/composables/useTheme';
 import type { ISeriresCategories } from '@/types/chart';
 import {
@@ -112,7 +112,7 @@ const simpleCategories: string[] = [
 ];
 </script>
 <template>
-    <BaseLayout page-title="Charts" fullscreen show-back-link>
+    <BasePage page-title="Charts" fullscreen show-back-link>
         <BaseCard title="Radial">
             <IonRow class="ion-justify-content-center">
                 <ChartRadial chart-id="radial-1" :series="simpleSeries.slice(0, 3)"
@@ -229,5 +229,5 @@ const simpleCategories: string[] = [
                 ]" :series="simpleSeries" :categories="simpleCategories" />
             </IonRow>
         </BaseCard>
-    </BaseLayout>
+    </BasePage>
 </template>

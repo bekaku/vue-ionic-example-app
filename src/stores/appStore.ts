@@ -1,10 +1,10 @@
+import type { AppLocale, AppTheme, LabelValue } from '@/types/common';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { AppLocale, AppTheme, IMenu } from '@/types/common';
 
 export const useAppStore = defineStore('appStore', () => {
     const permissions = ref<string[]>([]);
-    const appNavs = ref<IMenu[]>([]);
+    const appNavs = ref<LabelValue<any>[]>([]);
     const currentLocale = ref<AppLocale>('th');
     const currentTheme = ref<AppTheme>('light');
 
@@ -36,7 +36,7 @@ export const useAppStore = defineStore('appStore', () => {
         })
     }
 
-    const setAppNavs = (items: IMenu[]) => {
+    const setAppNavs = (items: LabelValue<any>[]) => {
         appNavs.value = items;
     }
     const setCurrentLocale = (l: AppLocale) => {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseSelect from '@/components/base/BaseSelect.vue';
 import BaseSelectDialog from '@/components/base/BaseSelectDialog.vue';
 import BaseSelectItem from '@/components/base/BaseSelectItem.vue';
@@ -89,9 +89,8 @@ const onMultipleChange = (items: number | number[] | undefined | null) => {
 }
 </script>
 <template>
-    <base-layout page-title="Select" fullscreen show-back-link>
-        <BaseTextHeader label="Dialog/Item" />
-        <BaseCard>
+    <BasePage page-title="Select" fullscreen show-back-link>
+        <BaseCard title="Dialog/Item">
             <IonCardContent class="q-gutter-md">
                 <BaseButton label="Open select dialog" full :icon="chevronExpandOutline" @click="dialog1 = true" />
                 <BaseSelectItem v-model="itemSingle" :items="simpleItems2" :multiple="false" required
@@ -100,11 +99,12 @@ const onMultipleChange = (items: number | number[] | undefined | null) => {
                     label="Select single 2" />
                 <BaseSelectItem v-model="itemMultiple" :items="simpleItems2" multiple label="Select multiple user" />
                 <BaseSelectItem v-model="itemMultiple2" :items="simpleItems" multiple label="Select multiple 2" />
-</IonCardContent>
+            </IonCardContent>
         </BaseCard>
 
         <BaseTextHeader label="Inline Single select" />
-        <BaseSelect v-model="singleModel" :items="simpleItems" :multiple="false" check-color="danger" @on-change="onSingleChange">
+        <BaseSelect v-model="singleModel" :items="simpleItems" :multiple="false" check-color="danger"
+            @on-change="onSingleChange">
             <template #top>
                 <div class="q-pa-md">
                     Selected : {{ singleModel }}
@@ -124,5 +124,5 @@ const onMultipleChange = (items: number | number[] | undefined | null) => {
 
         <BaseSelectDialog v-model="singleModel" v-model:show="dialog1" :items="simpleItems2" :multiple="false"
             title="Select users" />
-    </base-layout>
+    </BasePage>
 </template>

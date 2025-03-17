@@ -2,7 +2,7 @@
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseInput from '@/components/base/BaseInput.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
 import {
@@ -65,7 +65,7 @@ const onCopyText = async () => {
 };
 </script>
 <template>
-    <BaseLayout page-title="useBase" fullscreen show-back-link>
+    <BasePage page-title="useBase" fullscreen show-back-link>
         <BaseCard title="useBase" subtitle="Composables">
             <ion-card-content>
                 <ion-row class="q-gutter-md">
@@ -86,5 +86,5 @@ const onCopyText = async () => {
                 </BaseInput>
             </ion-card-content>
         </BaseCard>
-    </BaseLayout>
+    </BasePage>
 </template>

@@ -108,10 +108,10 @@ export const useAxios = () => {
     // });
   };
   const callAxiosProcess = async <T>(req: RequestType, logDev: boolean = true): Promise<AxiosResponse<T>> => {
-    const jwtKey = await loadStorage<string>(AppAuthTokenKey);
+    // const jwtKey = await loadStorage<string>(AppAuthTokenKey);
     const cahSyncOnlineStatus = await canSyncActiveStatusToServer();
     return new Promise((resolve, reject) => {
-      $appAxios.defaults.headers.Authorization = `Bearer ${jwtKey}`;
+      // $appAxios.defaults.headers.Authorization = `Bearer ${jwtKey}`;
       // $appAxios.defaults.headers['Accept-Language'] = await loadStorage<string>(LocaleKey);
 
       if (req.baseURL != undefined) {

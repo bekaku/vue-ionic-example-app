@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseInfiniteScroll from '@/components/base/BaseInfiniteScroll.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseLoadMore from '@/components/base/BaseLoadMore.vue';
 import BaseRefresher from '@/components/base/BaseRefresher.vue';
 import SkeletonListItem from '@/components/skeleton/SkeletonListItem.vue';
@@ -48,7 +48,7 @@ const onInfinite = async (event: any) => {
 };
 </script>
 <template>
-    <BaseLayout page-title="usePageFetch" fullscreen show-back-link>
+    <BasePage page-title="usePageFetch" fullscreen show-back-link>
         <BaseRefresher @on-refresh="handleRefresh" />
         <BaseCard title="usePageFetch" subtitle="Composables">
             <ion-card-content>
@@ -70,5 +70,5 @@ const onInfinite = async (event: any) => {
             </ion-card-content>
         </BaseCard>
         <BaseInfiniteScroll v-if="!isInfiniteDisabled" :disabled="isInfiniteDisabled" @on-infinite="onInfinite" />
-    </BaseLayout>
+    </BasePage>
 </template>

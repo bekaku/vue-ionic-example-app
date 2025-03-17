@@ -3,7 +3,7 @@ import BaseActionSheet from '@/components/base/BaseActionSheet.vue';
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseLongPressItem from '@/components/base/BaseLongPressItem.vue';
 import { useBase } from '@/composables/useBase';
 import type { AppActionSheet } from '@/types/common';
@@ -93,7 +93,7 @@ const actionSheetSelected = async (ev: any) => {
 };
 </script>
 <template>
-  <base-layout page-title="Long press" fullscreen show-back-link>
+  <BasePage page-title="Long press" fullscreen show-back-link>
     <BaseCard flat title="Long press">
       <ion-card-content class="q-gutter-md">
         <ion-row class="q-gutter-md">
@@ -117,5 +117,5 @@ const actionSheetSelected = async (ev: any) => {
 
     <BaseActionSheet v-model="showActionSheet" mode="md" header="Menu" sub-header="Sub header"
       :buttons="actionSheetButtons" @update="actionSheetSelected" />
-  </base-layout>
+  </BasePage>
 </template>

@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
-import BaseTextHeader from '@/components/base/BaseTextHeader.vue';
+import BaseInput from '@/components/base/BaseInput.vue';
+import BasePage from '@/components/base/BasePage.vue';
+import BaseVirtualScrollerDynamic from '@/components/base/BaseVirtualScrollerDynamic.vue';
+import BaseVirtualScrollerRecycle from '@/components/base/BaseVirtualScrollerRecycle.vue';
+import type { VirtualScrollerUpdate } from '@/types/common';
 import type {
-    InfiniteScrollCustomEvent } from '@ionic/vue';
+    InfiniteScrollCustomEvent
+} from '@ionic/vue';
 import {
     IonCardContent,
     IonCol,
@@ -12,23 +17,13 @@ import {
     IonLabel,
     IonRow
 } from '@ionic/vue';
-import BaseVirtualScrollerDynamic from '@/components/base/BaseVirtualScrollerDynamic.vue';
-import BaseVirtualScrollerRecycle from '@/components/base/BaseVirtualScrollerRecycle.vue';
-import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
 import { onMounted, ref, useTemplateRef } from 'vue';
-import type { VirtualScrollerUpdate } from '@/types/common';
-import BaseInput from '@/components/base/BaseInput.vue';
-import BaseAvatar from '@/components/base/BaseAvatar.vue';
 
-const scrollerChatRef = ref<any>(null);
-const isScrollingToTop = ref(false);
-const setScrollTimeout = ref<any>(null);
 const scrollerDynamicRef = useTemplateRef<any>('scrollerDynamicRef');
 const scrollerRecycleRef = useTemplateRef<any>('scrollerRecycleRef');
 const scrollPosition = ref<number>(10);
 const items = ref<any[]>([]);
 const dataList = ref<any[]>([])
-const maxSize = 1000
 const updateItem = ref<VirtualScrollerUpdate>();
 onMounted(() => {
     // for (let i = 0; i < maxSize; i++) {
@@ -101,7 +96,7 @@ const scrollTo = () => {
 }
 </script>
 <template>
-    <BaseLayout page-title="Virtual scroller" fullscreen show-back-link>
+    <BasePage page-title="Virtual scroller" fullscreen show-back-link>
          <BaseCard title="Dynamic Scroller">
             <ion-card-content>
                 <p v-if="updateItem">
@@ -161,5 +156,5 @@ const scrollTo = () => {
                 </template>
             </BaseVirtualScrollerRecycle>
         </BaseCard>
-    </BaseLayout>
+    </BasePage>
 </template>

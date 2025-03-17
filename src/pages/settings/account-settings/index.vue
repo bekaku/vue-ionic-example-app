@@ -1,88 +1,27 @@
-<template>
-  <ion-page>
-    <ion-header>
-      <base-toolbar>
-        <ion-buttons slot="start">
-          <base-back-button default-href="/tabs/other"></base-back-button>
-        </ion-buttons>
-        <ion-title> {{ t('base.accountSetting') }}</ion-title>
-      </base-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true" :scroll-y="true">
-      <ion-card class="ion-no-margin no-border-radius no-shadow">
-        <template v-if="authenStore.auth">
-          <ion-list>
-            <template v-for="(item, index) in items" :key="index">
-              <template v-if="item.canShow">
-                <template v-if="item.header">
-                  <ion-list-header>
-                    <ion-label>{{ t(item.title) }}</ion-label>
-                  </ion-list-header>
-                </template>
-                <template v-else>
-                  <ion-item button :detail="false" :router-link="item.link ? item.link : '#'">
-                    <ion-avatar v-if="item.avatar" slot="start">
-                      <img :src="item.avatar" alt="avatar" />
-                    </ion-avatar>
-                    <ion-icon v-else-if="item.startIcon" :icon="item.startIcon" slot="start">
-                    </ion-icon>
-
-                    <ion-label>
-                      {{ t(item.title) }}
-                      <p v-if="item.subTitle">{{ item.subTitle }}</p>
-                      <div>
-                        <template v-if="item.button">
-                          <ion-button fill="solid" shape="round" mode="ios" class="text-white">
-                            {{ t(item.button) }}
-                          </ion-button>
-                        </template>
-                      </div>
-                    </ion-label>
-
-                    <ion-icon v-if="item.endIcon" :icon="item.endIcon" slot="end"></ion-icon>
-                  </ion-item>
-                </template>
-              </template>
-            </template>
-          </ion-list>
-        </template>
-        <template v-else>
-          <base-result status="error" :description="t('error.dataNotfound')">
-          </base-result>
-        </template>
-      </ion-card>
-    </ion-content>
-  </ion-page>
-</template>
 <script setup lang="ts">
+import BaseCard from '@/components/base/BaseCard.vue';
+import BasePage from '@/components/base/BasePage.vue';
+import BaseTextHeader from '@/components/base/BaseTextHeader.vue';
+import { useLang } from '@/composables/useLang';
+import { useAuthenStore } from '@/stores/authenStore';
 import { } from '@/types/models';
 import {
-  pencilOutline,
-  keyOutline,
-  shieldOutline,
-  mailOutline,
-  callOutline,
-} from 'ionicons/icons';
-import { useAuthenStore } from '@/stores/authenStore';
-import { useLang } from '@/composables/useLang';
-import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
-import {
-  IonPage,
-  IonList,
+  IonAvatar,
+  IonButton,
+  IonIcon,
   IonItem,
   IonLabel,
-  IonButtons,
-  IonButton,
-  IonListHeader,
-  IonIcon,
-  IonAvatar,
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonCard,
+  IonList,
+  IonListHeader
 } from '@ionic/vue';
-import BaseToolbar from '@/components/base/BaseToolbar.vue';
-import BaseBackButton from '@/components/base/BaseBackButton.vue';
+import { biPencil } from '@quasar/extras/bootstrap-icons';
+import {
+  keyOutline,
+  mailOutline,
+  pencilOutline,
+  shieldOutline
+} from 'ionicons/icons';
+import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
 const BaseResult = defineAsyncComponent(
   () => import('@/components/base/BaseResult.vue'),
 );
@@ -145,3 +84,44 @@ watch(authenStore, () => {
   onReload();
 });
 </script>
+<template>
+  <BasePage :page-title="t('base.accountSetting')" fullscreen show-back-link page-default-back-link="/tabs/other">
+    <BaseCard>
+      <template v-if="authenStore.auth">
+        <ion-list>
+          <template v-for="(item, index) in items" :key="index">
+            <template v-if="item.canShow">
+              <template v-if="item.header">
+                <BaseTextHeader :header="false" icon-set="bootstrap-icons" class="text-muted" :label="t(item.title)" />
+              </template>
+              <template v-else>
+                <ion-item button :detail="false" :router-link="item.link ? item.link : '#'">
+                  <ion-avatar v-if="item.avatar" slot="start">
+                    <img :src="item.avatar" alt="avatar">
+                  </ion-avatar>
+                  <ion-icon v-else-if="item.startIcon" slot="start" :icon="item.startIcon" />
+
+                  <ion-label>
+                    {{ t(item.title) }}
+                    <p v-if="item.subTitle">{{ item.subTitle }}</p>
+                    <div>
+                      <template v-if="item.button">
+                        <ion-button fill="solid" shape="round" mode="ios" class="text-white">
+                          {{ t(item.button) }}
+                        </ion-button>
+                      </template>
+                    </div>
+                  </ion-label>
+                  <ion-icon v-if="item.endIcon" slot="end" :icon="item.endIcon" />
+                </ion-item>
+              </template>
+            </template>
+          </template>
+        </ion-list>
+      </template>
+      <template v-else>
+        <base-result status="error" :description="t('error.dataNotfound')" />
+      </template>
+    </BaseCard>
+  </BasePage>
+</template>

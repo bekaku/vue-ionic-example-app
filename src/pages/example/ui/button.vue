@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseTextHeader from '@/components/base/BaseTextHeader.vue';
 import {
   IonCardContent,
@@ -10,7 +10,7 @@ import {
 import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
 </script>
 <template>
-  <BaseLayout page-title="Button" fullscreen show-back-link>
+  <BasePage page-title="Button" fullscreen show-back-link>
     <BaseCard title="Button" subtitle="Button components">
       <ion-card-content>
         <BaseButton icon-only :icon="heart" shape="round" />
@@ -51,5 +51,5 @@ import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
         <BaseButton full label="Full" />
       </ion-card-content>
     </BaseCard>
-  </BaseLayout>
+  </BasePage>
 </template>

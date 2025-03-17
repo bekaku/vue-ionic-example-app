@@ -4,7 +4,7 @@ import { useLang } from '@/composables/useLang';
 import type { IonicColor, ItemLines, LabelValue } from '@/types/common';
 import { appPreventDefult } from '@/utils/appUtil';
 import { IonChip, IonCol, IonIcon, IonItem, IonLabel, IonRow } from '@ionic/vue';
-import { chevronExpandOutline, trashOutline } from 'ionicons/icons';
+import { chevronExpandOutline, close, trashOutline } from 'ionicons/icons';
 import { computed, defineAsyncComponent, ref } from 'vue';
 import BaseButton from './BaseButton.vue';
 import BaseIcon from './BaseIcon.vue';
@@ -142,7 +142,7 @@ const onRemove = (event: any, index: number) => {
                         <BaseIcon v-else-if="getItemBySelectId(val)?.icon" :icon="getItemBySelectId(val)?.icon || ''"
                             :icon-set="getItemBySelectId(val)?.iconSet" />
                         <ion-label>{{ getItemBySelectId(val)?.label }}</ion-label>
-                        <ion-icon :icon="trashOutline" @click="onRemove($event, orgIndex)"></ion-icon>
+                        <ion-icon :icon="close" @click="onRemove($event, orgIndex)" />
                     </ion-chip>
                 </ion-col>
             </ion-row>
@@ -155,7 +155,7 @@ const onRemove = (event: any, index: number) => {
         </ion-label>
         <IonRow slot="end" class="ion-align-items-center">
             <slot name="end">
-                <BaseButton v-if="showClearBtn" clear color="danger" icon-color="danger" icon-only :icon="trashOutline"
+                <BaseButton v-if="showClearBtn" clear color="danger" icon-color="danger" icon-only :icon="close"
                     @click="onClear($event)" />
                 <IonIcon :icon="chevronExpandOutline" class="q-text-muted" />
             </slot>

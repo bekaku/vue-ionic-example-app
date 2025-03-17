@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 // import draggable from 'vuedraggable';
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import {
@@ -54,7 +54,7 @@ const onEndDrag = () => {
 }
 </script>
 <template>
-    <BaseLayout page-title="Drag n Drop" fullscreen show-back-link>
+    <BasePage page-title="Drag n Drop" fullscreen show-back-link>
         <BaseCard title="Draggable 1" :subtitle="draging1 ? 'under drag...' : ''">
             <draggable v-model="list1" class="drag-area" item-key="name" v-bind="dragOptions"
                 :component-data="{ name: 'flip-list', type: 'transition' }" @change="log" @start="onStartDrag"
@@ -95,7 +95,7 @@ const onEndDrag = () => {
                 </template>
             </draggable>
         </BaseCard>
-    </BaseLayout>
+    </BasePage>
 </template>
 <style lang="scss" scoped>
 .drag-area {

@@ -5,7 +5,7 @@ import { isPlatform, getPlatforms } from '@ionic/vue';
 import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import { LatestSyncActiveStatusKey } from '@/libs/constant';
 import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/dateUtil';
-
+import { DeviceSecurityDetect } from '@capacitor-community/device-security-detect';
 export const useDevice = () => {
   const isIOS = async (): Promise<boolean> => {
     const info = await Device.getInfo();
@@ -70,6 +70,14 @@ export const useDevice = () => {
     await saveStorage(LatestSyncActiveStatusKey, getCurrentTimestamp(), false);
     return new Promise(resolve => resolve(true));
   };
+  const isRootDetected = async (): Promise<boolean> => {
+    const web = await isWeb();
+    if (web) {
+      return new Promise(resolve => resolve(false));
+    }
+    const { value } = await DeviceSecurityDetect.isJailBreakOrRooted();
+    return new Promise(resolve => resolve(value));
+  }
   return {
     isIOS,
     isAppPlatfrom,
@@ -79,6 +87,7 @@ export const useDevice = () => {
     isWeb,
     getPlatformType,
     getDeviceId,
-    canSyncActiveStatusToServer
+    canSyncActiveStatusToServer,
+    isRootDetected
   };
 };

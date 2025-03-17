@@ -1,5 +1,5 @@
 <template>
-  <base-layout page-title="404" fullscreen :scroll-y="false" :show-back-link="false">
+  <BasePage page-title="404" fullscreen :scroll-y="false" :show-back-link="false">
     <ion-row class="ion-justify-content-center ion-align-items-center" style="height: 85vh;">
       <div class="ion-text-center on-text-wrap">
         <h1 class="ion-padding-vertical q-text-weight-bold">Error 404</h1>
@@ -16,10 +16,10 @@
         </ion-button>
       </div>
     </ion-row>
-  </base-layout>
+  </BasePage>
 </template>
 <script setup lang="ts">
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
 import {

@@ -1,4 +1,4 @@
-import type { IMenu } from '@/types/common';
+import type { LabelValue } from '@/types/common';
 import {
     biApp,
     biArrowDownUp,
@@ -24,18 +24,19 @@ import {
     biPeople, biPerson,
     biPersonCircle,
     biPieChart,
+    biSegmentedNav,
     biShieldCheck,
     biUpload,
     biWindowSidebar
 } from '@quasar/extras/bootstrap-icons';
 import { brushOutline, fingerPrintOutline, warningOutline } from 'ionicons/icons';
 
-export const appNavs: IMenu[] = [
+export const appNavs: LabelValue<any>[] = [
     {
-        header: 'nav.developers',
-        pages: [
+        label: 'nav.developers',
+        children: [
             {
-                title: 'model_permission',
+                label: 'model_permission',
                 icon: biShieldCheck,
                 iconSet: 'bootstrap-icons',
                 to: '/permission',
@@ -44,17 +45,17 @@ export const appNavs: IMenu[] = [
         ]
     },
     {
-        header: 'nav.forAdmin',
-        pages: [
+        label: 'nav.forAdmin',
+        children: [
             {
-                title: 'nav.userRole',
+                label: 'nav.userRole',
                 icon: biPeople,
                 iconSet: 'bootstrap-icons',
                 to: '/role',
                 permission: 'role_list'
             },
             {
-                title: 'nav.appUser',
+                label: 'nav.appUser',
                 icon: biPerson,
                 iconSet: 'bootstrap-icons',
                 to: '/user',
@@ -64,10 +65,10 @@ export const appNavs: IMenu[] = [
     },
     {
         border: false,
-        header: 'nav.more',
-        pages: [
+        label: 'nav.more',
+        children: [
             {
-                title: 'model_files_manager',
+                label: 'model_files_manager',
                 icon: biFolder,
                 iconSet: 'bootstrap-icons',
                 to: '/myFiles?_id=root',
@@ -77,43 +78,38 @@ export const appNavs: IMenu[] = [
     }
 ];
 
-export const additionalMenu: IMenu[] = [
+
+export const additionalMenu: LabelValue<any>[] = [
     {
         border: true,
-        translate: false,
-        header: 'Example',
-        pages: [
+        translateLabel: false,
+        label: 'Example',
+        children: [
             {
                 icon: biList,
                 iconSet: 'bootstrap-icons',
-                title: 'Composables',
-                translate: false,
-                items: [
+                label: 'Composables',
+                translateLabel: false,
+                children: [
                     {
                         icon: biDatabase,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'useAxios',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'useAxios',
+                        translateLabel: false,
                         to: '/example/composables/use-axios'
                     },
                     {
                         icon: biChevronRight,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'useBase',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'useBase',
+                        translateLabel: false,
                         to: '/example/composables/use-base'
                     },
                     {
                         icon: biFileEarmark,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'usePageFetch',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'usePageFetch',
+                        translateLabel: false,
                         to: '/example/composables/use-pagefecth'
                     },
                 ]
@@ -121,232 +117,192 @@ export const additionalMenu: IMenu[] = [
             {
                 icon: brushOutline,
                 iconSet: 'ion',
-                title: 'UI',
-                translate: false,
-                items: [
+                label: 'UI',
+                translateLabel: false,
+                children: [
                     {
                         icon: biPersonCircle,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'Avatar',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'Avatar',
+                        translateLabel: false,
                         to: '/example/ui/avatar'
                     },
                     {
                         icon: biApp,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'Button',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'Button',
+                        translateLabel: false,
                         to: '/example/ui/button'
                     },
                     {
                         icon: biCalendar,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'Date-time picker',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'Date-time picker',
+                        translateLabel: false,
                         to: '/example/ui/date-picker'
                     },
                     {
                         icon: biBack,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'Dialog/Modal',
-                        caption: 'dialog, modal, popover',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'Dialog/Modal',
+                        description: 'dialog, modal, popover',
+                        translateLabel: false,
                         to: '/example/ui/dialog'
-                    },
-                    {
-                        icon: biList,
-                        iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'Dropdown menu',
-                        translate: false,
-                        translateCaption: false,
-                        to: '/example/ui/dropdown-menu'
                     },
                     {
                         icon: biUpload,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'File picker',
-                        caption: 'File/Image picker',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'File picker',
+                        description: 'File/Image picker',
+                        translateLabel: false,
                         to: '/example/ui/file-picker'
                     },
                     {
                         icon: biInputCursorText,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'Form Input',
-                        caption: 'Form, Input, Textarea',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'Form Input',
+                        description: 'Form, Input, Textarea',
+                        translateLabel: false,
                         to: '/example/ui/input-text'
                     },
                     {
                         icon: biEmojiSmile,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'Icon',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'Icon',
+                        translateLabel: false,
                         to: '/example/ui/icon'
                     },
                     {
                         icon: fingerPrintOutline,
                         iconSet: 'ion',
-                        permission: '',
-                        title: 'Long press',
-                        caption: 'Long press, Actionsheet',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'Long press',
+                        description: 'Long press, Actionsheet',
+                        translateLabel: false,
                         to: '/example/ui/long-press'
+                    },
+                    {
+                        icon: biList,
+                        iconSet: 'bootstrap-icons',
+                        label: 'Menu',
+                        description: 'Dropdown, Menu',
+                        translateLabel: false,
+                        to: '/example/ui/menu'
                     },
                     {
                         icon: biChevronExpand,
                         iconSet: 'bootstrap-icons',
-                        permission: '',
-                        title: 'Select',
-                        caption: 'Select, Command palette',
-                        translate: false,
-                        translateCaption: false,
+                        label: 'Select',
+                        description: 'Select, Command palette',
+                        translateLabel: false,
                         to: '/example/ui/select'
+                    },
+                    {
+                        icon: biSegmentedNav,
+                        iconSet: 'bootstrap-icons',
+                        label: 'Segment',
+                        translateLabel: false,
+                        to: '/example/ui/segment'
                     },
                 ],
             },
             {
                 icon: biPieChart,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Charts',
-                translate: false,
-                translateCaption: false,
+                label: 'Charts',
+                translateLabel: false,
                 to: '/example/charts'
             },
             {
                 icon: biChatDots,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Chat',
-                translate: false,
-                translateCaption: false,
+                label: 'Chat',
+                translateLabel: false,
                 to: '/chats'
             },
             {
                 icon: biCursorText,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Content text',
-                caption: 'Display user input',
-                translate: false,
-                translateCaption: false,
+                label: 'Content text',
+                description: 'Display user input',
+                translateLabel: false,
                 to: '/example/content-text'
             },
             {
                 icon: biArrowsMove,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Darg and Drop',
-                translate: false,
-                translateCaption: false,
+                label: 'Darg and Drop',
+                translateLabel: false,
                 to: '/example/drag-drop'
             },
             {
                 icon: biCrop,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Image cropper',
-                translate: false,
-                translateCaption: false,
+                label: 'Image cropper',
+                translateLabel: false,
                 to: '/example/image-cropper'
             },
             {
                 icon: biFileImage,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Image/Pdf View',
-                translate: false,
-                translateCaption: false,
+                label: 'Image/Pdf View',
+                translateLabel: false,
                 to: '/example/image-view'
             },
             {
                 icon: biMarkdown,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Markdown editor',
-                translate: false,
-                translateCaption: false,
+                label: 'Markdown editor',
+                translateLabel: false,
                 to: '/example/markdown-editor'
             },
             {
                 icon: biFile,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Result',
-                caption: 'Error, Success, 404, Alert',
-                translate: false,
-                translateCaption: false,
+                label: 'Result',
+                description: 'Error, Success, 404, Alert',
+                translateLabel: false,
                 to: '/example/result'
             },
             {
                 icon: biArrowLeftRight,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Swiper',
-                translate: false,
-                translateCaption: false,
+                label: 'Swiper',
+                translateLabel: false,
                 to: '/example/swiper'
             },
             {
                 icon: biWindowSidebar,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Social feed',
-                translate: false,
-                translateCaption: false,
+                label: 'Social feed',
+                translateLabel: false,
                 to: '/feed'
             },
             {
                 icon: biArrowDownUp,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Virtual scroller',
-                translate: false,
-                translateCaption: false,
+                label: 'Virtual scroller',
+                translateLabel: false,
                 to: '/example/virtual-scroller'
             },
             {
                 icon: biBug,
                 iconSet: 'bootstrap-icons',
-                permission: '',
-                title: 'Test page',
-                translate: false,
-                translateCaption: false,
+                label: 'Test page',
+                translateLabel: false,
                 to: '/test'
             },
             {
                 icon: warningOutline,
                 iconSet: 'ion',
-                permission: '',
-                title: 'Error page',
-                translate: false,
-                translateCaption: false,
+                label: 'Error page',
+                translateLabel: false,
                 to: '/permission/duplicate/0'
             },
             {
                 icon: warningOutline,
                 iconSet: 'ion',
-                permission: '',
-                title: '404 page',
-                translate: false,
-                translateCaption: false,
+                label: '404 page',
+                translateLabel: false,
                 to: '/notfound'
             },
         ]

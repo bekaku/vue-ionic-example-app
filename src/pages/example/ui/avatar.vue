@@ -2,7 +2,7 @@
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import BaseAvatarGroup from '@/components/base/BaseAvatarGroup.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import { useAuthenStore } from '@/stores/authenStore';
 import {
   IonCardContent,
@@ -24,7 +24,7 @@ const items = ref<string[]>([
 ])
 </script>
 <template>
-  <BaseLayout page-title="Avatar" fullscreen show-back-link>
+  <BasePage page-title="Avatar" fullscreen show-back-link>
     <BaseCard title="Avatar" subtitle="Avatart and Avatar group">
       <ion-card-content>
         <ion-row class="q-gutter-md">
@@ -50,5 +50,5 @@ const items = ref<string[]>([
         <BaseAvatar-group class="q-mt-md" :items="items" :limitUser="5" :avatarSize="42" />
       </ion-card-content>
     </BaseCard>
-  </BaseLayout>
+  </BasePage>
 </template>

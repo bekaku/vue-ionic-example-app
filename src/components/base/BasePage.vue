@@ -79,7 +79,7 @@ const logScrolling = (event: any) => {
                   </slot>
                   <slot name="actions-start">
                     <base-back-button v-if="showBackLink" :text="backText"
-                      :default-href="pageDefaultBackLink"></base-back-button>
+                      :default-href="pageDefaultBackLink" />
                   </slot>
                 </ion-row>
               </div>
@@ -93,7 +93,7 @@ const logScrolling = (event: any) => {
             <div slot="end">
               <slot name="end">
                 <ion-buttons>
-                  <slot name="actions-end"></slot>
+                  <slot name="actions-end" />
                 </ion-buttons>
               </slot>
             </div>

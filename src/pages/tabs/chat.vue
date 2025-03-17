@@ -1,5 +1,77 @@
+
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { addOutline } from 'ionicons/icons';
+import { useLang } from '@/composables/useLang';
+import { useBase } from '@/composables/useBase';
+import {
+  IonList,
+  IonItem,
+  IonLabel,
+  IonButton,
+  IonListHeader,
+  IonIcon,
+  IonAvatar,
+  IonImg,
+  IonBadge,
+  IonSearchbar,
+  IonFab,
+  IonFabButton,
+} from '@ionic/vue';
+import BasePage from '@/components/base/BasePage.vue';
+import BaseError from '@/components/base/Error.vue';
+const { appNavigateTo } = useBase();
+const { t } = useLang();
+const filterText = ref<string | null | undefined>('');
+const items = ref([
+  {
+    name: 'Fin',
+    text: 'Listen, I\'ve had a pretty messed up day',
+    new: 5,
+    online: true,
+  },
+  {
+    name: 'Han',
+    text: 'I\'ve got enough on my plate as it is, and I',
+    new: 15,
+    online: false,
+  },
+  {
+    name: 'Rey',
+    text: 'You will remove these restraints and leave You will remove these restraints and leave You will remove these restraints and leave You will remove these restraints and leave',
+    new: 0,
+    online: true,
+  },
+  {
+    name: 'Luke',
+    text: 'I feel the good in you, the conflict',
+    new: 150,
+    online: false,
+  },
+]);
+const onSearchChange = (s: string | null | undefined) => {
+  filterText.value = s;
+};
+const filterMessages = computed(() => {
+  const search = filterText.value
+    ? filterText.value.toLowerCase().trim()
+    : undefined;
+  if (!search) {
+    return items.value;
+  }
+
+  return items.value.filter(c => c.name.toLowerCase().includes(search));
+});
+
+const filterOnlines = computed(() =>
+  filterMessages.value.filter(t => t.online === true),
+);
+const filterOfflines = computed(() =>
+  filterMessages.value.filter(t => t.online === false),
+);
+</script>
 <template>
-  <base-layout
+  <BasePage
     :page-title="t('nav.chats')"
     fullscreen
     :content-padding="false"
@@ -7,7 +79,7 @@
   >
     <template #actions-end>
       <ion-button router-link="#">
-        <ion-icon slot="icon-only" :icon="addOutline"></ion-icon>
+        <ion-icon slot="icon-only" :icon="addOutline" />
       </ion-button>
     </template>
     <ion-searchbar
@@ -16,7 +88,7 @@
       :placeholder="t('base.search') + ' ' + t('nav.chats')"
       :debounce="250"
       @ion-input="onSearchChange($event.target.value)"
-    ></ion-searchbar>
+    />
 
     <ion-list v-if="filterMessages.length > 0">
       <ion-list-header> Online </ion-list-header>
@@ -94,80 +166,8 @@
 
     <ion-fab slot="fixed" vertical="bottom" horizontal="end">
       <ion-fab-button>
-        <ion-icon :icon="addOutline" class="text-white"></ion-icon>
+        <ion-icon :icon="addOutline" class="text-white" />
       </ion-fab-button>
     </ion-fab>
-  </base-layout>
+  </BasePage>
 </template>
-<script setup lang="ts">
-import { computed, ref } from 'vue';
-import { addOutline } from 'ionicons/icons';
-import { useLang } from '@/composables/useLang';
-import { useBase } from '@/composables/useBase';
-import {
-  IonList,
-  IonItem,
-  IonLabel,
-  IonButton,
-  IonListHeader,
-  IonIcon,
-  IonAvatar,
-  IonImg,
-  IonBadge,
-  IonSearchbar,
-  IonFab,
-  IonFabButton,
-} from '@ionic/vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
-import BaseError from '@/components/base/Error.vue';
-const { appNavigateTo } = useBase();
-const { t } = useLang();
-const count = ref(0);
-const filterText = ref<string | null | undefined>('');
-const items = ref([
-  {
-    name: 'Fin',
-    text: 'Listen, I\'ve had a pretty messed up day',
-    new: 5,
-    online: true,
-  },
-  {
-    name: 'Han',
-    text: 'I\'ve got enough on my plate as it is, and I',
-    new: 15,
-    online: false,
-  },
-  {
-    name: 'Rey',
-    text: 'You will remove these restraints and leave You will remove these restraints and leave You will remove these restraints and leave You will remove these restraints and leave',
-    new: 0,
-    online: true,
-  },
-  {
-    name: 'Luke',
-    text: 'I feel the good in you, the conflict',
-    new: 150,
-    online: false,
-  },
-]);
-const onSearchChange = (s: string | null | undefined) => {
-  filterText.value = s;
-};
-const filterMessages = computed(() => {
-  const search = filterText.value
-    ? filterText.value.toLowerCase().trim()
-    : undefined;
-  if (!search) {
-    return items.value;
-  }
-
-  return items.value.filter(c => c.name.toLowerCase().includes(search));
-});
-
-const filterOnlines = computed(() =>
-  filterMessages.value.filter(t => t.online === true),
-);
-const filterOfflines = computed(() =>
-  filterMessages.value.filter(t => t.online === false),
-);
-</script>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseDatePickerItem from '@/components/base/BaseDatePickerItem.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import { getCurrentDateByFormat } from '@/utils/dateUtil';
 import {
     IonCardContent
@@ -12,7 +12,7 @@ const dateMin = ref<string>();
 const dateMax = ref<string>();
 </script>
 <template>
-    <base-layout page-title="Date-time picker" fullscreen show-back-link>
+    <BasePage page-title="Date-time picker" fullscreen show-back-link>
         <BaseCard flat title="Date picker" subtitle="Date and Time picker">
             <ion-card-content class="q-gutter-md">
                 <BaseDatePickerItem v-model="date1" label="Simple" required />
@@ -20,5 +20,5 @@ const dateMax = ref<string>();
                 <BaseDatePickerItem v-model="dateMax" label="Max date" max="2025-03-04" />
             </ion-card-content>
         </BaseCard>
-    </base-layout>
+    </BasePage>
 </template>

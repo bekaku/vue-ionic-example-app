@@ -1,59 +1,20 @@
-<template>
-  <ion-page>
-    <ion-content fullscreen class="ion-padding">
-      <ion-grid>
-        <ion-row style="height: 100vh" class="ion-justify-content-center">
-          <ion-col class="ion-align-self-center">
-            <template v-if="loading">
-              <div class="ion-text-center">
-                <img src="/icon.png" style="width: 175px" alt="gd5" />
-                <p>
-                  <ion-spinner name="dots"></ion-spinner>
-                </p>
-              </div>
-            </template>
-            <ion-row v-else-if="isDeviceRooted">
-              <ion-col>
-                <base-result
-                  status="error"
-                  icon-size="128px"
-                  :description="t('error.deviceRootDetect')"
-                >
-                </base-result>
-              </ion-col>
-            </ion-row>
-            <template v-else-if="haveVersionUpdate">
-              <version-check
-                :user-version="userVersion"
-                :plat-form="platForm"
-                :item="appVersion"
-                @update-later="checkAuth()"
-              >
-              </version-check>
-            </template>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-content>
-  </ion-page>
-</template>
 <script setup lang="ts">
-import { useAuthenStore } from '@/stores/authenStore';
-import { defineAsyncComponent, onMounted, ref } from 'vue';
-import { useInitApp } from '@/composables/useInitApp';
-import { useAuthen } from '@/composables/useAuthen';
 import { useBase } from '@/composables/useBase';
-import { useConfig } from '@/composables/useConfig';
 import { useCheckVersion } from '@/composables/useCheckVersion';
+import { useConfig } from '@/composables/useConfig';
+import { useDevice } from '@/composables/useDevice';
+import { useInitApp } from '@/composables/useInitApp';
+import { useLang } from '@/composables/useLang';
+import { useAuthenStore } from '@/stores/authenStore';
 import {
-  IonRow,
   IonCol,
   IonContent,
   IonGrid,
-  IonSpinner,
   IonPage,
+  IonRow,
+  IonSpinner,
 } from '@ionic/vue';
-import { useLang } from '@/composables/useLang';
+import { defineAsyncComponent, onMounted, ref } from 'vue';
 declare let window: any;
 
 const VersionCheck = defineAsyncComponent(
@@ -63,8 +24,8 @@ const BaseResult = defineAsyncComponent(
   () => import('@/components/base/BaseResult.vue'),
 );
 const { t } = useLang();
+const { isRootDetected } = useDevice();
 const { initAuthen } = useInitApp();
-const { destroyAuthDataAndRedirect } = useAuthen();
 const { appNavigateTo } = useBase();
 const { isDevMode } = useConfig();
 const { checkVersion, appVersion, platForm, haveVersionUpdate, userVersion }
@@ -79,22 +40,11 @@ onMounted(async () => {
       authenStore.auth,
     );
   }
-  // detectRoot();
   await appInitial();
 });
-const detectRoot = () => {
-  console.log('pages.vue > detectRoot');
-  if (window && window.IRoot) {
-    window.IRoot.isRooted(appInitial, detectRootFailure);
-  } else {
-    appInitial();
-  }
-};
-const detectRootFailure = () => {
-  console.error('Device root detectRootFailure');
-};
 
-const appInitial = async (isRoot = false) => {
+const appInitial = async () => {
+  const isRoot = await isRootDetected();
   if (!isRoot) {
     await checkVersion();
     if (!haveVersionUpdate.value) {
@@ -133,6 +83,35 @@ const checkAuth = async () => {
   });
 };
 </script>
+<template>
+  <ion-page>
+    <ion-content fullscreen class="ion-padding">
+      <ion-grid>
+        <ion-row style="height: 100vh" class="ion-justify-content-center">
+          <ion-col class="ion-align-self-center">
+            <template v-if="loading">
+              <div class="ion-text-center">
+                <img src="/icon.png" style="width: 175px" alt="gd5">
+                <p>
+                  <ion-spinner name="dots" />
+                </p>
+              </div>
+            </template>
+            <ion-row v-else-if="isDeviceRooted">
+              <ion-col>
+                <base-result status="error" :icon-size="128" :description="t('error.deviceRootDetect')" />
+              </ion-col>
+            </ion-row>
+            <template v-else-if="haveVersionUpdate">
+              <version-check :user-version="userVersion" :plat-form="platForm" :item="appVersion"
+                @update-later="checkAuth()" />
+            </template>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+  </ion-page>
+</template>
 <style scoped lang="scss">
 ion-content {
   --background: var(--v-color-white);

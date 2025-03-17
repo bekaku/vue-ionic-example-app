@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
-import BaseNavItem from '@/components/base/BaseNavItem.vue';
-import BaseNavItems from '@/components/base/BaseNavItems.vue';
+import BasePage from '@/components/base/BasePage.vue';
+import BaseMenuItem from '@/components/base/BaseMenuItem.vue';
+import BaseMenuItems from '@/components/base/BaseMenuItems.vue';
 import { useAuthen } from '@/composables/useAuthen';
 import { useBase } from '@/composables/useBase';
 import { useCache } from '@/composables/useCache';
@@ -76,11 +76,11 @@ watch(notification, async (newVal) => {
 });
 </script>
 <template>
-  <BaseLayout :page-title="t('base.other')" fullscreen :show-back-link="false">
-    <BaseNavItems v-if="appNavs.length > 0" :menu-items="appNavs">
+  <BasePage :page-title="t('base.other')" fullscreen :show-back-link="false">
+    <BaseMenuItems v-if="appNavs.length > 0" :items="appNavs">
       <template v-if="authenStore.auth" #top>
-        <BaseNavItem class="q-px-md q-pt-sm" :item="{
-          image: authenStore?.auth?.avatar?.thumbnail,
+        <BaseMenuItem class="q-px-md q-pt-sm" :item="{
+          avatar: authenStore?.auth?.avatar?.thumbnail,
         }">
           <template #label>
             <ion-label>
@@ -98,15 +98,15 @@ watch(notification, async (newVal) => {
               {{ t('base.edit') }}
             </ion-button>
           </template>
-        </BaseNavItem>
+        </BaseMenuItem>
       </template>
-    </BaseNavItems>
-    <BaseNavItems :menu-items="additionalMenu" />
+    </BaseMenuItems>
+    <BaseMenuItems :items="additionalMenu" />
 
     <BaseCard :title="t('base.setting')">
       <ion-list>
-        <BaseNavItem :item="{
-          title: 'base.appearance',
+        <BaseMenuItem :item="{
+          label: 'base.appearance',
           to: '/settings/appearance',
           icon: colorPaletteOutline,
           iconSet: 'ion'
@@ -116,10 +116,10 @@ watch(notification, async (newVal) => {
               {{ t(`theme.${isDark ? 'darkTheme' : 'lightTheme'}`) }}
             </ion-text>
           </template>
-        </BaseNavItem>
-        <BaseNavItem :item="{
-          title: 'base.language',
-          caption: 'base.translations',
+        </BaseMenuItem>
+        <BaseMenuItem :item="{
+          label: 'base.language',
+          description: 'base.translations',
           to: '/settings/languge',
           icon: globeOutline,
           iconSet: 'ion'
@@ -129,7 +129,7 @@ watch(notification, async (newVal) => {
               {{ currenLocaleItem?.name }}
             </ion-text>
           </template>
-        </BaseNavItem>
+        </BaseMenuItem>
         <ion-item button :detail="false" lines="none">
           <ion-icon slot="start" :icon="notification ? notificationsOutline : notificationsOffOutline" />
           <ion-toggle v-model="notification" justify="space-between" :aria-label="t('nav.notification')"
@@ -137,29 +137,29 @@ watch(notification, async (newVal) => {
             {{ t('nav.notification') }}
           </ion-toggle>
         </ion-item>
-        <BaseNavItem :item="{
-          title: 'base.deleteCache',
+        <BaseMenuItem :item="{
+          label: 'base.deleteCache',
           icon: trashOutline,
           iconSet: 'ion',
           button: true
         }" @on-select="onDeleteCache" />
-        <BaseNavItem :item="{
-          title: 'base.about',
-          caption: t('app.appVersion', [userVersion]),
-          translateCaption: false,
+        <BaseMenuItem :item="{
+          label: 'base.about',
+          description: t('app.appVersion', [userVersion]),
+          translateDescription: false,
           to: '/about',
           icon: informationCircleOutline,
           iconSet: 'ion'
         }" />
-        <BaseNavItem :item="{
-          title: 'base.logout',
+        <BaseMenuItem :item="{
+          label: 'base.logout',
           iconSet: 'ion',
           color: 'danger',
           button: true
         }" @on-select="signOut" />
       </ion-list>
     </BaseCard>
-  </BaseLayout>
+  </BasePage>
 </template>
 <style scoped>
 /* ion-content {

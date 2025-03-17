@@ -2,7 +2,7 @@
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseFilePicker from '@/components/base/BaseFilePicker.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import { useFileSystem } from '@/composables/useFileSystem';
 import { FileTypeAcceptList } from '@/libs/constant';
 import type { ChoosePhotoItem } from '@/types/common';
@@ -88,7 +88,7 @@ const onFileAdded = async (files: File[]) => {
 };
 </script>
 <template>
-    <base-layout page-title="File picker" fullscreen show-back-link>
+    <BasePage page-title="File picker" fullscreen show-back-link>
         <BaseCard flat title="Image picker">
             <ion-card-content>
                 <BaseButton full label="Single From gallerry/Camera" @click="dialogPickGallerryOrCamera = true" />
@@ -128,5 +128,5 @@ const onFileAdded = async (files: File[]) => {
                 @on-file-add="onFileAdded">
             </BaseFilePicker>
         </div>
-    </base-layout>
+    </BasePage>
 </template>

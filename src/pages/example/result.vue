@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseAlert from '@/components/base/BaseAlert.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseResult from '@/components/base/BaseResult.vue';
 import { useLang } from '@/composables/useLang';
 import {
@@ -12,7 +12,7 @@ import { batteryHalfOutline, checkmarkOutline, eyeOffOutline, lockClosedOutline,
 const { t } = useLang();
 </script>
 <template>
-    <BaseLayout page-title="Result" fullscreen show-back-link>
+    <BasePage page-title="Result" fullscreen show-back-link>
         <BaseCard title="Alert">
             <ion-card-content class="q-gutter-y-lg">
                 <BaseAlert type="is-primary" :icon="batteryHalfOutline" message="This is primary!!" />
@@ -44,5 +44,5 @@ const { t } = useLang();
                 <base-result description="Warning" status="warning" />
             </ion-card-content>
         </BaseCard>
-    </BaseLayout>
+    </BasePage>
 </template>

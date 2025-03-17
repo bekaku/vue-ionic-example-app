@@ -6,7 +6,7 @@ import BaseCheckboxItem from '@/components/base/BaseCheckboxItem.vue';
 import BaseInput from '@/components/base/BaseInput.vue';
 import BaseInputMoney from '@/components/base/BaseInputMoney.vue';
 import BaseInputOtp from '@/components/base/BaseInputOtp.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseRadioItem from '@/components/base/BaseRadioItem.vue';
 import BaseSearchBar from '@/components/base/BaseSearchBar.vue';
 import BaseSelectItem from '@/components/base/BaseSelectItem.vue';
@@ -93,7 +93,7 @@ const onCheckboxChange = (event: any) => {
 }
 </script>
 <template>
-    <base-layout page-title="Form input" fullscreen show-back-link>
+    <BasePage page-title="Form input" fullscreen show-back-link>
         <template #headerBottom>
             <IonToolbar>
                 <BaseSearchBar placeholder="Search bar..." @on-change="onSearchChange" />
@@ -156,5 +156,5 @@ const onCheckboxChange = (event: any) => {
             </IonList>
             <BaseButton class="q-pa-sm" label="Submit" full />
         </BaseCard>
-    </base-layout>
+    </BasePage>
 </template>

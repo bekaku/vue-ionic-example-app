@@ -1,9 +1,3 @@
-<template>
-  <ion-app>
-    <ion-router-outlet :aria-hidden="true" />
-  </ion-app>
-</template>
-
 <script setup lang="ts">
 import { useBase } from '@/composables/useBase';
 import { useConfig } from '@/composables/useConfig';
@@ -19,7 +13,6 @@ import {
   useIonRouter
 } from '@ionic/vue';
 import { onBeforeMount } from 'vue';
-
 const { isDevMode } = useConfig();
 const authenStore = useAuthenStore();
 const { initAuthen, initThemeLanguge } = useInitApp();
@@ -39,7 +32,6 @@ onBeforeMount(async () => {
   });
 
   await initAuthen();
-
   useBackButton(-1, async () => {
     const currentPath = getCurrentPath();
     if (!ionRouter.canGoBack() || currentPath == '/tabs/home') {
@@ -51,3 +43,8 @@ onBeforeMount(async () => {
   });
 });
 </script>
+<template>
+  <ion-app>
+    <ion-router-outlet />
+  </ion-app>
+</template>

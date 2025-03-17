@@ -178,6 +178,10 @@ export interface CacheDateAndKey {
   key: string
   date: string | number
 }
+export interface CheckboxDetail {
+  checked: boolean
+  value?: any
+}
 export interface Country {
   code: CountryCode
   no: number
@@ -332,16 +336,27 @@ export interface IMenuPageItem {
   button?: boolean
 }
 export interface LabelValue<Type> {
-  label: string
-  description?: string
-  avatar?: string
-  icon?: string
+  label?: string;
+  description?: string;
+  avatar?: string;
+  avatarSize?: number;
+  icon?: string;
   iconSet?: IconSetType
-  fetch?: boolean
-  color?: AppColor
-  to?: string
-  value?: Type
-  border?: boolean
+  iconSize?: number;
+  iconColor?: string;
+  fetch?: boolean;
+  color?: string;
+  value?: Type;
+  border?: boolean;
+  to?: string;
+  translateLabel?: boolean;
+  translateDescription?: boolean;
+  params?: string[];
+  queries?: string[];
+  permissions?: string[];
+  permission?: string;
+  noActiveLink?: boolean;
+  button?: boolean;
   children?: LabelValue<Type>[]
 }
 export interface ILocales {

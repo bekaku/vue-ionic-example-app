@@ -1,30 +1,3 @@
-<template>
-  <base-layout
-    :page-title="t('nav.chats')"
-    fullscreen
-    :content-padding="false"
-    show-back-link
-  >
-    <template #actions-end>
-      <ion-buttons>
-        <BaseDropdownMenu :items="menus" />
-      </ion-buttons>
-    </template>
-    <ion-searchbar
-      animated
-      :placeholder="t('base.search') + ' ' + t('nav.chats')"
-      :debounce="250"
-    ></ion-searchbar>
-
-    <base-result
-      :icon-size-alt="32"
-      :show-icon="true"
-      status="empty"
-      full-height
-    >
-    </base-result>
-</base-layout>
-</template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { addOutline, funnelOutline, searchOutline } from 'ionicons/icons';
@@ -86,7 +59,7 @@ import {
   IonFab,
   IonFabButton
 } from '@ionic/vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseResult from '@/components/base/BaseResult.vue';
 import BaseDropdownMenu from '@/components/base/BaseDropdownMenu.vue';
 import { biCopy, biPencil, biTrash } from '@quasar/extras/bootstrap-icons';
@@ -118,3 +91,29 @@ const menus = ref<LabelValue<number>[]>([
   }
 ]);
 </script>
+<template>
+  <BasePage
+    :page-title="t('nav.chats')"
+    fullscreen
+    :content-padding="false"
+    show-back-link
+  >
+    <template #actions-end>
+      <ion-buttons>
+        <BaseDropdownMenu :items="menus" />
+      </ion-buttons>
+    </template>
+    <ion-searchbar
+      animated
+      :placeholder="t('base.search') + ' ' + t('nav.chats')"
+      :debounce="250"
+    />
+
+    <base-result
+      :icon-size-alt="32"
+      :show-icon="true"
+      status="empty"
+      full-height
+    />
+</BasePage>
+</template>

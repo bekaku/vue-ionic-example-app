@@ -3,7 +3,7 @@ import BaseCard from '@/components/base/BaseCard.vue';
 import BaseFilePreviewItem from '@/components/base/BaseFilePreviewItem.vue';
 import BaseFilePreviewItemAlt from '@/components/base/BaseFilePreviewItemAlt.vue';
 import BaseImageView from '@/components/base/BaseImageView.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseTextHeader from '@/components/base/BaseTextHeader.vue';
 import { useTheme } from '@/composables/useTheme';
 import type { FileManagerDto } from '@/types/models';
@@ -209,7 +209,7 @@ const setImagesFileView = (file: FileManagerDto) => {
 };
 </script>
 <template>
-    <BaseLayout page-title="Image/Pdf View" fullscreen show-back-link>
+    <BasePage page-title="Image/Pdf View" fullscreen show-back-link>
         <BaseCard title="Image">
             <BaseTextHeader label="Grid" caption="Tab image to view" />
             <IonGrid class="ion-no-padding">
@@ -266,5 +266,5 @@ const setImagesFileView = (file: FileManagerDto) => {
 
         <BaseFileView v-if="showMixFiles && fileMixForView" v-model:show="showMixFiles" :item="fileMixForView"
             :image-list="fileImageItemsForView" :select-index="fileMixImageSelectIndex" title="Images" />
-    </BaseLayout>
+    </BasePage>
 </template>

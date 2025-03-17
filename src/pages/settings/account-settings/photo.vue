@@ -1,27 +1,20 @@
 <script setup lang="ts">
-import { useAuthenStore } from '@/stores/authenStore';
-import { cameraOutline } from 'ionicons/icons';
-import type { FileManagerDto } from '@/types/models';
-import type { ChoosePhotoItem } from '@/types/common';
 import FileManagerService from '@/api/FileManagerService';
 import UserService from '@/api/UserService';
-import { defineAsyncComponent, ref } from 'vue';
+import BaseImageCropperDialog from '@/components/base/BaseImageCropperDialog.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
-import {
-  IonPage,
-  IonButtons,
-  IonButton,
-  IonIcon,
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonCard,
-} from '@ionic/vue';
-import BaseToolbar from '@/components/base/BaseToolbar.vue';
-import BaseBackButton from '@/components/base/BaseBackButton.vue';
-import BaseImageCropper from '@/components/base/BaseImageCropper.vue';
 import { useTheme } from '@/composables/useTheme';
+import { useAuthenStore } from '@/stores/authenStore';
+import type { ChoosePhotoItem } from '@/types/common';
+import type { FileManagerDto } from '@/types/models';
+import {
+  IonButton,
+  IonIcon
+} from '@ionic/vue';
+import { cameraOutline } from 'ionicons/icons';
+import { defineAsyncComponent, ref } from 'vue';
 
 const ProfileCard = defineAsyncComponent(() => import('@/components/profile/Card.vue'),);
 const BaseChoosePhoto = defineAsyncComponent(() => import('@/components/base/BaseChoosePhoto.vue'));
@@ -56,6 +49,7 @@ const onPickPicture = (images: ChoosePhotoItem[] | null) => {
   dialog.value = true;
 };
 const conSubmit = (f: any) => {
+  dialog.value = false
   if (isAvatar.value) {
     onUploadAvatar(f);
   } else {
@@ -104,44 +98,33 @@ const onUploadFileProcess = async (f: any): Promise<FileManagerDto | null> => {
 };
 </script>
 <template>
-  <ion-page>
-    <ion-header>
-      <base-toolbar>
-        <ion-buttons slot="start">
-          <base-back-button default-href="/settings/account-settings"></base-back-button>
-        </ion-buttons>
-        <ion-title> {{ t('base.editPhoto') }}</ion-title>
-      </base-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true" :scroll-y="true">
-      <ion-card class="no-shadow ion-no-margin no-border-radius">
-        <profile-card v-if="authenStore.auth && !isLoading" :avatar-image="authenStore.auth.avatar?.image"
-          :cover-image="authenStore.auth.cover?.image" :name="authenStore.auth.username" :height="200" :avatar-top="140"
-          :avatar-size="100" show-change-photo description-style="margin-top:25px" @on-change-avatar="openAvatar"
-          @on-change-cover="openCover">
-          <template #coverExtra>
-            <ion-button class="q-absolute" size="small" :color="!isDark ? 'light' : 'dark'"
-              style="top: 165px; right: 15px" @click="openCover">
-              <ion-icon slot="icon-only" :icon="cameraOutline"></ion-icon>
-            </ion-button>
-          </template>
-          <template #avatarExtra>
-            <ion-button class="q-absolute" size="small" :color="!isDark ? 'light' : 'dark'" fill="solid"
-              style="top: 200px; left: 120px; z-index: 199" @click="openAvatar">
-              <ion-icon slot="icon-only" :icon="cameraOutline"></ion-icon>
-            </ion-button>
-          </template>
-        </profile-card>
-      </ion-card>
-    </ion-content>
+  <BasePage :page-title="t('base.editPhoto')" fullscreen :content-padding="false" show-back-link
+    page-default-back-link="/settings/account-settings">
+    <profile-card v-if="authenStore.auth && !isLoading" :avatar-image="authenStore.auth.avatar?.image"
+      :cover-image="authenStore.auth.cover?.image" :name="authenStore.auth.username" :height="200" :avatar-top="140"
+      :avatar-size="100" show-change-photo description-style="margin-top:25px" @on-change-avatar="openAvatar"
+      @on-change-cover="openCover">
+      <template #coverExtra>
+        <ion-button class="q-absolute" size="small" :color="!isDark ? 'light' : 'dark'" style="top: 165px; right: 15px"
+          @click="openCover">
+          <ion-icon slot="icon-only" :icon="cameraOutline" />
+        </ion-button>
+      </template>
+      <template #avatarExtra>
+        <ion-button class="q-absolute" size="small" :color="!isDark ? 'light' : 'dark'" fill="solid"
+          style="top: 200px; left: 120px; z-index: 199" @click="openAvatar">
+          <ion-icon slot="icon-only" :icon="cameraOutline" />
+        </ion-button>
+      </template>
+    </profile-card>
 
-    <BaseImageCropper v-if="dialog && imageFile && imageFile.webPath" v-model="dialog" :src="imageFile.webPath"
-      :title="isAvatar ? t('cropAvatar') : t('base.changeCover')" :ratio="isAvatar ? 1 : 16 / 9" :preview-style="isAvatar
+    <BaseImageCropperDialog v-if="dialog && imageFile && imageFile.webPath" v-model="dialog"
+      :initial-src="imageFile.webPath" :title="isAvatar ? t('cropAvatar') : t('base.changeCover')"
+      :ratio="isAvatar ? 1 : 16 / 9" :auto-close="false" :preview-style="isAvatar
         ? 'width: 100px;height: 100px;border-radius: 100%;'
-        : 'overflow: hidden;width: 100%;height: 200px;'" @on-close="dialog = false" @on-okay="conSubmit">
-    </BaseImageCropper>
+        : 'overflow: hidden;width: 100%;height: 200px;'" @on-close="dialog = false" @on-submit="conSubmit" />
 
     <BaseChoosePhoto v-if="showChoosePhoto" v-model="showChoosePhoto" :multiple="false" @on-pick-picture="onPickPicture"
       @on-take-picture="onTakePicture" />
-  </ion-page>
+  </BasePage>
 </template>

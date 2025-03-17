@@ -1,91 +1,24 @@
-<template>
-  <ion-page>
-    <ion-header>
-      <base-toolbar>
-        <ion-buttons slot="start">
-          <base-back-button default-href="/settings/account-settings"></base-back-button>
-        </ion-buttons>
-        <ion-title> {{ t('authSessions') }}</ion-title>
-      </base-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true" :scroll-y="true">
-      <ion-card class="ion-no-margin no-border-radius">
-        <template v-if="!fristLoaded">
-          <BaseSpinner />
-        </template>
-        <template v-else>
-          <ion-list>
-            <ion-item lines="none">
-              <ion-label class="ion-text-wrap">
-                <p>{{ t('authSessionsHelp') }}</p>
-              </ion-label>
-            </ion-item>
-            <ion-item v-for="(item, index) in sessionList" :key="index">
-              <ion-icon slot="start" :icon="item.loginFrom == 'WEB'
-                  ? laptop
-                  : item.loginFrom == 'IOS'
-                    ? logoApple
-                    : logoAndroid
-                "></ion-icon>
-              <ion-label>
-                <span class="q-text-weight-medium">[{{ item.ipAddredd }}]</span>
-                <p>
-                  <span class="text-grey-8"> {{ item.hostName }}</span>
-                  <span v-if="item.activeNow">
-                    <ion-icon :icon="ellipse" class="text-success"></ion-icon>
-                  </span>
-                </p>
-
-                <p>
-                  {{
-                    t('lastestActive')
-                    + ' '
-                    + appFormatDateTime(item.lastestActive, FORMAT_DATETIME)
-                  }}
-                </p>
-              </ion-label>
-              <ion-buttons slot="end">
-                <ion-button @click="onDeleteSession(index)">
-                  <ion-icon :icon="trash" color="danger"></ion-icon>
-                </ion-button>
-              </ion-buttons>
-            </ion-item>
-          </ion-list>
-
-          <load-more v-if="!isInfiniteDisabled" :loading="sessionLoading" :frist-loaded="fristLoaded"
-            :is-infinite-disabled="isInfiniteDisabled" :label="t('base.loadMore')" @on-next-page="loadNextPage">
-          </load-more>
-        </template>
-      </ion-card>
-    </ion-content>
-  </ion-page>
-</template>
 <script setup lang="ts">
-import type { AccessTokenDto } from '@/types/models';
-import { FORMAT_DATETIME } from '@/utils/dateUtil';
-import UserService from '@/api/UserService';
 import AuthenService from '@/api/AuthenService';
-import { logoAndroid, logoApple, laptop, ellipse, trash } from 'ionicons/icons';
-import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
+import UserService from '@/api/UserService';
+import BaseCard from '@/components/base/BaseCard.vue';
+import BasePage from '@/components/base/BasePage.vue';
+import BaseSpinner from '@/components/base/BaseSpinner.vue';
 import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
+import { usePaging } from '@/composables/usePaging';
+import type { AccessTokenDto } from '@/types/models';
+import { FORMAT_DATETIME } from '@/utils/dateUtil';
 import {
-  IonPage,
-  IonList,
+  IonButton,
+  IonButtons,
+  IonIcon,
   IonItem,
   IonLabel,
-  IonButtons,
-  IonButton,
-  IonIcon,
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonCard,
+  IonList
 } from '@ionic/vue';
-import BaseToolbar from '@/components/base/BaseToolbar.vue';
-import BaseBackButton from '@/components/base/BaseBackButton.vue';
-import BaseSpinner from '@/components/base/BaseSpinner.vue';
-import { usePaging } from '@/composables/usePaging';
+import { ellipse, laptop, logoAndroid, logoApple, trash } from 'ionicons/icons';
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
 const LoadMore = defineAsyncComponent(
   () => import('@/components/base/BaseLoadMore.vue'),
 );
@@ -139,10 +72,62 @@ const onDeleteSession = async (index: number) => {
       loading.present();
       const res = await removeAccessTokenSession(item.id);
       loading.dismiss();
-      if (res.status == 'OK') {
+      if (res && res.status == 'OK') {
         sessionList.value.splice(index, 1);
       }
     }
   }
 };
 </script>
+<template>
+  <BasePage :page-title="t('authSessions')" fullscreen show-back-link
+    page-default-back-link="/settings/account-settings">
+    <BaseCard clear>
+      <template v-if="!fristLoaded">
+        <BaseSpinner />
+      </template>
+      <template v-else>
+        <ion-list>
+          <ion-item lines="none">
+            <ion-label class="ion-text-wrap">
+              <p>{{ t('authSessionsHelp') }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item v-for="(item, index) in sessionList" :key="index">
+            <ion-icon slot="start" :icon="item.loginFrom == 'WEB'
+              ? laptop
+              : item.loginFrom == 'IOS'
+                ? logoApple
+                : logoAndroid
+              " />
+            <ion-label>
+              <span class="q-text-weight-medium">[{{ item.ipAddredd }}]</span>
+              <p>
+                <span class="text-grey-8"> {{ item.hostName }}</span>
+                <span v-if="item.activeNow">
+                  <ion-icon :icon="ellipse" class="text-success" />
+                </span>
+              </p>
+
+              <p>
+                {{
+                  t('lastestActive')
+                  + ' '
+                  + appFormatDateTime(item.lastestActive, FORMAT_DATETIME)
+                }}
+              </p>
+            </ion-label>
+            <ion-buttons slot="end">
+              <ion-button @click="onDeleteSession(index)">
+                <ion-icon :icon="trash" color="danger" />
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-list>
+
+        <load-more v-if="!isInfiniteDisabled" :loading="sessionLoading" :frist-loaded="fristLoaded"
+          :is-infinite-disabled="isInfiniteDisabled" :label="t('base.loadMore')" @on-next-page="loadNextPage" />
+      </template>
+    </BaseCard>
+  </BasePage>
+</template>

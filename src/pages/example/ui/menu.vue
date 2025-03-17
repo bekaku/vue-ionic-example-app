@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseDropdownMenu from '@/components/base/BaseDropdownMenu.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
+import BaseMenuItems from '@/components/base/BaseMenuItems.vue';
 import type { LabelValue } from '@/types/common';
 import {
     IonCardContent,
+    IonChip,
     IonRow
 } from '@ionic/vue';
 import { biCopy, biTrash } from '@quasar/extras/bootstrap-icons';
 import { pencilOutline, settingsOutline } from 'ionicons/icons';
+import { additionalMenu } from '@/libs/navs';
 import { ref } from 'vue';
 const menus = ref<LabelValue<number>[]>([
     {
@@ -67,7 +70,7 @@ const menus2: LabelValue<number>[] = [
 ];
 </script>
 <template>
-    <base-layout page-title="Dropdown" fullscreen show-back-link>
+    <BasePage page-title="Dropdown" fullscreen show-back-link>
         <template #actions-end>
             <BaseDropdownMenu :items="menus" />
         </template>
@@ -82,5 +85,16 @@ const menus2: LabelValue<number>[] = [
                 </ion-row>
             </ion-card-content>
         </BaseCard>
-    </base-layout>
+        <BaseCard title="Menu">
+            <BaseMenuItems :items="additionalMenu" :detail="false">
+                <template #end="{ menuItem }">
+                    <div slot="end">
+                        <ion-chip>
+                            {{ menuItem.label?.charAt(0).toUpperCase() }}
+                        </ion-chip>
+                    </div>
+                </template>
+            </BaseMenuItems>
+        </BaseCard>
+    </BasePage>
 </template>

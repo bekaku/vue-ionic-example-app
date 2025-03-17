@@ -1,8 +1,8 @@
 <script setup lang="ts" generic="T">
-import type { AppColor, ItemLines, LabelValue } from '@/types/common';
-import { IonIcon, IonItem, IonLabel, IonRow, IonText } from '@ionic/vue';
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import BaseIcon from '@/components/base/BaseIcon.vue';
+import type { AppColor, ItemLines, LabelValue } from '@/types/common';
+import { IonItem, IonLabel, IonRow, IonText } from '@ionic/vue';
 
 const { item, iconSize = 20, avatarSize = 24, detail = false, lines = 'none' } = defineProps<{
     item: LabelValue<T>
@@ -31,7 +31,7 @@ const onClick = () => {
                 <base-avatar v-if="item.avatar" :src="item.avatar" :fetch-image :size="avatarSize" />
                 <template v-else-if="item.icon">
                     <base-icon :icon="item.icon" :size="iconSize" :icon-set="item.iconSet"
-                        :color="color ? color : item.color ?  item.color : undefined" />
+                        :color="color ? color : item.color ? item.color : undefined" />
                 </template>
             </slot>
         </IonRow>

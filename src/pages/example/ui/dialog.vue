@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseModal from '@/components/base/BaseModal.vue';
 import BasePopover from '@/components/base/BasePopover.vue';
 import BaseSearchBar from '@/components/base/BaseSearchBar.vue';
@@ -54,7 +54,7 @@ const onOpenPopover = (event: Event) => {
 };
 </script>
 <template>
-  <base-layout ref="baseLayoutRef" page-title="Dialog" fullscreen show-back-link>
+  <BasePage ref="baseLayoutRef" page-title="Dialog" fullscreen show-back-link>
     <BaseCard flat title="Dialog">
       <ion-card-content>
         <ion-row class="q-gutter-md">
@@ -109,5 +109,5 @@ const onOpenPopover = (event: Event) => {
     <BasePopover v-model="popover" :event="popoverEvent" width="80%" @on-close="popover = false">
       {{ rolemText }}
     </BasePopover>
-  </base-layout>
+  </BasePage>
 </template>

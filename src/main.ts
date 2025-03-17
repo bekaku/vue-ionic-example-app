@@ -33,6 +33,7 @@ import './assets/css/positioning.sass';
 import './assets/css/size.sass';
 import './assets/css/typography.sass';
 import './assets/css/variables.scss';
+import '@/plugins/cropperjs';
 
 startApp();
 

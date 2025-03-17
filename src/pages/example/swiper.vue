@@ -2,7 +2,7 @@
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseImage from '@/components/base/BaseImage.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseSwiperSlides from '@/components/base/BaseSwiperSlides.vue';
 import type { SlideOptions } from '@/types/common';
 import {
@@ -194,7 +194,7 @@ const items = [
 ];
 </script>
 <template>
-  <BaseLayout page-title="Swipper" fullscreen show-back-link>
+  <BasePage page-title="Swipper" fullscreen show-back-link>
     <BaseCard title="Horizontal">
       <ion-card-content>
         <base-swiper-slides ref="testSwiperRef" :params="slideOpts">
@@ -299,5 +299,5 @@ const items = [
         </base-swiper-slides>
       </ion-card-content>
     </BaseCard>
-</BaseLayout>
+</BasePage>
 </template>

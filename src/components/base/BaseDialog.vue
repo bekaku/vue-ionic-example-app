@@ -79,7 +79,7 @@ defineExpose({
                 <ion-icon slot="icon-only" :class="dark ? 'light' : 'text-black'" :icon="arrowBack" />
               </ion-button>
             </ion-buttons>
-            <slot name="actions-start"></slot>
+            <slot name="actions-start" />
           </slot>
           <slot name="title">
             <ion-title v-if="title">{{ title }}</ion-title>

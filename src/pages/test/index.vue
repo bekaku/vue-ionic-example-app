@@ -2,7 +2,7 @@
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import BaseAvatarGroup from '@/components/base/BaseAvatarGroup.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import { useAuthenStore } from '@/stores/authenStore';
 import type { IMenuItem } from '@/types/models';
 import {
@@ -16,10 +16,10 @@ import { ref } from 'vue';
 const authenStore = useAuthenStore();
 </script>
 <template>
-  <base-layout page-title="Test Page" fullscreen show-back-link>
+  <BasePage page-title="Test Page" fullscreen show-back-link>
     <BaseCard title="Test Page" subtitle="Just test page">
       <ion-card-content>
       </ion-card-content>
     </BaseCard>
-  </base-layout>
+  </BasePage>
 </template>

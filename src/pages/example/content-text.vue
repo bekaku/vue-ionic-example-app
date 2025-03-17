@@ -3,7 +3,7 @@ import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseContentItem from '@/components/base/BaseContentItem.vue';
 import BaseEllipsis from '@/components/base/BaseEllipsis.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseOpenGraphItemAlt from '@/components/base/BaseOpenGraphItemAlt.vue';
 import BaseTextarea from '@/components/base/BaseTextarea.vue';
 import { extractHashtagsFromString } from '@/utils/appUtil';
@@ -57,7 +57,7 @@ const testExtractHashTag = () => {
 }
 </script>
 <template>
-    <base-layout page-title="Content text" fullscreen show-back-link>
+    <BasePage page-title="Content text" fullscreen show-back-link>
         <BaseCard flat title="Content">
             <BaseTextarea v-model="content" label="Content" max-height="250px" />
             <IonCardContent class="q-gutter-md">
@@ -92,5 +92,5 @@ const testExtractHashTag = () => {
             </IonCardContent>
             <BaseOpenGraphItemAlt v-if="showContent" :content="content" :short="false" />
         </BaseCard>
-    </base-layout>
+    </BasePage>
 </template>

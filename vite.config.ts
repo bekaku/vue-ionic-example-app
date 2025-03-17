@@ -13,8 +13,10 @@ export default defineConfig({
       template: {
         compilerOptions: {
           // isCustomElement: (tag) => tag.startsWith('swiper-'),
-          isCustomElement: tag =>
-            ['swiper-container', 'swiper-slide'].includes(tag),
+          isCustomElement: tag => [
+            'swiper-container', 'swiper-slide',
+            'cropper-canvas', 'cropper-image', 'cropper-shade', 'cropper-handle', 'cropper-selection', 'cropper-grid', 'cropper-crosshair', 'cropper-viewer'
+            ].includes(tag),
         },
       },
     }),

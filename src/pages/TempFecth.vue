@@ -60,7 +60,7 @@ import {
   IonTabButton,
 } from '@ionic/vue';
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 const BaseResult = defineAsyncComponent(() => import('@/components/base/BaseResult.vue'));
 const BaseLoadMore = defineAsyncComponent(() => import('@/components/base/BaseLoadMore.vue'));
@@ -121,28 +121,26 @@ const loadNextPage = async () => {
 };
 </script>
 <template>
-  <base-layout page-title="Temp fetch" fullscreen show-back-link>
+  <BasePage page-title="Temp fetch" fullscreen show-back-link>
     <BaseRefresher @on-refresh="doRefresh" />
     <BaseCard flat title="Test Page" subtitle="Just test page">
       <ion-card-content>
         <template v-if="!fristLoaded">
-          <base-spinner></base-spinner>
+          <base-spinner />
         </template>
         <template v-else>
           <ion-row v-if="items.length == 0">
             <ion-col>
               <base-result :icon-size-alt="32" :show-icon="true" status="empty" :description="t('cartEmpty')"
-                full-height>
-              </base-result>
+                full-height />
             </ion-col>
           </ion-row>
           <template v-else>
             <BaseLoadMore v-if="fristLoaded && !isInfiniteDisabled" :loading="loading" :frist-loaded="fristLoaded"
-              :is-infinite-disabled="isInfiniteDisabled" @on-next-page="loadNextPage">
-            </BaseLoadMore>
+              :is-infinite-disabled="isInfiniteDisabled" @on-next-page="loadNextPage" />
           </template>
         </template>
       </ion-card-content>
     </BaseCard>
-  </base-layout>
+  </BasePage>
 </template>

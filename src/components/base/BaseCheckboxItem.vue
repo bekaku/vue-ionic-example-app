@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import type { IonicColor, ItemLines } from '@/types/common';
+import type { CheckboxDetail, IonicColor, ItemLines } from '@/types/common';
 import { IonCheckbox, IonItem } from '@ionic/vue';
-interface CheckboxDetail {
-    checked: boolean
-    value?: any
-}
 const {
     justify = 'space-between',
     lines = 'none',

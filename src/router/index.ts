@@ -144,10 +144,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/example/ui/dialog.vue')
   },
   {
-    path: '/example/ui/dropdown-menu',
-    component: () => import('@/pages/example/ui/dropdown-menu.vue')
-  },
-  {
     path: '/example/ui/file-picker',
     component: () => import('@/pages/example/ui/file-picker.vue')
   },
@@ -164,8 +160,16 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/example/ui/long-press.vue')
   },
   {
+    path: '/example/ui/menu',
+    component: () => import('@/pages/example/ui/menu.vue')
+  },
+  {
     path: '/example/ui/select',
     component: () => import('@/pages/example/ui/select.vue')
+  },
+  {
+    path: '/example/ui/segment',
+    component: () => import('@/pages/example/ui/segment.vue')
   },
   {
     path: '/test',

@@ -1,103 +1,25 @@
-<template>
-  <ion-page>
-    <ion-header>
-      <base-toolbar>
-        <ion-buttons slot="start">
-          <base-back-button
-            default-href="/settings/account-settings"
-          ></base-back-button>
-        </ion-buttons>
-        <ion-title> {{ t('base.phoneEdit') }}</ion-title>
-        <ion-buttons slot="end">
-          <ion-button :disabled="!canSubmit" @click="onSubmit">
-            <ion-icon :icon="checkmarkOutline" slot="start"></ion-icon>
-            {{ t('base.submit') }}
-          </ion-button>
-        </ion-buttons>
-      </base-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true" :scroll-y="true">
-      <ion-card class="ion-no-margin no-border-radius">
-        <ion-card-content>
-          <ion-list>
-            <ion-item>
-              <ion-button slot="start" fill="clear" @click="show = true">
-                {{ countryCode }}
-                <ion-icon :icon="chevronDownOutline" slot="end"></ion-icon>
-              </ion-button>
-
-              <ion-input
-                v-model="entity.mobilePhone"
-                :maxlength="20"
-                type="tel"
-                label-placement="stacked"
-                :label="t('base.phoneEdit')"
-              ></ion-input>
-            </ion-item>
-            <ion-item v-if="!phoneValid">
-              <ion-label class="ion-text-wrap">
-                <p class="text-red">
-                  {{ t('error.validatePhone') }}
-                </p>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </ion-content>
-
-    <!-- <lazy-base-modal
-        v-if="show"
-        :model-value="show"
-        title="Select country"
-        :initial-breakpoint="1"
-        :breakpoints="[0, 1]"
-        @update:modelValue="(newVal : boolean) => show=newVal"
-        @on-close="show = false"
-      >
-        <ion-item
-          v-for="(item, index) in countryList"
-          :key="index"
-          button
-          :detail="false"
-        >
-          <ion-label> {{ item.name }} </ion-label>
-          <ion-icon
-            v-if="countryCode == item.code"
-            slot="end"
-            :icon="checkmarkOutline"
-          ></ion-icon>
-        </ion-item>
-      </lazy-base-modal> -->
-  </ion-page>
-</template>
 <script setup lang="ts">
-import { useAuthenStore } from '@/stores/authenStore';
-import type { UserPersonalEditRequest } from '@/types/models';
-import type { CountryCode, Country } from '@/types/common';
 import UserService from '@/api/UserService';
+import BasePage from '@/components/base/BasePage.vue';
+import { useBase } from '@/composables/useBase';
+import { useLang } from '@/composables/useLang';
+import { useAuthenStore } from '@/stores/authenStore';
+import type { Country, CountryCode } from '@/types/common';
+import type { UserPersonalEditRequest } from '@/types/models';
+import {
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList
+} from '@ionic/vue';
 import { checkmarkOutline, chevronDownOutline } from 'ionicons/icons';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { computed, onMounted, ref } from 'vue';
-import { useBase } from '@/composables/useBase';
-import { useLang } from '@/composables/useLang';
-import {
-  IonPage,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonButtons,
-  IonButton,
-  IonInput,
-  IonIcon,
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonCardContent,
-  IonCard,
-} from '@ionic/vue';
-import BaseToolbar from '@/components/base/BaseToolbar.vue';
-import BaseBackButton from '@/components/base/BaseBackButton.vue';
 const { t } = useLang();
 const { onBack, appLoading } = useBase();
 const authenStore = useAuthenStore();
@@ -148,3 +70,38 @@ const onSubmit = async () => {
   }
 };
 </script>
+<template>
+  <BasePage :page-title="t('base.phoneEdit')" fullscreen show-back-link
+    page-default-back-link="/settings/account-settings">
+    <template #end>
+      <ion-buttons>
+        <ion-button :disabled="!canSubmit" @click="onSubmit">
+          <ion-icon slot="start" :icon="checkmarkOutline" />
+          {{ t('base.submit') }}
+        </ion-button>
+      </ion-buttons>
+    </template>
+    <ion-card class="ion-no-margin no-border-radius">
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-button slot="start" fill="clear" @click="show = true">
+              {{ countryCode }}
+              <ion-icon slot="end" :icon="chevronDownOutline" />
+            </ion-button>
+
+            <ion-input v-model="entity.mobilePhone" :maxlength="20" type="tel" label-placement="stacked"
+              :label="t('base.phoneEdit')" />
+          </ion-item>
+          <ion-item v-if="!phoneValid">
+            <ion-label class="ion-text-wrap">
+              <p class="text-red">
+                {{ t('error.validatePhone') }}
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </BasePage>
+</template>

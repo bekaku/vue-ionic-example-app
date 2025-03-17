@@ -2,7 +2,7 @@
 import UserService from '@/api/UserService';
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import SkeletonListItem from '@/components/skeleton/SkeletonListItem.vue';
 import { useAxios } from '@/composables/useAxios';
 import type { ApiListResponse } from '@/types/common';
@@ -115,7 +115,7 @@ await callAxios<ResponseMessage>({
 */
 </script>
 <template>
-    <BaseLayout page-title="Fetch data" fullscreen show-back-link>
+    <BasePage page-title="Fetch data" fullscreen show-back-link>
         <BaseCard>
             <BaseButton full clear label="Fetch via service" @click="fetchViaApiService" />
             <div v-if="userData" class="pre-div bg-black text-light-green-13">
@@ -150,7 +150,7 @@ await callAxios<ResponseMessage>({
                 <pre>{{ JSON.stringify(responseError) }}</pre>
             </div>
         </BaseCard>
-    </BaseLayout>
+    </BasePage>
 </template>
 <style lang="scss" scoped>
 .pre-div {

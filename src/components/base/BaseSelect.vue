@@ -75,7 +75,7 @@ const filterList = (searchQuery: string | undefined | null) => {
          * contain the search query as a substring.
          */
         const normalizedQuery = searchQuery.toLowerCase();
-        filteredItems.value = items.filter(item => item.label.toLowerCase().includes(normalizedQuery) || (item.description && item.description.toLowerCase().includes(normalizedQuery)));
+        filteredItems.value = items.filter(item => (item.label && item.label.toLowerCase().includes(normalizedQuery)) || (item.description && item.description.toLowerCase().includes(normalizedQuery)));
     }
 };
 const onSelect = (selectedItem: LabelValue<any> | undefined) => {

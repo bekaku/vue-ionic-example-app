@@ -2,7 +2,7 @@
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseIcon from '@/components/base/BaseIcon.vue';
-import BaseLayout from '@/components/base/BaseLayout.vue';
+import BasePage from '@/components/base/BasePage.vue';
 import {
   IonCardContent,
   IonIcon,
@@ -14,7 +14,7 @@ import { mdiAccountCardOutline, mdiAccountCowboyHat, mdiAccountSchoolOutline, md
 import { callOutline, logoIonic, umbrellaOutline, videocam, wineOutline } from 'ionicons/icons';
 </script>
 <template>
-  <base-layout page-title="Icon" fullscreen show-back-link>
+  <BasePage page-title="Icon" fullscreen show-back-link>
     <BaseCard flat title="Ionic icon">
       <ion-card-content>
         <BaseButton :icon="logoIonic" full label="Ioninc icon link" href="https://ionic.io/ionicons" target="_blank" />
@@ -68,5 +68,5 @@ import { callOutline, logoIonic, umbrellaOutline, videocam, wineOutline } from '
         </ion-row>
       </ion-card-content>
     </BaseCard>
-  </base-layout>
+  </BasePage>
 </template>

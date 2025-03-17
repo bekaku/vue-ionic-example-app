@@ -1,59 +1,20 @@
-<template>
-  <ion-page>
-    <ion-header>
-      <base-toolbar>
-        <ion-buttons slot="start">
-          <base-back-button default-href="/settings/account-settings">
-          </base-back-button>
-        </ion-buttons>
-        <ion-title> {{ t('base.emailEdit') }}</ion-title>
-        <ion-buttons slot="end">
-          <ion-button :disabled="!canSubmit" @click="onSubmit">
-            <ion-icon :icon="checkmarkOutline" slot="start"></ion-icon>
-            {{ t('base.submit') }}
-          </ion-button>
-        </ion-buttons>
-      </base-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true" :scroll-y="true">
-      <ion-card class="card-clear">
-        <ion-card-content>
-          <ion-list>
-            <ion-item>
-              <ion-input v-model="entity.email" type="email" label-placement="stacked"
-                :label="t('base.emailEdit')"></ion-input>
-            </ion-item>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </ion-content>
-  </ion-page>
-</template>
 <script setup lang="ts">
+import UserService from '@/api/UserService';
+import BaseCard from '@/components/base/BaseCard.vue';
+import BaseInput from '@/components/base/BaseInput.vue';
+import BasePage from '@/components/base/BasePage.vue';
+import { useBase } from '@/composables/useBase';
+import { useLang } from '@/composables/useLang';
 import { useAuthenStore } from '@/stores/authenStore';
 import type { UserPersonalEditRequest } from '@/types/models';
 import { validateEmail } from '@/utils/appUtil';
-import UserService from '@/api/UserService';
-import { checkmarkOutline } from 'ionicons/icons';
-import { computed, onMounted, ref } from 'vue';
-import { useBase } from '@/composables/useBase';
-import { useLang } from '@/composables/useLang';
 import {
-  IonPage,
-  IonList,
-  IonItem,
-  IonButtons,
   IonButton,
-  IonInput,
-  IonIcon,
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonCardContent,
-  IonCard,
+  IonButtons,
+  IonIcon
 } from '@ionic/vue';
-import BaseToolbar from '@/components/base/BaseToolbar.vue';
-import BaseBackButton from '@/components/base/BaseBackButton.vue';
+import { checkmarkOutline, mailOutline } from 'ionicons/icons';
+import { computed, onMounted, ref } from 'vue';
 const { t } = useLang();
 const { onBack, appLoading } = useBase();
 const authenStore = useAuthenStore();
@@ -88,3 +49,19 @@ const onSubmit = async () => {
   }
 };
 </script>
+<template>
+  <BasePage :page-title="t('authSessions')" fullscreen show-back-link
+    page-default-back-link="/settings/account-settings">
+    <template #end>
+      <ion-buttons>
+        <ion-button :disabled="!canSubmit" @click="onSubmit">
+          <ion-icon slot="start" :icon="checkmarkOutline" />
+          {{ t('base.submit') }}
+        </ion-button>
+      </ion-buttons>
+    </template>
+    <BaseCard>
+      <BaseInput v-model="entity.email" :icon="mailOutline" type="email" :label="t('base.emailEdit')" />
+    </BaseCard>
+  </BasePage>
+</template>
