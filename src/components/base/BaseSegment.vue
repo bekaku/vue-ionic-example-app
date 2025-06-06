@@ -1,13 +1,14 @@
 <script setup lang="ts" generic="T">
-import { IonBadge, IonIcon, IonLabel, IonSegment, IonSegmentButton } from '@ionic/vue';
 import type { IonicColor, LabelValue } from '@/types/common';
+import { IonBadge, IonLabel, IonSegment, IonSegmentButton } from '@ionic/vue';
+import BaseIcon from './BaseIcon.vue';
 
 const {
     scrollable = true,
     layout = 'icon-top',
     items = []
 } = defineProps<{
-    items: LabelValue<any>[]
+    items?: LabelValue<any>[]
     height?: number
     scrollable?: boolean
     color?: IonicColor
@@ -36,7 +37,8 @@ const segmentChanged = (even: any) => {
                 </ion-badge>
             </slot>
             <ion-label>{{ item.label }}</ion-label>
-            <ion-icon v-if="item.icon" :icon="item.icon" />
+            <!-- <ion-icon v-if="item.icon" :icon="item.icon" /> -->
+             <BaseIcon v-if="item.icon" v-bind="item.icon" />
         </ion-segment-button>
     </ion-segment>
 </template>

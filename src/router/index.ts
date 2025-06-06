@@ -104,6 +104,10 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/example/image-view.vue')
   },
   {
+    path: '/example/markdown-editor',
+    component: () => import('@/pages/example/markdown-editor.vue')
+  },
+  {
     path: '/example/result',
     component: () => import('@/pages/example/result.vue')
   },
@@ -170,6 +174,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/example/ui/segment',
     component: () => import('@/pages/example/ui/segment.vue')
+  },
+  {
+    path: '/example/ui/user',
+    component: () => import('@/pages/example/ui/user.vue')
   },
   {
     path: '/test',

@@ -11,10 +11,8 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
-  IonList,
-  IonListHeader
+  IonList
 } from '@ionic/vue';
-import { biPencil } from '@quasar/extras/bootstrap-icons';
 import {
   keyOutline,
   mailOutline,
@@ -92,7 +90,7 @@ watch(authenStore, () => {
           <template v-for="(item, index) in items" :key="index">
             <template v-if="item.canShow">
               <template v-if="item.header">
-                <BaseTextHeader :header="false" icon-set="bootstrap-icons" class="text-muted" :label="t(item.title)" />
+                <BaseTextHeader :header="false" icon-set="bootstrap-icons" class="text-muted" :title="t(item.title)" />
               </template>
               <template v-else>
                 <ion-item button :detail="false" :router-link="item.link ? item.link : '#'">

@@ -89,8 +89,10 @@ http://ionicframework.com/docs/theming/ */
   /* Custom variables */
   --app-bg-color: #f1f1f1;
 
-  --app-bg-color-theme-dark: #1d232a;
-  --second-bg-color-theme-dark: #242b34;
+  --app-bg-color-theme-dark: var(--color-zinc-950);
+  --second-bg-color-theme-dark: var(--color-zinc-900);
+  // --app-bg-color-theme-dark: #1d232a;
+  // --second-bg-color-theme-dark: #242b34;
   --third-bg-color-theme-dark: #161b20;
 
   --app-border-color: #e9e9ec;
@@ -111,7 +113,8 @@ http://ionicframework.com/docs/theming/ */
   --app-input-backgroud-dark: var(--app-bg-color-theme-dark);
 
 
-  --v-text-muted: #687782;
+  --v-text-muted: var(--color-zinc-500);
+  // --v-text-muted: #687782;
   --v-text-muted2: #6b7982;
   --v-text-muted-dark: #8b99a3;
   --v-text-black: #000;
@@ -640,4 +643,10 @@ body[color-theme='dark'] .report-header-holder {
   width: 12px;
   height: 12px;
   border-radius: 100%;
+}
+
+.avatar-top {
+  margin: 16px 16px auto 0;
+  //margin: 16px 16px 8px 0;
+  //margin-bottom: auto;
 }

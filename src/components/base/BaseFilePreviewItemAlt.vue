@@ -62,7 +62,7 @@ const onClick = (event: any, index: number) => {
           :src="item.filePath" ratio="4/3" />
       </template>
       <template v-else>
-        <base-icon :icon="getFileTypeIcon(item.fileMime)" icon-set="bootstrap-icons" :size="iconSize" />
+        <base-icon :name="getFileTypeIcon(item.fileMime)" icon-set="bootstrap-icons" :size="iconSize" />
       </template>
     </div>
     <ion-label :class="{ 'ion-text-nowrap': !wrapText }">

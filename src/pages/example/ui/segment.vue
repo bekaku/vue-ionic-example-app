@@ -22,7 +22,7 @@ const segmentItems = ref<LabelValue<string>[]>([
     {
         label: 'Review',
         value: 'review',
-        icon: chatbubbleOutline,
+        icon: { name: chatbubbleOutline, iconSet: 'ion' },
     },
     {
         label: 'Photos',

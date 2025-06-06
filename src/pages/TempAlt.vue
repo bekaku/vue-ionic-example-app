@@ -71,24 +71,24 @@ const menus = ref<LabelValue<number>[]>([
   {
     label: 'Edit',
     description: 'edit this item',
-    icon: biPencil,
+    icon: { name: biPencil, iconSet: 'bootstrap-icons' },
     fetch: false,
-    value: 1
+    value: 1,
   },
   {
     label: 'Delete',
-    icon: biTrash,
+    icon: { name: biTrash, iconSet: 'bootstrap-icons' },
     color: 'danger',
     fetch: false,
-    value: 2
+    value: 2,
   },
   {
     label: 'Copy',
     description: 'Copy this item',
-    icon: biCopy,
+    icon: { name: biCopy, iconSet: 'bootstrap-icons' },
     fetch: false,
-    value: 3
-  }
+    value: 3,
+  },
 ]);
 </script>
 <template>

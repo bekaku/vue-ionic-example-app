@@ -1,4 +1,5 @@
 import type { WriteFileResult } from '@capacitor/filesystem';
+import type { AvatarProps, IconProps, RBACProps } from './props';
 // enum
 export enum CrudListDataType {
   TEXT,
@@ -13,12 +14,6 @@ export enum CrudListDataType {
   NUMBER_FORMAT
 }
 
-export enum ChatMessageType {
-  TEXT = 1,
-  IMAGE = 2,
-  MAP = 3,
-  SOUND = 4
-}
 export enum HttpMethod {
   GET,
   POST,
@@ -122,6 +117,20 @@ export type ITheme = 'dark' | 'light' | 'synapse';
 export type JwtStatus = 'VALID' | 'EXPIRED' | 'NO_EXPIRATION_TIME' | 'INVALID';
 export type ResponseDataType = 'arraybuffer' | 'blob' | 'json' | 'download' | 'axiosresponse';
 export type SearchOperation = ':' | '>' | '>=' | '<' | '<=' | '=' | '!=';
+export type MDPreviewTheme = 'default' | 'github' | 'vuepress' | 'mk-cute' | 'smart-blue' | 'cyanosis';
+export type MDCodeTheme =
+  'atom'
+  | 'a11y'
+  | 'github'
+  | 'gradient'
+  | 'kimbie'
+  | 'paraiso'
+  | 'qtcreator'
+  | 'stackoverflow';
+export type ChatType = 'PERSONAL' | 'GROUP';
+export type ChatMessageType = 'MEDIA' | 'TEXT' | 'IMAGE' | 'FILE' | 'INVITE' | 'LEAVE' | 'LOCATION';
+export type EmojiType = 'LIKE' | 'FIGHTING' | 'LAUGH' | 'WOW' | 'CARE' | 'SAD';
+export type DatetimePresentation = 'date-time' | 'time-date' | 'date' | 'time' | 'month' | 'year' | 'month-year';
 // interface
 export interface AppActionSheet {
   text?: string
@@ -338,14 +347,15 @@ export interface IMenuPageItem {
 export interface LabelValue<Type> {
   label?: string;
   description?: string;
-  avatar?: string;
-  avatarSize?: number;
-  icon?: string;
-  iconSet?: IconSetType
-  iconSize?: number;
-  iconColor?: string;
+  // avatar?: string;
+  // avatarSize?: number;
+  avatar?: AvatarProps;
+  icon?: IconProps;
+  // iconSet?: IconSetType
+  // iconSize?: number;
+  // iconColor?: string;
   fetch?: boolean;
-  color?: string;
+  color?: AppColor | undefined;
   value?: Type;
   border?: boolean;
   to?: string;
@@ -353,11 +363,10 @@ export interface LabelValue<Type> {
   translateDescription?: boolean;
   params?: string[];
   queries?: string[];
-  permissions?: string[];
-  permission?: string;
+  rbac?: RBACProps;
   noActiveLink?: boolean;
   button?: boolean;
-  children?: LabelValue<Type>[]
+  children?: LabelValue<Type>[];
 }
 export interface ILocales {
   name: string

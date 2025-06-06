@@ -11,30 +11,6 @@ export const useAppStore = defineStore('appStore', () => {
     const setPermissions = (items: string[]) => {
         permissions.value = items;
     }
-    const isPermited = (code: string): boolean => {
-        return permissions.value.find((t: string) => t === code) != undefined;
-    }
-    const isHavePermission = (codes: string[] | undefined): boolean => {
-        if (codes == undefined || codes.length == 0) {
-            return true;
-        }
-        let isHave = false;
-        for (const code of codes) {
-            if (!isHave) {
-                isHave = isPermited(code);
-                if (isHave) {
-                    break;
-                }
-            }
-        }
-        return isHave
-    }
-    const isHavePermissionLazy = (codes: string[] | undefined): Promise<boolean> => {
-        return new Promise((resolve) => {
-            const isHave = isHavePermission(codes)
-            resolve(isHave);
-        })
-    }
 
     const setAppNavs = (items: LabelValue<any>[]) => {
         appNavs.value = items;
@@ -48,13 +24,11 @@ export const useAppStore = defineStore('appStore', () => {
     return {
         permissions,
         setPermissions,
-        isHavePermission,
-        isHavePermissionLazy,
         appNavs,
         setAppNavs,
         currentLocale,
         setCurrentLocale,
         currentTheme,
-        setCurrentTheme
+        setCurrentTheme,
     }
 });

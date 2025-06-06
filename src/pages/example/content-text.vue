@@ -61,9 +61,9 @@ const testExtractHashTag = () => {
         <BaseCard flat title="Content">
             <BaseTextarea v-model="content" label="Content" max-height="250px" />
             <IonCardContent class="q-gutter-md">
-                <BaseButton :icon="refresh" label="Reload Preview" @click="onPreview" />
+                <BaseButton :icon=" { name: refresh, iconSet: 'ion' }" label="Reload Preview" @click="onPreview" />
 
-                <BaseButton :icon="biHash" icon-set="bootstrap-icons" label="Extract HashTag from content"
+                <BaseButton :icon=" { name: biHash, iconSet: 'bootstrap-icons' }" label="Extract HashTag from content"
                     @click="testExtractHashTag" />
             </IonCardContent>
         </BaseCard>

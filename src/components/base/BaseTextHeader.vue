@@ -1,29 +1,33 @@
 <script setup lang="ts">
 import type { IconSetType } from '@/types/common';
+import type { IconProps } from '@/types/props';
 import { IonItem, IonLabel, IonRow, IonText } from '@ionic/vue';
 import BaseIcon from './BaseIcon.vue';
 
-const { iconSet = 'ion', header = true } = defineProps<{
-  label: string
-  caption?: string
-  icon?: string
-  iconSet?: IconSetType
-  header?: boolean
+const { header = true } = defineProps<{
+  title: string;
+  subtitle?: string;
+  icon?: IconProps;
+  iconSet?: IconSetType;
+  header?: boolean;
 }>();
 </script>
 <template>
-  <IonItem lines="none">
+  <IonItem v-bind="$attrs" lines="none">
     <IonLabel>
       <IonText :class="{ 'q-text-h5 q-text-weight-bold': header }">
         <IonRow class="ion-align-items-center">
           <slot name="icon">
-            <BaseIcon v-if="icon" :icon="icon" :icon-set="iconSet" class="q-mr-xs" />
+            <BaseIcon v-if="icon" v-bind="icon" class="q-mr-xs" />
           </slot>
-          {{ label }}
+          {{ title }}
         </IonRow>
       </IonText>
-      <p v-if="caption">{{ caption }}</p>
+      <p v-if="subtitle">{{ subtitle }}</p>
     </IonLabel>
+    <div slot="end">
+      <slot name="end" />
+    </div>
   </IonItem>
 </template>
 <style lang="css" scoped>

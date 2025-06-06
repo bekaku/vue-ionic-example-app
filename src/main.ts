@@ -34,9 +34,24 @@ import './assets/css/size.sass';
 import './assets/css/typography.sass';
 import './assets/css/variables.scss';
 import '@/plugins/cropperjs';
-
+import { SafeArea } from 'capacitor-plugin-safe-area';
 startApp();
-
+SafeArea.getSafeAreaInsets().then((data) => {
+      const { insets } = data;
+      document.body.style.setProperty('--ion-safe-area-top', `${insets.top}px`);
+      document.body.style.setProperty(
+        '--ion-safe-area-right',
+        `${insets.right}px`
+      );
+      document.body.style.setProperty(
+        '--ion-safe-area-bottom',
+        `${insets.bottom}px`
+      );
+      document.body.style.setProperty(
+        '--ion-safe-area-left',
+        `${insets.left}px`
+      );
+    });
 // async start function to enable waiting for refresh token call
 async function startApp() {
   const app = createApp(App).use(i18n()).use(createPinia()).use(IonicVue, {

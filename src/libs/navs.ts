@@ -37,10 +37,11 @@ export const appNavs: LabelValue<any>[] = [
         children: [
             {
                 label: 'model_permission',
-                icon: biShieldCheck,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biShieldCheck, iconSet: 'bootstrap-icons' },
                 to: '/permission',
-                permission: 'permission_list'
+                rbac: {
+                    permissions: ['permission_list']
+                }
             }
         ]
     },
@@ -49,17 +50,19 @@ export const appNavs: LabelValue<any>[] = [
         children: [
             {
                 label: 'nav.userRole',
-                icon: biPeople,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biPeople, iconSet: 'bootstrap-icons' },
                 to: '/role',
-                permission: 'role_list'
+                rbac: {
+                    permissions: ['role_list']
+                }
             },
             {
                 label: 'nav.appUser',
-                icon: biPerson,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biPerson, iconSet: 'bootstrap-icons' },
                 to: '/user',
-                permission: 'user_list'
+                rbac: {
+                    permissions: ['user_list']
+                }
             }
         ]
     },
@@ -69,10 +72,11 @@ export const appNavs: LabelValue<any>[] = [
         children: [
             {
                 label: 'model_files_manager',
-                icon: biFolder,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biFolder, iconSet: 'bootstrap-icons' },
                 to: '/myFiles?_id=root',
-                permission: 'file_manager_manage'
+                rbac: {
+                    permissions: ['file_manager_manage']
+                }
             }
         ]
     }
@@ -86,28 +90,24 @@ export const additionalMenu: LabelValue<any>[] = [
         label: 'Example',
         children: [
             {
-                icon: biList,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biList, iconSet: 'bootstrap-icons' },
                 label: 'Composables',
                 translateLabel: false,
                 children: [
                     {
-                        icon: biDatabase,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biDatabase, iconSet: 'bootstrap-icons' },
                         label: 'useAxios',
                         translateLabel: false,
                         to: '/example/composables/use-axios'
                     },
                     {
-                        icon: biChevronRight,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biChevronRight, iconSet: 'bootstrap-icons' },
                         label: 'useBase',
                         translateLabel: false,
                         to: '/example/composables/use-base'
                     },
                     {
-                        icon: biFileEarmark,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biFileEarmark, iconSet: 'bootstrap-icons' },
                         label: 'usePageFetch',
                         translateLabel: false,
                         to: '/example/composables/use-pagefecth'
@@ -115,192 +115,172 @@ export const additionalMenu: LabelValue<any>[] = [
                 ]
             },
             {
-                icon: brushOutline,
-                iconSet: 'ion',
+                icon: { name: brushOutline, iconSet: 'ion' },
                 label: 'UI',
                 translateLabel: false,
                 children: [
                     {
-                        icon: biPersonCircle,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biPersonCircle, iconSet: 'bootstrap-icons' },
                         label: 'Avatar',
                         translateLabel: false,
                         to: '/example/ui/avatar'
                     },
                     {
-                        icon: biApp,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biApp, iconSet: 'bootstrap-icons' },
                         label: 'Button',
                         translateLabel: false,
                         to: '/example/ui/button'
                     },
                     {
-                        icon: biCalendar,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biCalendar, iconSet: 'bootstrap-icons' },
                         label: 'Date-time picker',
                         translateLabel: false,
                         to: '/example/ui/date-picker'
                     },
                     {
-                        icon: biBack,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biBack, iconSet: 'bootstrap-icons' },
                         label: 'Dialog/Modal',
                         description: 'dialog, modal, popover',
                         translateLabel: false,
                         to: '/example/ui/dialog'
                     },
                     {
-                        icon: biUpload,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biUpload, iconSet: 'bootstrap-icons' },
                         label: 'File picker',
                         description: 'File/Image picker',
                         translateLabel: false,
                         to: '/example/ui/file-picker'
                     },
                     {
-                        icon: biInputCursorText,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biInputCursorText, iconSet: 'bootstrap-icons' },
                         label: 'Form Input',
                         description: 'Form, Input, Textarea',
                         translateLabel: false,
                         to: '/example/ui/input-text'
                     },
                     {
-                        icon: biEmojiSmile,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biEmojiSmile, iconSet: 'bootstrap-icons' },
                         label: 'Icon',
                         translateLabel: false,
                         to: '/example/ui/icon'
                     },
                     {
-                        icon: fingerPrintOutline,
-                        iconSet: 'ion',
+                        icon: { name: fingerPrintOutline, iconSet: 'ion' },
                         label: 'Long press',
                         description: 'Long press, Actionsheet',
                         translateLabel: false,
                         to: '/example/ui/long-press'
                     },
                     {
-                        icon: biList,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biList, iconSet: 'bootstrap-icons' },
                         label: 'Menu',
                         description: 'Dropdown, Menu',
                         translateLabel: false,
                         to: '/example/ui/menu'
                     },
                     {
-                        icon: biChevronExpand,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biChevronExpand, iconSet: 'bootstrap-icons' },
                         label: 'Select',
                         description: 'Select, Command palette',
                         translateLabel: false,
                         to: '/example/ui/select'
                     },
                     {
-                        icon: biSegmentedNav,
-                        iconSet: 'bootstrap-icons',
+                        icon: { name: biSegmentedNav, iconSet: 'bootstrap-icons' },
                         label: 'Segment',
                         translateLabel: false,
                         to: '/example/ui/segment'
                     },
+                    {
+                        icon: { name: biPerson, iconSet: 'bootstrap-icons' },
+                        label: 'User',
+                        translateLabel: false,
+                        to: '/example/ui/user'
+                    },
                 ],
             },
             {
-                icon: biPieChart,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biPieChart, iconSet: 'bootstrap-icons' },
                 label: 'Charts',
                 translateLabel: false,
                 to: '/example/charts'
             },
             {
-                icon: biChatDots,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biChatDots, iconSet: 'bootstrap-icons' },
                 label: 'Chat',
                 translateLabel: false,
                 to: '/chats'
             },
             {
-                icon: biCursorText,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biCursorText, iconSet: 'bootstrap-icons' },
                 label: 'Content text',
                 description: 'Display user input',
                 translateLabel: false,
                 to: '/example/content-text'
             },
             {
-                icon: biArrowsMove,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biArrowsMove, iconSet: 'bootstrap-icons' },
                 label: 'Darg and Drop',
                 translateLabel: false,
                 to: '/example/drag-drop'
             },
             {
-                icon: biCrop,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biCrop, iconSet: 'bootstrap-icons' },
                 label: 'Image cropper',
                 translateLabel: false,
                 to: '/example/image-cropper'
             },
             {
-                icon: biFileImage,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biFileImage, iconSet: 'bootstrap-icons' },
                 label: 'Image/Pdf View',
                 translateLabel: false,
                 to: '/example/image-view'
             },
             {
-                icon: biMarkdown,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biMarkdown, iconSet: 'bootstrap-icons' },
                 label: 'Markdown editor',
                 translateLabel: false,
                 to: '/example/markdown-editor'
             },
             {
-                icon: biFile,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biFile, iconSet: 'bootstrap-icons' },
                 label: 'Result',
                 description: 'Error, Success, 404, Alert',
                 translateLabel: false,
                 to: '/example/result'
             },
             {
-                icon: biArrowLeftRight,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biArrowLeftRight, iconSet: 'bootstrap-icons' },
                 label: 'Swiper',
                 translateLabel: false,
                 to: '/example/swiper'
             },
             {
-                icon: biWindowSidebar,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biWindowSidebar, iconSet: 'bootstrap-icons' },
                 label: 'Social feed',
                 translateLabel: false,
                 to: '/feed'
             },
             {
-                icon: biArrowDownUp,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biArrowDownUp, iconSet: 'bootstrap-icons' },
                 label: 'Virtual scroller',
                 translateLabel: false,
                 to: '/example/virtual-scroller'
             },
             {
-                icon: biBug,
-                iconSet: 'bootstrap-icons',
+                icon: { name: biBug, iconSet: 'bootstrap-icons' },
                 label: 'Test page',
                 translateLabel: false,
                 to: '/test'
             },
             {
-                icon: warningOutline,
-                iconSet: 'ion',
+                icon: { name: warningOutline, iconSet: 'ion' },
                 label: 'Error page',
                 translateLabel: false,
                 to: '/permission/duplicate/0'
             },
             {
-                icon: warningOutline,
-                iconSet: 'ion',
+                icon: { name: warningOutline, iconSet: 'ion' },
                 label: '404 page',
                 translateLabel: false,
                 to: '/notfound'

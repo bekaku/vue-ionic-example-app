@@ -30,7 +30,7 @@ ion-popover {
 }
 body[color-theme='dark'] {
   ion-content {
-    --background: var(--color-dark-900) !important;
+    --background: var(--color-zinc-800) !important;
   }
 }
 </style>

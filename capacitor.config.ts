@@ -1,4 +1,4 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from '@capacitor/cli';
 import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
@@ -14,6 +14,9 @@ const config: CapacitorConfig = {
     allowMixedContent: true
   },
   plugins: {
+    CapacitorHttp: {
+      enabled: true,
+    },
     Keyboard: {
       resize: KeyboardResize.Body,
       style: KeyboardStyle.Default,

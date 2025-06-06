@@ -69,18 +69,18 @@ const onCopyText = async () => {
         <BaseCard title="useBase" subtitle="Composables">
             <ion-card-content>
                 <ion-row class="q-gutter-md">
-                    <BaseButton :icon="notificationsOutline" label="show toast" color="warning" @click="toaster" />
-                    <BaseButton :icon="trashBinOutline" label="show confirm" color="danger" @click="confirm" />
+                    <BaseButton :icon=" { name: notificationsOutline, iconSet: 'ion' }" label="show toast" color="warning" @click="toaster" />
+                    <BaseButton :icon=" { name: trashBinOutline, iconSet: 'ion' }" label="show confirm" color="danger" @click="confirm" />
                     <BaseButton label="show confirm Custom Btn" @click="confirm2" />
-                    <BaseButton :icon="hourglassOutline" label="show loading" color="primary" outline unelevated
+                    <BaseButton :icon=" { name: hourglassOutline, iconSet: 'ion' }" label="show loading" color="primary" outline unelevated
                         @click="loader" />
-                    <BaseButton :icon="returnUpForwardOutline" label="Navigate to" outline
+                    <BaseButton :icon="{ name: returnUpForwardOutline, iconSet: 'ion' }" label="Navigate to" outline
                         @click="appNavigateTo('/example/image-view')" />
                 </ion-row>
                 <BaseInput v-model="textModel" label="Copy text">
                     <template #end>
                         <IonButtons>
-                            <BaseButton clear icon-only :icon="copyOutline" @click="onCopyText" />
+                            <BaseButton clear icon-only :icon=" { name: copyOutline, iconSet: 'ion' }" @click="onCopyText" />
                         </IonButtons>
                     </template>
                 </BaseInput>

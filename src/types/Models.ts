@@ -1,5 +1,5 @@
 import type { IChartSeries, ISeriresCategories } from './chart';
-import type { AppLocale } from './common';
+import type { AppLocale, ChatMessageType, ChatType, EmojiType } from './common';
 export type IPlatForm = 1 | 2 | 3; // 1=web, 2=ios, 3=android
 export type IPermissionOperationType = 1 | 2 | 3; // 1=crud, 2=report, 3=other
 export type SearchType = 'POST' | 'PROFILE' | 'HASHTAG' | 'THEME';
@@ -60,6 +60,7 @@ export interface UserDto extends Id {
   selectedRoles?: number[]
   defaultLocale?: AppLocale
   ownerProfile?: boolean
+  permissions?: string[] | undefined
 }
 export interface UserProfileDto extends Id {
   id: number
@@ -236,11 +237,6 @@ export interface ISearch {
   avatar: ImageDto | null
   cover: ImageDto | null
 }
-export interface IApiListResponse {
-  totalPages: number
-  totalElements: number
-  last: boolean
-}
 export interface NotificationDto {
   id: number
   functionId: number
@@ -291,4 +287,72 @@ export interface AppVersionDto {
   puaseUpdate: boolean
   appVersionIos: string | null
   appVersionAndroid: string | null
+}
+export interface GroupChatMemberDto extends Id {
+  favorite: boolean
+  muteNotify: boolean
+  pin: boolean
+  online?: boolean
+  joinDate: string
+  offDate?: string
+  member: UserProfileDto
+}
+
+export interface GroupChatDto extends Id {
+  dtoAvatar?: ImageDto | null
+  chatType: ChatType
+  groupName?: string | null
+  latestMessage?: string | null
+  latestUpdate?: string | null
+  latestMessageType?: ChatMessageType | null
+  totalNewMessage: number
+  totalMembers?: number
+  pin: boolean
+  favorite: boolean
+  muteNotify: boolean
+  online: boolean
+  memberItems?: GroupChatMemberDto[]
+  totalImages?: number
+  totalFile?: number
+}
+
+export interface GroupChatRequest {
+  fileAvatarSelectId?: number | null | undefined
+  chatType: ChatType
+  groupName: string | null
+  newMemberUserIds: number[]
+  deleteAvatar?: boolean | undefined
+  newAvatar?: ImageDto | undefined
+  avatarPreview?: string | undefined
+}
+export interface GroupChatFileDto extends Id {
+  fileManager?: FileManagerDto | null | undefined
+}
+
+export interface EmojiCountDto {
+  total: number
+  emojiType: EmojiType
+}
+export interface GroupChatMsgDto extends Id {
+  groupId?: number | undefined
+  chatMsg?: string | undefined | null
+  msgDateTime: string
+  readCount: number
+  unsend?: boolean | undefined
+  sent: boolean
+  sendUser?: UserDto | undefined
+  files?: GroupChatFileDto[] | undefined |null
+  liked?: boolean | undefined
+  onlyLabel?: boolean | undefined
+  emojiType?: EmojiType | null | undefined
+  reactionEngage?: EmojiCountDto[] | undefined
+  dtoReplyTo?: GroupChatMsgDto | null | undefined
+  chatMessageType?: ChatMessageType | undefined
+}
+export interface GroupChatMsgRequest {
+  chatMessageType?: ChatMessageType | undefined | null
+  chatMsg?: string | null
+  fileIds?: number[]
+  shareMessageIds?: number[]
+  replyToId?: number | null
 }

@@ -102,7 +102,7 @@ const downloadPdf = async () => {
                             <ion-icon slot="icon-only" class="text-black" :icon="downloadOutline"></ion-icon>
                         </ion-button> -->
                         <BaseButton v-if="showDownload && !loading" clear icon-only :icon-size="30" icon-set="bootstrap-icons"
-                            :icon="biDownload" @click="downloadPdf" />
+                           :icon=" { name: biDownload, iconSet: 'bootstrap-icons' }" @click="downloadPdf" />
                     </ion-buttons>
                 </ion-row>
             </ion-toolbar>

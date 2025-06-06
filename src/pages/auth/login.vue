@@ -25,9 +25,9 @@
         </div>
         <div class="wee-login">
           <ion-grid class="ion-no-padding">
-            <ion-row class="ion-align-items-center" style="height: 50vh" v-if="isDeviceRooted">
+            <ion-row v-if="isDeviceRooted" class="ion-align-items-center" style="height: 50vh">
               <ion-col class="q-pa-md">
-                <base-result status="error" icon-size="128px" :description="t('error.deviceRootDetect')">
+                <base-result status="error" :icon-size="128" :description="t('error.deviceRootDetect')">
                 </base-result>
               </ion-col>
             </ion-row>
@@ -48,16 +48,16 @@
                         <ion-list lines="none">
                           <ion-item>
                             <div class="wee-login-input">
-                              <base-icon :icon="personOutline" icon-set="ion" color="grey-8"></base-icon>
-                              <ion-input class="q-ml-md" :disabled="loading" v-model="email"
+                              <base-icon :name="personOutline" icon-set="ion" color="grey-8"></base-icon>
+                              <ion-input v-model="email" class="q-ml-md" :disabled="loading"
                                 :placeholder="t('base.emailOrUsername')"></ion-input>
                             </div>
                           </ion-item>
                           <ion-item>
                             <div class="wee-login-input">
-                              <base-icon :icon="keyOutline" icon-set="ion" color="grey-8"></base-icon>
-                              <ion-input class="q-ml-md" :disabled="loading" :type="!showPassword ? 'password' : 'text'"
-                                v-model="password" :placeholder="t('authen.password')"></ion-input>
+                              <base-icon :name="keyOutline" icon-set="ion" color="grey-8"></base-icon>
+                              <ion-input v-model="password" class="q-ml-md" :disabled="loading"
+                                :type="!showPassword ? 'password' : 'text'" :placeholder="t('authen.password')"></ion-input>
                               <ion-button fill="clear" size="small" @click="showPassword = !showPassword">
                                 <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline
                                   "></ion-icon>
@@ -67,14 +67,14 @@
                           <ion-item :button="false" lines="none">
                             <ion-checkbox v-model="acceptedTerm" label-placement="end">
                               {{ t('base.termAcceptText') }}
-                              <a @click="$event.stopPropagation()" class="app-text-link" :href="PolicyLink"
-                                target="_blank">
+                              <a class="app-text-link" :href="PolicyLink" target="_blank"
+                                @click="$event.stopPropagation()">
                                 {{ t('base.termAcceptText2') }}
                               </a>
                             </ion-checkbox>
                           </ion-item>
-                          <ion-item button @click="appNavigateTo('/settings/languge')" :detail="true" lines="none">
-                            <ion-icon :icon="globeOutline" slot="start"></ion-icon>
+                          <ion-item button :detail="true" lines="none" @click="appNavigateTo('/settings/languge')">
+                            <ion-icon slot="start" :icon="globeOutline"></ion-icon>
                             <ion-label>
                               {{ t('base.language') }}
                               <p class="ion-text-capitalize">
@@ -128,13 +128,13 @@ import { useDevice } from '@/composables/useDevice';
 import { useLang } from '@/composables/useLang';
 import { useNotification } from '@/composables/useNotification';
 import { useTheme } from '@/composables/useTheme';
-import { isAppException } from '@/utils/appUtil';
 import {
   DefaultColor,
   DeviceIdAtt,
   FcmTokenKey,
   PolicyLink,
 } from '@/libs/constant';
+import { isAppException } from '@/utils/appUtil';
 import { getYearNow } from '@/utils/dateUtil';
 import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import {
@@ -252,7 +252,7 @@ const onSubmit = async () => {
       deviceId: deviceId.value ? deviceId.value : null,
     },
   });
-  if (!isAppException(response)) {
+  if (response && !isAppException(response)) {
     if (response.authenticationToken) {
       await setAuthenticationCookies(response);
       await registerTopic(response.userId);

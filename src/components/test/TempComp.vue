@@ -1,6 +1,5 @@
 <script setup lang="ts" generic="T">
-import type { ISortMode } from '@/types/common';
-import type { LabelValue } from '@/types/models';
+import type { ISortMode, LabelValue } from '@/types/common';
 /*
 import TempComp from '@/components/test/TempComp.vue';
 const textVal = ref();

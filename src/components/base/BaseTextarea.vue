@@ -107,7 +107,7 @@ defineExpose({
                 @ion-input="onInput">
                 <slot name="start">
                     <div v-if="icon" slot="start">
-                        <BaseIcon :icon="icon" :icon-set="iconSet" />
+                        <BaseIcon :name="icon" :icon-set="iconSet" />
                     </div>
                 </slot>
                 <slot name="label">

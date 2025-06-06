@@ -52,7 +52,7 @@ const {
   type?: 'area' | 'bar' | 'line';
   mode?: ChartMode;
   palette?: ChartThemePalete;
-  series: IChartSeries[];
+  series?: IChartSeries[];
   colors?: string[];
   dark?: boolean;
   showDataLabels?: boolean;

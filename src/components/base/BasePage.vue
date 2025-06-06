@@ -24,6 +24,8 @@ const {
   showBackLink = true,
   headerNoBorder = false,
   dark = false,
+  scrollEvents = false,
+  noPadding = false,
 } = defineProps<{
   pageTitle?: string | null
   pageTitleBold?: boolean
@@ -34,6 +36,7 @@ const {
   avatarSize?: number
   collapse?: string // condense
   contentPadding?: boolean
+    noPadding?: boolean
   translucent?: boolean
   scrollY?: boolean
   fullscreen?: boolean
@@ -41,9 +44,14 @@ const {
   showBackLink?: boolean
   headerNoBorder?: boolean
   dark?: boolean
-  titleSize?: 'large' | 'small' | undefined
+  titleSize?: 'large' | 'small' | undefined,
+  scrollEvents?: boolean
 }>();
-const emit = defineEmits(['on-scroll-up', 'on-scroll-down']);
+const emit = defineEmits<{
+  'on-scroll-up': []
+  'on-scroll-down': []
+  'on-scroll': [event: any]
+}>()
 const BaseToolbar = defineAsyncComponent(() => import('@/components/base/BaseToolbar.vue'));
 const BaseBackButton = defineAsyncComponent(() => import('@/components/base/BaseBackButton.vue'));
 const BaseAvatar = defineAsyncComponent(() => import('@/components/base/BaseAvatar.vue'));
@@ -51,6 +59,7 @@ const BaseAvatar = defineAsyncComponent(() => import('@/components/base/BaseAvat
 const { isAppPlatfrom } = useDevice();
 const headerHidden = ref(false);
 const logScrolling = (event: any) => {
+    emit('on-scroll', event)
   if (event.detail.deltaY > 1) {
     if (hideHeaderOnScroll) {
       headerHidden.value = true;
@@ -104,8 +113,8 @@ const logScrolling = (event: any) => {
     </slot>
 
     <slot name="content">
-      <ion-content :scroll-events="true" :fullscreen="fullscreen" :scroll-y="scrollY"
-        :class="{ 'ion-padding': contentPadding, 'dark': dark }" @ion-scroll="logScrolling($event)">
+      <ion-content :scroll-events="scrollEvents" :fullscreen="fullscreen" :scroll-y="scrollY"
+        :class="{ 'ion-padding': contentPadding, 'dark': dark, 'ion-no-padding': noPadding}" @ion-scroll="logScrolling($event)">
         <template v-if="collapse == 'condense'">
           <ion-header mode="ios" collapse="condense">
             <ion-toolbar :color="toolbarColor">

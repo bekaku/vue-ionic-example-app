@@ -53,7 +53,7 @@ const onClick = (event: any, index: number) => {
             </base-image>
         </template>
         <template v-else>
-            <base-icon :icon="getFileTypeIcon(item.fileMime)" icon-set="bootstrap-icons"
+            <base-icon :name="getFileTypeIcon(item.fileMime)" icon-set="bootstrap-icons"
                 :size="iconSize" />
         </template>
     </div>

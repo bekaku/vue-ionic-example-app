@@ -87,7 +87,7 @@ defineExpose({
           <div slot="end">
             <slot name="end">
               <slot name="avatar">
-                <base-icon v-if="icon" slot="start" :icon-set="iconSet" :icon="icon" :color="iconColor" :size="24" />
+                <base-icon v-if="icon" slot="start" :icon-set="iconSet" :name="icon" :color="iconColor" :size="24" />
               </slot>
             </slot>
           </div>

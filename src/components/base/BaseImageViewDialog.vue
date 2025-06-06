@@ -81,7 +81,7 @@ const onClose = () => {
             <slot name="end">
                 <ion-buttons slot="end">
                     <BaseButton v-if="showDownload" color="light" clear icon-only icon-set="bootstrap-icons"
-                        icon-color="white" :icon-size="30" :icon="biDownload" @click="download" />
+                        icon-color="white" :icon-size="30" :icon=" { name: biDownload, iconSet: 'bootstrap-icons' }" @click="download" />
                     <ion-button v-if="showDeleteImage" color="light" @click="onDelete">
                         <ion-icon slot="icon-only" :icon="trashOutline" />
                     </ion-button>

@@ -211,7 +211,7 @@ const setImagesFileView = (file: FileManagerDto) => {
 <template>
     <BasePage page-title="Image/Pdf View" fullscreen show-back-link>
         <BaseCard title="Image">
-            <BaseTextHeader label="Grid" caption="Tab image to view" />
+            <BaseTextHeader title="Grid" subtitle="Tab image to view" />
             <IonGrid class="ion-no-padding">
                 <IonRow>
                     <IonCol v-for="(item, i) in imageItems" :key="`img-${i}-${item.fileName}`"
@@ -221,14 +221,14 @@ const setImagesFileView = (file: FileManagerDto) => {
                 </IonRow>
             </IonGrid>
 
-            <BaseTextHeader label="List" caption="Tab image to view" />
+            <BaseTextHeader title="List" subtitle="Tab image to view" />
             <IonList>
                 <BaseFilePreviewItemAlt v-for="(itemAlt, iAlt) in imageItems" :key="`img-${iAlt}-${itemAlt.fileName}`"
                     :item="itemAlt" :index="iAlt" :show-delete="false" button :format-size="false"
                     @on-click="onImgPreviewClick" />
             </IonList>
 
-            <BaseTextHeader label="Image Slide" caption="Swip left right image to view" />
+            <BaseTextHeader title="Image Slide" subtitle="Swip left right image to view" />
             <IonCardContent>
                 <BaseImageView :files="imageItems" :dark="isDark" height="250px" />
             </IonCardContent>
@@ -243,7 +243,7 @@ const setImagesFileView = (file: FileManagerDto) => {
             </IonCardContent>
 
 
-            <!-- <BaseTextHeader label="Pdf inline display" />
+            <!-- <BaseTextHeader title="Pdf inline display" />
             <BasePdfView src="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
                 :closeable="false" title="compressed.tracemonkey-pldi-09.pdf" min-height="350px" /> -->
         </BaseCard>

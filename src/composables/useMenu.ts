@@ -2,9 +2,12 @@ import { appNavs as initNav } from '@/libs/navs';
 import { useAppStore } from '@/stores/appStore';
 import type { LabelValue } from '@/types/common';
 import { storeToRefs } from 'pinia';
+import { useRBAC } from './useRBAC';
+import type { RBACProps } from '@/types/props';
 export const useMenu = () => {
     const appStore = useAppStore();
     const { appNavs } = storeToRefs(appStore)
+    const { hasPermissionLazy } = useRBAC();
     const initialAppNav = async (): Promise<boolean> => {
         const aclFinal: LabelValue<any>[] = [];
         let menu: LabelValue<any> | null = {};
@@ -36,7 +39,7 @@ export const useMenu = () => {
                                     filterPages.push(menuHaveChild);
                                 }
                             } else {
-                                const isPermised = !p.permissions || p.permissions.length == 0 || await isPermited(p.permissions);
+                                const isPermised = await isPermited(p.rbac);
                                 if (isPermised) {
                                     filterPages.push(p);
                                 }
@@ -60,7 +63,7 @@ export const useMenu = () => {
         const childs: LabelValue<any>[] = [];
         for (const item of pageItems) {
             if (item) {
-                const isPermised = !item.permissions || item.permissions.length == 0 || await isPermited(item.permissions);
+                const isPermised = await isPermited(item.rbac);
                 if (isPermised) {
                     childs.push(item);
                 }
@@ -102,8 +105,8 @@ export const useMenu = () => {
         });
     }
 
-    const isPermited = async (permissions: string[]): Promise<boolean> => {
-        return await appStore.isHavePermissionLazy(permissions);
+    const isPermited = async (rabc: RBACProps | undefined): Promise<boolean> => {
+        return await hasPermissionLazy(rabc);
     }
     return {
         initialAppNav,

@@ -24,7 +24,7 @@ import {
   IonList,
   IonRow,
   IonText,
-  IonToggle
+  IonToggle,
 } from '@ionic/vue';
 import {
   colorPaletteOutline,
@@ -33,7 +33,7 @@ import {
   mailOutline,
   notificationsOffOutline,
   notificationsOutline,
-  trashOutline
+  trashOutline,
 } from 'ionicons/icons';
 import { onMounted, ref, watch } from 'vue';
 
@@ -79,9 +79,12 @@ watch(notification, async (newVal) => {
   <BasePage :page-title="t('base.other')" fullscreen :show-back-link="false">
     <BaseMenuItems v-if="appNavs.length > 0" :items="appNavs">
       <template v-if="authenStore.auth" #top>
-        <BaseMenuItem class="q-px-md q-pt-sm" :item="{
-          avatar: authenStore?.auth?.avatar?.thumbnail,
-        }">
+        <BaseMenuItem
+          class="q-px-md q-pt-sm"
+          :item="{
+            avatar: { src: authenStore?.auth?.avatar?.thumbnail || '' },
+          }"
+        >
           <template #label>
             <ion-label>
               <h2 class="q-text-weight-bold">
@@ -94,7 +97,11 @@ watch(notification, async (newVal) => {
             </ion-label>
           </template>
           <template #end>
-            <ion-button slot="end" fill="clear" router-link="/settings/account-settings">
+            <ion-button
+              slot="end"
+              fill="clear"
+              router-link="/settings/account-settings"
+            >
               {{ t('base.edit') }}
             </ion-button>
           </template>
@@ -105,25 +112,27 @@ watch(notification, async (newVal) => {
 
     <BaseCard :title="t('base.setting')">
       <ion-list>
-        <BaseMenuItem :item="{
-          label: 'base.appearance',
-          to: '/settings/appearance',
-          icon: colorPaletteOutline,
-          iconSet: 'ion'
-        }">
+        <BaseMenuItem
+          :item="{
+            label: 'base.appearance',
+            to: '/settings/appearance',
+            icon: { name: colorPaletteOutline, iconSet: 'ion' },
+          }"
+        >
           <template #end>
             <ion-text slot="end" class="text-muted text-caption">
               {{ t(`theme.${isDark ? 'darkTheme' : 'lightTheme'}`) }}
             </ion-text>
           </template>
         </BaseMenuItem>
-        <BaseMenuItem :item="{
-          label: 'base.language',
-          description: 'base.translations',
-          to: '/settings/languge',
-          icon: globeOutline,
-          iconSet: 'ion'
-        }">
+        <BaseMenuItem
+          :item="{
+            label: 'base.language',
+            description: t('base.translations'),
+            to: '/settings/languge',
+            icon: { name: globeOutline, iconSet: 'ion' },
+          }"
+        >
           <template #end>
             <ion-text slot="end" class="text-muted text-caption">
               {{ currenLocaleItem?.name }}
@@ -131,32 +140,46 @@ watch(notification, async (newVal) => {
           </template>
         </BaseMenuItem>
         <ion-item button :detail="false" lines="none">
-          <ion-icon slot="start" :icon="notification ? notificationsOutline : notificationsOffOutline" />
-          <ion-toggle v-model="notification" justify="space-between" :aria-label="t('nav.notification')"
-            :enable-on-off-labels="true">
+          <ion-icon
+            slot="start"
+            :icon="
+              notification ? notificationsOutline : notificationsOffOutline
+            "
+          />
+          <ion-toggle
+            v-model="notification"
+            justify="space-between"
+            :aria-label="t('nav.notification')"
+            :enable-on-off-labels="true"
+          >
             {{ t('nav.notification') }}
           </ion-toggle>
         </ion-item>
-        <BaseMenuItem :item="{
-          label: 'base.deleteCache',
-          icon: trashOutline,
-          iconSet: 'ion',
-          button: true
-        }" @on-select="onDeleteCache" />
-        <BaseMenuItem :item="{
-          label: 'base.about',
-          description: t('app.appVersion', [userVersion]),
-          translateDescription: false,
-          to: '/about',
-          icon: informationCircleOutline,
-          iconSet: 'ion'
-        }" />
-        <BaseMenuItem :item="{
-          label: 'base.logout',
-          iconSet: 'ion',
-          color: 'danger',
-          button: true
-        }" @on-select="signOut" />
+        <BaseMenuItem
+          :item="{
+            label: 'base.deleteCache',
+            icon: { name: trashOutline, iconSet: 'ion' },
+            button: true,
+          }"
+          @on-select="onDeleteCache"
+        />
+        <BaseMenuItem
+          :item="{
+            label: 'base.about',
+            description: t('app.appVersion', [userVersion]),
+            translateDescription: false,
+            to: '/about',
+            icon: { name: informationCircleOutline, iconSet: 'ion' },
+          }"
+        />
+        <BaseMenuItem
+          :item="{
+            label: 'base.logout',
+            color: 'danger',
+            button: true,
+          }"
+          @on-select="signOut"
+        />
       </ion-list>
     </BaseCard>
   </BasePage>

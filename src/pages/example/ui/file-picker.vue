@@ -95,8 +95,8 @@ const onFileAdded = async (files: File[]) => {
                 <BaseButton full label="Multiple from gallerry/Camera"
                     @click="dialogPickGallerryOrCameraMultiple = true" />
 
-                <BaseButton label="From gallerry" :icon="imageOutline" @click="onPickImageProcess" />
-                <BaseButton label="From camera" :icon="cameraOutline" @click="onTakeImageProcess" />
+                <BaseButton label="From gallerry" :icon=" { name: imageOutline, iconSet: 'ion' }" @click="onPickImageProcess" />
+                <BaseButton label="From camera" :icon=" { name: cameraOutline, iconSet: 'ion' }" @click="onTakeImageProcess" />
             </ion-card-content>
             <ion-card-content>
                 <IonList>
@@ -112,7 +112,7 @@ const onFileAdded = async (files: File[]) => {
             <ion-card-content>
                 <BaseFilePicker v-model:file-items="filePickItems" label="Simple picker" multiple
                     :accept="FileTypeAcceptList" />
-                <BaseButton full label="Custom UI" :icon="imageOutline" @click="openFilePicker" />
+                <BaseButton full label="Custom UI" :icon=" { name: imageOutline, iconSet: 'ion' }" @click="openFilePicker" />
             </ion-card-content>
         </BaseCard>
 

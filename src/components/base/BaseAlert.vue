@@ -64,7 +64,7 @@ const iconColor = computed(() => {
     <div class="padding">
       <strong>
         <!-- <ion-icon v-if="icon" :icon="icon" style="margin-right: 5px" /> -->
-        <BaseIcon v-if="icon" :icon="icon" :icon-set="iconSet" :color="iconColor" style="margin-right: 5px" />
+        <BaseIcon v-if="icon" :name="icon" :icon-set="iconSet" :color="iconColor" style="margin-right: 5px" />
       </strong>
       <slot>
         {{ message ? message : '' }}

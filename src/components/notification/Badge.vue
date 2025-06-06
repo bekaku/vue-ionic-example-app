@@ -1,6 +1,6 @@
 <template>
   <BaseButton clear>
-    <ion-icon :icon="notificationsOutline" slot="icon-only" :class="textColor"></ion-icon>
+    <ion-icon slot="icon-only" :icon="notificationsOutline" :class="textColor"></ion-icon>
     <!-- <BaseIcon slot="icon-only" :icon="notificationsOutline" :color="textColor" :size="24"/> -->
     <ion-badge v-if="no && no != '0'" :color="color">
       {{ badgeNo }}
@@ -9,12 +9,11 @@
 </template>
 
 <script setup lang="ts">
-import { IonBadge, IonButton, IonIcon } from '@ionic/vue';
+import { IonBadge, IonIcon } from '@ionic/vue';
 import { notificationsOutline } from 'ionicons/icons';
 import type { PropType } from 'vue';
 import { computed } from 'vue';
 import BaseButton from '../base/BaseButton.vue';
-import BaseIcon from '../base/BaseIcon.vue';
 const props = defineProps({
   no: {
     type: Number as PropType<string | number>,

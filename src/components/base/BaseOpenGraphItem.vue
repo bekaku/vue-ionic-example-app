@@ -2,15 +2,15 @@
     <ion-card v-if="item && (item.image || item.domain || item.title || item.desc)" v-bind="$attrs"
         class="ion-no-margin ion-no-padding no-shadow" :href="item.url" target="_blank">
         <base-image v-if="item.image && !short" :src="item.image" ratio="16/9"
-            :style="{ maxHeight: imageSize }"></base-image>
+            :style="{ maxHeight: imageSize }" />
         <ion-item lines="none">
             <base-image v-if="item.image && short" slot="start" :src="item.image" ratio="4/3"
-                :style="{ maxHeight: imageMaxHeight, maxWidth: imageMaxWidth }"></base-image>
+                :style="{ maxHeight: imageMaxHeight, maxWidth: imageMaxWidth }" />
             <ion-label>
                 <ion-text class="ion-text-uppercase ion-text-nowrap">
                     {{ item.domain }}
                 </ion-text>
-                <br />
+                <br>
                 <ion-text class="ion-text-wrap">
                     <BaseEllipsis :lines="textLines">
                         {{ item.title }}
@@ -22,7 +22,7 @@
                     </BaseEllipsis>
                 </ion-text>
             </ion-label>
-            <base-icon slot="end" :icon="returnUpForward" icon-set="ion" />
+            <base-icon slot="end" :name="returnUpForward" icon-set="ion" />
         </ion-item>
     </ion-card>
 </template>
@@ -59,7 +59,7 @@ ion-item {
 
 body[color-theme='dark'] {
     ion-item {
-        --background: var(--color-dark-900);
+        --background: var(--color-zinc-800);
     }
 }
 </style>

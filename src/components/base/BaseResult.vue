@@ -21,11 +21,11 @@ import {
   mdiAlertBoxOutline,
   mdiAllergy,
   mdiCheckBold,
+  mdiInboxOutline,
   mdiInboxRemoveOutline,
   mdiInformationVariant,
-  mdiPackageVariant,
   mdiPaperclip,
-  mdiRobotConfused,
+  mdiRobotConfused
 } from '@quasar/extras/mdi-v7';
 import { ref } from 'vue';
 import BaseIcon from './BaseIcon.vue';
@@ -78,7 +78,7 @@ const getIcon = (): string => {
       icon = mdiAlert;
       break;
     case 'empty':
-      icon = mdiPackageVariant;
+      icon = mdiInboxOutline;
       break;
     default:
       icon = mdiInformationVariant;
@@ -155,7 +155,7 @@ const getBgColor = () => {
                 :image-bg="false" ratio="1" />
             </template>
             <BaseIcon v-else-if="showIcon" :size="iconSize" :color="!hideBg ? getIconColor() : undefined"
-              :icon="icon ? icon : getIcon()" :icon-set="icon ? iconSet : 'mdi'" />
+              :name="icon ? icon : getIcon()" :icon-set="icon ? iconSet : 'mdi'" />
           </div>
         </ion-row>
         <div class="q-mt-md q-text-center">
@@ -183,7 +183,7 @@ ion-avatar {
 }
 
 .icon-holder {
-  padding: 8px;
+  padding: 10px;
   height: v-bind(divSize);
   width: v-bind(divSize);
   border-radius: 100%;

@@ -14,6 +14,8 @@
 import FileManagerService from '@/api/FileManagerService';
 import { IonAvatar, IonImg, IonSkeletonText } from '@ionic/vue';
 import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue';
+import type { AvatarProps } from '@/types/props';
+import BaseBadge from '@/components/base/BaseBadge.vue';
 const {
   top = false,
   fetchImage = false,
@@ -25,22 +27,7 @@ const {
   bordered = false,
   borderedColor = '#fff',
   borderedWidth = '2px',
-} = defineProps<{
-  src: string
-  shadow?: number
-  top?: boolean
-  fetchImage?: boolean
-  rounded?: boolean
-  round?: boolean
-  square?: boolean
-  size?: number
-  ratio?: number
-  imgBg?: string
-  spinnerColor?: string
-  bordered?: boolean
-  borderedColor?: string
-  borderedWidth?: string
-}>();
+} = defineProps<AvatarProps>();
 const { fethCdnData } = FileManagerService();
 const loading = ref(true);
 const firstLoaded = ref(false);
@@ -92,6 +79,9 @@ onBeforeUnmount(() => {
       </Transition>
     </slot>
     <slot name="extra"></slot>
+     <slot name="badge">
+      <BaseBadge v-if="badge" v-bind="badge" />
+     </slot>
   </ion-avatar>
 </template>
 <style scoped>
