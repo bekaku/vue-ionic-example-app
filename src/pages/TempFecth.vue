@@ -121,7 +121,7 @@ const loadNextPage = async () => {
 };
 </script>
 <template>
-  <BasePage page-title="Temp fetch" fullscreen show-back-link>
+  <BasePage page-title="Temp fetch">
     <BaseRefresher @on-refresh="doRefresh" />
     <BaseCard flat title="Test Page" subtitle="Just test page">
       <ion-card-content>

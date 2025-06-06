@@ -19,6 +19,7 @@ import {
     biFileImage,
     biFolder,
     biInputCursorText,
+    biLayers,
     biList,
     biMarkdown,
     biPeople, biPerson,
@@ -190,6 +191,24 @@ export const additionalMenu: LabelValue<any>[] = [
                         label: 'Segment',
                         translateLabel: false,
                         to: '/example/ui/segment'
+                    },
+                    {
+                        icon: { name: biSegmentedNav, iconSet: 'bootstrap-icons' },
+                        label: 'Tabs',
+                        translateLabel: false,
+                        to: '/example/ui/tabs'
+                    },
+                    {
+                        icon: { name: biSegmentedNav, iconSet: 'bootstrap-icons' },
+                        label: 'Tabs router',
+                        translateLabel: false,
+                        to: '/example/ui/tabs-router'
+                    },
+                    {
+                        icon: { name: biLayers, iconSet: 'bootstrap-icons' },
+                        label: 'Transitions',
+                        translateLabel: false,
+                        to: '/example/ui/transitions'
                     },
                     {
                         icon: { name: biPerson, iconSet: 'bootstrap-icons' },

@@ -2,12 +2,12 @@ import { appNavs as initNav } from '@/libs/navs';
 import { useAppStore } from '@/stores/appStore';
 import type { LabelValue } from '@/types/common';
 import { storeToRefs } from 'pinia';
-import { useRBAC } from './useRBAC';
+import { useRbac } from './useRbac';
 import type { RBACProps } from '@/types/props';
 export const useMenu = () => {
     const appStore = useAppStore();
     const { appNavs } = storeToRefs(appStore)
-    const { hasPermissionLazy } = useRBAC();
+    const { hasPermissionLazy } = useRbac();
     const initialAppNav = async (): Promise<boolean> => {
         const aclFinal: LabelValue<any>[] = [];
         let menu: LabelValue<any> | null = {};

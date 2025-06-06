@@ -176,6 +176,40 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/example/ui/segment.vue')
   },
   {
+    path: '/example/ui/tabs',
+    component: () => import('@/pages/example/ui/tabs.vue')
+  },
+  {
+    path: '/example/ui/tabs-router/',
+    component: () => import('@/pages/example/ui/tab-router/index.vue'),
+    children: [
+      {
+        path: '',
+        redirect: '/example/ui/tabs-router/tab1'
+      },
+      {
+        path: 'tab1',
+        component: () => import('@/pages/example/ui/tab-router/tab1.vue')
+      },
+      {
+        path: 'tab2',
+        component: () => import('@/pages/example/ui/tab-router/tab2.vue')
+      },
+      {
+        path: 'tab3',
+        component: () => import('@/pages/example/ui/tab-router/tab3.vue')
+      },
+      {
+        path: 'tab4',
+        component: () => import('@/pages/example/ui/tab-router/tab4.vue')
+      }
+    ]
+  },
+    {
+    path: '/example/ui/transitions',
+    component: () => import('@/pages/example/ui/transitions.vue')
+  },
+  {
     path: '/example/ui/user',
     component: () => import('@/pages/example/ui/user.vue')
   },

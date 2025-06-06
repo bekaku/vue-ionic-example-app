@@ -366,6 +366,7 @@ export interface LabelValue<Type> {
   rbac?: RBACProps;
   noActiveLink?: boolean;
   button?: boolean;
+  disable?: boolean;
   children?: LabelValue<Type>[];
 }
 export interface ILocales {

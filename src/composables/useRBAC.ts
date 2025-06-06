@@ -1,6 +1,6 @@
 import { useAppStore } from '@/stores/appStore';
 import type { RBACProps } from '@/types/props';
-export const useRBAC = () => {
+export const useRbac = () => {
     const { permissions } = useAppStore();
 
     const isPermited = (code: string): boolean => {

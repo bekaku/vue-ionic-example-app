@@ -94,9 +94,7 @@ const menus = ref<LabelValue<number>[]>([
 <template>
   <BasePage
     :page-title="t('nav.chats')"
-    fullscreen
     :content-padding="false"
-    show-back-link
   >
     <template #actions-end>
       <ion-buttons>

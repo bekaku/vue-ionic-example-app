@@ -31,6 +31,9 @@ const segmentItems = ref<LabelValue<string>[]>([
     {
         label: 'Videos',
         value: 'videos',
+        rbac: {
+            permissions: ['test-not-exist'],
+        }
     }
 ])
 const onSegmentChange = (e: any) => {
@@ -40,7 +43,7 @@ const onSegmentChange = (e: any) => {
 <template>
     <BasePage page-title="Segment" show-back-link>
         <BaseToolbar>
-            <BaseSegment v-model="segmentSelected" :items="segmentItems" layout="icon-end" @on-change="onSegmentChange">
+            <BaseSegment v-model="segmentSelected" :items="segmentItems" filter-acl layout="icon-end" @on-change="onSegmentChange">
                 <template #description="{ item }">
                     <ion-badge v-if="item.value == 'review'" color="danger">
                         99
