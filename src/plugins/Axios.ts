@@ -65,7 +65,7 @@ appAxiosInstance.interceptors.response.use((response) => {
   return response;
 }, async (error) => {
   const originalRequest = error.config;
-  if (error.response?.status !== 403 || originalRequest._retry) {
+  if (error.response?.status !== 401 || originalRequest._retry) {
     return Promise.reject(error);
   }
   const refreshToken = await loadStorage<string>(AppAuthRefeshTokenKey);
@@ -120,7 +120,7 @@ appAxiosInstance.interceptors.response.use((response) => {
   } catch (refreshError: any) {
     processQueue(refreshError, null);
     if (refreshError?.response && refreshError?.response?.status) {
-      if (refreshError.response.status == 401) {
+      if (refreshError.response.status == 403) {
         router.replace('/auth/login');
       }
     }
