@@ -201,7 +201,21 @@ http://ionicframework.com/docs/theming/ */
     border: 1px solid var(--ion-color-primary);
   }
 }
-
+body[safe-area='edge-to-edge'] {
+  --ion-safe-area-top: var(--app-safe-area-top);
+  --ion-safe-area-left: var(--app-safe-area-left);
+  --ion-safe-area-right: var(--app-safe-area-right);
+  --ion-safe-area-bottom: var(--app-safe-area-bottom);
+  ion-content {
+      --padding-bottom: var(--app-safe-area-bottom);
+      // --padding-end: var(--app-safe-area-right);
+      // --padding-start: var(--app-safe-area-left);
+      // --padding-top: var(--app-safe-area-top);
+  }
+  .q-fixed-bottom2 {
+    padding-bottom: var(--app-safe-area-bottom);
+  }
+}
 .ios {
   --ion-font-family: var(--app-font-family);
 }

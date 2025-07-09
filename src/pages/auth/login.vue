@@ -1,11 +1,85 @@
+<script setup lang="ts">
+import AppLoginForm from '@/components/app/AppLoginForm.vue';
+import AppModeDetect from '@/components/app/AppModeDetect.vue';
+import BaseCard from '@/components/base/BaseCard.vue';
+import BaseSpinner from '@/components/base/BaseSpinner.vue';
+import { useAppStorage } from '@/composables/useAppStorage';
+import { useAuthen } from '@/composables/useAuthen';
+import { useConfig } from '@/composables/useConfig';
+import { useLang } from '@/composables/useLang';
+import { useNotification } from '@/composables/useNotification';
+import { useTheme } from '@/composables/useTheme';
+import { DefaultColor } from '@/libs/constant';
+import { getYearNow } from '@/utils/dateUtil';
+import {
+  IonCard,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonPage,
+  IonRow,
+} from '@ionic/vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+const {
+  setStatusBarColor,
+  Style: StatusStyle,
+  setDefaultStatusBar,
+} = useTheme();
+const { userSubscribeFcm } = useNotification();
+const { getEnv } = useConfig();
+const { destroyAuthDataAndRedirect } = useAuthen();
+const { t } = useLang();
+const { isDark } = useTheme();
+const { getCurrentUserToken } = useAppStorage();
+const userVersion = ref(getEnv<string>('VITE_APP_VERSION'));
+const pageTimeout = ref<any>();
+const initialized = ref(false);
+onBeforeUnmount(() => {
+  setDefaultStatusBar();
+});
+onMounted(async () => {
+  await validateIsLogedIn();
+  await userSubscribeFcm(false);
+  await setStatusBarColor(DefaultColor, StatusStyle.Dark);
+});
+const validateIsLogedIn = async () => {
+  const currentToken = await getCurrentUserToken();
+  if (currentToken && currentToken.authenticationToken) {
+    console.log('currentToken', currentToken);
+    window.location.replace('/tabs/home');
+  } else {
+    await destroyAuthDataAndRedirect(false);
+  }
+
+  return new Promise((resolve) => {
+    pageTimeout.value = setTimeout(() => {
+      initialized.value = true;
+      resolve(true);
+    }, 100);
+  });
+};
+onBeforeUnmount(() => {
+  setDefaultStatusBar();
+  if (pageTimeout.value) {
+    clearTimeout(pageTimeout.value);
+  }
+});
+</script>
 <template>
   <ion-page>
     <ion-content fullscreen scroll-y class="ion-no-padding ion-no-margin">
       <div class="login-holder">
-        <div class="header-section" :class="{ 'bg-primary': !isDark }">
+        <div
+          v-if="initialized"
+          class="header-section"
+          :class="{ 'bg-primary': !isDark }"
+        >
           <ion-row>
             <ion-col class="ion-text-center q-mt-xl">
-              <img src="/logo/logo-white.png" style="width: 120px; height: auto" />
+              <img
+                src="/logo/logo-white.png"
+                style="width: 120px; height: auto"
+              />
             </ion-col>
           </ion-row>
           <div class="area">
@@ -25,91 +99,39 @@
         </div>
         <div class="wee-login">
           <ion-grid class="ion-no-padding">
-            <ion-row v-if="isDeviceRooted" class="ion-align-items-center" style="height: 50vh">
-              <ion-col class="q-pa-md">
-                <base-result status="error" :icon-size="128" :description="t('error.deviceRootDetect')">
-                </base-result>
+            <ion-row v-if="initialized" class="ion-align-items-center">
+              <ion-col>
+                <ion-card class="no-shadow">
+                  <AppLoginForm>
+                    <template #additionalAction>
+                      <div
+                        class="ion-text-center q-text-smaller q-text-muted q-mt-lg"
+                      >
+                        <p>{{ t('app.appVersion', [userVersion]) }}</p>
+                        <div>
+                          {{ `@ ${getYearNow()} ${t('app.monogram')}` }}
+                        </div>
+                        <app-mode-detect class="q-mt-sm" />
+                      </div>
+                    </template>
+                  </AppLoginForm>
+                </ion-card>
               </ion-col>
             </ion-row>
-            <ion-row v-else class="ion-align-items-center">
-              <ion-col>
-                <ion-card class="card-clear">
-                  <form @submit.prevent="onSubmit" @keydown.enter="onSubmit">
-                    <ion-row class="ion-padding ion-margin-horizontal">
-                      <ion-col>
-                        <div class="q-my-lg">
-                          <ion-text class="ion-text-center">
-                            <div class="q-text-h5 q-text-weight-bolder">
-                              {{ t('authen.login') }}
-                            </div>
-                          </ion-text>
-                        </div>
-
-                        <ion-list lines="none">
-                          <ion-item>
-                            <div class="wee-login-input">
-                              <base-icon :name="personOutline" icon-set="ion" color="grey-8"></base-icon>
-                              <ion-input v-model="email" class="q-ml-md" :disabled="loading"
-                                :placeholder="t('base.emailOrUsername')"></ion-input>
-                            </div>
-                          </ion-item>
-                          <ion-item>
-                            <div class="wee-login-input">
-                              <base-icon :name="keyOutline" icon-set="ion" color="grey-8"></base-icon>
-                              <ion-input v-model="password" class="q-ml-md" :disabled="loading"
-                                :type="!showPassword ? 'password' : 'text'" :placeholder="t('authen.password')"></ion-input>
-                              <ion-button fill="clear" size="small" @click="showPassword = !showPassword">
-                                <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline
-                                  "></ion-icon>
-                              </ion-button>
-                            </div>
-                          </ion-item>
-                          <ion-item :button="false" lines="none">
-                            <ion-checkbox v-model="acceptedTerm" label-placement="end">
-                              {{ t('base.termAcceptText') }}
-                              <a class="app-text-link" :href="PolicyLink" target="_blank"
-                                @click="$event.stopPropagation()">
-                                {{ t('base.termAcceptText2') }}
-                              </a>
-                            </ion-checkbox>
-                          </ion-item>
-                          <ion-item button :detail="true" lines="none" @click="appNavigateTo('/settings/languge')">
-                            <ion-icon slot="start" :icon="globeOutline"></ion-icon>
-                            <ion-label>
-                              {{ t('base.language') }}
-                              <p class="ion-text-capitalize">
-                                {{ t('base.translations') }}
-                              </p>
-                            </ion-label>
-                            <ion-text slot="end" class="text-muted text-caption">
-                              {{ currenLocaleItem?.name }}
-                            </ion-text>
-                          </ion-item>
-                        </ion-list>
-                      </ion-col>
-                      <ion-col size="12" class="q-mt-md">
-                        <ion-button mode="ios" expand="block" class="text-white" :disabled="!canSubmit || !acceptedTerm"
-                          type="submit">
-                          <ion-spinner v-if="loading" name="dots" color="white"></ion-spinner>
-                          <template v-else>
-                            {{ t('authen.login') }}
-                          </template>
-                        </ion-button>
-                        <ion-button fill="clear" class="ion-margin-vertical" expand="block" size="small"
-                          router-link="/auth/forgot-password">
-                          {{ t('authen.forgetPassword') }}
-                        </ion-button>
-                        <div class="ion-text-center q-text-smaller q-text-muted q-mt-lg">
-                          <p>{{ t('app.appVersion', [userVersion]) }}</p>
-                          <div>
-                            {{ `@ ${getYearNow()} ${t('app.monogram')}` }}
-                          </div>
-                          <app-mode-detect class="q-mt-sm" />
-                        </div>
-                      </ion-col>
-                    </ion-row>
-                  </form>
-                </ion-card>
+            <ion-row
+              v-else
+              class="ion-align-items-center"
+              style="height: 100vh"
+            >
+              <ion-col class="ion-no-padding">
+                <BaseCard>
+                  <div class="ion-text-center">
+                    <p>{{ t('base.pleaseWait') }}</p>
+                    <p>
+                      <BaseSpinner />
+                    </p>
+                  </div>
+                </BaseCard>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -118,162 +140,6 @@
     </ion-content>
   </ion-page>
 </template>
-<script setup lang="ts">
-import AuthenService from '@/api/AuthenService';
-import AppModeDetect from '@/components/app/AppModeDetect.vue';
-import { useAuthen } from '@/composables/useAuthen';
-import { useBase } from '@/composables/useBase';
-import { useConfig } from '@/composables/useConfig';
-import { useDevice } from '@/composables/useDevice';
-import { useLang } from '@/composables/useLang';
-import { useNotification } from '@/composables/useNotification';
-import { useTheme } from '@/composables/useTheme';
-import {
-  DefaultColor,
-  DeviceIdAtt,
-  FcmTokenKey,
-  PolicyLink,
-} from '@/libs/constant';
-import { isAppException } from '@/utils/appUtil';
-import { getYearNow } from '@/utils/dateUtil';
-import { loadStorage, saveStorage } from '@/utils/storageUtil';
-import {
-  IonButton,
-  IonCard,
-  IonCheckbox,
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonIcon,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonPage,
-  IonRow,
-  IonSpinner,
-  IonText,
-} from '@ionic/vue';
-import {
-  eyeOffOutline,
-  eyeOutline,
-  globeOutline,
-  keyOutline,
-  personOutline,
-} from 'ionicons/icons';
-import {
-  computed,
-  defineAsyncComponent,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-} from 'vue';
-declare let window: any;
-
-const BaseIcon = defineAsyncComponent(
-  () => import('@/components/base/BaseIcon.vue'),
-);
-const BaseResult = defineAsyncComponent(
-  () => import('@/components/base/BaseResult.vue'),
-);
-const {
-  setStatusBarColor,
-  Style: StatusStyle,
-  setDefaultStatusBar,
-} = useTheme();
-const { registerTopic, userSubscribeFcm } = useNotification();
-const { singin } = AuthenService();
-const { getEnv } = useConfig();
-const { setAuthenticationCookies, destroyAuthDataAndRedirect } = useAuthen();
-const { t, currenLocaleItem } = useLang();
-const { appNavigateTo, appToast } = useBase();
-const { isDark } = useTheme();
-const { getPlatformType, getDeviceId } = useDevice();
-const email = ref<string | undefined>('admin@mydomain.com');
-const password = ref<string | undefined>('P@ssw0rd');
-const showPassword = ref<boolean>(false);
-const acceptedTerm = ref<boolean>(false);
-const userVersion = ref(getEnv<string>('VITE_APP_VERSION'));
-const loading = ref(true);
-const deviceId = ref();
-const isDeviceRooted = ref(false);
-onBeforeUnmount(() => {
-  setDefaultStatusBar();
-});
-onMounted(async () => {
-  await appInitial(false);
-  await userSubscribeFcm(false);
-});
-const detectRoot = () => {
-  if (window && window?.IRoot) {
-    window?.IRoot?.isRooted(appInitial, detectRootFailure);
-  } else {
-    appInitial();
-  }
-};
-const detectRootFailure = () => {
-  console.error('Device root detectRootFailure');
-};
-const appInitial = async (isRoot = false) => {
-  loading.value = false;
-  if (!isRoot) {
-    deviceId.value = await getDeviceId();
-    await destroyAuthDataAndRedirect(false);
-    setStatusBarColor(DefaultColor, StatusStyle.Dark);
-  } else {
-    isDeviceRooted.value = true;
-  }
-  return new Promise((resolve) => {
-    resolve(true);
-  });
-};
-const onSubmit = async () => {
-  if (!canSubmit.value || loading.value) {
-    return;
-  }
-  if (!acceptedTerm.value) {
-    appToast({
-      text: t('error.termAcceptEnpty'),
-    });
-    return;
-  }
-
-  loading.value = true;
-
-  await saveStorage(DeviceIdAtt, deviceId.value);
-  const platform = await getPlatformType();
-  const fcmToken = await loadStorage<string>(FcmTokenKey);
-  const response = await singin({
-    user: {
-      emailOrUsername: email.value,
-      password: password.value,
-      loginFrom: platform,
-      fcmToken,
-      deviceId: deviceId.value ? deviceId.value : null,
-    },
-  });
-  if (response && !isAppException(response)) {
-    if (response.authenticationToken) {
-      await setAuthenticationCookies(response);
-      await registerTopic(response.userId);
-      window.location.replace('/');
-      loading.value = false;
-      appToast({
-        text: t('success.loginSuccess'),
-      });
-    }
-  } else {
-    loading.value = false;
-  }
-};
-const canSubmit = computed(() => {
-  if (!email.value || !password.value) {
-    return false;
-  }
-
-  return email.value.length >= 4 && password.value.length >= 4;
-});
-</script>
 <style scoped lang="scss">
 // @import '@/assets/css/login.scss';
 
@@ -333,7 +199,6 @@ body[color-theme='dark'] .wee-login-input {
   width: 100%;
   position: absolute;
   top: 50vh;
-
 }
 
 .context h1 {
@@ -341,7 +206,6 @@ body[color-theme='dark'] .wee-login-input {
   color: #fff;
   font-size: 50px;
 }
-
 
 .circles {
   position: absolute;
@@ -361,7 +225,6 @@ body[color-theme='dark'] .wee-login-input {
   background: rgba(255, 255, 255, 0.2);
   animation: animate 25s linear infinite;
   bottom: -150px;
-
 }
 
 .circles li:nth-child(1) {
@@ -370,7 +233,6 @@ body[color-theme='dark'] .wee-login-input {
   height: 80px;
   animation-delay: 0s;
 }
-
 
 .circles li:nth-child(2) {
   left: 10%;
@@ -440,9 +302,7 @@ body[color-theme='dark'] .wee-login-input {
   animation-duration: 11s;
 }
 
-
 @keyframes animate {
-
   0% {
     transform: translateY(0) rotate(0deg);
     opacity: 1;
@@ -454,6 +314,5 @@ body[color-theme='dark'] .wee-login-input {
     opacity: 0;
     border-radius: 50%;
   }
-
 }
 </style>

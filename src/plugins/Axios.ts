@@ -1,11 +1,16 @@
-import { AppAuthRefeshTokenKey, AppAuthTokenKey, DefaultApiCLient, LocaleKey } from '@/libs/constant';
-import { loadStorage, saveStorage } from '@/utils/storageUtil';
+import { DefaultApiCLient, LocaleKey } from '@/libs/constant';
+import { loadStorage } from '@/utils/storageUtil';
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 // import authInterceptor from './AxiosInterceptor';
+import { useAppStorage } from '@/composables/useAppStorage';
 import { getTokenStatus } from '@/utils/jwtUtil';
 import router from '../router';
-
+const {
+  getCurrentUserToken,
+  setAuthToken,
+  removeAuthToken
+} = useAppStorage()
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $axios: AxiosInstance
@@ -45,12 +50,14 @@ const processQueue = (error: any, token: any = null) => {
   failedQueue = [];
 };
 appAxiosInstance.interceptors.request.use(async (config) => {
-  const [token, locale] = await Promise.all([
-    loadStorage<string>(AppAuthTokenKey),
-    loadStorage<string>(LocaleKey)
-  ]);
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  // const [token, locale] = await Promise.all([
+  //   loadStorage<string>(AppAuthTokenKey),
+  //   loadStorage<string>(LocaleKey)
+  // ]);
+  const currentToken = await getCurrentUserToken();
+  const locale = await loadStorage<string>(LocaleKey);
+  if (currentToken && currentToken?.authenticationToken) {
+    config.headers.Authorization = `Bearer ${currentToken.authenticationToken}`;
   }
   if (locale) {
     config.headers['Accept-Language'] = locale;
@@ -68,19 +75,14 @@ appAxiosInstance.interceptors.response.use((response) => {
   if (error.response?.status !== 401 || originalRequest._retry) {
     return Promise.reject(error);
   }
-  const refreshToken = await loadStorage<string>(AppAuthRefeshTokenKey);
-  if (!refreshToken) {
+  const currentToken = await getCurrentUserToken();
+  if (!currentToken || !currentToken.refreshToken || !currentToken.authenticationToken) {
     return Promise.reject(error);
   }
-
-
-  const currentToken = await loadStorage<string>(AppAuthTokenKey);
-  if (currentToken) {
-    const currentExpireStatus = await getTokenStatus(currentToken);
-    if (currentExpireStatus && currentExpireStatus == 'VALID') {
-      originalRequest.headers.Authorization = 'Bearer ' + currentToken;
-      return appAxiosInstance(originalRequest);
-    }
+  const currentExpireStatus = await getTokenStatus(currentToken.authenticationToken);
+  if (currentExpireStatus && currentExpireStatus == 'VALID') {
+    originalRequest.headers.Authorization = 'Bearer ' + currentToken.authenticationToken;
+    return appAxiosInstance(originalRequest);
   }
 
   if (isRefreshing) {
@@ -97,22 +99,27 @@ appAxiosInstance.interceptors.response.use((response) => {
   isRefreshing = true;
   originalRequest._retry = true;
   try {
-    console.log('Refreshing token:', { refreshToken, isRefreshing, queueLength: failedQueue.length });
+    console.log('Refreshing token:', {
+      refreshToken: currentToken.refreshToken,
+      isRefreshing,
+      queueLength: failedQueue.length
+    });
     appAxiosInstance.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
     appAxiosInstance.defaults.responseType = 'json';
     appAxiosInstance.defaults.headers['Content-Type'] = 'application/json';
     const { data } = await appAxiosInstance.post('/api/auth/refreshToken', {
       refreshToken: {
-        refreshToken
+        refreshToken: currentToken.refreshToken
       }
     })
 
     const newToken = data?.authenticationToken;
-    const newRefreshToken = data?.refreshToken;
-    await Promise.all([
-      saveStorage(AppAuthTokenKey, newToken),
-      saveStorage(AppAuthRefeshTokenKey, newRefreshToken)
-    ]);
+    // const newRefreshToken = data?.refreshToken;
+    // await Promise.all([
+    //   saveStorage(AppAuthTokenKey, newToken),
+    //   saveStorage(AppAuthRefeshTokenKey, newRefreshToken)
+    // ]);
+    await setAuthToken(data)
     appAxiosInstance.defaults.headers.Authorization = `Bearer ${newToken}`;
     originalRequest.headers.Authorization = `Bearer ${newToken}`;
     processQueue(null, newToken);
@@ -121,6 +128,7 @@ appAxiosInstance.interceptors.response.use((response) => {
     processQueue(refreshError, null);
     if (refreshError?.response && refreshError?.response?.status) {
       if (refreshError.response.status == 403) {
+        await removeAuthToken();
         router.replace('/auth/login');
       }
     }

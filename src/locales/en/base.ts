@@ -207,6 +207,7 @@ export default {
         'editData': 'Edit information',
         'privateData': 'Personal information',
         'accountSetting': 'Account settings',
+        'accountEdit': 'Edit account',
         'editPhoto': 'Edit photo',
         'editName': 'Edit name',
         'versionUpdateHelp': 'Note, when you go to Store and there is no update button, you can press \'Later\' to skip this version update and access Vue Ionic first because the update version is delivered to each device may not be same or Store may not. Remember the old Cach.',
@@ -252,6 +253,7 @@ export default {
         'you': 'You',
         'refreshing': 'Refreshing',
         'pullToRefresh': 'Pull to refresh',
+        notifications: 'Notifications',
     },
     'theme': {
         'light': 'Light',
@@ -349,6 +351,11 @@ export default {
         'login_main_helper4': 'Enter the verification code we just sent you on email address.',
         'login_main_helper5': 'If not found in the message box, it is possible that it may be in the junk box.',
         'login_main_helper6': 'The verification code is valid for 15 minutes.',
+        seeAllProfiles: 'See all profiles',
+        allProfiles: 'All profiles',
+        addProfile: 'Add profile',
+        switchProfile: 'Switch profile',
+        switchProfileConfirm: 'Confirm profile switch to {name}\'s profile.',
     },
     'http': {
         '2xx': 'Successful',

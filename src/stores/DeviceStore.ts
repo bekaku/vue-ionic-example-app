@@ -6,20 +6,20 @@ import { LatestDeviceActiveKey } from '@/libs/constant';
 export const useDeviceStore = defineStore('deviceStore', () => {
   const isActive = ref(false);
   const deviceFourceReloadData = ref(false);
-  const setAppStateChange =async (state: boolean) => {
-    const latestDeviceActive = await loadStorage<number>(LatestDeviceActiveKey, false);
+  const setAppStateChange = async (state: boolean) => {
+  const latestDeviceActive = await loadStorage<number>(LatestDeviceActiveKey, true);
     isActive.value = state;
+    const currentTimeTamp = getCurrentTimestamp();
     if (state) {
-      const currentTimeTamp = getCurrentTimestamp();
       const diffminutes = getDateDiffMinutes(
-        latestDeviceActive || 0,
+        Number.parseInt(latestDeviceActive + '') || 0,
         currentTimeTamp
       );
-      if (diffminutes >= 30) {
+      if (diffminutes > 0 && diffminutes >= 15) {
         deviceFourceReloadData.value = true;
       }
     } else {
-      await saveStorage(LatestDeviceActiveKey, getCurrentTimestamp());
+      await saveStorage(LatestDeviceActiveKey, currentTimeTamp, true);
       deviceFourceReloadData.value = false;
     }
   };

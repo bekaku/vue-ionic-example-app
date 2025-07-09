@@ -9,6 +9,7 @@ import { toastController } from '@ionic/vue';
 import { useBase } from './useBase';
 import { useDevice } from './useDevice';
 import { useLang } from './useLang';
+import { useAppStorage } from './useAppStorage';
 
 export const useNotification = () => {
   const {
@@ -17,6 +18,7 @@ export const useNotification = () => {
     findCountAllNotRead,
     updateReadNotify
   } = UserNotifyService();
+  const { getCurrentUserToken } = useAppStorage()
   const { isWeb } = useDevice();
   const { notify, setNotify } = useNotificationStore();
   const { t } = useLang();
@@ -40,11 +42,12 @@ export const useNotification = () => {
     });
   };
   const onUpdateFcmSetting = async (isON: boolean) => {
-    const refeshTokenKey = await loadStorage<string>(AppAuthRefeshTokenKey);
+    // const refeshTokenKey = await loadStorage<string>(AppAuthRefeshTokenKey);
+     const currentToken = await getCurrentUserToken();
     const fcmToken = await loadStorage<string>(FcmTokenKey);
     await updateFcmSetting({
       refreshToken: {
-        refreshToken: refeshTokenKey,
+        refreshToken: currentToken?.refreshToken || null,
         fcmToken,
         fcmEnable: isON
       }
@@ -239,7 +242,7 @@ export const useNotification = () => {
         || functionCode == 'LIKE_POST'
       ) {
         appNavigateTo(`/post/view/${functionId}`);
-      // eslint-disable-next-line no-empty
+        // eslint-disable-next-line no-empty
       } else if (functionCode == 'CHAT') {
       }
     }

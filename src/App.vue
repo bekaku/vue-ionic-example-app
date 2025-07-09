@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useBase } from '@/composables/useBase';
 import { useConfig } from '@/composables/useConfig';
-import { useInitApp } from '@/composables/useInitApp';
 import { useLang } from '@/composables/useLang';
 import { useAuthenStore } from '@/stores/authenStore';
 import { useDeviceStore } from '@/stores/deviceStore';
@@ -13,15 +12,19 @@ import {
   useIonRouter
 } from '@ionic/vue';
 import { onBeforeMount } from 'vue';
+import { useAuthen } from './composables/useAuthen';
+import { useDevice } from './composables/useDevice';
 const { isDevMode } = useConfig();
 const authenStore = useAuthenStore();
-const { initAuthen, initThemeLanguge } = useInitApp();
+const { initAuthen, initThemeLanguge } = useAuthen();
 const ionRouter = useIonRouter();
 const { getCurrentPath, appConfirm } = useBase();
 const { t } = useLang();
 const deviceStore = useDeviceStore();
 const { setAppStateChange } = deviceStore;
+const { setSafeArea } = useDevice()
 onBeforeMount(async () => {
+  setSafeArea();
   initThemeLanguge();
   console.log('App.vue > onBeforeMount');
   if (isDevMode()) {

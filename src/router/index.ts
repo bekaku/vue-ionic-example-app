@@ -1,8 +1,6 @@
-import { AppAuthTokenKey } from '@/libs/constant';
-import { loadStorage } from '@/utils/storageUtil';
+import { useAppStorage } from '@/composables/useAppStorage';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import type { RouteRecordRaw } from 'vue-router';
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: '',
@@ -205,7 +203,7 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-    {
+  {
     path: '/example/ui/transitions',
     component: () => import('@/pages/example/ui/transitions.vue')
   },
@@ -229,14 +227,18 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
 });
+const {
+  getCurrentUserToken,
+} = useAppStorage()
 router.beforeEach(async (to, from, next) => {
   if (to.meta.noRequireAuth === true) {
     next();
   } else {
     // console.log('requireAuth > from ', from, 'to >', to);
     // const authTokenKey = localStorage.getItem(AppAuthTokenKey);
-    const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
-    if (authTokenKey) {
+    // const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
+    const currentJwtToken = await getCurrentUserToken()
+    if (currentJwtToken && currentJwtToken.authenticationToken) {
       next();
     } else {
       next({

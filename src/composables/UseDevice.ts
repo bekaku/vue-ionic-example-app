@@ -6,6 +6,7 @@ import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import { LatestSyncActiveStatusKey } from '@/libs/constant';
 import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/dateUtil';
 import { DeviceSecurityDetect } from '@capacitor-community/device-security-detect';
+import { SafeArea } from 'capacitor-plugin-safe-area'
 export const useDevice = () => {
   const isIOS = async (): Promise<boolean> => {
     const info = await Device.getInfo();
@@ -78,6 +79,47 @@ export const useDevice = () => {
     const { value } = await DeviceSecurityDetect.isJailBreakOrRooted();
     return new Promise(resolve => resolve(value));
   }
+   const setSafeArea = () => {
+    // document.body.setAttribute('safe-area', 'edge-to-edge');
+    SafeArea.getSafeAreaInsets().then(async (data) => {
+      const { insets } = data
+      const info = await getDeviceInfo();
+      // document.body.style.setProperty('--ion-safe-area-top', `${insets.top}px`)
+      // document.body.style.setProperty('--ion-safe-area-right', `${insets.right}px`,)
+      // document.body.style.setProperty('--ion-safe-area-bottom', `${insets.bottom}px`,)
+      // document.body.style.setProperty('--ion-safe-area-left', `${insets.left}px`)
+      if (info.operatingSystem=='android' && info?.androidSDKVersion && info?.androidSDKVersion >= 35) {
+        document.body.setAttribute('safe-area', 'edge-to-edge');
+        document.documentElement.style.setProperty('--app-safe-area-top', `${insets.top}px`)
+        document.documentElement.style.setProperty('--app-safe-area-right', `${insets.right}px`)
+        document.documentElement.style.setProperty('--app-safe-area-bottom', `${insets.bottom}px`)
+        document.documentElement.style.setProperty('--app-safe-area-left', `${insets.left}px`)
+      }
+      // document.documentElement.style.setProperty(
+      //   '--ion-safe-area-top',
+      //   `${insets.top}px`,
+      // )
+      // document.documentElement.style.setProperty(
+      //   '--ion-safe-area-right',
+      //   `${insets.right}px`,
+      // )
+      // document.documentElement.style.setProperty(
+      //   '--ion-safe-area-bottom',
+      //   `${insets.bottom}px`,
+      // )
+      // document.documentElement.style.setProperty(
+      //   '--ion-safe-area-left',
+      //   `${insets.left}px`,
+      // )
+      // safeAreaStyle.value = {
+      //   paddingTop: `${insets.top}px`,
+      //   paddingBottom: `${insets.bottom}px`,
+      //   paddingLeft: `${insets.left}px`,
+      //   paddingRight: `${insets.right}px`,
+      //   border: '1px solid red',
+      // }
+    })
+  }
   return {
     isIOS,
     isAppPlatfrom,
@@ -88,6 +130,8 @@ export const useDevice = () => {
     getPlatformType,
     getDeviceId,
     canSyncActiveStatusToServer,
-    isRootDetected
+    isRootDetected,
+    setSafeArea,
+    setSysncActiveStatus
   };
 };

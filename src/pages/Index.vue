@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { useAuthen } from '@/composables/useAuthen';
 import { useBase } from '@/composables/useBase';
 import { useCheckVersion } from '@/composables/useCheckVersion';
 import { useConfig } from '@/composables/useConfig';
 import { useDevice } from '@/composables/useDevice';
-import { useInitApp } from '@/composables/useInitApp';
 import { useLang } from '@/composables/useLang';
 import { useAuthenStore } from '@/stores/authenStore';
 import {
@@ -15,7 +15,6 @@ import {
   IonSpinner,
 } from '@ionic/vue';
 import { defineAsyncComponent, onMounted, ref } from 'vue';
-declare let window: any;
 
 const VersionCheck = defineAsyncComponent(
   () => import('@/components/VersionCheck.vue'),
@@ -25,7 +24,7 @@ const BaseResult = defineAsyncComponent(
 );
 const { t } = useLang();
 const { isRootDetected } = useDevice();
-const { initAuthen } = useInitApp();
+const { initAuthen } = useAuthen();
 const { appNavigateTo } = useBase();
 const { isDevMode } = useConfig();
 const { checkVersion, appVersion, platForm, haveVersionUpdate, userVersion }

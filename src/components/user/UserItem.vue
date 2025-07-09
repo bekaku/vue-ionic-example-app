@@ -3,17 +3,27 @@ import type { AvatarProps } from '@/types/props';
 import BaseAvatar from '../base/BaseAvatar.vue';
 import { IonItem, IonLabel } from '@ionic/vue';
 import type { ItemLines } from '@/types/common';
+import BaseEllipsis from '../base/BaseEllipsis.vue';
 
-const { showArrow = false } = defineProps<{
+const {
+  showArrow = false,
+  lines = 'none',
+  nameBold = false,
+  linesName = 0,
+  linesDescription = 0,
+} = defineProps<{
   avatar?: AvatarProps;
   avatarTop?: boolean;
   clickable?: boolean;
   showArrow?: boolean;
   description?: string | undefined;
   name?: string | undefined;
+  nameBold?: boolean;
   to?: string;
   sideTop?: boolean;
   lines?: ItemLines;
+  linesName?: number;
+  linesDescription?: number;
 }>();
 </script>
 <template>
@@ -30,14 +40,23 @@ const { showArrow = false } = defineProps<{
     </div>
     <IonLabel>
       <slot name="name">
-        <h3 class="q-text-weight-medium">
+        <BaseEllipsis
+          :lines="linesName"
+          :class="{
+            'q-text-weight-bold': nameBold,
+            'q-text-weight-medium': !nameBold,
+          }"
+        >
           {{ name }}
-        </h3>
+        </BaseEllipsis>
       </slot>
       <slot name="description">
-        <p>
+        <!-- <p> -->
+        <BaseEllipsis :lines="linesDescription" class="text-muted q-text-caption">
           {{ description }}
-        </p>
+        </BaseEllipsis>
+
+        <!-- </p> -->
       </slot>
       <slot name="bottom" />
     </IonLabel>

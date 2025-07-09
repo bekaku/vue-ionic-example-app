@@ -14,9 +14,9 @@ const config: CapacitorConfig = {
     allowMixedContent: true
   },
   plugins: {
-    CapacitorHttp: {
-      enabled: true,
-    },
+    // CapacitorHttp: {
+    //   enabled: true,
+    // },
     Keyboard: {
       resize: KeyboardResize.Body,
       style: KeyboardStyle.Default,

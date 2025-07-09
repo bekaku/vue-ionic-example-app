@@ -28,6 +28,7 @@ export const AppAuthRefeshTokenKey = PrefixKey + 'mb_02';
 export const AppAuthDataKey = PrefixKey + 'mb_03';
 export const AppAuthTokenExpireKey = PrefixKey + 'mb_04';
 export const AppAuthTokenCreatedKey = PrefixKey + 'mb_05';
+export const AppAuthCuurentUserKey = PrefixKey + 'current_user';
 export const CacheDateCheckKey = PrefixKey + 'mb_cache_date_check';
 export const FcmTokenKey = PrefixKey + 'mb_fcm';
 export const FcmSettingKey = PrefixKey + 'mb_fcm_setting';

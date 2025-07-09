@@ -98,7 +98,9 @@ const actionSheetSelected = async (ev: any) => {
       <ion-card-content class="q-gutter-md">
         <ion-row class="q-gutter-md">
           <BaseLongPressItem style="width: 100%;" @on-long-press="onLongPress">
-            <BaseButton label="Press me!" full avatar="https://cdn.quasar.dev/img/avatar2.jpg" />
+            <BaseButton label="Press me!" full :avatar="{
+              src: 'https://cdn.quasar.dev/img/avatar1.jpg'
+            }" />
           </BaseLongPressItem>
         </ion-row>
         <IonList>

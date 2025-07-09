@@ -1,7 +1,9 @@
 import { useAxios, } from '@/composables/useAxios';
-import type { AppLocale, ResponseMessage } from '@/types/common';
+import type { AppLocale, LoginedProfileItem, ResponseMessage } from '@/types/common';
 import type {
   AccessTokenDto,
+  RefreshTokenRequest,
+  RefreshTokenResponse,
   UserChangePasswordRequest,
   UserDto,
   UserPersonalEditRequest
@@ -88,6 +90,28 @@ export default () => {
       method: 'GET'
     });
   };
+    const findLoginedProfile = async (
+    refreshToken: RefreshTokenRequest
+  ): Promise<LoginedProfileItem | null> => {
+    return await callAxios<LoginedProfileItem>({
+      API: '/api/user/findLoginedProfile',
+      method: 'POST',
+      body: refreshToken,
+    });
+  };
+  const verifyUserByEmailOrUsername = async (
+    userNameOrEmail: string
+  ): Promise<RefreshTokenResponse | null> => {
+    return await callAxios<RefreshTokenResponse>({
+      API: '/api/user/verifyUserByEmailOrUsername',
+      method: 'POST',
+      body: {
+        emailOrUsername: {
+          emailOrUsername: userNameOrEmail
+        }
+      },
+    });
+  };
   return {
     getUserSessionData,
     findPublicUserData,
@@ -98,6 +122,8 @@ export default () => {
     currentAuthSession,
     updateUserAvatar,
     updateUserCover,
-    findAllUserActiveByUserAuth
+    findAllUserActiveByUserAuth,
+    findLoginedProfile,
+    verifyUserByEmailOrUsername
   };
 };

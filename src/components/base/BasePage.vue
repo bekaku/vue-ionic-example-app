@@ -44,6 +44,7 @@ const {
   showBackLink?: boolean
   headerNoBorder?: boolean
   dark?: boolean
+  light?: boolean
   titleSize?: 'large' | 'small' | undefined,
   scrollEvents?: boolean
 }>();
@@ -114,7 +115,7 @@ const logScrolling = (event: any) => {
 
     <slot name="content">
       <ion-content :scroll-events="scrollEvents" :fullscreen="fullscreen" :scroll-y="scrollY"
-        :class="{ 'ion-padding': contentPadding, 'dark': dark, 'ion-no-padding': noPadding}" @ion-scroll="logScrolling($event)">
+        :class="{ 'ion-padding': contentPadding, 'dark': dark, 'ion-no-padding': noPadding }" @ion-scroll="logScrolling($event)">
         <template v-if="collapse == 'condense'">
           <ion-header mode="ios" collapse="condense">
             <ion-toolbar :color="toolbarColor">
@@ -136,5 +137,8 @@ ion-content.dark {
 ion-toolbar.dark {
   --background: var(--second-bg-color-theme-dark);
   --color: var(--v-main-text-body-theme-dark);
+}
+ion-content.light {
+  --background: var(--v-color-white);
 }
 </style>

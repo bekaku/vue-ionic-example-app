@@ -58,7 +58,7 @@ export default antfu({
     'node/prefer-global/process': 'off',
     'style/brace-style': 'off',
     'vue/html-indent': 'off',
-    'style/arrow-parens': 'warn',
+    'style/arrow-parens': 'off',
     'vue/first-attribute-linebreak': 'off',
     'vue/html-closing-bracket-newline': 'off',
     'vue/singleline-html-element-content-newline': 'off',
@@ -77,5 +77,7 @@ export default antfu({
     // 'vue/v-on-event-hyphenation': 'off',
     'style/eol-last': 'off',
     'style/member-delimiter-style': 'off',
+    'style/operator-linebreak': 'off',
+    'vue/operator-linebreak': 'off',
   },
 });

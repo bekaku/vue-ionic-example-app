@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue';
-import BasePage from '@/components/base/BasePage.vue';
 import BaseMenuItem from '@/components/base/BaseMenuItem.vue';
 import BaseMenuItems from '@/components/base/BaseMenuItems.vue';
+import BasePage from '@/components/base/BasePage.vue';
+import UserLoginedCard from '@/components/user/UserLoginedCard.vue';
 import { useAuthen } from '@/composables/useAuthen';
 import { useBase } from '@/composables/useBase';
 import { useCache } from '@/composables/useCache';
@@ -17,23 +18,20 @@ import { useAuthenStore } from '@/stores/authenStore';
 import { useTabStore } from '@/stores/tabStore';
 import { loadStorage, saveStorage } from '@/utils/storageUtil';
 import {
-  IonButton,
   IonIcon,
   IonItem,
-  IonLabel,
   IonList,
-  IonRow,
   IonText,
-  IonToggle,
+  IonToggle
 } from '@ionic/vue';
+import { biPersonGear } from '@quasar/extras/bootstrap-icons';
 import {
   colorPaletteOutline,
   globeOutline,
   informationCircleOutline,
-  mailOutline,
   notificationsOffOutline,
   notificationsOutline,
-  trashOutline,
+  trashOutline
 } from 'ionicons/icons';
 import { onMounted, ref, watch } from 'vue';
 
@@ -52,7 +50,7 @@ const userVersion = ref(getEnv<string>('VITE_APP_VERSION'));
 const notification = ref(true);
 
 onMounted(async () => {
-  const fcmSetting = await loadStorage<boolean>(CacheKey.FCM_SETTING, false);
+  const fcmSetting = await loadStorage<boolean>(CacheKey.FCM_SETTING);
   notification.value = fcmSetting != null ? fcmSetting : true;
 });
 const onDeleteCache = () => {
@@ -77,41 +75,19 @@ watch(notification, async (newVal) => {
 </script>
 <template>
   <BasePage :page-title="t('base.other')" fullscreen :show-back-link="false">
-    <BaseMenuItems v-if="appNavs.length > 0" :items="appNavs">
-      <template v-if="authenStore.auth" #top>
-        <BaseMenuItem
-          class="q-px-md q-pt-sm"
-          :item="{
-            avatar: { src: authenStore?.auth?.avatar?.thumbnail || '' },
-          }"
-        >
-          <template #label>
-            <ion-label>
-              <h2 class="q-text-weight-bold">
-                {{ authenStore.loginedDisplay }}
-              </h2>
-              <IonRow class="ion-align-items-center text-muted q-text-caption">
-                <ion-icon :icon="mailOutline" class="q-mr-xs" />
-                {{ authenStore.auth?.email }}
-              </IonRow>
-            </ion-label>
-          </template>
-          <template #end>
-            <ion-button
-              slot="end"
-              fill="clear"
-              router-link="/settings/account-settings"
-            >
-              {{ t('base.edit') }}
-            </ion-button>
-          </template>
-        </BaseMenuItem>
-      </template>
-    </BaseMenuItems>
+    <UserLoginedCard />
+    <BaseMenuItems v-if="appNavs.length > 0" :items="appNavs"> </BaseMenuItems>
     <BaseMenuItems :items="additionalMenu" />
-
     <BaseCard :title="t('base.setting')">
       <ion-list>
+        <BaseMenuItem
+          :item="{
+            label: 'base.accountEdit',
+            icon: { name: biPersonGear, iconSet: 'bootstrap-icons' },
+            button: true,
+             to: '/settings/account-settings',
+          }"
+        />
         <BaseMenuItem
           :item="{
             label: 'base.appearance',

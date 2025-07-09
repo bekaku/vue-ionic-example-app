@@ -1,11 +1,8 @@
 import { useAxios } from '@/composables/useAxios';
 import type {
   NotificationCount,
-  RefreshTokenRequest,
-  NotificationDto
-} from '@/types/models';
-import {
-  NotifyFunctionType
+  NotificationDto,
+  RefreshTokenRequest
 } from '@/types/models';
 export default () => {
   const { callAxios } = useAxios();

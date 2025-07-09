@@ -1,5 +1,6 @@
 import type { WriteFileResult } from '@capacitor/filesystem';
 import type { AvatarProps, IconProps, RBACProps } from './props';
+import type { UserDto } from './models';
 // enum
 export enum CrudListDataType {
   TEXT,
@@ -373,6 +374,20 @@ export interface ILocales {
   name: string
   iso: AppLocale
   flag: string
+}
+export interface StorageItem {
+  key?: string
+  value?: any
+  userId?: number | string
+}
+export interface NotificationCount {
+  lastestId: number
+  totalNotify: number
+  totalNewMessage: number
+}
+export interface LoginedProfileItem {
+  user?: UserDto
+  notificationCount?: NotificationCount
 }
 // export interface ILocales {
 //   [key: string]: {
