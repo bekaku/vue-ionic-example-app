@@ -90,13 +90,20 @@ export default () => {
       method: 'GET'
     });
   };
-    const findLoginedProfile = async (
+  const findLoginedProfile = async (
     refreshToken: RefreshTokenRequest
   ): Promise<LoginedProfileItem | null> => {
     return await callAxios<LoginedProfileItem>({
       API: '/api/user/findLoginedProfile',
       method: 'POST',
       body: refreshToken,
+    });
+  };
+  const findAllLoginedProfile = async (
+  ): Promise<LoginedProfileItem[] | null> => {
+    return await callAxios<LoginedProfileItem[]>({
+      API: '/api/user/findAllLoginedProfile',
+      method: 'GET',
     });
   };
   const verifyUserByEmailOrUsername = async (
@@ -124,6 +131,7 @@ export default () => {
     updateUserCover,
     findAllUserActiveByUserAuth,
     findLoginedProfile,
+    findAllLoginedProfile,
     verifyUserByEmailOrUsername
   };
 };

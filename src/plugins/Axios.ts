@@ -20,7 +20,7 @@ declare module '@vue/runtime-core' {
 const appAxiosInstance = axios.create({
   // baseURL: process.env.NODE_ENV == 'development' ? 'http://192.168.7.249:8080' : 'https://api.example.com',
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  withCredentials: false,
+  withCredentials: true,
   timeout: import.meta.env.VITE_API_TIMOUT || 3 * 60000, // 60000 = 1 minute, 0 = no timeout
   headers: {
     'Content-Type': 'application/json',
@@ -58,6 +58,7 @@ appAxiosInstance.interceptors.request.use(async (config) => {
   const locale = await loadStorage<string>(LocaleKey);
   if (currentToken && currentToken?.authenticationToken) {
     config.headers.Authorization = `Bearer ${currentToken.authenticationToken}`;
+    config.headers['X-User-ID'] = currentToken.userId || '';
   }
   if (locale) {
     config.headers['Accept-Language'] = locale;

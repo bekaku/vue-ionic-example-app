@@ -14,7 +14,8 @@ export const useAuthenStore = defineStore('authenStore', () => {
   } = useAppStorage()
   const appStore = useAppStore();
   const auth = ref<UserDto | null>();
-   const loginedItems = ref<LoginedProfileItem[]>([]);
+  const alreadyFetchLoginedProfile = ref<boolean>(false);
+  const loginedItems = ref<LoginedProfileItem[]>([]);
   const refreshTokenTimeout = ref<any>(null);
   const refreshTokenTimeoutNo = ref<number>(0);
   const sessionExpired = ref<boolean>(false);
@@ -64,8 +65,11 @@ export const useAuthenStore = defineStore('authenStore', () => {
   const setAuthen = (item: UserDto) => {
     auth.value = item;
   }
-    const setLoginedItems = (items: LoginedProfileItem[]) => {
+  const setLoginedItems = (items: LoginedProfileItem[]) => {
     loginedItems.value = items;
+  }
+  const setFetchLoginedProfile = (status: boolean) => {
+    alreadyFetchLoginedProfile.value = status;
   }
   const logout = () => {
     auth.value = undefined;
@@ -85,6 +89,8 @@ export const useAuthenStore = defineStore('authenStore', () => {
     logout,
     initialAuthData,
     initialAuthDataProcess,
-    setLoginedItems
+    setLoginedItems,
+    setFetchLoginedProfile,
+    alreadyFetchLoginedProfile
   }
 });

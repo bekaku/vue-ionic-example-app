@@ -24,18 +24,29 @@ const emit = defineEmits<{
   'on-switch-profile': [userId: number | string];
 }>();
 const authenStore = useAuthenStore();
-const { loginedItems } = storeToRefs(authenStore);
-const { auth, setLoginedItems } = authenStore;
+const { loginedItems, alreadyFetchLoginedProfile } = storeToRefs(authenStore);
+const { auth, setLoginedItems, setFetchLoginedProfile } = authenStore;
 const { appConfirm } = useBase();
 const { isDark } = useTheme();
 const { t } = useLang();
 const loading = ref<boolean>(true);
 const { getAllRefreshTokens } = useAppStorage();
-const { findLoginedProfile } = UserService();
+const { findLoginedProfile, findAllLoginedProfile } = UserService();
 onMounted(async () => {
-  await onSetProfiles();
+  await fetchAllProfile();
   loading.value = false;
 });
+const fetchAllProfile = async () => {
+  if (alreadyFetchLoginedProfile) {
+    return new Promise((resolve) => resolve(true));
+  }
+  const res = await findAllLoginedProfile();
+  setFetchLoginedProfile(true);
+  if (res && res.length > 0) {
+    setLoginedItems(res);
+  }
+  return new Promise((resolve) => resolve(true));
+};
 const onSetProfiles = async () => {
   if (loginedItems.value.length > 0 || !auth || !auth.id) {
     return new Promise((resolve) => resolve(false));
@@ -118,7 +129,11 @@ const onGoToAddProfilePage = () => {
       }"
     >
       <template #end>
-        <BaseIcon :name="checkmarkCircleOutline" icon-set="ion" color="primary" />
+        <BaseIcon
+          :name="checkmarkCircleOutline"
+          icon-set="ion"
+          color="primary"
+        />
       </template>
     </UserItem>
     <SkeletonItem v-if="loading" :show="loading" :items="2" />
