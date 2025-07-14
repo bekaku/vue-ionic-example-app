@@ -54,5 +54,7 @@ export default {
         'usernameValidate': 'รูปแบบชื่อผู้ใช้ไม่ถูกต้อง',
         'fileExcelError': 'กรุณาเลือกไฟล์นามสกุล .xlsx',
         'percentageValueWrong': 'ค่าเปอร์เซ็นต์ไม่ถูกต้องกรุณาตรวจสอบ',
+        emailOrUsernameNotFound: 'ไม่พบชื่อผู้ใช้หรืออีเมล์ในระบบ',
+        userNameDuplicateInDevice: 'มีผู้ใช้งานนี้แล้วในอุปกรณ์นี้ กรุณาเปลี่ยนผู้ใช้งานใหม่',
     },
 }

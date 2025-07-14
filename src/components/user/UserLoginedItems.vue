@@ -33,11 +33,11 @@ const loading = ref<boolean>(true);
 const { getAllRefreshTokens } = useAppStorage();
 const { findLoginedProfile, findAllLoginedProfile } = UserService();
 onMounted(async () => {
-  await fetchAllProfile();
+  await onSetProfiles();
   loading.value = false;
 });
 const fetchAllProfile = async () => {
-  if (alreadyFetchLoginedProfile) {
+  if (alreadyFetchLoginedProfile.value) {
     return new Promise((resolve) => resolve(true));
   }
   const res = await findAllLoginedProfile();
@@ -48,7 +48,7 @@ const fetchAllProfile = async () => {
   return new Promise((resolve) => resolve(true));
 };
 const onSetProfiles = async () => {
-  if (loginedItems.value.length > 0 || !auth || !auth.id) {
+  if (loginedItems.value.length > 0 || !auth || !auth.id ||alreadyFetchLoginedProfile.value) {
     return new Promise((resolve) => resolve(false));
   }
   const jwtCookies = await getAllRefreshTokens();

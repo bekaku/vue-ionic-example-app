@@ -115,7 +115,7 @@ const logScrolling = (event: any) => {
 
     <slot name="content">
       <ion-content :scroll-events="scrollEvents" :fullscreen="fullscreen" :scroll-y="scrollY"
-        :class="{ 'ion-padding': contentPadding, 'dark': dark, 'ion-no-padding': noPadding }" @ion-scroll="logScrolling($event)">
+        :class="{ 'ion-padding': contentPadding, 'dark': dark, 'ion-no-padding': noPadding, 'light': light, }" @ion-scroll="logScrolling($event)">
         <template v-if="collapse == 'condense'">
           <ion-header mode="ios" collapse="condense">
             <ion-toolbar :color="toolbarColor">

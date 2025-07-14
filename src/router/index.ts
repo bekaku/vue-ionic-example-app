@@ -17,6 +17,10 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/auth/login.vue')
   },
   {
+    path: '/auth/add-account',
+    component: () => import('@/pages/auth/add-account.vue')
+  },
+  {
     path: '/auth/forgot-password',
     meta: { noRequireAuth: true },
     component: () => import('@/pages/auth/forgot-password.vue')

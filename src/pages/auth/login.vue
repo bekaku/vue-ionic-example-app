@@ -105,7 +105,7 @@ onBeforeUnmount(() => {
                   <AppLoginForm>
                     <template #additionalAction>
                       <div
-                        class="ion-text-center q-text-smaller q-text-muted q-mt-lg"
+                        class="ion-text-center q-text-smaller q-text-muted q-my-lg"
                       >
                         <p>{{ t('app.appVersion', [userVersion]) }}</p>
                         <div>

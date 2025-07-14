@@ -53,5 +53,7 @@ export default {
         'usernameValidate': 'Invalid username format.',
         'fileExcelError': 'Please select a file with the extension .xlsx.',
         'validateRequireChoose': 'Please select this information.',
+        emailOrUsernameNotFound: 'Username or email not found in the system.',
+        userNameDuplicateInDevice: 'This user already exists on this device. Please change the user.',
     },
 }

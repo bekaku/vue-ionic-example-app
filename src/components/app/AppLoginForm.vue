@@ -260,7 +260,7 @@ const onVeryfyAccount = async () => {
           <ion-button
             mode="ios"
             expand="block"
-            class="text-white"
+            class="text-white q-mx-sm"
             :disabled="!canSubmit || !acceptedTerm"
             type="submit"
           >
