@@ -42,12 +42,13 @@ const {
             v-bind="icon"
           />
         </template>
-        <base-icon
-          v-if="iconOnly && icon"
-          slot="icon-only"
-          class="q-pb-xs"
-          v-bind="{ ...icon, color: icon.color || clear ? 'black' : undefined }"
-        />
+        <template v-if="iconOnly && icon">
+          <base-icon
+            slot="icon-only"
+            class="q-pb-xs"
+            v-bind="icon"
+          />
+        </template>
 
         <template v-if="label">{{ label }}</template>
         <template v-if="iconRight">

@@ -17,6 +17,7 @@
   "dependencies": {
     "@capacitor-community/device-security-detect": "^7.0.0",
     "@capacitor-community/fcm": "^7.1.1",
+    "@capacitor-community/file-opener": "^7.0.1",
     "@capacitor-community/media": "^8.0.1",
     "@capacitor/android": "^7.2.0",
     "@capacitor/app": "^7.0.1",
@@ -30,6 +31,7 @@
     "@capacitor/keyboard": "^7.0.1",
     "@capacitor/preferences": "^7.0.1",
     "@capacitor/push-notifications": "^7.0.1",
+    "@capacitor/share": "^7.0.1",
     "@capacitor/status-bar": "^7.0.1",
     "@coders-tm/vue-number-format": "^3.35.4",
     "@ionic/vue": "8.5.8",

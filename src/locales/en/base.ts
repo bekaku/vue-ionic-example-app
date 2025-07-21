@@ -253,7 +253,10 @@ export default {
         'you': 'You',
         'refreshing': 'Refreshing',
         'pullToRefresh': 'Pull to refresh',
+        share: 'Share',
         notifications: 'Notifications',
+        noViewerForThisFile: 'Unable to open file.',
+        noViewerForThisFileHelp: 'Users can download the file and use other apps on the device to open the file, or share the file to other apps to open the file.',
     },
     'theme': {
         'light': 'Light',

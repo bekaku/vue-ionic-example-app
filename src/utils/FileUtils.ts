@@ -2,7 +2,7 @@
 import { FileNamePrefix } from '@/libs/constant';
 import type { FileType } from '@/types/common';
 import { getCurrentFormattedDatetime } from '@/utils/dateUtil';
-import { biFileEarmarkImage, biFileEarmarkPpt, biFileEarmarkZip, biFiletypePdf, biFiletypeXlsx, biFileWord, biPaperclip } from '@quasar/extras/bootstrap-icons';
+import { biCameraReels, biFileEarmarkImage, biFileEarmarkPpt, biFileEarmarkZip, biFiletypeCsv, biFiletypePdf, biFiletypeTxt, biFiletypeXlsx, biFileWord, biMic, biPaperclip } from '@quasar/extras/bootstrap-icons';
 import JSZip from 'jszip';
 
 export const fileToBlob = (file: File): Promise<any> => {
@@ -31,7 +31,7 @@ export const blobToFile = (
     resolve(file);
   });
 };
-export const imageUrlToFile =async (imageUrl: string, fileName: string): Promise<File> => {
+export const imageUrlToFile = async (imageUrl: string, fileName: string): Promise<File> => {
   // Fetch the image data
   const response = await fetch(imageUrl);
   // Check if the response is successful (status code 200)
@@ -260,6 +260,20 @@ export const getFileTypeIcon = (t: string) => {
     case 'x-rar':
       icon = biFileEarmarkZip;
       break;
+    case 'text/plain':
+      icon = biFiletypeTxt;
+      break;
+    case 'text/csv':
+      icon = biFiletypeCsv;
+      break;
+    case 'audio/mpeg':
+      icon = biMic;
+      break;
+    case 'video/mp4':
+    case 'video/x-msvideo':
+    case 'video/quicktime':
+      icon = biCameraReels;
+      break;
     default:
       icon = biPaperclip;
       break;
@@ -315,6 +329,20 @@ export const getFileType = (t: string): FileType | undefined => {
     case 'application/vnd.rar':
     case 'x-rar':
       type = 'zip';
+      break;
+    case 'text/plain':
+      type = 'txt';
+      break;
+    case 'text/csv':
+      type = 'csv';
+      break;
+    case 'audio/mpeg':
+      type = 'audio';
+      break;
+    case 'video/mp4':
+    case 'video/x-msvideo':
+    case 'video/quicktime':
+      type = 'video';
       break;
     default:
       type = 'unknown';

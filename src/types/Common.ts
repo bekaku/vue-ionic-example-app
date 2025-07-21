@@ -74,7 +74,7 @@ export type AppLocale = 'th' | 'en';
 export type AppTheme =
   | 'dark'
   | 'light';
-export type FileType = 'pdf' | 'msexcel' | 'msword' | 'mspowerpoint' | 'image' | 'zip' | 'unknown';
+export type FileType = 'pdf' | 'msexcel' | 'msword' | 'mspowerpoint' | 'image' | 'zip' | 'txt' | 'csv' |'audio' | 'video' | 'unknown';
 export type ImgRatioType = '1' | '16/9' | '4/3';
 export type IHrefTarget = '_blank' | '_parent' | '_self' | '_top';
 export type IHttpStatus =

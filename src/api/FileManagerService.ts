@@ -67,13 +67,14 @@ export default () => {
     path: string,
     responseDataType: ResponseDataType = 'blob'
   ): Promise<any> => {
-    const cdnBase = getEnv<string>('VITE_CDN_BASE_URL');
-    const src = path ? path.replace(cdnBase || '', '') : path;
+    // const cdnBase = getEnv<string>('VITE_CDN_BASE_URL');
+    // const src = path ? path.replace(cdnBase || '', '') : path;
     const response = await callAxiosFile<any>({
-      API: src,
-      baseURL: cdnBase,
+      API: path,
+      // baseURL: cdnBase,
       method: 'GET',
-      responseType: 'arraybuffer'
+      responseType: 'arraybuffer',
+      clearBaseUrl: true
     });
     if (response.data) {
       if (responseDataType == 'blob') {
