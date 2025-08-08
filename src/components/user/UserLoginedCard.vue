@@ -76,11 +76,10 @@ const onSwithUserProcess = async (userId: number | string) => {
                   class="q-mt-sm"
                   :icon="{
                     name: chevronDownOutline,
+                    iconSet: 'ion',
                   }"
-                  color="light"
                   icon-only
                   clear
-                  icon-set="ion"
                 >
                 </BaseButton>
                 <IonBadge

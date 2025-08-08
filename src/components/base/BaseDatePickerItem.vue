@@ -31,6 +31,7 @@
     :breakpoints="[1]"
     :content-padding="false"
     :title="t('base.chooseDate')"
+    keep-contents-mounted
     @on-close="show = false"
   >
     <BaseDatePicker

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import FileManagerService from '@/api/FileManagerService';
 import UserService from '@/api/UserService';
 import BaseImageCropperDialog from '@/components/base/BaseImageCropperDialog.vue';
 import BasePage from '@/components/base/BasePage.vue';
 import { useBase } from '@/composables/useBase';
+import { useFileUpload } from '@/composables/useFileUpload';
 import { useLang } from '@/composables/useLang';
 import { useTheme } from '@/composables/useTheme';
 import { useAuthenStore } from '@/stores/authenStore';
@@ -19,7 +19,7 @@ import { defineAsyncComponent, ref } from 'vue';
 const ProfileCard = defineAsyncComponent(() => import('@/components/profile/Card.vue'),);
 const BaseChoosePhoto = defineAsyncComponent(() => import('@/components/base/BaseChoosePhoto.vue'));
 
-const { uploadApi } = FileManagerService();
+const { onUploadChunk } = useFileUpload()
 const { updateUserAvatar, updateUserCover } = UserService();
 const authenStore = useAuthenStore();
 const { t } = useLang();
@@ -91,7 +91,8 @@ const onUploadCover = async (f: any) => {
   l.dismiss();
 };
 const onUploadFileProcess = async (f: any): Promise<FileManagerDto | null> => {
-  const response = await uploadApi(f);
+  // const response = await uploadApi(f);
+  const response = await onUploadChunk(f);
   return new Promise((resolve) => {
     resolve(response);
   });

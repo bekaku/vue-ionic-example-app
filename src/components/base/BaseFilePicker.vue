@@ -22,7 +22,8 @@ const {
         'image/png',
         'image/jpeg'
     ],
-    lines = 'none'
+    lines = 'none',
+    formatSize= false
 } = defineProps<{
     multiple?: boolean
     showPreview?: boolean
@@ -34,6 +35,7 @@ const {
     iconSize?: number
     wildcard?: boolean
     lines?: ItemLines
+    formatSize?: boolean;
 }>();
 const emit = defineEmits(['on-file-add']);
 const { t } = useLang();
@@ -186,7 +188,7 @@ defineExpose({
         </slot>
         <ion-list v-if="showPreview && fileItems.length > 0 && modelValue && modelValue.length > 0" class="q-my-md">
             <template v-for="(f, fileIndex) in fileItems" :key="`f-${fileIndex}-${f.uniqueId}-${f.id}`">
-                <BaseFilePreviewItemAlt :item="f" :index="fileIndex" dense
+                <BaseFilePreviewItemAlt :item="f" :index="fileIndex" dense :format-size="formatSize"
                      :image-size="imageSize" :icon-size="iconSize" :show-delete="showDelete"
                     @on-remove="onRemoveNewImage" />
             </template>

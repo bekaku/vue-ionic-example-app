@@ -71,17 +71,17 @@ export const useAxios = () => {
   const callAxios = async <T>(req: RequestType): Promise<T | null> => {
     const response = await callAxiosProcess<T>(req);
     return new Promise((resolve /* reject */) => {
-        if (response.status != 401 && response.status != 403) {
-          if (response.data) {
-            if (isAppException(response.data)) {
-              notifyException(response.data);
-            } else if (isServerResponseMessage(response.data)) {
-              notifyServerMessage(response.data);
-            }
+      if (response.status != 401 && response.status != 403) {
+        if (response.data) {
+          if (isAppException(response.data)) {
+            notifyException(response.data);
+          } else if (isServerResponseMessage(response.data)) {
+            notifyServerMessage(response.data);
           }
         }
-        resolve(response.data as T);
       }
+      resolve(response.data as T);
+    }
     );
 
 
@@ -114,6 +114,8 @@ export const useAxios = () => {
 
       if (req.baseURL != undefined) {
         $appAxios.defaults.baseURL = req.baseURL;
+      } else if (req.clearBaseUrl === true) {
+        $appAxios.defaults.baseURL = '';
       } else {
         $appAxios.defaults.baseURL = getEnv<string>('VITE_API_BASE_URL');
       }

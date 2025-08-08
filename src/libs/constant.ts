@@ -17,7 +17,7 @@ export const config = {
   apkLink: import.meta.env.VITE_APK_STORE,
 };
 
-export const Devmode = import.meta.env.VITE_DEV_MODE==='true';
+export const Devmode = import.meta.env.VITE_DEV_MODE === 'true';
 export const PrefixKey = '_vue_ionic_';
 export const DefaultLocale = 'th';
 export const LocaleKey = PrefixKey + 'mb_locale';
@@ -56,15 +56,27 @@ export const ProfileNameAtt = 'userProfileId';
 export const FileNamePrefix = 'my_file';
 export const FileExtensionAccept
   = '.png,.jpg,.jpeg,.gif,.doc,.docx,.pdf,.xls,.xlsx,.ppt,.pptx,.pps';
-
+export const FileExtensionVdoAccept = '.mp4,.m4v,.m4a,.mov,.mpg,.mpeg,.mpe,.mpv,.webm,.avi,.webm';
 export const FileTypeAcceptList = [
-  'application/pdf',
+  'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-powerpoint',
   'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  'image/png',
+  'application/pdf',
+  'application/vnd.rar',
+  'application/zip',
   'image/jpeg',
-  'image/gif'
+  'image/png',
+  'image/gif',
+  'text/plain',
+  'text/csv',
+  'video/mpeg',
+  'video/mp4',
+  'video/quicktime',
+  'video/x-msvideo',
+  'video/webm',
 ];
 
 export const FILES_UPLOAD_ATT = '_filesUploadName';

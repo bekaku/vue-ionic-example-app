@@ -64,41 +64,44 @@ import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
         <BaseButton full label="Full" />
       </ion-card-content>
     </BaseCard>
-    <BaseCard title="RBAC" subtitle="Role based access control">
+    <BaseCard
+      title="RBAC"
+      subtitle="Role based access control"
+    >
       <ion-card-content>
         <ion-row class="q-gutter-md">
           <BaseButton
-            label="Single permission"
-            :rbac="{
+            v-rbac="{
               permissions: ['user_manage'],
             }"
+            label="Single permission"
           />
           <BaseButton
-            label="Any of multiple permissions"
-            :rbac="{
+            v-rbac="{
               permissions: ['user_manage_not_exist', 'file_manager_list'],
               condition: 'any',
             }"
+            label="Any of multiple permissions"
           />
           <BaseButton
-            label="All permissions required"
-            :rbac="{
+            v-rbac="{
               permissions: ['user_list', 'user_view', 'user_delete'],
               condition: 'all',
             }"
+            label="All permissions required"
           />
           <BaseButton
-            label="Negation (not)"
-            :rbac="{
+            v-rbac="{
               permissions: ['user_manage'],
               condition: 'not',
             }"
+            label="Negation (not)"
           />
           <BaseButton
-            label="Not eligible for this"
-            :rbac="{
+            v-rbac="{
               permissions: ['user_manage_not_exist'],
             }"
+            label="Not eligible for this"
           />
         </ion-row>
       </ion-card-content>

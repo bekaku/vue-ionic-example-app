@@ -34,6 +34,7 @@ const {
   contentPadding = true,
   iconColor = 'primary',
   iconSet = 'ion',
+  keepContentsMounted = false,
 } = defineProps<{
   autoClose?: boolean;
   headerNoBorder?: boolean;
@@ -45,12 +46,15 @@ const {
   title?: string;
   isTablet?: boolean;
   presentingElement?: any;
+  keepContentsMounted?: boolean;
 }>();
 const { isAppPlatfrom } = useDevice();
 const emit = defineEmits(['on-close', 'on-before-hide']);
 const modelValue = defineModel<boolean>({ default: false });
 const baseDialogRef = useTemplateRef<any>('baseDialogRef');
-const fullMode = computed(() => isAppPlatfrom('tablet') || isAppPlatfrom('desktop'))
+const fullMode = computed(
+  () => isAppPlatfrom('tablet') || isAppPlatfrom('desktop'),
+);
 const onClose = () => {
   emit('on-close');
   if (autoClose) {
@@ -68,15 +72,27 @@ defineExpose({
 });
 </script>
 <template>
-  <ion-modal ref="baseDialogRef" :is-open="modelValue" :class="{ 'full-modal': fullMode }"
-    :presenting-element="presentingElement" :aria-hidden="true" :show-backdrop="false" @will-dismiss="onClose">
+  <ion-modal
+    ref="baseDialogRef"
+    :is-open="modelValue"
+    :class="{ 'full-modal': fullMode }"
+    :presenting-element="presentingElement"
+    :aria-hidden="true"
+    :show-backdrop="false"
+    :keep-contents-mounted="keepContentsMounted"
+    @will-dismiss="onClose"
+  >
     <ion-header :class="{ 'ion-no-border': headerNoBorder || dark }">
       <slot name="toolbar">
         <base-toolbar :class="{ dark }">
           <slot name="start">
             <ion-buttons slot="start">
               <ion-button :color="dark ? 'light' : undefined" @click="onClose">
-                <ion-icon slot="icon-only" :class="dark ? 'light' : 'text-black'" :icon="arrowBack" />
+                <ion-icon
+                  slot="icon-only"
+                  :class="dark ? 'light' : 'text-black'"
+                  :icon="arrowBack"
+                />
               </ion-button>
             </ion-buttons>
             <slot name="actions-start" />
@@ -87,7 +103,14 @@ defineExpose({
           <div slot="end">
             <slot name="end">
               <slot name="avatar">
-                <base-icon v-if="icon" slot="start" :icon-set="iconSet" :name="icon" :color="iconColor" :size="24" />
+                <base-icon
+                  v-if="icon"
+                  slot="start"
+                  :icon-set="iconSet"
+                  :name="icon"
+                  :color="iconColor"
+                  :size="24"
+                />
               </slot>
             </slot>
           </div>

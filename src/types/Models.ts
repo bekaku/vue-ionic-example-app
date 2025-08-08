@@ -1,5 +1,5 @@
 import type { IChartSeries, ISeriresCategories } from './chart';
-import type { AppLocale, ChatMessageType, ChatType, EmojiType } from './common';
+import type { AppLocale, ChatMessageType, ChatType, EmojiType, UploadStatus } from './common';
 export type IPlatForm = 1 | 2 | 3; // 1=web, 2=ios, 3=android
 export type IPermissionOperationType = 1 | 2 | 3; // 1=crud, 2=report, 3=other
 export type SearchType = 'POST' | 'PROFILE' | 'HASHTAG' | 'THEME';
@@ -120,6 +120,26 @@ export interface FileManagerDto {
   isImage?: boolean
   image?: boolean
   file?: any
+  uploadProgress?: {
+    uploading: boolean;
+    progress: number;
+    status: UploadStatus;
+    uploadData?: FileManagerDto | null
+  };
+}
+export interface FileUploadChunkResponseDto {
+  filename?: string | null;
+  fileMime?: string | null;
+  status?: boolean;
+  lastChunk?: boolean;
+}
+export interface FileUploadChunkMergeRequestDto {
+  totalChunks: number;
+  fileMime: string | null;
+  originalFilename?: string;
+  chunkFilename: string;
+  resizeImage: boolean;
+  fileDirectoryId?: number | null;
 }
 export interface AccessTokenDto {
   id: number
@@ -341,7 +361,7 @@ export interface GroupChatMsgDto extends Id {
   unsend?: boolean | undefined
   sent: boolean
   sendUser?: UserDto | undefined
-  files?: GroupChatFileDto[] | undefined |null
+  files?: GroupChatFileDto[] | undefined | null
   liked?: boolean | undefined
   onlyLabel?: boolean | undefined
   emojiType?: EmojiType | null | undefined

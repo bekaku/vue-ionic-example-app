@@ -26,6 +26,7 @@ const {
   initialBreakpoint = 0.5,
   breakpoints = [0, 0.25, 0.5, 0.75, 1],
   autoClose = true,
+  keepContentsMounted = false,
 } = defineProps<{
   contentPadding?: boolean;
   autoClose?: boolean;
@@ -33,6 +34,7 @@ const {
   breakpoints?: number[];
   title?: string;
   presentingElement?: any;
+  keepContentsMounted?: boolean
 }>();
 const { t } = useLang();
 const emit = defineEmits(['on-close', 'on-present']);
@@ -69,6 +71,7 @@ defineExpose({
     :initial-breakpoint="initialBreakpoint"
     :breakpoints="breakpoints"
     :presenting-element="presentingElement"
+    :keep-contents-mounted="keepContentsMounted"
     @will-dismiss="onClose"
     @ion-modal-did-dismiss="onClose"
     @did-present="onShow"

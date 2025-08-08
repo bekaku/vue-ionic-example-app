@@ -132,6 +132,7 @@ export type ChatType = 'PERSONAL' | 'GROUP';
 export type ChatMessageType = 'MEDIA' | 'TEXT' | 'IMAGE' | 'FILE' | 'INVITE' | 'LEAVE' | 'LOCATION';
 export type EmojiType = 'LIKE' | 'FIGHTING' | 'LAUGH' | 'WOW' | 'CARE' | 'SAD';
 export type DatetimePresentation = 'date-time' | 'time-date' | 'date' | 'time' | 'month' | 'year' | 'month-year';
+export type UploadStatus = 'UPLOADING' | 'COMPLETED' | 'FAILED';
 // interface
 export interface AppActionSheet {
   text?: string

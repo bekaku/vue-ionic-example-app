@@ -2,7 +2,7 @@ import { useAxios } from '@/composables/useAxios';
 import { useConfig } from '@/composables/useConfig';
 import { FILES_DIRECTORY_ID_ATT, FILES_UPLOAD_ATT } from '@/libs/constant';
 import type { ResponseDataType, ResponseMessage, UploadRequest } from '@/types/common';
-import type { FileManagerDto } from '@/types/models';
+import type { FileManagerDto, FileUploadChunkMergeRequestDto, FileUploadChunkResponseDto } from '@/types/models';
 import { base64FromArrayByffer, generateFileNameByExtesnsion, getFileExtension, getBlobFromAxiosResponse, getFileNameFromAxiosResponse } from '@/utils/fileUtils';
 
 export default () => {
@@ -35,6 +35,39 @@ export default () => {
         uploadRequest: req
       },
       baseURL: getEnv<string>('VITE_CDN_BASE_URL')
+    });
+  };
+
+  const uploadChunkApi = async (
+    file: any,
+    chunkNumber = 0,
+    totalChunks = 0,
+    originalFilename: string = '',
+    chunkFilename: string = '',
+  ): Promise<FileUploadChunkResponseDto | null> => {
+    const postData = new FormData();
+    postData.append(FILES_UPLOAD_ATT, file);
+    postData.append('chunkNumber', chunkNumber.toString());
+    postData.append('totalChunks', totalChunks.toString());
+    postData.append('originalFilename', originalFilename);
+    postData.append('chunkFilename', chunkFilename);
+    return await callAxios<FileUploadChunkResponseDto>({
+      API: '/api/fileManager/uploadChunkApi',
+      method: 'POST',
+      body: postData,
+      baseURL: getEnv<string>('VITE_CDN_BASE_URL'),
+      contentType: 'multipart/form-data'
+    });
+  };
+
+  const mergeChunkApi = async (req: FileUploadChunkMergeRequestDto): Promise<FileManagerDto | null> => {
+    return await callAxios<FileManagerDto>({
+      API: '/api/fileManager/mergeChunkApi',
+      method: 'POST',
+      body: {
+        fileUploadChunkMergeRequest: req
+      },
+      baseURL: getEnv<string>('VITE_CDN_BASE_URL'),
     });
   };
 
@@ -114,6 +147,8 @@ export default () => {
   };
   return {
     uploadApi,
+    uploadChunkApi,
+    mergeChunkApi,
     uploadBase64Api,
     deleteFileApi,
     updateUserCover,

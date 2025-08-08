@@ -6,7 +6,7 @@ import appAxios from './plugins/axios';
 import { AxiosKey } from './plugins/axiosSymbols';
 import i18n from './plugins/i18n';
 import router from './router';
-
+import rbac from '@/directives/rbac'
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
 
@@ -50,6 +50,7 @@ async function startApp() {
   // app.component('RecycleScroller', RecycleScroller);
   // app.config.globalProperties.$appAxios = { ...appAxios };
   app.provide(AxiosKey, appAxios);
+  app.directive('rbac', rbac)
   router.isReady().then(async () => {
     const authenStore = useAuthenStore();
     const { removeAuthToken } = useAppStorage()
