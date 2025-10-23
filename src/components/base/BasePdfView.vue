@@ -66,6 +66,7 @@ const contentType = ref();
 const scale = ref(1);
 const page = ref(1);
 const pages = ref(0);
+const fitParent = ref<boolean>(true)
 onMounted(async () => {
   onLoad();
 });
@@ -128,6 +129,14 @@ const onShare = async () => {
     loader.dismiss();
   }
 };
+const onScaleUp = () => {
+  fitParent.value = false
+  scale.value = scale.value < 2 ? scale.value + 0.25 : scale.value
+}
+const onScaleDown = () => {
+  fitParent.value = false
+  scale.value = scale.value > 0.25 ? scale.value - 0.25 : scale.value
+}
 </script>
 <template>
   <IonRow :style="{ minHeight, minWidth }">
@@ -135,7 +144,7 @@ const onShare = async () => {
       <ion-toolbar>
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-buttons>
-            <ion-button @click="scale = scale > 0.25 ? scale - 0.25 : scale">
+            <ion-button @click="onScaleDown">
               <ion-icon
                 slot="icon-only"
                 class="text-black"
@@ -143,7 +152,7 @@ const onShare = async () => {
               ></ion-icon>
             </ion-button>
             <span>{{ scale * 100 + '%' }}</span>
-            <ion-button @click="scale = scale < 2 ? scale + 0.25 : scale">
+            <ion-button @click="onScaleUp">
               <ion-icon
                 slot="icon-only"
                 class="text-black"
@@ -184,6 +193,7 @@ const onShare = async () => {
           v-model:scale="scale"
           v-model:page="page"
           v-model:pagess="pages"
+          :fit-parent="fitParent"
           :src="pdfSrc"
           :scroll-height="minHeight"
         />

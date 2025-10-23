@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useAppStorage } from '@/composables/useAppStorage';
 import { getTokenStatus } from '@/utils/jwtUtil';
 import router from '../router';
+import JSONbig from 'json-bigint'
 const {
   getCurrentUserToken,
   setAuthToken,
@@ -16,7 +17,8 @@ declare module '@vue/runtime-core' {
     $axios: AxiosInstance
   }
 }
-
+const JSONbigString = JSONbig({ storeAsString: true });
+const BIGINT_PATTERN = /\d{16,}/
 const appAxiosInstance = axios.create({
   // baseURL: process.env.NODE_ENV == 'development' ? 'http://192.168.7.249:8080' : 'https://api.example.com',
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -26,7 +28,29 @@ const appAxiosInstance = axios.create({
     'Content-Type': 'application/json',
     'Accept-Apiclient': DefaultApiCLient
   },
-  validateStatus: status => status < 400 // Resolve only if the status code is less than 400
+  validateStatus: status => status < 400, // Resolve only if the status code is less than 400
+  transformResponse: [function (data) {
+    if (!data) {
+      return data
+    }
+    // try {
+    //   return JSON.parse(JSON.stringify(JSONbigString.parse(data)));
+    // } catch {
+    //   try {
+    //     return JSON.parse(data)
+    //   } catch {
+    //     return data
+    //   }
+    // }
+    try {
+      if (BIGINT_PATTERN.test(data)) {
+        return JSON.parse(JSON.stringify(JSONbigString.parse(data)))
+      }
+      return JSON.parse(data)
+    } catch {
+      return data
+    }
+  }]
 });
 
 interface FailedRequests {

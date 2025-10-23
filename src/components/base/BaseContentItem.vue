@@ -147,7 +147,7 @@ const urlify = (
 ) => {
     const inputText = isEscapeHtml ? escapeHtml(rawText) : rawText;
     if (canUrlify) {
-        const urlRegex = /(https?:\/\/\S+)/g;
+       const urlRegex = /(https?:\/\/[^\s<]+)/g;
         const textLink = inputText.replace(urlRegex, (url) => {
             return `<a class="content-href-${contentId} app-text-link ${linkColor || ''
                 }" href="${url}">${url}</a>`;

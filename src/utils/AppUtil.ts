@@ -69,7 +69,7 @@ export const urlify = (
   inputText: string,
   linkColor: string | undefined = undefined
 ) => {
-  const urlRegex = /(https?:\/\/\S+)/g;
+  const urlRegex = /(https?:\/\/[^\s<]+)/g;
   return inputText.replace(urlRegex, (url) => {
     return `<a class="app-text-link ${linkColor || ''
       }" href="${url}" target="_blank">${url}</a>`;

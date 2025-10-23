@@ -92,11 +92,17 @@ export const useAppStorage = () => {
       resolve(true);
     });
   }
+   const removeAuthCookiesByUserID = async (userId: number | string): Promise<void> => {
+    await removeStorage(`${AppAuthTokenKey}_${userId}`);
+    await removeStorage(`${AppAuthRefeshTokenKey}_${userId}`);
+    return new Promise(resolve => resolve());
+  }
   const removeAuthToken = async () => {
     const currentUID = await loadStorage<string | null>(AppAuthCuurentUserKey);
     if (currentUID) {
-      await removeStorage(`${AppAuthTokenKey}_${currentUID}`);
-      await removeStorage(`${AppAuthRefeshTokenKey}_${currentUID}`);
+      // await removeStorage(`${AppAuthTokenKey}_${currentUID}`);
+      // await removeStorage(`${AppAuthRefeshTokenKey}_${currentUID}`);
+      await removeAuthCookiesByUserID(currentUID);
       // set another user
       const activeJwtTokens = await getAllJwtTokens()
       if (activeJwtTokens && activeJwtTokens.length > 0) {
@@ -185,6 +191,7 @@ export const useAppStorage = () => {
     getCurrentUserToken,
     setAuthToken,
     switchUser,
-    removeAuthToken
+    removeAuthToken,
+    removeAuthCookiesByUserID
   }
 };

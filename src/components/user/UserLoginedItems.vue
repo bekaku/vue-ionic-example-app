@@ -30,7 +30,7 @@ const { appConfirm } = useBase();
 const { isDark } = useTheme();
 const { t } = useLang();
 const loading = ref<boolean>(true);
-const { getAllRefreshTokens } = useAppStorage();
+const { getAllRefreshTokens, removeAuthCookiesByUserID } = useAppStorage();
 const { findLoginedProfile, findAllLoginedProfile } = UserService();
 onMounted(async () => {
   await onSetProfiles();
@@ -48,7 +48,12 @@ const fetchAllProfile = async () => {
   return new Promise((resolve) => resolve(true));
 };
 const onSetProfiles = async () => {
-  if (loginedItems.value.length > 0 || !auth || !auth.id ||alreadyFetchLoginedProfile.value) {
+  if (
+    loginedItems.value.length > 0 ||
+    !auth ||
+    !auth.id ||
+    alreadyFetchLoginedProfile.value
+  ) {
     return new Promise((resolve) => resolve(false));
   }
   const jwtCookies = await getAllRefreshTokens();
@@ -63,6 +68,11 @@ const onSetProfiles = async () => {
           const res = await findLoginedProcess(item.value);
           if (res) {
             finalItems.push(res);
+          } else {
+            // delete this user from loged
+            if (item.userId) {
+              await removeAuthCookiesByUserID(item.userId);
+            }
           }
         }
       }
