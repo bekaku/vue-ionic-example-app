@@ -15,7 +15,9 @@ export default () => {
     return await callAxios<RefreshTokenResponse>({
       API: '/api/auth/login',
       method: 'POST',
-      body: loginRequest
+      body: {
+        data: loginRequest
+      }
     });
   };
 
@@ -25,7 +27,7 @@ export default () => {
     return await callAxios<ResponseMessage>({
       API: '/api/auth/logout',
       method: 'POST',
-      body: refreshToken
+      body: { data: refreshToken }
     });
   };
   const refreshToken = async (
@@ -34,7 +36,7 @@ export default () => {
     return await callAxios<RefreshTokenResponse>({
       API: '/api/auth/refreshToken',
       method: 'POST',
-      body: refreshToken
+      body: { data: refreshToken }
     });
   };
   const removeAccessTokenSession = async (
@@ -53,7 +55,7 @@ export default () => {
       API: '/api/auth/requestVerifyCodeToResetPwd',
       method: 'POST',
       body: {
-        forgotPasswordRequest: req
+        data: req
       },
     });
   };
@@ -64,7 +66,7 @@ export default () => {
       API: '/api/auth/sendVerifyCodeToResetPwd',
       method: 'POST',
       body: {
-        forgotPasswordRequest: req
+        data: req
       },
     });
   };
@@ -75,7 +77,7 @@ export default () => {
       API: '/api/auth/resetPassword',
       method: 'POST',
       body: {
-        forgotPasswordRequest: req
+        data: req
       },
     });
   };

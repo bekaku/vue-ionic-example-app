@@ -65,7 +65,7 @@ export default () => {
       API: '/api/fileManager/mergeChunkApi',
       method: 'POST',
       body: {
-        fileUploadChunkMergeRequest: req
+        data: req
       },
       baseURL: getEnv<string>('VITE_CDN_BASE_URL'),
     });

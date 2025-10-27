@@ -21,11 +21,11 @@ export default () => {
   const refreshFcmToken = async (
     refreshToken: RefreshTokenRequest
   ): Promise<void> => {
-    if (refreshToken && refreshToken.refreshToken.fcmToken) {
+    if (refreshToken && refreshToken.fcmToken) {
       await callAxios<void>({
         API: '/api/user/refreshFcmToken',
         method: 'PUT',
-        body: refreshToken
+        body: { data: refreshToken }
       });
     }
   };
@@ -35,7 +35,7 @@ export default () => {
     await callAxios<void>({
       API: '/api/user/updateFcmSetting',
       method: 'PUT',
-      body: refreshToken
+      body: { data: refreshToken }
     });
   };
   const findCountAllNotRead = async (

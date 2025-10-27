@@ -79,28 +79,22 @@ export interface UserProfileDto extends Id {
 //   };
 // }
 export interface LoginRequest {
-  user: {
-    emailOrUsername?: string | null
-    password?: string | null
-    fcmToken?: string | null
-    deviceId?: string | null
-    loginFrom: PlatformType
-  }
+  emailOrUsername?: string | null
+  password?: string | null
+  fcmToken?: string | null
+  deviceId?: string | null
+  loginFrom: PlatformType
 }
 export interface RefreshTokenRequest {
-  refreshToken: {
-    refreshToken?: string | null
-    fcmToken?: string | null
-    email?: string | null
-    fcmEnable?: boolean
-  }
+  refreshToken?: string | null
+  fcmToken?: string | null
+  email?: string | null
+  fcmEnable?: boolean
 }
 export interface UserChangePasswordRequest {
-  userChangePasswordRequest: {
-    password: string
-    newPassword?: string
-    logoutAllDevice: boolean
-  }
+  password: string
+  newPassword?: string
+  logoutAllDevice: boolean
 }
 export interface RefreshTokenResponse {
   userId: number

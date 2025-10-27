@@ -75,13 +75,11 @@ export const useAuthen = () => {
     const platform = await getPlatformType()
     const fcmToken = await loadStorage<string>(FcmTokenKey)
     const response = await singin({
-      user: {
-        emailOrUsername,
-        password,
-        loginFrom: platform,
-        fcmToken,
-        deviceId: deviceId || null,
-      },
+      emailOrUsername,
+      password,
+      loginFrom: platform,
+      fcmToken,
+      deviceId: deviceId || null,
     })
     if (response && response.authenticationToken) {
       await setAuthToken(response)
@@ -118,10 +116,8 @@ export const useAuthen = () => {
     }
 
     await singoutToServer({
-      refreshToken: {
-        refreshToken: refeshTokenKey,
-        email: mail || ''
-      }
+      refreshToken: refeshTokenKey,
+      email: mail || ''
     });
     return new Promise((resolve) => {
       resolve(true);

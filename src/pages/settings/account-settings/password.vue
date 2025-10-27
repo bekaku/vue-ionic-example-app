@@ -21,11 +21,9 @@ const onSubmit = async () => {
   const loading: any = await appLoading();
   loading.present();
   const res = await selfUpdatePassword({
-    userChangePasswordRequest: {
-      password: currentPassword.value,
-      newPassword: newPassword.value,
-      logoutAllDevice: logoutAllDevice.value,
-    },
+    password: currentPassword.value,
+    newPassword: newPassword.value,
+    logoutAllDevice: logoutAllDevice.value,
   });
   loading.dismiss();
   if (res && res.status == 'OK') {
@@ -42,10 +40,22 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <BasePage :page-title="t('updatePassword')" fullscreen show-back-link
-    page-default-back-link="/settings/account-settings">
-    <password-form v-model:currentPassword="currentPassword" v-model:newPassword="newPassword"
-      v-model:logoutAllDevice="logoutAllDevice" v-model:loading="loading" show-current-password show-logout
-      :submit-label="t('updatePassword')" action-align="left" @on-submit="onSubmit" />
+  <BasePage
+    :page-title="t('updatePassword')"
+    fullscreen
+    show-back-link
+    page-default-back-link="/settings/account-settings"
+  >
+    <password-form
+      v-model:currentPassword="currentPassword"
+      v-model:newPassword="newPassword"
+      v-model:logoutAllDevice="logoutAllDevice"
+      v-model:loading="loading"
+      show-current-password
+      show-logout
+      :submit-label="t('updatePassword')"
+      action-align="left"
+      @on-submit="onSubmit"
+    />
   </BasePage>
 </template>
