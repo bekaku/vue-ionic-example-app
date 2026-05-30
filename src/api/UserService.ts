@@ -13,7 +13,7 @@ export default () => {
   const { callAxios } = useAxios();
   const getUserSessionData = async (): Promise<UserDto | null> => {
     return await callAxios<UserDto>({
-      API: '/api/user/currentUserData',
+      API: '/api/appUser/currentUserData',
       method: 'GET'
     });
   };
@@ -21,7 +21,7 @@ export default () => {
     fileManagerId: number
   ): Promise<ResponseMessage | null> => {
     return await callAxios<ResponseMessage>({
-      API: `/api/user/updateUserAvatar?fileManagerId=${fileManagerId}`,
+      API: `/api/appUser/updateUserAvatar?fileManagerId=${fileManagerId}`,
       method: 'PUT'
     });
   };
@@ -29,13 +29,13 @@ export default () => {
     fileManagerId: number
   ): Promise<ResponseMessage | null> => {
     return await callAxios<ResponseMessage>({
-      API: `/api/user/updateUserCover?fileManagerId=${fileManagerId}`,
+      API: `/api/appUser/updateUserCover?fileManagerId=${fileManagerId}`,
       method: 'PUT'
     });
   };
   const updateDefaultLocale = async (locale: AppLocale): Promise<UserDto | null> => {
     return await callAxios<UserDto>({
-      API: `/api/user/updateDefaultLocale?locale=${locale}`,
+      API: `/api/appUser/updateDefaultLocale?locale=${locale}`,
       method: 'PUT'
     });
   };
@@ -43,7 +43,7 @@ export default () => {
     userId: number
   ): Promise<UserDto | null> => {
     return await callAxios<UserDto>({
-      API: `/api/user/findPublicUserData/${userId}`,
+      API: `/api/appUser/findPublicUserData/${userId}`,
       method: 'GET'
     });
   };
@@ -51,7 +51,7 @@ export default () => {
     req: UserPersonalEditRequest
   ): Promise<ResponseMessage | null> => {
     return await callAxios<ResponseMessage>({
-      API: '/api/user/updatePersonalData',
+      API: '/api/appUser/updatePersonalData',
       method: 'PUT',
       body: {
         data: req
@@ -62,7 +62,7 @@ export default () => {
     req: UserPersonalEditRequest
   ): Promise<ResponseMessage | null> => {
     return await callAxios<ResponseMessage>({
-      API: '/api/user/updateEmail',
+      API: '/api/appUser/updateEmail',
       method: 'PUT',
       body: {
         data: req
@@ -73,20 +73,20 @@ export default () => {
     req: UserChangePasswordRequest
   ): Promise<ResponseMessage | null> => {
     return await callAxios<ResponseMessage>({
-      API: '/api/user/selfUpdatePassword',
+      API: '/api/appUser/selfUpdatePassword',
       method: 'PUT',
       body: { data: req }
     });
   };
   const currentAuthSession = async (q: string): Promise<AccessTokenDto[] | null> => {
     return await callAxios<AccessTokenDto[]>({
-      API: `/api/user/currentAuthSession${q}`,
+      API: `/api/appUser/currentAuthSession${q}`,
       method: 'GET'
     });
   };
   const findAllUserActiveByUserAuth = async (): Promise<UserDto[] | null> => {
     return await callAxios<UserDto[]>({
-      API: '/api/user/findAllUserActiveByUserAuth',
+      API: '/api/appUser/findAllUserActiveByUserAuth',
       method: 'GET'
     });
   };
@@ -94,7 +94,7 @@ export default () => {
     refreshToken: RefreshTokenRequest
   ): Promise<LoginedProfileItem | null> => {
     return await callAxios<LoginedProfileItem>({
-      API: '/api/user/findLoginedProfile',
+      API: '/api/appUser/findLoginedProfile',
       method: 'POST',
       body: { data: refreshToken },
     });
@@ -102,7 +102,7 @@ export default () => {
   const findAllLoginedProfile = async (
   ): Promise<LoginedProfileItem[] | null> => {
     return await callAxios<LoginedProfileItem[]>({
-      API: '/api/user/findAllLoginedProfile',
+      API: '/api/appUser/findAllLoginedProfile',
       method: 'GET',
     });
   };
@@ -110,7 +110,7 @@ export default () => {
     userNameOrEmail: string
   ): Promise<RefreshTokenResponse | null> => {
     return await callAxios<RefreshTokenResponse>({
-      API: '/api/user/verifyUserByEmailOrUsername',
+      API: '/api/appUser/verifyUserByEmailOrUsername',
       method: 'POST',
       body: {
         data: {

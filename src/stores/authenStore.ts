@@ -43,10 +43,10 @@ export const useAuthenStore = defineStore('authenStore', () => {
       appAxios.defaults.headers['Content-Type'] = 'application/json';
       const response = await appAxios({
         method: 'GET',
-        url: '/api/user/currentUserData'
+        url: '/api/appUser/currentUserData'
       });
       if (devMode) {
-        console.log('initialAuthDataProcess > /api/user/currentUserData', response);
+        console.log('initialAuthDataProcess > /api/appUser/currentUserData', response);
       }
       if (response && response.status == 200) {
         setAuthen(response.data);

@@ -32,10 +32,8 @@ export const useNotification = () => {
       });
     }
     await refreshFcmToken({
-      refreshToken: {
         refreshToken: refeshTokenKey,
         fcmToken
-      }
     });
     return new Promise((resolve) => {
       resolve(true);
@@ -46,11 +44,9 @@ export const useNotification = () => {
      const currentToken = await getCurrentUserToken();
     const fcmToken = await loadStorage<string>(FcmTokenKey);
     await updateFcmSetting({
-      refreshToken: {
         refreshToken: currentToken?.refreshToken || null,
         fcmToken,
         fcmEnable: isON
-      }
     });
     return new Promise((resolve) => {
       resolve(true);

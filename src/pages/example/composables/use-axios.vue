@@ -104,7 +104,7 @@ await callAxios<RefreshTokenResponse | null>({
 
 // PUT
 await callAxios<ResponseMessage>({
-    API: '/api/user/updateEmail',
+    API: '/api/appUser/updateEmail',
     method: 'PUT',
     body: {
         user: {

@@ -15,7 +15,7 @@ export const canRefreshToken = async (token: string, showLog = false, from: stri
   const decodeToken = await decodeJWT(token);
   if (decodeToken && decodeToken.exp) {
     const expirationTime = decodeToken.exp * 1000; // Convert to milliseconds
-    const currentTime = new Date().getTime();
+    const currentTime = Date.now();
     const timeUntilExpiration = expirationTime - currentTime;
     const refreshThreshold = 5 * (60 * 1000); // 5 min
     const refeshIt = timeUntilExpiration < refreshThreshold;
@@ -46,7 +46,7 @@ export const getTokenStatus = async (token: string): Promise<JwtStatus> => {
     if (decodeToken && decodeToken.exp) {
       // Get the current time in seconds since the epoch
       // const currentTime = Math.floor(Date.now() / 1000);
-      const currentTime = new Date().getTime() + 3000;// add 3 more seconds in case not expired when fetch new data from server
+      const currentTime = Date.now() + 3000;// add 3 more seconds in case not expired when fetch new data from server
       const expirationTime = decodeToken.exp * 1000; // Convert to milliseconds
       // Check if the token is expired
       if (decodeToken && currentTime > expirationTime) {

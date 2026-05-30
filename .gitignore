@@ -37,5 +37,5 @@ android/app/src/main/assets/public/
 ios/App/public/
 android/.idea/compiler.xml
 .env.development
-pnpm-lock.yaml
+# pnpm-lock.yaml
 public/assets/sql-wasm.wasm

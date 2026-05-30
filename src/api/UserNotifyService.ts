@@ -23,7 +23,7 @@ export default () => {
   ): Promise<void> => {
     if (refreshToken && refreshToken.fcmToken) {
       await callAxios<void>({
-        API: '/api/user/refreshFcmToken',
+        API: '/api/appUser/refreshFcmToken',
         method: 'PUT',
         body: { data: refreshToken }
       });
@@ -33,7 +33,7 @@ export default () => {
     refreshToken: RefreshTokenRequest
   ): Promise<void> => {
     await callAxios<void>({
-      API: '/api/user/updateFcmSetting',
+      API: '/api/appUser/updateFcmSetting',
       method: 'PUT',
       body: { data: refreshToken }
     });
