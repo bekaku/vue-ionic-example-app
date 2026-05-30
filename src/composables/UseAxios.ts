@@ -57,7 +57,7 @@ export const useAxios = () => {
       closeIcon: closeOutline,
       time: 3 * 1000,
       color:
-        response.status == 'OK' || response.status == 'CREATED'
+        response.status == '200 OK' || response.status == '201 Created'
           ? undefined
           : 'danger'
     });

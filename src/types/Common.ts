@@ -78,13 +78,13 @@ export type FileType = 'pdf' | 'msexcel' | 'msword' | 'mspowerpoint' | 'image' |
 export type ImgRatioType = '1' | '16/9' | '4/3';
 export type IHrefTarget = '_blank' | '_parent' | '_self' | '_top';
 export type IHttpStatus =
-  | 'OK'
-  | 'CREATED'
-  | 'NOT_FOUND'
-  | 'UNAUTHORIZED'
-  | 'BAD_REQUEST'
-  | 'FORBIDDEN'
-  | 'INTERNAL_SERVER_ERROR';
+  | '200 OK'
+  | '201 Created'
+  | '404 Not Found'
+  | '401 Unauthorized'
+  | '400 Bad Request'
+  | '403 Forbidden'
+  | '500 Internal Server Error';
 export type IResult =
   | '400'
   | '404'

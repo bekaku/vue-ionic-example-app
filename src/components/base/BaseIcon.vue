@@ -1,13 +1,32 @@
 <template>
-  <template v-if="name && iconSet == 'ion'">
-    <ion-icon v-bind="$attrs" class="q-relative-position" style="top: 3px" :class="'text-' + color" :icon="name"
-      :style="{ fontSize: size + 'px' }" />
+  <template v-if="iconSet === 'ion'">
+    <ion-icon
+      v-bind="$attrs"
+      class="q-relative-position"
+      style="top: 3px"
+      :class="`${color} text-${color}`"
+      :icon="name"
+      :style="{ fontSize: size + 'px' }"
+    />
   </template>
-  <template v-else-if="name">
-    <svg v-bind="$attrs" xmlns="http://www.w3.org/2000/svg" :width="size" :height="size" fill="currentColor"
-      :viewBox="getViewBox" :class="'text-' + color">
-      <template v-if="paths.length > 0">
-        <path v-for="(ic, index) in paths" :key="`${index}-${ic}`" :d="ic" />
+
+  <template v-else>
+    <svg
+      v-bind="$attrs"
+      xmlns="http://www.w3.org/2000/svg"
+      :width="size"
+      :height="size"
+      fill="currentColor"
+      :viewBox="parsedIcon.viewBox"
+      :class="`${color} text-${color}`"
+    >
+      <template v-if="parsedIcon.paths.length > 0">
+        <path
+          v-for="(p, index) in parsedIcon.paths"
+          :key="index"
+          :d="p.d"
+          :style="p.style"
+        />
       </template>
     </svg>
   </template>
@@ -23,50 +42,63 @@
    */
 import type { IconProps } from '@/types/props';
 import { IonIcon } from '@ionic/vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 const {
   additionalReplce = '',
   name,
   iconSet = 'ion',
   size = 20,
 } = defineProps<IconProps>();
-const paths = ref<string[]>([])
-onMounted(() => {
-  setIcons();
-})
-const setIcons = () => {
-  if (iconSet == 'bootstrap-icons') { // https://icons.getbootstrap.com/icons
-    paths.value = name.split('&&').map(t => t.replaceAll('|0 0 16 16', '').replaceAll('@@fill:currentColor;', '').replaceAll('fill-rule:evenodd;', ''))
-  } else if (iconSet == 'line-awesome') { // https://icons8.com/line-awesome
-    const laIcon = name
-      .replaceAll('|0 0 32 32', '')
-      .replaceAll(additionalReplce, '');
-    if (laIcon) {
-      paths.value.push(laIcon);
+const parsedIcon = computed(() => {
+  if (iconSet === 'ion') {
+    return { viewBox: '', paths: [] }
+  }
+
+  let pathsData = name || ''
+  let viewBox = ''
+
+  // 1. ตรวจหา viewBox แบบ Custom ที่ Quasar อาจจะแนบมา (คั่นด้วย '|')
+  if (pathsData.includes('|')) {
+    const parts = pathsData.split('|')
+    pathsData = parts[0]
+    viewBox = parts[1]
+  }
+
+  // 2. กำหนด Default viewBox หากไม่มีติดมากับ String
+  if (!viewBox) {
+    if (iconSet === 'bootstrap-icons') {
+      viewBox = '0 0 16 16'
+    } else if (iconSet === 'line-awesome') {
+      viewBox = '0 0 32 32'
+    } else {
+      // สำหรับ mdi, material-icons และอื่นๆ
+      viewBox = '0 0 24 24'
     }
-  } else if (iconSet == 'mdi') { // https://pictogrammers.com/library/mdi/
-    paths.value.push(name);
-  } else if (iconSet == 'material-icons') { // https://fonts.google.com/icons
-    // const maIcon = icon
-    //   .replaceAll('M0,0h24v24H0V0z@@fill:none;&&', '')
-    //   .replaceAll('M0 0 H24 V24 H0 V0 z@@fill:none;&&', '')
-    //   .replaceAll('M0 0h24v24H0z@@fill:none;&&', '')
-    //   .replaceAll(additionalReplce, '');
-    // if (maIcon) {
-    //   paths.value.push(maIcon);
-    // }
   }
-}
-const getViewBox = computed(() => {
-  if (iconSet == 'bootstrap-icons') {
-    return '0 0 16 16';
-  } else if (iconSet == 'line-awesome') {
-    return '0 0 32 32';
-  } else if (iconSet == 'material-icons') {
-    return '0 0 24 24';
-  } else if (iconSet == 'mdi') {
-    return '0 0 24 24';
+
+  // 3. จัดการเรื่อง additionalReplce ถ้ามีการส่งมา (สำหรับกรณีพิเศษจริงๆ)
+  if (additionalReplce) {
+    pathsData = pathsData.replaceAll(additionalReplce, '')
   }
-  return '';
-});
+
+  // 4. แยก Path (Quasar ใช้ '&&' ในการคั่นหลาย paths)
+  // และแยก Style (Quasar ใช้ '@@' ในการคั่น style เช่น path@@fill:none;)
+  const paths = pathsData.split('&&').map((pathStr) => {
+    const pathParts = pathStr.split('@@')
+    const d = pathParts[0]
+    let style = ''
+
+    // หากมี Style พิเศษแนบมากับ Path
+    if (pathParts.length > 1) {
+      style = pathParts[1]
+    }
+
+    return { d, style }
+  })
+
+  return {
+    viewBox,
+    paths,
+  }
+})
 </script>
