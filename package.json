@@ -4,10 +4,12 @@
   "version": "1.0.3",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=3004",
+    "dev": "vite --port=3004 --mode development",
     "ion-dev": "ionic serve --port=8001 --browser 'none'",
     "build:vite": "vue-tsc && vite build",
+    "build:dev": "ionic build -- --mode development",
     "build": "ionic build --prod",
+    "build:test": "ionic build -- --mode testing",
     "build:watch": "ionic build --watch",
     "preview": "vite preview",
     "test:e2e": "cypress run",
