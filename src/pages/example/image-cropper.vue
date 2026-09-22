@@ -6,7 +6,7 @@ import BaseImageCropperDialog from '@/components/base/BaseImageCropperDialog.vue
 import BasePage from '@/components/base/BasePage.vue';
 import BaseRadioItem from '@/components/base/BaseRadioItem.vue';
 import type { ChoosePhotoItem, LabelValue } from '@/types/common';
-import { getImgUrlFromFile } from '@/utils/fileUtils';
+import { getImgUrlFromFile } from '@/utils/FileUtils';
 import { IonCardContent } from '@ionic/vue';
 import { defineAsyncComponent, ref } from 'vue';
 const BaseChoosePhoto = defineAsyncComponent(

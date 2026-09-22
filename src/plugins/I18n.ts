@@ -4,7 +4,7 @@ import th from '../locales/th';
 // import en from "../locales/en.json";
 // import th from "../locales/th.json";
 import { DefaultLocale, LocaleKey } from '@/libs/constant';
-import { loadStorage } from '@/utils/storageUtil';
+import { loadStorage } from '@/utils/StorageUtil';
 
 // export default createI18n({
 //   legacy: false,

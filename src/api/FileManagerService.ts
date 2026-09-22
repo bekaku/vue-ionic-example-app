@@ -3,7 +3,7 @@ import { useConfig } from '@/composables/useConfig';
 import { FILES_DIRECTORY_ID_ATT, FILES_UPLOAD_ATT } from '@/libs/constant';
 import type { ResponseDataType, ResponseMessage, UploadRequest } from '@/types/common';
 import type { FileManagerDto, FileUploadChunkMergeRequestDto, FileUploadChunkResponseDto } from '@/types/models';
-import { base64FromArrayByffer, generateFileNameByExtesnsion, getFileExtension, getBlobFromAxiosResponse, getFileNameFromAxiosResponse } from '@/utils/fileUtils';
+import { base64FromArrayByffer, generateFileNameByExtesnsion, getFileExtension, getBlobFromAxiosResponse, getFileNameFromAxiosResponse } from '@/utils/FileUtils';
 
 export default () => {
   const { callAxios, callAxiosFile } = useAxios();
@@ -65,7 +65,7 @@ export default () => {
       API: '/api/fileManager/mergeChunkApi',
       method: 'POST',
       body: {
-        data: req
+         req
       },
       baseURL: getEnv<string>('VITE_CDN_BASE_URL'),
     });

@@ -12,7 +12,7 @@
         />
  */
 import FileManagerService from '@/api/FileManagerService';
-import { IonAvatar, IonImg, IonSkeletonText } from '@ionic/vue';
+import { IonAvatar, IonSkeletonText } from '@ionic/vue';
 import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue';
 import type { AvatarProps } from '@/types/props';
 import BaseBadge from '@/components/base/BaseBadge.vue';
@@ -74,8 +74,8 @@ onBeforeUnmount(() => {
       }
         " :animated="true"></ion-skeleton-text>
       <Transition>
-        <ion-img v-if="!loading" :src="srcUrl"
-          :class="{ 'avatar-rounded': !square && rounded, 'avatar-round': !square && !rounded, 'avatar-square': square }"></ion-img>
+        <img v-if="!loading" :src="srcUrl" loading="lazy" decoding="async" :alt="'avatar'"
+          :class="{ 'avatar-rounded': !square && rounded, 'avatar-round': !square && !rounded, 'avatar-square': square }" />
       </Transition>
     </slot>
     <slot name="extra"></slot>

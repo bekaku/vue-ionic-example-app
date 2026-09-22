@@ -24,7 +24,6 @@ import {
   IonBadge,
   IonButtons,
   IonCardContent,
-  IonImg,
   IonItem,
   IonLabel,
   IonList
@@ -44,10 +43,13 @@ const recentSalseItems = ref<LabelValue<string>[]>(dashBaordRecentSalseItems);
     :show-back-link="false"
   >
     <template #start>
-      <ion-img
+      <img
         slot="start"
         style="width: 40px; height: 40px"
         :src="!isDark ? '/logo/logo.png' : '/logo/logo-white.png'"
+        alt="app logo"
+        loading="lazy"
+        decoding="async"
       />
     </template>
     <template #actions-end>

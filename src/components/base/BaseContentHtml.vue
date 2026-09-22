@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useBase } from '@/composables/useBase';
-import { escapeHtml } from '@/utils/appUtil';
+import { escapeHtml } from '@/utils/AppUtil';
 import { computed } from 'vue';
 const { content, isEscapeHtml = false, highLightText } = defineProps<{
     content?: string

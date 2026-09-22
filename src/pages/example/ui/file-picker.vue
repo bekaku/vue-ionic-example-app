@@ -8,7 +8,7 @@ import { useFileUpload } from '@/composables/useFileUpload';
 import { FileTypeAcceptList } from '@/libs/constant';
 import type { ChoosePhotoItem } from '@/types/common';
 import type { FileManagerDto } from '@/types/models';
-import { generateUUID } from '@/utils/appUtil';
+import { generateUUID } from '@/utils/AppUtil';
 import { IonCardContent, IonList } from '@ionic/vue';
 import { cameraOutline, imageOutline } from 'ionicons/icons';
 import { defineAsyncComponent, ref, useTemplateRef } from 'vue';

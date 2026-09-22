@@ -5,8 +5,8 @@ import { useLang } from '@/composables/useLang';
 import { FileTypeAcceptList, LIMIT_FILE_SIZE, LIMIT_FILE_SIZE_MB } from '@/libs/constant';
 import type { ItemLines } from '@/types/common';
 import type { FileManagerDto } from '@/types/models';
-import { generateUUID } from '@/utils/appUtil';
-import { getImgUrlFromFile, zipFile, isImageFile } from '@/utils/fileUtils';
+import { generateUUID } from '@/utils/AppUtil';
+import { getImgUrlFromFile, zipFile, isImageFile } from '@/utils/FileUtils';
 import { IonIcon, IonItem, IonLabel, IonList, IonNote } from '@ionic/vue';
 import { documentAttachOutline } from 'ionicons/icons';
 import { ref } from 'vue';
@@ -40,9 +40,9 @@ const {
 const emit = defineEmits(['on-file-add']);
 const { t } = useLang();
 const { appToast } = useBase();
-const modelValue = defineModel<any[]>({ default: [] });
+const modelValue = defineModel<any[]>({ default: () => [] });
 const modelImageFiles = ref<any>(null);
-const fileItems = defineModel<FileManagerDto[]>('fileItems', { default: [] });
+const fileItems = defineModel<FileManagerDto[]>('fileItems', { default: () => [] });
 const filePickerInputRef = ref<any>(null);
 
 const rejectTotal = ref(0);

@@ -2,7 +2,7 @@
 import type { IonicColor, LabelValue } from '@/types/common';
 import { IonBadge, IonLabel, IonSegment, IonSegmentButton } from '@ionic/vue';
 import BaseIcon from './BaseIcon.vue';
-import { useRbac } from '@/composables/useRbac';
+import { useRbac } from '@/composables/useRBAC';
 import { computed } from 'vue';
 
 const {

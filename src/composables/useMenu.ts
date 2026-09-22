@@ -2,7 +2,7 @@ import { appNavs as initNav } from '@/libs/navs';
 import { useAppStore } from '@/stores/appStore';
 import type { LabelValue } from '@/types/common';
 import { storeToRefs } from 'pinia';
-import { useRbac } from './useRbac';
+import { useRbac } from './useRBAC';
 import type { RBACProps } from '@/types/props';
 export const useMenu = () => {
     const appStore = useAppStore();

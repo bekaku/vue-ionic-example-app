@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T">
 import BaseAvatar from '@/components/base/BaseAvatar.vue';
 import type { IonicColor, ItemLines, LabelValue } from '@/types/common';
-import { appPreventDefult } from '@/utils/appUtil';
+import { appPreventDefult } from '@/utils/AppUtil';
 import {
   IonChip,
   IonCol,

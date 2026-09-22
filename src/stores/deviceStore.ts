@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/dateUtil';
-import { loadStorage, saveStorage } from '@/utils/storageUtil';
+import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/DateUtil';
+import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 import { LatestDeviceActiveKey } from '@/libs/constant';
 export const useDeviceStore = defineStore('deviceStore', () => {
   const isActive = ref(false);

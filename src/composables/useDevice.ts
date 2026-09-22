@@ -2,9 +2,9 @@ import { Device } from '@capacitor/device';
 import type { OsPlatForm } from '@/types/common';
 import type { IPlatForm, PlatformType } from '@/types/models';
 import { isPlatform, getPlatforms } from '@ionic/vue';
-import { loadStorage, saveStorage } from '@/utils/storageUtil';
+import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 import { LatestSyncActiveStatusKey } from '@/libs/constant';
-import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/dateUtil';
+import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/DateUtil';
 import { DeviceSecurityDetect } from '@capacitor-community/device-security-detect';
 import { SafeArea } from 'capacitor-plugin-safe-area'
 export const useDevice = () => {

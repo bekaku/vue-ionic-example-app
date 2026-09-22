@@ -6,7 +6,7 @@ import BaseEllipsis from '@/components/base/BaseEllipsis.vue';
 import BasePage from '@/components/base/BasePage.vue';
 import BaseOpenGraphItemAlt from '@/components/base/BaseOpenGraphItemAlt.vue';
 import BaseTextarea from '@/components/base/BaseTextarea.vue';
-import { extractHashtagsFromString } from '@/utils/appUtil';
+import { extractHashtagsFromString } from '@/utils/AppUtil';
 import {
     IonCardContent
 } from '@ionic/vue';

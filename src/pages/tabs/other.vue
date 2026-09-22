@@ -16,7 +16,7 @@ import { CacheKey, TabsName } from '@/libs/constant';
 import { additionalMenu } from '@/libs/navs';
 import { useAuthenStore } from '@/stores/authenStore';
 import { useTabStore } from '@/stores/tabStore';
-import { loadStorage, saveStorage } from '@/utils/storageUtil';
+import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 import {
   IonIcon,
   IonItem,

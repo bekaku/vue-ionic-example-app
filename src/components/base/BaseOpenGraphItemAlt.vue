@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, onMounted, ref } from 'vue';
 import type { OgMeta } from '@/types/models';
-import { catchUrlFromText, isLinkFromWebApp } from '@/utils/appUtil';
+import { catchUrlFromText, isLinkFromWebApp } from '@/utils/AppUtil';
 import UtilService from '@/api/UtilService';
 const BaseOpenGraphItem = defineAsyncComponent(() => import('@/components/base/BaseOpenGraphItem.vue'));
 const {

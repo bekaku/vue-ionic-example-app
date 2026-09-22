@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRbac } from '@/composables/useRbac';
+import { useRbac } from '@/composables/useRBAC';
 import type { AppColor, LabelValue } from '@/types/common';
 import {
   IonRouterOutlet,

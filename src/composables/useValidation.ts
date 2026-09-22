@@ -1,4 +1,4 @@
-import { validateEmail, isNumber } from '@/utils/appUtil';
+import { validateEmail, isNumber } from '@/utils/AppUtil';
 import { useLang } from './useLang';
 export const useValidation = () => {
   const { t } = useLang();

@@ -10,7 +10,7 @@ import { useLang } from '@/composables/useLang';
 import { useNotification } from '@/composables/useNotification';
 import { useTheme } from '@/composables/useTheme';
 import { DefaultColor } from '@/libs/constant';
-import { getYearNow } from '@/utils/dateUtil';
+import { getYearNow } from '@/utils/DateUtil';
 import {
   IonCard,
   IonCol,

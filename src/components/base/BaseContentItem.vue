@@ -13,7 +13,7 @@
         />
  */
 import { defineAsyncComponent, onBeforeUnmount, onMounted, ref } from 'vue';
-import { appPreventDefult, escapeHtml, openUrlInNewTab, roundDecimal } from '@/utils/appUtil';
+import { appPreventDefult, escapeHtml, openUrlInNewTab, roundDecimal } from '@/utils/AppUtil';
 import { useLang } from '@/composables/useLang';
 import { useBase } from '@/composables/useBase';
 import { IonCol, IonRow } from '@ionic/vue';

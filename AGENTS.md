@@ -7,8 +7,8 @@
 ## 1. Purpose and Scope
 
 1. This repository is an Ionic Vue + Capacitor mobile app (`src/`, `capacitor.config.ts`).
-   Verified stack: `@ionic/vue 8.8.8`, `vue 3.5.35`, `@capacitor/core 8.3.4`,
-   `axios 1.16.1`, `pinia 3.0.4`, `vue-router 5.1.0` via `@ionic/vue-router 8.8.8`,
+   Verified stack: `@ionic/vue 9.0.4`, `vue 3.5.35`, `@capacitor/core 8.3.4`,
+   `axios 1.16.1`, `pinia 3.0.4`, `vue-router 5.1.0` via `@ionic/vue-router 9.0.4`,
    Vite + `vue-tsc`, package manager **pnpm** (`pnpm-lock.yaml`). See
    `docs/agent/PROJECT_REFERENCE.md`.
 2. Supported runtime targets: **Android, iOS, Web** (Capacitor `android`/`ios`

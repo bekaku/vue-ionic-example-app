@@ -1,5 +1,5 @@
 import { config } from '@/libs/constant';
-import { getConfig as getAppConfig } from '@/utils/appUtil';
+import { getConfig as getAppConfig } from '@/utils/AppUtil';
 export const useConfig = () => {
   const getEnv = <T>(key: string) => {
     const env = import.meta.env;

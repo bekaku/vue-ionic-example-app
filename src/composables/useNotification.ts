@@ -2,7 +2,7 @@ import UserNotifyService from '@/api/UserNotifyService';
 import { useNotificationStore } from '@/stores/notificationStore';
 import type { NotificationCount, NotifyFunctionType } from '@/types/models';
 import { AppAuthRefeshTokenKey, FCM_USER_TOPIC, FcmTokenKey, NotifyKey } from '@/libs/constant';
-import { loadStorage, saveStorage } from '@/utils/storageUtil';
+import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 import { FCM } from '@capacitor-community/fcm';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { toastController } from '@ionic/vue';

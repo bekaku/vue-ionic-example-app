@@ -8,7 +8,7 @@ import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
 import { usePaging } from '@/composables/usePaging';
 import type { AccessTokenDto } from '@/types/models';
-import { FORMAT_DATETIME } from '@/utils/dateUtil';
+import { FORMAT_DATETIME } from '@/utils/DateUtil';
 import {
   IonButton,
   IonButtons,

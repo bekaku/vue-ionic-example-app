@@ -5,11 +5,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '',
     meta: { noRequireAuth: true },
-    component: () => import('@/pages/index.vue')
+    component: () => import('@/pages/Index.vue')
   },
   {
     path: '/about',
-    component: () => import('@/pages/about.vue')
+    component: () => import('@/pages/About.vue')
   },
   {
     path: '/auth/login',
@@ -56,12 +56,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/settings/languge',
     meta: { noRequireAuth: true },
-    component: () => import('@/pages/settings/languge.vue')
+    component: () => import('@/pages/settings/Languge.vue')
   },
   {
     path: '/settings/appearance',
     meta: { noRequireAuth: true },
-    component: () => import('@/pages/settings/appearance.vue')
+    component: () => import('@/pages/settings/Appearance.vue')
   },
   {
     path: '/tabs/',
@@ -234,21 +234,21 @@ const router = createRouter({
 const {
   getCurrentUserToken,
 } = useAppStorage()
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to) => {
   if (to.meta.noRequireAuth === true) {
-    next();
+    return true;
   } else {
-    // console.log('requireAuth > from ', from, 'to >', to);
+    // console.log('requireAuth > to >', to);
     // const authTokenKey = localStorage.getItem(AppAuthTokenKey);
     // const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
     const currentJwtToken = await getCurrentUserToken()
     if (currentJwtToken && currentJwtToken.authenticationToken) {
-      next();
+      return true;
     } else {
-      next({
+      return {
         path: '/auth/login/',
         replace: true
-      });
+      };
     }
   }
 });

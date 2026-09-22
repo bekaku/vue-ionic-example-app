@@ -10,7 +10,7 @@ import {
   formatDate,
   formatDateTime,
   formatDistanceFromNow
-} from '@/utils/dateUtil';
+} from '@/utils/DateUtil';
 import { Clipboard } from '@capacitor/clipboard';
 import {
   alertController,

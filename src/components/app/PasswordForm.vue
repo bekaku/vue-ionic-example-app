@@ -84,7 +84,6 @@ const onSubmit = () => {
           :label="t('authen.currentPassword')"
           autocomplete="off"
           autocapitalize="off"
-          autocorrect="off"
         >
           <template #end>
             <BaseButton
@@ -102,7 +101,6 @@ const onSubmit = () => {
           :label="t('authen.newPassword')"
           autocomplete="off"
           autocapitalize="off"
-          autocorrect="off"
         >
           <template #end>
             <BaseButton
@@ -129,7 +127,6 @@ const onSubmit = () => {
           :label="t('authen.confirmPassword')"
           autocomplete="off"
           autocapitalize="off"
-          autocorrect="off"
         >
           <template #end>
             <BaseButton

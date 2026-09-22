@@ -34,7 +34,7 @@ import {
   convertDateFormatToThai,
   FORMAT_DATE14,
   formatIso,
-} from '@/utils/dateUtil';
+} from '@/utils/DateUtil';
 import { IonCol, IonDatetime, IonRow } from '@ionic/vue';
 import { computed } from 'vue';
 

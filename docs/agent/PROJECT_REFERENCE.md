@@ -4,7 +4,7 @@ Audit date: 2026-09-22. Evidence paths are repo-relative.
 
 ## Technology stack (VERIFIED — `package.json`, `pnpm-lock.yaml`)
 
-- `@ionic/vue 8.8.8`, `@ionic/vue-router ^8.8.8`, `vue ^3.5.35`,
+- `@ionic/vue 9.0.4`, `@ionic/vue-router ^9.0.0`, `vue ^3.5.35`,
   `vue-router ^5.1.0`, `@capacitor/core|cli|android|ios ^8.3.4`,
   `axios ^1.16.1`, `pinia ^3.0.4` (devDependencies), `typescript ^6.0.3`,
   `vite ^8.0.14`, `vue-tsc ^3.3.3`, `vitest ^4.1.7`, `cypress ^15.16.0`,

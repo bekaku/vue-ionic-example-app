@@ -4,7 +4,7 @@ import { useBase } from '@/composables/useBase';
 import { defineAsyncComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 import type { FileType } from '@/types/common';
 import FileManagerService from '@/api/FileManagerService';
-import { fileToBlob, getFileType } from '@/utils/fileUtils';
+import { fileToBlob, getFileType } from '@/utils/FileUtils';
 import { useFileSystem } from '@/composables/useFileSystem';
 const BasePdfViewDialog = defineAsyncComponent(() => import('@/components/base/BasePdfViewDialog.vue'));
 const BaseImageViewDialog = defineAsyncComponent(() => import('@/components/base/BaseImageViewDialog.vue'));

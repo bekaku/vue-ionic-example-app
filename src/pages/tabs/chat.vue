@@ -12,7 +12,6 @@ import {
   IonListHeader,
   IonIcon,
   IonAvatar,
-  IonImg,
   IonBadge,
   IonSearchbar,
   IonFab,
@@ -102,8 +101,11 @@ const filterOfflines = computed(() =>
         @click="appNavigateTo('/chat')"
       >
         <ion-avatar slot="start" class="wee-avatar-50 wee-image-border-success">
-          <ion-img
+          <img
             src="https://images.pexels.com/photos/1105191/pexels-photo-1105191.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+            alt="chat avatar"
+            loading="lazy"
+            decoding="async"
           />
         </ion-avatar>
         <ion-label>
@@ -136,8 +138,11 @@ const filterOfflines = computed(() =>
         @click="appNavigateTo('/chat')"
       >
         <ion-avatar slot="start" class="wee-avatar-50 wee-image-border-light">
-          <ion-img
+          <img
             src="https://images.pexels.com/photos/1105191/pexels-photo-1105191.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+            alt="chat avatar"
+            loading="lazy"
+            decoding="async"
           />
         </ion-avatar>
         <ion-label>

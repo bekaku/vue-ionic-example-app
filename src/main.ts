@@ -3,8 +3,8 @@ import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 import App from './App.vue';
 import appAxios from './plugins/axios';
-import { AxiosKey } from './plugins/axiosSymbols';
-import i18n from './plugins/i18n';
+import { AxiosKey } from './plugins/AxiosSymbols';
+import i18n from './plugins/I18n';
 import router from './router';
 import rbac from '@/directives/rbac'
 /* Core CSS required for Ionic components to work properly */

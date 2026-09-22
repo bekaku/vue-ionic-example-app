@@ -1,7 +1,7 @@
 import { useAppStore } from '@/stores/appStore';
 import type { AppLocale, ILocales } from '@/types/common';
 import { DefaultLocale, LocaleKey } from '@/libs/constant';
-import { loadStorage, saveStorage } from '@/utils/storageUtil';
+import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

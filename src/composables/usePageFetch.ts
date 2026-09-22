@@ -4,7 +4,7 @@ import { useAxios } from '@/composables/useAxios';
 import { usePaging } from '@/composables/usePaging';
 import { useSort } from '@/composables/useSort';
 import type { ApiListResponse, CrudListApiOptions } from '@/types/common';
-import { isAppException, isArray, isEmpty, isListResponse, isServerResponseMessage } from '@/utils/appUtil';
+import { isAppException, isArray, isEmpty, isListResponse, isServerResponseMessage } from '@/utils/AppUtil';
 import { warningOutline } from 'ionicons/icons';
 import type { Ref } from 'vue';
 import { computed, ref } from 'vue';

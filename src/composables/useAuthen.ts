@@ -8,7 +8,7 @@ import type { RefreshTokenResponse, UserDto } from '@/types/models';
 import {
   loadStorage,
   saveStorage
-} from '@/utils/storageUtil';
+} from '@/utils/StorageUtil';
 import { useAppStorage } from './useAppStorage';
 import { useBase } from './useBase';
 import { useCache } from './useCache';

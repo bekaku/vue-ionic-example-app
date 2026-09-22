@@ -1,7 +1,7 @@
 /* eslint-disable ts/no-unused-vars */
 import { FileNamePrefix } from '@/libs/constant';
 import type { FileType } from '@/types/common';
-import { getCurrentFormattedDatetime } from '@/utils/dateUtil';
+import { getCurrentFormattedDatetime } from '@/utils/DateUtil';
 import { biCameraReels, biFileEarmarkImage, biFileEarmarkPpt, biFileEarmarkZip, biFiletypeCsv, biFiletypePdf, biFiletypeTxt, biFiletypeXlsx, biFileWord, biMic, biPaperclip } from '@quasar/extras/bootstrap-icons';
 import JSZip from 'jszip';
 

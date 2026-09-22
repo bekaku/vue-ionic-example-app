@@ -7,7 +7,7 @@ import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
 import { useAuthenStore } from '@/stores/authenStore';
 import type { UserPersonalEditRequest } from '@/types/models';
-import { validateEmail } from '@/utils/appUtil';
+import { validateEmail } from '@/utils/AppUtil';
 import {
   IonButton,
   IonButtons,

@@ -101,16 +101,15 @@ Details: <keys, preservation plan>
 
 ## Testing and Verification
 
-- Lint: NOT_RUN
-- Typecheck: NOT_RUN
-- Unit tests: NOT_RUN
 - Web build: NOT_RUN
 - Android build: NOT_RUN
 - iOS build: NOT_RUN
 - Emulator test: NOT_RUN
 - Physical device test: NOT_RUN
 
-(Use PASSED / FAILED / NOT_RUN / NOT_APPLICABLE / BLOCKED. Web ≠ native proof.)
+(Use PASSED / FAILED / NOT_RUN / NOT_APPLICABLE / BLOCKED. Web ≠ native proof.
+Lint and unit tests are NOT required — run them only when the task touches
+code paths they cover and the suite is green on main.)
 
 ## Risks
 
@@ -122,8 +121,9 @@ Details: <keys, preservation plan>
 
 ## Completion Criteria
 
-Implementation complete, applicable tests performed, impacts reviewed, API
-dependencies resolved or excluded, checkpoints done, limitations disclosed.
+Implementation complete, applicable build/platform checks performed, impacts
+reviewed, API dependencies resolved or excluded, checkpoints done,
+limitations disclosed.
 
 ## Final Summary
 

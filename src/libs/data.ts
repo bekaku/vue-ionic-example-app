@@ -1,7 +1,7 @@
 import type { ISeriresCategories } from '@/types/chart';
 import type { ApiListResponse, LabelValue } from '@/types/common';
 import type { FileManagerDto, GroupChatDto, GroupChatMsgDto, Permission, RefreshTokenResponse, UserDto } from '@/types/models';
-import { FORMAT_DATE13, getCurrentDateByFormat } from '@/utils/dateUtil';
+import { FORMAT_DATE13, getCurrentDateByFormat } from '@/utils/DateUtil';
 import { biBarChart, biChatDots, biCreditCard, biCurrencyDollar, biGraphUp, biNewspaper, biPeople } from '@quasar/extras/bootstrap-icons';
 export const userData: UserDto = {
     id: 1,

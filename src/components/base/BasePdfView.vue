@@ -4,11 +4,11 @@ import { useBase } from '@/composables/useBase';
 import { useFileDownload } from '@/composables/useFileDownload';
 import { useLang } from '@/composables/useLang';
 import type { FileManagerDto } from '@/types/models';
-import { getCurrentFormattedDatetime } from '@/utils/dateUtil';
+import { getCurrentFormattedDatetime } from '@/utils/DateUtil';
 import {
     getBlobFromAxiosResponse,
     getFileNameFromAxiosResponse,
-} from '@/utils/fileUtils';
+} from '@/utils/FileUtils';
 import {
     IonButton,
     IonButtons,

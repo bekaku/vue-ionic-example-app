@@ -1,6 +1,6 @@
 import { config } from '@/libs/constant';
 import type { AppException, IApiListResponse, IHrefTarget, ISortModeType, ResponseMessage, ServerException } from '@/types/common';
-import { clearStorage } from '@/utils/storageUtil';
+import { clearStorage } from '@/utils/StorageUtil';
 import { Device } from '@capacitor/device';
 
 declare let window: any;

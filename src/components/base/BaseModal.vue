@@ -72,6 +72,7 @@ defineExpose({
     :breakpoints="breakpoints"
     :presenting-element="presentingElement"
     :keep-contents-mounted="keepContentsMounted"
+    handle-behavior="none"
     @will-dismiss="onClose"
     @ion-modal-did-dismiss="onClose"
     @did-present="onShow"

@@ -2,7 +2,7 @@
 import BaseIcon from '@/components/base/BaseIcon.vue';
 import BaseImage from '@/components/base/BaseImage.vue';
 import type { FileManagerDto } from '@/types/models';
-import { getFileTypeIcon } from '@/utils/fileUtils';
+import { getFileTypeIcon } from '@/utils/FileUtils';
 import { computed } from 'vue';
 
 const {

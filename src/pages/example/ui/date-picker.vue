@@ -3,7 +3,7 @@ import BaseCard from '@/components/base/BaseCard.vue';
 import BaseDatePickerItem from '@/components/base/BaseDatePickerItem.vue';
 import BaseDatePicker from '@/components/base/BaseDatePicker.vue';
 import BasePage from '@/components/base/BasePage.vue';
-import { getCurrentDateByFormat } from '@/utils/dateUtil';
+import { getCurrentDateByFormat } from '@/utils/DateUtil';
 import { IonCardContent, IonDatetime } from '@ionic/vue';
 import { ref } from 'vue';
 const date1 = ref<string>();

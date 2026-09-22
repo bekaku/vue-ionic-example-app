@@ -1,7 +1,7 @@
-import { AxiosKey } from '@/plugins/axiosSymbols';
+import { AxiosKey } from '@/plugins/AxiosSymbols';
 import type { AppException, RequestType, ResponseMessage } from '@/types/common';
-import { isAppException, isServerException, isServerResponseMessage } from '@/utils/appUtil';
-import { injectStrict } from '@/utils/injectTyped';
+import { isAppException, isServerException, isServerResponseMessage } from '@/utils/AppUtil';
+import { injectStrict } from '@/utils/InjectTyped';
 import { App } from '@capacitor/app';
 import { toastController } from '@ionic/vue';
 import type { AxiosResponse } from 'axios';

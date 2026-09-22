@@ -1,10 +1,10 @@
 import { DefaultApiCLient, LocaleKey } from '@/libs/constant';
-import { loadStorage } from '@/utils/storageUtil';
+import { loadStorage } from '@/utils/StorageUtil';
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 // import authInterceptor from './AxiosInterceptor';
 import { useAppStorage } from '@/composables/useAppStorage';
-import { getTokenStatus } from '@/utils/jwtUtil';
+import { getTokenStatus } from '@/utils/JwtUtil';
 import router from '../router';
 import JSONbig from 'json-bigint'
 const {

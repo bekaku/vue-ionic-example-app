@@ -10,13 +10,13 @@
             <img
               v-if="isError"
               class="ion-padding-vertical"
-              :src="require('@/assets/robot-sad.png')"
+              src="/images/no_picture.jpg"
               style="width: 50%"
             />
             <img
               v-else
               class="ion-padding-vertical"
-              :src="require('@/assets/robot.png')"
+              src="/images/no_picture.jpg"
               style="width: 50%"
             />
           </template>

@@ -3,8 +3,8 @@ import BaseIcon from '@/components/base/BaseIcon.vue';
 import BaseImage from '@/components/base/BaseImage.vue';
 import type { ItemLines } from '@/types/common';
 import type { FileManagerDto } from '@/types/models';
-import { formatBytes } from '@/utils/appUtil';
-import { getFileTypeIcon } from '@/utils/fileUtils';
+import { formatBytes } from '@/utils/AppUtil';
+import { getFileTypeIcon } from '@/utils/FileUtils';
 import {
   IonButton,
   IonButtons,

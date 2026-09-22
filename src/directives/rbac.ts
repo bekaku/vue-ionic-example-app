@@ -1,4 +1,4 @@
-import { useRbac } from '@/composables/useRbac'
+import { useRbac } from '@/composables/useRBAC'
 import type { RBACProps } from '@/types/props'
 import type { DirectiveBinding } from 'vue'
 

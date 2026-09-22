@@ -1,11 +1,11 @@
 import { AppAuthCuurentUserKey, AppAuthRefeshTokenKey, AppAuthTokenKey } from '@/libs/constant';
 import type { StorageItem } from '@/types/common';
 import type { RefreshTokenResponse } from '@/types/models';
-import { loadStorage, removeStorage, saveStorage } from '@/utils/storageUtil';
+import { loadStorage, removeStorage, saveStorage } from '@/utils/StorageUtil';
 import { Preferences } from '@capacitor/preferences';
 import { ref } from 'vue';
 import { useDevice } from './useDevice';
-import { cordovaClearCach } from '@/utils/appUtil';
+import { cordovaClearCach } from '@/utils/AppUtil';
 import { PushNotifications } from '@capacitor/push-notifications';
 export const useAppStorage = () => {
   const { isWeb } = useDevice();

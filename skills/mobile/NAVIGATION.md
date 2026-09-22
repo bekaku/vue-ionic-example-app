@@ -14,9 +14,10 @@ Authoritative home for navigation rules. Entry:
 
 ## 2. Guard (VERIFIED)
 
-`router/index.ts:237-254` — `beforeEach`: `to.meta.noRequireAuth === true`
-→ `next()`; else `getCurrentUserToken()` must return `authenticationToken`,
-else `next({path:'/auth/login/', replace:true})`. Rule: every new protected
+`router/index.ts:237-252` — `beforeEach` uses the Vue Router 5 return-value
+pattern (no `next()`): `to.meta.noRequireAuth === true` → `return true`;
+else `getCurrentUserToken()` must return `authenticationToken` → `return true`,
+else `return { path: '/auth/login/', replace: true }`. Rule: every new protected
 route relies on this guard; every public route must set the flag explicitly.
 
 ## 3. Programmatic navigation (VERIFIED)

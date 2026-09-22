@@ -8,12 +8,12 @@
   <div v-if="src" v-bind="$attrs" class="q-img q-img--menu" role="img">
     <div :style="{ paddingBottom: imgRatio + '%' }"></div>
     <div class="q-img__container q-absolute-full" :class="{ 'bg-black': !completed }">
-      <ion-img :src="srcUrl" class="q-img__image q-img__image--with-transition q-img__image--loaded"
-        :class="{ 'q-absolute-center': !completed, 'img-bg': imageBg }" :alt loading="lazy" fetchpriority="auto"
-        aria-hidden="true" draggable="false" :style="!completed
+      <img :src="srcUrl" class="q-img__image q-img__image--with-transition q-img__image--loaded"
+        :class="{ 'q-absolute-center': !completed, 'img-bg': imageBg }" :alt="alt" loading="lazy" decoding="async"
+        fetchpriority="auto" aria-hidden="true" draggable="false" :style="!completed
           ? 'width: 0px'
           : `object-fit: ${fit}; object-position: 50% 50%`
-          " @ion-error="onError" @ion-img-did-load="onImgDidLoad" @ion-img-will-load="onImgWillLoad" />
+          " @error="onError" @load="onImgDidLoad" />
     </div>
     <ion-spinner v-if="!completed || loading" name="crescent" class="q-absolute-center text-white"
       :class="loadingColor"></ion-spinner>
@@ -25,7 +25,7 @@
 // <base-image v-if="src" :class="`shadow-${shadow}`" :src="src" ratio="4/3"></base-image>
 import FileManagerService from '@/api/FileManagerService';
 import type { ImgRatioType } from '@/types/common';
-import { IonImg, IonSpinner } from '@ionic/vue';
+import { IonSpinner } from '@ionic/vue';
 import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
 
 const { src, alt = 'img', ratio = '1', loadingColor = 'text-white', fetch = false, fit = 'cover', imageBg = false } = defineProps<{

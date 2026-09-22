@@ -62,7 +62,7 @@ import {
   FORMAT_DATE14,
   formatDateBy,
   getDateNow,
-} from '@/utils/dateUtil';
+} from '@/utils/DateUtil';
 import { IonButtons, IonCol, IonIcon, IonItem, IonLabel } from '@ionic/vue';
 import { calendarOutline, close } from 'ionicons/icons';
 import { computed, defineAsyncComponent, ref } from 'vue';

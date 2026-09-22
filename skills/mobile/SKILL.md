@@ -7,7 +7,7 @@ Authoritative home for core architecture rules. Canonical entry:
 
 | Item | Version / value | Evidence |
 | ---- | --------------- | -------- |
-| `@ionic/vue` / `@ionic/vue-router` | `8.8.8` | `package.json:37-38` |
+| `@ionic/vue` / `@ionic/vue-router` | `9.0.4` | `package.json:39-40` |
 | `vue` / `vue-router` | `3.5.35` / `5.1.0` | `package.json:60,62` |
 | `@capacitor/core|cli|android|ios` | `8.3.4` | `package.json:22,26,30,69` |
 | `axios` | `1.16.1` | `package.json:43` |

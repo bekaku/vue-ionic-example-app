@@ -2,7 +2,7 @@ import { useDevice } from '@/composables/useDevice';
 import { useAppStore } from '@/stores/appStore';
 import type { AppTheme } from '@/types/common';
 import { ThemeKey } from '@/libs/constant';
-import { loadStorage, saveStorage } from '@/utils/storageUtil';
+import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { isPlatform } from '@ionic/vue';
 import { moonOutline, sunnyOutline } from 'ionicons/icons';

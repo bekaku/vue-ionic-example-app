@@ -54,7 +54,7 @@ export default () => {
       API: '/api/appUser/updatePersonalData',
       method: 'PUT',
       body: {
-        data: req
+         req
       }
     });
   };
@@ -65,7 +65,7 @@ export default () => {
       API: '/api/appUser/updateEmail',
       method: 'PUT',
       body: {
-        data: req
+         req
       }
     });
   };
@@ -75,7 +75,7 @@ export default () => {
     return await callAxios<ResponseMessage>({
       API: '/api/appUser/selfUpdatePassword',
       method: 'PUT',
-      body: { data: req }
+      body: { req }
     });
   };
   const currentAuthSession = async (q: string): Promise<AccessTokenDto[] | null> => {
@@ -96,7 +96,7 @@ export default () => {
     return await callAxios<LoginedProfileItem>({
       API: '/api/appUser/findLoginedProfile',
       method: 'POST',
-      body: { data: refreshToken },
+      body: { refreshToken },
     });
   };
   const findAllLoginedProfile = async (
@@ -113,9 +113,7 @@ export default () => {
       API: '/api/appUser/verifyUserByEmailOrUsername',
       method: 'POST',
       body: {
-        data: {
           emailOrUsername: userNameOrEmail
-        }
       },
     });
   };

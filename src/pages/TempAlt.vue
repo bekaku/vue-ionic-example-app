@@ -34,7 +34,6 @@ import {
   IonProgressBar,
   IonCardSubtitle,
   IonChip,
-  IonImg,
   IonThumbnail,
   IonSkeletonText,
   IonRippleEffect,

@@ -1,6 +1,6 @@
 <template>
   <ion-row v-if="showIcon" class="ion-justify-content-center">
-    <ion-img src="/icon.png" style="width: 130px; height: auto"> </ion-img>
+    <img src="/icon.png" style="width: 130px; height: auto" alt="app icon" loading="lazy" decoding="async" />
   </ion-row>
   <template v-if="item">
     <ion-row>
@@ -64,7 +64,7 @@ import type { AppVersionDto, PlatformType } from '@/types/models';
 import { cloudDownloadOutline } from 'ionicons/icons';
 import { useLang } from '@/composables/useLang';
 import { useConfig } from '@/composables/useConfig';
-import { IonRow, IonCol, IonButton, IonIcon, IonImg } from '@ionic/vue';
+import { IonRow, IonCol, IonButton, IonIcon } from '@ionic/vue';
 defineProps({
   userVersion: {
     type: String as PropType<string | undefined>,
