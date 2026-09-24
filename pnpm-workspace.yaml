@@ -9,3 +9,6 @@ minimumReleaseAgeExclude:
   - eslint@10.4.1
   - libphonenumber-js@1.13.4
   - vue-tsc@3.3.3
+overrides:
+  # GHSA DoS fixes; minimatch@10 allows ^5.0.5 but pnpm keeps 5.0.6 (dev tooling only)
+  brace-expansion@>=4.0.0 <5.0.9: ^5.0.9
