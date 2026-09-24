@@ -190,6 +190,10 @@ Before any implementation task:
   (`PASSED`/`FAILED`/`NOT_RUN`/`NOT_APPLICABLE`/`BLOCKED` — never claim Android/
   iOS passed on a web-only build), checkpoints complete, impacts reviewed,
   limitations disclosed.
+- Git: commit only when the user asks. Commit directly on the currently
+  checked-out branch (including `main`) — do **not** create a new branch.
+  Never push unless the user explicitly asks. Check staged files for secrets
+  (`.env*` values, keystores) before committing.
 
 ## 12. Testing and Platform Verification
 
