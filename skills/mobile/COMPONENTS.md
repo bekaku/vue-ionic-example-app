@@ -11,8 +11,8 @@ Representative: `src/pages/tabs/home.vue:42-64` uses `BasePage` with
 `#start` / `#actions-end` slots, then `BaseCard` sections. Rules:
 
 - Route pages need an `IonPage` root. Prefer `BasePage` for a standard
-  header/content layout; `auth/login.vue:69`, `Index.vue:86`, and
-  `tabs/index.vue:55` use `IonPage` directly for custom layouts.
+  header/content layout; `auth/login.vue`, `Index.vue`, and `tabs/index.vue`
+  use `IonPage` directly for custom layouts.
 - Props pattern per `BasePage.vue:14-50`: `pageTitle`, `showBackLink`,
   `pageDefaultBackLink='/tabs/home'`, `translucent`, `scrollY/fullscreen`, etc.
 - Reuse `src/components/base/*` (`BaseButton`, `BaseCard`, `BaseIcon`,
@@ -24,14 +24,21 @@ Representative: `src/pages/tabs/home.vue:42-64` uses `BasePage` with
 `IonApp` + `IonRouterOutlet` (`App.vue`), `IonPage/Header/Toolbar/Title/Content`,
 `IonButtons/Row`, `IonList/Item/Label/Badge/CardContent/Img`
 (`home.vue:24-31`, `BasePage.vue`). Modals/alerts/toasts exist via controllers
-(`toastController` in `useNotification.ts:198`; `appConfirm/appLoading` in
-`useBase.ts`). Inspect the target area before assuming a component is unused.
+(`toastController` in `useNotification.ts` › `reciveNotificationToast`;
+`appConfirm/appLoading` in `useBase.ts`). Inspect the target area before assuming a component is unused.
 
 ## 3. Forms/validation/dialogs/loading
 
 Validation via `src/composables/useValidation.ts`; RBAC via `rbac` directive
-(`main.ts:53`); feedback via `useBase` toasts/confirms/loaders. Add
-loading/error/empty states where the new interaction needs them.
+(`main.ts` › `startApp`); feedback via `useBase` toasts/confirms/loaders. Add
+loading/error/empty states where the new interaction needs them; dismiss
+loaders in `finally` so a thrown `ApiFetchError` cannot leave them open.
+
+Remote images/PDFs: `BaseImage`/`BaseAvatar` with `fetch`/`fetch-image` load
+through `FileManagerService.fethCdnData` and release blob URLs via
+`useBlobUrls`; reuse them instead of calling `fethCdnData` directly.
+Component tests: `tests/unit/BaseAvatar.spec.ts` shows the jsdom + mocked
+`@ionic/vue` pattern.
 
 ## 4. Ionic lifecycle (VERIFIED principle)
 
@@ -48,7 +55,7 @@ new behavior, not a claim about current page implementation. See `LIFECYCLE.md`.
   `capacitor-plugin-safe-area` insets; Android SDK ≥ 35 gets `edge-to-edge`
   + `--app-safe-area-*` vars. iOS behavior is UNKNOWN without device evidence
   (see `PLATFORM_DIFFERENCES.md`).
-- Keyboard: config-only (`capacitor.config.ts:20-24`, `KeyboardResize.Body`);
+- Keyboard: config-only (`capacitor.config.ts` `plugins.Keyboard`, `KeyboardResize.Body`);
   no direct `@capacitor/keyboard` import in `src` (NOT_FOUND) — verify before
-  claiming behavior. StatusBar colors set per screen (`login.vue:24-62`,
-  `useTheme.ts:30-99`).
+  claiming behavior. StatusBar colors set per screen (`login.vue` ›
+  `onMounted` → `setStatusBarColor`; `useTheme.ts`).

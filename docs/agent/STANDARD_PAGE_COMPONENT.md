@@ -21,7 +21,9 @@ true, default href `/tabs/home`), `translucent/scrollY/fullscreen`,
 4. For new behavior that must repeat on cached-page re-entry, use Ionic view
    hooks and cleanup listeners with the owning view. No existing page imports
    those hooks as of this review.
-5. StatusBar per screen where needed (`login.vue:38-62` pattern).
+5. StatusBar per screen where needed (`login.vue` › `onMounted` pattern).
 6. Conflicts: if implementations diverge, follow the majority + newest usage
    and log the conflict in `KNOWN_ISSUES.md` — do not invent a universal
    pattern.
+7. Loaders from `appLoading()` are dismissed in `finally` around API calls
+   (`pages/settings/account-settings/*.vue`); `useApi` already toasts errors.

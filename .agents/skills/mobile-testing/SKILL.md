@@ -22,8 +22,11 @@ not required unless the user asks (`skills/mobile/TESTING.md` §2).
 
 ## Relevant project locations
 
-- `tests/unit/useApi.spec.ts`, `tests/e2e/specs/test.cy.ts`
-- `package.json` (`test:unit` = vitest, `test:e2e` = cypress), `eslint.config.js`
+- `tests/unit/useApi.spec.ts` (composable + mocked `fetch`),
+  `tests/unit/BaseAvatar.spec.ts` (component, jsdom), `tests/e2e/specs/test.cy.ts`
+- `package.json` (`test:unit` = vitest watch, `test:e2e` = cypress); no
+  `vitest.config` — default env is `node`, add `// @vitest-environment jsdom`
+  per component spec
 
 ## Mandatory rules
 
@@ -37,8 +40,10 @@ not required unless the user asks (`skills/mobile/TESTING.md` §2).
 ## Implementation workflow
 
 1. Pick applicable levels from the task's Platform/Native/API/Data impacts.
-2. Run relevant checks with bounded commands (`pnpm exec vitest run` for
-   one-shot unit tests); compare failures with the existing baseline.
+2. Run relevant checks with bounded commands: `pnpm exec vue-tsc --noEmit`,
+   `pnpm exec vitest run`, `pnpm exec vite build`; compare failures with the
+   existing baseline. Typecheck/build do not catch runtime errors — add a
+   test when a change affects mount/lifecycle behavior.
 3. Mock native plugins (`@capacitor/*`, community) in jsdom/vitest.
 4. Record per-platform results in the task's Testing section.
 

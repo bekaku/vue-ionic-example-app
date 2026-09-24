@@ -36,5 +36,5 @@ Every row below is CREATED, not moved.
 | (none) | Files/media detail | `skills/mobile/FILES_MEDIA.md` | CREATED |
 | (none) | Build/release detail | `skills/mobile/BUILD_RELEASE.md` | CREATED |
 | (none) | Testing detail | `skills/mobile/TESTING.md` | CREATED |
-| (none) | Task template/workflow | `tasks/TASK_TEMPLATE.md`, `tasks/README.md`, `docs/tasks/.gitkeep` | CREATED |
+| (none) | Task template/workflow | `tasks/TASK_TEMPLATE.md`, `tasks/README.md` | CREATED |
 | (none) | Audit evidence (10 files) | `docs/agent/*.md` | CREATED |

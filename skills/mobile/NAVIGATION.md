@@ -23,10 +23,12 @@ route relies on this guard; every public route must set the flag explicitly.
 ## 3. Programmatic navigation (VERIFIED)
 
 `useBase` exposes `appNavigateTo` / `getCurrentPath` (used in `App.vue:39`,
-`useNotification.ts:240`). Notification taps call
-`appNavigateTo('/post/view/${functionId}')` — note `/post/view/:id` has no
-verified route entry in `router/index.ts` (CONFLICTING — record/test before
-relying; see `KNOWN_ISSUES.md`).
+`useNotification.ts` › `onNotifyView`). `onNotifyView` targets
+`/post/view/${functionId}`, which has no route, and it is only reachable via
+`addNotifyListeners()` — which nothing calls. Other links without a route:
+`/user/view/:id`, `/notifications`, `/hashtag/*`, menu `/permission` `/role`
+`/user` `/chats` `/feed` (KNOWN_ISSUES #23). All fall to the catch-all 404;
+add the route before relying on a link.
 
 ## 4. Android back button (VERIFIED)
 
@@ -37,7 +39,7 @@ handling verified — do not add competing handlers.
 
 ## 5. iOS navigation (PARTIALLY_VERIFIED)
 
-`swipeBackEnabled: false` (`main.ts:45`); `BaseBackButton` default
+`swipeBackEnabled: false` (`main.ts` › `startApp`); `BaseBackButton` default
 `/tabs/home`. Gesture/stack behavior on iOS is UNKNOWN without device
 evidence — never claim parity with Android.
 
@@ -46,10 +48,9 @@ evidence — never claim parity with Android.
 ```text
 router module registers beforeEach → app.use(router)
 → initial navigation may evaluate auth guard
-→ router.isReady → initialAuthData → app.mount → IonRouterOutlet
+→ router.isReady → initialAuthData (15 s) → .finally(app.mount) → IonRouterOutlet
 → page activation; routed pages may remain mounted when inactive
 ```
 
 Do not assume auth restoration has completed when the guard first runs
-(`src/main.ts:41-65`,
-`src/router/index.ts:237-254`).
+(`src/main.ts` › `startApp`, `src/router/index.ts:237-254`).

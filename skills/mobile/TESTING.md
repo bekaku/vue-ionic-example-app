@@ -5,18 +5,29 @@ Authoritative home for verification rules. Entry:
 
 ## 1. Frameworks (VERIFIED)
 
-| Tool | Version | Evidence |
-| ---- | ------- | -------- |
-| `vitest` (`test:unit`) | check lockfile | `package.json:16,94` |
-| `cypress` (`test:e2e`) | check lockfile | `package.json:15,83` |
-| `@vue/test-utils` / `jsdom` | check lockfile | `package.json:81,87` |
-| eslint / `vue-tsc` | check lockfile | `package.json:84,95` |
+| Check | Command | Notes |
+| ----- | ------- | ----- |
+| Typecheck (`STATIC`) | `pnpm exec vue-tsc --noEmit` | covers `src/**` only (not `tests/`) |
+| Unit/component | `pnpm exec vitest run [path]` | `pnpm test:unit` is watch mode |
+| Web build (`BUILD`) | `pnpm exec vite build` | add `--outDir <tmp>` to keep `dist/` untouched |
+| E2E | `pnpm test:e2e` (cypress) | needs a running app |
 
-Samples: `tests/unit/useApi.spec.ts` (fetch/Preferences/router mocked with
-`vi.mock` + `vi.stubGlobal('fetch')`), `tests/e2e/specs/test.cy.ts`
-(+ `support/`, `fixtures/`), `cypress.config.ts`.
-`test:unit` starts Vitest watch mode; use `pnpm exec vitest run` for a
-bounded check; establish whether a failure predates your change.
+Versions: check `package.json` + lockfile (`vitest`, `cypress`,
+`@vue/test-utils`, `jsdom`, `vue-tsc`).
+
+Samples:
+- `tests/unit/useApi.spec.ts` — composable test: `vi.mock` for router,
+  `useAppStorage`, `useDevice`, `StorageUtil`, `JwtUtil`, `@ionic/vue`;
+  `vi.hoisted` shared state; `vi.stubGlobal('fetch', …)`.
+- `tests/unit/BaseAvatar.spec.ts` — component test: `// @vitest-environment
+  jsdom` (default env is `node`; there is no `vitest.config`), stub
+  `@ionic/vue` components with `vi.mock`, `mount` + `flushPromises` +
+  `setProps`.
+- `tests/e2e/specs/test.cy.ts` (+ `support/`, `fixtures/`), `cypress.config.ts`.
+
+Typecheck and build do not catch runtime errors (e.g. TDZ in `watch
+{immediate}`); cover mount/lifecycle changes with a component test.
+Establish whether a failure predates your change.
 
 ## 2. Levels
 

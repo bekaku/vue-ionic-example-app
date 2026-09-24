@@ -4,12 +4,16 @@
 
 ```bash
 pnpm install --shamefully-hoist   # per README
+pnpm exec vue-tsc --noEmit         # typecheck (verification gate)
+pnpm exec vitest run               # unit/component tests, one-shot
+pnpm exec vite build               # web build → dist/ (no Ionic CLI needed)
 pnpm build:vite                    # vue-tsc && vite build → dist/
-pnpm build                         # ionic build --prod → dist/
+pnpm build                         # ionic build --prod → dist/ (global Ionic CLI)
 pnpm preview                       # local preview
 pnpm lint                          # eslint (optional, not a verification gate)
-pnpm test:unit                     # vitest
-pnpm test:e2e                       # cypress
+pnpm test:unit                     # vitest watch mode
+pnpm test:e2e                      # cypress
+pnpm audit                         # dependency vulnerabilities (overrides live in pnpm-workspace.yaml)
 ```
 
 `dist/` is the Capacitor `webDir`. Dev server: `pnpm dev` (vite :3004) or
@@ -21,7 +25,8 @@ pnpm test:e2e                       # cypress
 | ---- | --- | ----- |
 | `.env.development` | `http://localhost:8080` | CDN/WS same host |
 | `.env.production` | `https://api.myapp.com` (+cdn) | test-server URLs commented |
-| `.env` / `.env.development.example` | keys incl. timeout, paging, stores, versions | values redacted in docs |
+| `.env` | keys incl. timeout, paging, stores, versions | shared by all modes |
+| `.env.development.example` | template for `.env.development` (API/CDN/WS, dev mode) | tracked; `.env.development` is gitignored |
 
 Mode helpers: `useConfig()` (`isDevMode/isTestMode/isDevelopMode/isProdMode`).
 
@@ -35,6 +40,7 @@ No `android/`/`ios/` committed:
 ```bash
 npx cap add android && npx cap add ios  # first time only
 npx cap sync          # after each web build with native/plugin changes
+CAP_ALLOW_HTTP=true npx cap sync  # dev only: allow http:// API (cleartext/mixed content)
 npx cap sync android  # per README
 npx cap sync ios
 ```

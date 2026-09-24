@@ -1,14 +1,13 @@
 # PROJECT_REFERENCE — Verified Facts (Mobile Repository)
 
-Reviewed against the working tree on 2026-09-24. Evidence paths are
-repo-relative. The working tree contains uncommitted application and
-dependency changes; recheck it before implementation.
+Reviewed against `main` at commit `8c4868d` (2026-09-24). Evidence paths are
+repo-relative; recheck the working tree before implementation.
 
 ## Technology stack (VERIFIED — `package.json`, `pnpm-lock.yaml`)
 
 - Current lockfile importer resolves `@ionic/vue` and `@ionic/vue-router`
   9.0.4, Vue 3.5.43, Vue Router 5.3.1, Capacitor core/CLI/Android/iOS
-  8.5.2, and Pinia 3.0.4 (axios removed 2026-09-24) (`package.json:19-95`,
+  8.5.2, and Pinia 3.0.4 (axios removed 2026-09-24) (`package.json`,
   `pnpm-lock.yaml` importer). `pinia` is in dependencies. Recheck before
   quoting versions.
 - Package manager: pnpm (`pnpm-lock.yaml`, `pnpm-workspace.yaml`). No
@@ -54,9 +53,11 @@ LEGACY: `cordova-plugin-file`. Details: `NATIVE_PLUGIN_INVENTORY.md`.
   `/api/appUser/currentUserData`, `/api/auth/refreshTokenApi`.
 - Auth: JWT+refresh in Preferences (per-user keys, multi-account switch).
 - Local data: Preferences; no app-managed SQLite/IndexedDB/migrations.
-- Notifications: Push + FCM topics (`io.mydomain.fcm.user.<id>`), toast +
-  `/post/view/:id` tap nav (route CONFLICTING).
+- Notifications: Push registration + FCM topics (`io.mydomain.fcm.user.<id>`).
+  Foreground toast + tap navigation exist in `addNotifyListeners()` but are
+  not wired (KNOWN_ISSUES #24); tap target `/post/view/:id` has no route (#23).
 - Deep links: none verified (no `appUrlOpen`/intent-filters/domains).
-- Build: `ionic build --prod` targets `dist/`; native sync/build not run in
-  this documentation review.
-- Testing: vitest + cypress + eslint + vue-tsc; samples in `tests/`.
+- Build: `pnpm exec vite build` / `pnpm build:vite`; `pnpm build` =
+  `ionic build --prod` (global Ionic CLI) → `dist/`. Native sync/build not run.
+- Testing: `vue-tsc` (typecheck gate) + vitest (`tests/unit/`) + cypress;
+  eslint exists but is not a gate.

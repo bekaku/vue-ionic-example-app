@@ -34,7 +34,11 @@ background behavior, listener/memory-leak fixes.
    recur on entry, with cleanup owned by the same page/session.
 3. Never assume background JS runs indefinitely or termination fires.
 4. Check existing listener ownership; `App.vue` does not retain the
-   `appStateChange` handle, and push registration can repeat.
+   `appStateChange` handle. For listeners that can be registered from several
+   places, copy `useNotification.ts` › `addListeners`: keep handles, remove
+   before re-adding, serialize calls.
+5. `watch(..., { immediate: true })` runs its callback synchronously — declare
+   the functions it calls above it (a `const` below it throws at mount).
 
 ## Implementation workflow
 

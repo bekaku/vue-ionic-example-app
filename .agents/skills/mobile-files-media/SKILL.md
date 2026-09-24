@@ -31,8 +31,8 @@ gallery, permissions, scoped-storage/sandbox paths.
 
 ## Mandatory rules
 
-1. Camera: `getPhoto` Uri + `webUseInput`, `pickImages`; never assume gallery
-   save works on web (explicit TODO/no-op).
+1. Camera: `getPhoto` Uri + `webUseInput`, `pickImages`. Web has no gallery:
+   `savePicture`/`saveFile` fall back to a browser download.
 2. Save pipeline: base64 → `Filesystem.writeFile` (`Directory.Data`) →
    `Media.savePhoto` into `AppAlbumName` album.
 3. Upload defaults: 1 MB chunks, one attempt unless `maxRetries` is
@@ -40,6 +40,9 @@ gallery, permissions, scoped-storage/sandbox paths.
    In-memory chunk tracking is not restart-safe resume.
 4. Validate paths, MIME, filenames; respect scoped storage / sandbox; request
    minimal permissions with `isWeb()` guards.
+5. Blob URLs from `fethCdnData` must be released: use `useBlobUrls()`
+   (`track` + auto-revoke on unmount), as `BaseImage`/`BaseAvatar` do.
+   Downloads that must land on the device use `useFileDownload`.
 
 ## Implementation workflow
 

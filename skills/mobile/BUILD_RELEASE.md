@@ -7,8 +7,9 @@ Authoritative home for build/release rules. Entry:
 ## 1. Web build (VERIFIED)
 
 - `package.json` scripts: `build:vite` = `vue-tsc && vite build`;
-  `build` = `ionic build --prod`; output `dist/` = Capacitor `webDir`
-  (`capacitor.config.ts:7`).
+  `build` = `ionic build --prod` (needs the global Ionic CLI; not a project
+  dependency); `pnpm exec vite build` needs neither. Output `dist/` =
+  Capacitor `webDir` (`capacitor.config.ts`).
 - Env selection: `.env.development` (localhost:8080 API/CDN/WS) vs
   `.env.production` (myapp.com). No secrets in frontend env files.
 
@@ -20,8 +21,9 @@ Authoritative home for build/release rules. Entry:
   plugin config.
 - No `android/`/`ios/` committed → add the target project with
   `npx cap add android` or `npx cap add ios` first, then `npx cap sync` as
-  appropriate. Never sync during docs tasks or
-  blindly on dirty trees.
+  appropriate. Never sync during docs tasks or blindly on dirty trees.
+- Run `npx cap sync` after adding/removing a Capacitor plugin (e.g. the
+  2026-09-24 `@capacitor/haptics` removal).
 
 ## 3. Release rules
 

@@ -14,23 +14,23 @@ DECLARED, never ACTIVE.
 
 | Plugin | Verdict | Evidence |
 | ------ | ------- | -------- |
-| `App` | ACTIVE | `App.vue:7,33,43` |
-| `Device` | ACTIVE | `useDevice.ts:1`; `AppUtil.ts:4` |
-| `Preferences` | ACTIVE | `StorageUtil.ts:1`; `useAppStorage.ts:5` |
-| `Camera` | ACTIVE via `useFileSystem` | `useFileSystem.ts:7,208-302`; `useCamera.ts` is unreferenced |
-| `Filesystem` | ACTIVE | `useFileSystem.ts:8`; `useFileDownload.ts:4` |
-| `PushNotifications` | ACTIVE | `useNotification.ts:7`; config `presentationOptions: []` |
-| `@capacitor-community/fcm` | ACTIVE | `useNotification.ts:6,288-310` |
-| `@capacitor-community/file-opener` | ACTIVE | `useFileDownload.ts:2,226` |
-| `@capacitor-community/media` | ACTIVE | `useFileSystem.ts:5-6,18-41` |
-| `Share` | ACTIVE | `useFileDownload.ts:5,245` |
-| `Clipboard` | ACTIVE | `useBase.ts:14,256` |
-| `StatusBar` | ACTIVE | `useTheme.ts:6,30-99` |
-| `@capacitor-community/device-security-detect` | ACTIVE | `useDevice.ts:8,79` |
-| `capacitor-plugin-safe-area` | ACTIVE | `useDevice.ts:9,84` |
-| `Keyboard` | CONFIGURED_ONLY | `capacitor.config.ts:20-24`; no `src` import (NOT_FOUND) |
+| `App` | ACTIVE | `App.vue` › `onBeforeMount` (`appStateChange`, `exitApp`) |
+| `Device` | ACTIVE | `useDevice.ts` (`isWeb`, `getInfo`); `AppUtil.ts` |
+| `Preferences` | ACTIVE | `StorageUtil.ts`; `useAppStorage.ts` |
+| `Camera` | ACTIVE via `useFileSystem` | `useFileSystem.ts` › `onTakePicture`, `takePickSiglePicture`, `pickPhotoAlbum`; `useCamera.ts` is unreferenced |
+| `Filesystem` | ACTIVE | `useFileSystem.ts` › `saveProcess`; `useFileDownload.ts` › `downloadFile` |
+| `PushNotifications` | ACTIVE (registration only) | `useNotification.ts` › `registerNotifications`, `addListeners`; config `presentationOptions: []` |
+| `@capacitor-community/fcm` | ACTIVE | `useNotification.ts` › `subscribeTopic`, `unSubscribeTopic`, `deleteInstance` |
+| `@capacitor-community/file-opener` | ACTIVE | `useFileDownload.ts` › `openFile` |
+| `@capacitor-community/media` | ACTIVE | `useFileSystem.ts` › `createAlbumIfNotExist`, `ensureDemoAlbum`, `saveProcess` |
+| `Share` | ACTIVE | `useFileDownload.ts` › `shareFile` |
+| `Clipboard` | ACTIVE | `useBase.ts` (copy helper) |
+| `StatusBar` | ACTIVE | `useTheme.ts` |
+| `@capacitor-community/device-security-detect` | ACTIVE | `useDevice.ts` › `isRootDetected` |
+| `capacitor-plugin-safe-area` | ACTIVE | `useDevice.ts` › `setSafeArea` |
+| `Keyboard` | CONFIGURED_ONLY | `capacitor.config.ts` `plugins.Keyboard`; no `src` import (NOT_FOUND) |
 | `Haptics` | REMOVED | `pnpm remove @capacitor/haptics` 2026-09-24 |
-| `cordova-plugin-file` | LEGACY | declared; `cordovaClearCach` in `AppUtil`/`useAppStorage.ts:142` |
+| `cordova-plugin-file` | LEGACY (still used) | `AppUtil.ts` › `cacheClear` → `window.cordova.file`, called from `useAppStorage.ts` › `onClearAllToken` |
 
 Android/iOS packages are DECLARED; no `android/`/`ios/` dirs committed
 (NOT_FOUND) so manifest/Info.plist/Pods claims are UNKNOWN until `cap add`.

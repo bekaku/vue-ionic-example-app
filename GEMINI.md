@@ -12,8 +12,11 @@ This file is a thin adapter. The authority is `AGENTS.md` + `SKILLS.md`.
    unless the task explicitly authorizes implementation — then use
    `tasks/TASK_TEMPLATE.md` and record cross-repo dependencies instead of
    editing other repos.
-4. **Verify**: classify findings with file:line evidence; never claim Android/
+4. **Verify**: classify findings with file + symbol (or file:line) evidence; never claim Android/
    iOS builds or tests passed without executing them; keep web vs native
    results distinct.
 5. Gemini-specific note: prefer grounding claims in file contents you actually
-   read this session; cite `file:line` paths.
+   read this session; cite code as file + symbol (see `AGENTS.md` §13).
+6. Start from `AGENTS.md` "Quick Reference" for commands (typecheck/tests/
+   build), the lint-not-required rule, and git rules (commit on the active
+   branch only when asked).

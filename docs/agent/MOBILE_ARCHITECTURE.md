@@ -1,13 +1,13 @@
 # MOBILE_ARCHITECTURE — Actual Implementation
 
-Reviewed against the working tree on 2026-09-24. This page records source
+Reviewed against `main` at commit `8c4868d` (2026-09-24). This page records source
 structure; implementation rules live in `AGENTS.md` and `skills/mobile/`.
 
 ## Source ownership map (VERIFIED)
 
 | Layer | Main files | Responsibility shown by source |
 | ----- | ---------- | ------------------------------ |
-| Bootstrap | `src/main.ts:40-67`, `src/App.vue:26-52` | Create Vue/Ionic/Pinia/router, restore auth before mount, initialize app listeners and root outlet |
+| Bootstrap | `src/main.ts` › `startApp`, `src/App.vue` › `onBeforeMount` | Create Vue/Ionic/Pinia/router, restore auth before mount, initialize app listeners and root outlet |
 | Routes | `src/router/index.ts:4-255`, `src/pages/` | Route records, public-route metadata, auth guard, page entry points |
 | Shared UI | `src/components/base/`, `src/assets/css/` | Standard page wrapper and reusable controls/theme |
 | State | `src/stores/` | Auth, app permissions, device state, notifications, tabs, utilities |
@@ -26,23 +26,24 @@ flowchart TD
   A[main.ts startApp] --> B[createApp + IonicVue mode ios + Pinia + i18n + router]
   B --> C[rbac directive]
   C --> D[router.isReady]
-  D --> E[authenStore.initialAuthData GET /api/appUser/currentUserData]
-  E -->|403| F[removeAuthToken + replace /auth/login]
-  E -->|200/no token| G[app.mount #app]
+  D --> E[authenStore.initialAuthData GET /api/appUser/currentUserData, 15s]
+  E -->|ApiFetchError 403| F[removeAuthToken + replace /auth/login]
+  E -->|200 / no token / network error| G
+  F --> G[finally: app.mount #app]
   G --> H[App.vue onBeforeMount: setSafeArea, initThemeLanguge, appStateChange listener, initAuthen, useBackButton -1]
 ```
 
 The router guard is registered when the module loads; `app.use(router)`
 precedes `router.isReady` and `initialAuthData()`. An initial navigation may
 evaluate the guard before auth restoration
-(`src/main.ts:41-58`, `src/router/index.ts:237-254`).
+(`src/main.ts` › `startApp`, `src/router/index.ts:237-254`).
 
 ## Router + guard (VERIFIED)
 
 ```mermaid
 flowchart TD
   A[IonRouterOutlet] --> B[beforeEach: noRequireAuth?]
-  B -->|true| C[next]
+  B -->|true| C[allow: return true]
   B -->|false| D[getCurrentUserToken has authenticationToken?]
   D -->|yes| C
   D -->|no| E[redirect /auth/login replace]
@@ -72,11 +73,14 @@ BaseChoosePhoto / file-picker example
   → useUpload (File → FormData chunks → CDN uploadChunkApi → mergeChunkApi)
 ```
 
-`src/components/base/BaseChoosePhoto.vue:22,45` and
-`src/pages/example/ui/file-picker.vue:6-7,23-28` use this path.
+`src/components/base/BaseChoosePhoto.vue` and
+`src/pages/example/ui/file-picker.vue` use this path (`useFileSystem`).
 `src/composables/useCamera.ts` has photo/video helpers and HEIC conversion,
 but no `src/` import caller at this review. `useFileDownload.ts` owns
-download/open/share, while `useFileSystem.ts` owns native gallery saving.
+download/open/share (also used by `BaseFileView`, `BasePdfView`,
+`BaseImageView`), while `useFileSystem.ts` owns gallery saving (browser
+download on web). Remote image/PDF display goes through
+`FileManagerService.fethCdnData` with blob URLs released by `useBlobUrls`.
 The upload default is 1 MB chunks and one attempt (`useUpload.ts:14-15`);
 options can override it. Backend guarantees are not established here.
 

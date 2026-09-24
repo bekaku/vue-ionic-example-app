@@ -10,8 +10,9 @@ Authoritative home for deep-link rules. Entry:
   domains/entitlements (NOT_FOUND — directories absent; `cap add` required).
 - No custom-scheme/Universal-Link/App-Link config in `capacitor.config.ts`
   (NOT_FOUND).
-- Only verified inbound navigation: notification taps
-  (`useNotification.ts:226-245` → `/post/view/:id`, itself CONFLICTING).
+- No inbound navigation is active: notification taps would go through
+  `useNotification.ts` › `onNotifyView` → `/post/view/:id` (no route), but
+  `addNotifyListeners()` is never called (KNOWN_ISSUES #23, #24).
 
 ## 2. Rules for future work
 

@@ -1,8 +1,15 @@
+<!--
+File name: tasks/NNN-<slug>.md
+- NNN  = next 3-digit number after the highest existing task file
+         (ls tasks/[0-9]*.md | tail -1 → 003-… means use 004)
+- slug = short kebab-case summary, e.g. 004-add-post-view-route.md
+Task ID below must equal NNN. Delete this comment in the copied file.
+-->
 # Task: <name>
 
 ## Metadata
 
-- Task ID:
+- Task ID: NNN
 - Status: TODO
 - Priority: Medium
 - Created: YYYY-MM-DD
@@ -14,7 +21,7 @@
 
 ## Background
 
-<Evidence, file:line refs, classification VERIFIED/PARTIALLY_VERIFIED/NOT_FOUND.>
+<Evidence (file + symbol or file:line), classification VERIFIED/PARTIALLY_VERIFIED/NOT_FOUND.>
 
 ## Scope
 

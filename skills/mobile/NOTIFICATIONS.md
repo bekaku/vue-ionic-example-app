@@ -10,36 +10,41 @@ Authoritative home for push-notification rules. Entry:
 orchestrated by `src/composables/useNotification.ts`, counts in
 `src/stores/notificationStore.ts`, server calls via `UserNotifyService`.
 Config: `PushNotifications.presentationOptions: []`
-(`capacitor.config.ts:25-28`) — foreground presentation is custom (toast).
+(`capacitor.config.ts` `plugins.PushNotifications`) — foreground
+presentation would be a custom toast (inactive, see §2).
 
 ## 2. Flows (VERIFIED)
 
-- Gate: `isNotifyPermited()` returns false on web (`:55-72`).
-- Register: `checkPermissions → requestPermissions (if prompt) → register()`
-  (`registerNotifications`, `:250`); listeners: `registration` (saves `FcmTokenKey`, never logs the token),
-  `registrationError` (`addListeners`, `:79-102`). Handles are kept module-level
-  (`:17`) and removed before re-adding, calls are serialized — safe to call from
-  App.vue, Index.vue, login and the toggle.
-- Notify listeners: `pushNotificationReceived` → toast with View/Close;
+Symbols below are in `useNotification.ts` unless noted.
+
+- Gate: `isNotifyPermited()` returns false on web.
+- Register: `registerNotifications` = `checkPermissions → requestPermissions
+  (if prompt) → register()`. `addListeners` adds `registration` (saves
+  `FcmTokenKey`, never logs the token) + `registrationError`. Handles live in
+  module-level `registrationHandles` and are removed before re-adding; calls
+  are serialized via `listenerQueue` — safe to call from App.vue, Index.vue,
+  login and the settings toggle.
+- Notify listeners: `pushNotificationReceived` → `reciveNotificationToast`;
   `pushNotificationActionPerformed` → `onNotifyView` — both in
-  `addNotifyListeners()` (`:104`), which **nothing calls** (NOT_FOUND caller):
+  `addNotifyListeners()`, which **nothing calls** (NOT_FOUND caller), so
   foreground toast and tap navigation are currently inactive.
-- Topics: `FCM.subscribeTo/unsubscribeFrom/deleteInstance`
-  (`:286-318`); user topic `FCM_USER_TOPIC + userId`
-  (`'io.mydomain.fcm.user.'`, `libs/constant.ts:131`).
-- Logout: `userUnSubscribeFcm` → topic removal + optional
-  `removeAllListeners/unregister` (`:340-361`); `onClearAllToken` also
-  unregisters (`useAppStorage.ts:140-153`).
+- Topics: `subscribeTopic`/`unSubscribeTopic`/`deleteInstance` (FCM plugin);
+  user topic `FCM_USER_TOPIC + String(userId)` (`libs/constant.ts`
+  `FCM_USER_TOPIC = 'io.mydomain.fcm.user.'`).
+- Logout: `userUnSubscribeFcm` → topic removal + optional `removeAllListeners`
+  (also clears `registrationHandles`) + `unregister`; `useAppStorage.ts` ›
+  `onClearAllToken` also unregisters.
 
 ## 3. Navigation contract (VERIFIED, with conflict)
 
 `onNotifyView`: marks read, then `SYSTEM_ANNOUNMENT`/`LIKE_POST` →
-`appNavigateTo('/post/view/${functionId}')`; `CHAT` → no-op (`:235-244`).
+`appNavigateTo('/post/view/${functionId}')`; `CHAT` → no-op.
 `/post/view/:id` has no route in `router/index.ts` — treat as CONFLICTING
 until a destination is specified and tested (see `KNOWN_ISSUES.md`).
 
 ## 4. Risks (PARTIALLY_VERIFIED)
 
-If `addNotifyListeners` is wired up, make it replace-not-stack like
-`addListeners` and gate cold-start taps on router/auth readiness. Also and untested Android channels / iOS capabilities (no
-native dirs to verify). Never store real tokens in docs.
+Before wiring `addNotifyListeners`: create the tap destination route (#23),
+make it replace-not-stack like `addListeners`, and gate cold-start taps on
+router/auth readiness (#9). Android channels / iOS capabilities are untested
+(no native dirs to verify). Never store real tokens in docs.

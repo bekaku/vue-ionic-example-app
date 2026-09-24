@@ -2,7 +2,7 @@
 
 ## Metadata
 
-- Task ID: migrate-axios-to-useapi
+- Task ID: 002
 - Status: VERIFYING
 - Priority: Medium
 - Created: 2026-09-24
@@ -11,8 +11,9 @@
 ## Objective
 
 Move every app HTTP call to the new ofetch-style `useApi()` composable
-(`src/composables/useApi.ts`, native `fetch`). `src/plugins/axios.ts` and
-`src/composables/useAxios.ts` are kept (not deleted) per user request.
+(`src/composables/useApi.ts`, native `fetch`). axios, `src/plugins/axios.ts`
+and `src/composables/useAxios.ts` were first kept, then removed in a follow-up
+the same day (see Out of Scope note).
 
 ## Scope
 

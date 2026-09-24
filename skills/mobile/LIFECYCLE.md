@@ -5,11 +5,12 @@ Authoritative home for lifecycle rules. Entry:
 
 ## 1. App launch (VERIFIED)
 
-`src/main.ts:54-66` (`router.isReady → initialAuthData → mount`) plus
+`src/main.ts` › `startApp` (`router.isReady → initialAuthData → .finally(mount)`) plus
 `src/App.vue:26-47` (`onBeforeMount`: `setSafeArea()`, `initThemeLanguge()`,
 `App.addListener('appStateChange')`, `initAuthen()`, `useBackButton`).
-`initAuthen` (`useAuthen.ts:33-52`): token present → `initialAuthDataProcess()`
-(`GET /api/appUser/currentUserData`) → notification/FCM setup + `initialAppNav()`.
+`initAuthen` (`useAuthen.ts` › `initAuthen`): token present and no `auth` yet →
+retry `initialAuthDataProcess()` (`GET /api/appUser/currentUserData`, errors
+caught) → notification/FCM setup + `initialAppNav()`.
 
 ## 2. Foreground/background (VERIFIED hook, UNKNOWN duration)
 
@@ -31,10 +32,14 @@ termination callbacks fire.
 
 Identify the owner first (app, routed view, composable, or auth session).
 Keep listener handles or an explicit registration guard, avoid duplicate
-registration, and remove listeners when the owner ends. Current
-`App.vue:33-35` registers `appStateChange` without saving a handle;
-`useNotification.ts` registers push listeners and removes all on logout.
-Treat this as an area to inspect, not an already-enforced invariant.
+registration, and remove listeners when the owner ends. Reference pattern:
+`useNotification.ts` › `addListeners` keeps module-level handles, removes
+them before re-adding, and serializes calls. `App.vue:33-35` registers
+`appStateChange` without saving a handle (root-owned, lives for the app).
+
+`watch(source, fn, { immediate: true })` calls `fn` synchronously at the
+`watch` line — a `const fn` declared below it throws "Cannot access before
+initialization" at mount (typecheck/build do not catch this).
 
 ## 5. State restoration (VERIFIED)
 

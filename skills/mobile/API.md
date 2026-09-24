@@ -19,8 +19,11 @@ Options: `method`, `body`, `query`, `baseURL`, `headers`, `responseType`
   `X-Sync-Active` (`canSyncActiveStatusToServer`). Plain object body →
   JSON + `Content-Type: application/json`; `FormData`/`Blob` sent as-is
   (browser sets multipart boundary). No `Content-Type` on body-less calls.
-- Response: `json-bigint` when `/\d{16,}/` else `JSON.parse` (`:82`);
-  status ≥ 400 → `ApiFetchError` (`status`, `data`, `response`, `:299`).
+- Response: `json-bigint` (`storeAsString`) when `/\d{16,}/` else
+  `JSON.parse` (`:82`) — snowflake ids arrive as strings (`IdType`, see
+  `SKILL.md` §4); status ≥ 400 → `ApiFetchError` (`status`, `data`,
+  `response`, `:299`). `api.raw` throws too — catch `ApiFetchError` where a
+  page needs a 4xx body (pattern: `AuthenService.ts` › `rawResponse`).
 - 401 (`:331-373`): missing token → reject; token VALID → retry once;
   otherwise one module-level `refreshPromise` shared by concurrent 401s
   (`:75`), `POST /api/auth/refreshTokenApi` `{refreshToken}` →
@@ -50,8 +53,9 @@ const items = await api<ApiListResponse<Permission>>('/api/permission', {
 await api<ResponseMessage>(`/api/permission/${id}`, { method: 'DELETE' });
 ```
 
-Examples: `pages/example/composables/use-api.vue`, `usePageFetch.ts:55`,
-`authenStore.ts:42`.
+Examples: `pages/example/composables/use-api.vue`, `usePageFetch.ts` ›
+`loadData`, `authenStore.ts` › `initialAuthDataProcess`. Tests:
+`tests/unit/useApi.spec.ts`.
 
 **Add/extend a `src/api/*Service.ts` factory when** the endpoint is:
 1. already in an existing service — reuse it, do not duplicate the call
@@ -89,7 +93,7 @@ via `AuthenService`. Never invent methods/DTOs/pagination.
 
 Timeout (180s default), shared 401 refresh, refresh-403 logout, error toast in
 `useApi.ts`, and loading/confirm/toast UX via `useBase`. Download progress:
-`onDownloadProgress` (needs `Content-Length`; `useFileDownload.ts:123`). `useUpload.ts:14-15`
+`onDownloadProgress` (needs `Content-Length`; `useFileDownload.ts` › `downloadFile`). `useUpload.ts:14-15`
 defaults to 1 MB chunks and one attempt (`maxRetries` is overridable);
 there is no generic offline queue or retry policy. Inspect upload separately
 from ordinary REST requests.

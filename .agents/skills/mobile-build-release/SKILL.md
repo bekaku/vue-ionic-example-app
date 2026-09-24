@@ -28,14 +28,18 @@ environment selection, release verification, CI.
 
 ## Mandatory rules
 
-1. `pnpm build` invokes `ionic build --prod` and targets `dist/`; web output
-   does not establish native success.
+1. `pnpm build` invokes `ionic build --prod` (needs the global Ionic CLI) and
+   targets `dist/`; `pnpm exec vite build` builds without it. Web output does
+   not establish native success.
 2. No `android/`/`ios/` committed. A native project must exist before sync;
    review generated/native changes and working-tree state before running it.
 3. Inspect current `.env*` keys and selected mode without copying values;
    device localhost differs from the developer machine.
 4. Never touch signing creds/identifiers; record ANDROID/IOS results only
    when actually executed.
+5. Cleartext/mixed content is off by default; a dev build against an
+   `http://` API needs `CAP_ALLOW_HTTP=true npx cap sync`. Release: sync
+   without it. After adding/removing a Capacitor plugin, `npx cap sync`.
 
 ## Implementation workflow
 

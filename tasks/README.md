@@ -1,8 +1,18 @@
 # tasks/ — Task Workflow
 
-Substantial work (feature, fix, plugin, schema, release) requires a task file
-copied from `TASK_TEMPLATE.md`. Keep tasks in this directory
-(`tasks/<id>-<slug>.md`).
+Substantial work (new feature, multi-file fix, plugin, schema, release)
+requires a task file copied from `TASK_TEMPLATE.md`. Small targeted fixes,
+dependency bumps, and docs-only edits may skip it (`AGENTS.md` §11).
+
+## File naming
+
+`tasks/NNN-<slug>.md` — `NNN` is a 3-digit sequence number, `slug` is short
+kebab-case (e.g. `004-add-post-view-route.md`).
+
+- Next number = highest existing + 1: `ls tasks/[0-9]*.md | tail -1`.
+- `Task ID` in the file's Metadata equals `NNN`.
+- Numbers are permanent: never renumber or reuse one, even if a task is
+  dropped (set its status instead).
 
 ## Statuses
 
@@ -10,8 +20,9 @@ copied from `TASK_TEMPLATE.md`. Keep tasks in this directory
 
 ## Lifecycle
 
-1. **Create**: copy the template; fill Metadata, Objective, Background
-   (with file:line evidence), Scope/Out of Scope, Required Reading/Skills.
+1. **Create**: copy the template to `tasks/NNN-<slug>.md` (see File naming);
+   fill Metadata, Objective, Background
+   (with file + symbol (or file:line) evidence), Scope/Out of Scope, Required Reading/Skills.
 2. **Plan**: record Existing Implementation to Inspect + Implementation Plan +
    impact assessments (Platform / Native Plugin / API Contract / Local Data).
 3. **Execute**: work through Checkpoints + Implementation Checklist; update

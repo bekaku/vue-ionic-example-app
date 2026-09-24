@@ -36,8 +36,12 @@ Every mobile implementation task. Add domain skills per `SKILLS.md`.
 3. Trace state through Pinia stores, composables, and callers before choosing
    the change location; `src/pages/example/` is demonstration code.
 4. Env via `import.meta.env` (`VITE_*`); never commit secret values.
+   `VITE_*` values ship in the client bundle — they are not secrets.
 5. `pnpm` only; do not upgrade/alter dependencies in docs tasks.
-6. Classify findings with file:line evidence; no invented versions/contracts.
+6. Classify findings with file + symbol evidence; no invented
+   versions/contracts.
+7. Server IDs are snowflake strings (`IdType`); never convert with
+   `Number()`/`parseInt` (`skills/mobile/SKILL.md` §4).
 
 ## Implementation workflow
 
@@ -48,5 +52,5 @@ Every mobile implementation task. Add domain skills per `SKILLS.md`.
 
 ## Verification
 
-Typecheck + relevant unit/component checks; lint is not required
-(`skills/mobile/TESTING.md` §2). Disclose what was NOT_RUN.
+`pnpm exec vue-tsc --noEmit` + relevant `pnpm exec vitest run` checks; lint
+is not required (`skills/mobile/TESTING.md` §2). Disclose what was NOT_RUN.

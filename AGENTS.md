@@ -4,6 +4,22 @@
 > (`vue-ionic-mobile`). Backend (Spring Boot + MySQL) and Web frontend (Quasar SSR)
 > are separate repositories and are out of scope for edits.
 
+## Quick Reference
+
+Summary only — each row links to the authoritative home.
+
+| Need | Use |
+| ---- | --- |
+| Typecheck (the `STATIC` gate) | `pnpm exec vue-tsc --noEmit` (`TESTING.md` §2) |
+| Unit/component tests | `pnpm exec vitest run` (one-shot; `pnpm test:unit` is watch mode) |
+| Web build | `pnpm exec vite build`; `pnpm build:vite` = typecheck + build; `pnpm build` needs the global Ionic CLI |
+| Dev server | `pnpm dev` (vite :3004) |
+| Lint | not required — skip unless the user asks (`TESTING.md` §2) |
+| HTTP call | `const api = useApi(); await api<T>(url, opts)` — direct or via `src/api` (`API.md` §2) |
+| IDs from the server | snowflake **strings** (`IdType`); never `Number()`/`parseInt` (`skills/mobile/SKILL.md` §4) |
+| Open problems before you start | `docs/agent/KNOWN_ISSUES.md` (Open section) |
+| Git | commit only when asked, on the active branch; push only when asked (§11) |
+
 ## 1. Purpose and Scope
 
 1. This repository is an Ionic Vue + Capacitor mobile app (`src/`, `capacitor.config.ts`).
@@ -66,7 +82,7 @@ Before any implementation task:
 4. Verify dependency versions in `package.json` + `pnpm-lock.yaml`, Capacitor
    config in `capacitor.config.ts`, env in `.env*` (never copy secret values).
 5. Classify findings (`VERIFIED`, `PARTIALLY_VERIFIED`, `LEGACY`, `CONFLICTING`,
-   `NOT_FOUND`, `UNKNOWN`) with file:line evidence. Missing search results are
+   `NOT_FOUND`, `UNKNOWN`) with file + symbol (or file:line) evidence. Missing search results are
    not proof of absence — check synonyms and native config before claiming
    `NOT_FOUND`. Recheck dated audit docs against the working tree; distinguish
    current code, pending changes, and historical findings.
@@ -85,7 +101,7 @@ Before any implementation task:
 ## 6. Ionic and Vue Conventions
 
 - Composition API + `<script setup lang="ts">`, TypeScript strict, `@/` alias
-  (`tsconfig.json` paths). App mode is forced `mode: 'ios'` (`src/main.ts:46`).
+  (`tsconfig.json` paths). App mode is forced `mode: 'ios'` (`src/main.ts` › `startApp`).
 - Route pages need an `IonPage` root. Prefer `BasePage.vue` for standard pages;
   existing login, index, and tabs shell pages use `IonPage` directly. Reuse
   `src/components/base/*`; `@quasar/extras` supplies icons in some pages but
@@ -181,9 +197,11 @@ Before any implementation task:
 
 ## 11. Task Workflow
 
-- Substantial work (feature, fix, plugin, schema, release) requires a task file
-  from `tasks/TASK_TEMPLATE.md`; workflow in `tasks/README.md`. Statuses:
-  `TODO → IN_PROGRESS → BLOCKED → VERIFYING → DONE`.
+- Substantial work (new feature, multi-file fix, plugin, schema, release)
+  requires a task file from `tasks/TASK_TEMPLATE.md`; workflow in
+  `tasks/README.md`. Statuses: `TODO → IN_PROGRESS → BLOCKED → VERIFYING → DONE`.
+  Small targeted fixes, dependency bumps, and docs-only edits may skip the
+  task file — report files changed + verification in the reply instead.
 - Every task fills: Platform Impact, Native Plugin Impact, API Contract Impact,
   Local Data Impact. Cross-repo needs are documented, never implemented here.
 - `DONE` only when: implementation complete, applicable verification recorded
@@ -210,8 +228,12 @@ Before any implementation task:
 ## 13. Documentation Maintenance
 
 - One authoritative home per rule (§2). Fix rules where they live; link, don't
-  copy. New conventions need code evidence + file:line refs before becoming
-  rules; proposals stay proposals.
+  copy. New conventions need code evidence before becoming rules; proposals
+  stay proposals.
+- Cite code as file + symbol (`useNotification.ts` › `addListeners`) rather
+  than line numbers — line numbers drift with every edit. Line numbers are
+  fine for stable files or config keys. When you change code a doc cites,
+  update that doc in the same change.
 - Preserve history: `docs/agent/ORIGINAL_SKILLS.md` is archive-only.
   Migrations tracked in `docs/agent/SPLIT_MAP.md`. Issues (not fixes) go to
   `docs/agent/KNOWN_ISSUES.md` — never fix app code during a docs audit.

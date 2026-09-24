@@ -8,23 +8,26 @@ Authoritative home for core architecture rules. Canonical entry:
 Use `package.json` for declared ranges and `pnpm-lock.yaml` for resolved
 versions. Do not copy numbers from dated audit pages into implementation
 plans. This is a pnpm project (`pnpm-lock.yaml`, `pnpm-workspace.yaml`);
-`capacitor.config.ts:5-7` sets app id/name and `webDir: 'dist'`.
+`capacitor.config.ts` sets `appId`/`appName` and `webDir: 'dist'`.
 
 Build scripts: `dev` (vite :3004), `build:vite` (`vue-tsc && vite build`),
-`build` (`ionic build --prod`), `test:unit` (vitest), `test:e2e` (cypress),
-`lint` (eslint). See `package.json:6-16`, `docs/agent/BUILD_RELEASE_GUIDE.md`.
+`build` (`ionic build --prod`, needs the global Ionic CLI), `test:unit`
+(vitest watch), `test:e2e` (cypress), `lint` (eslint, not a gate). See
+`package.json` `scripts`, `docs/agent/BUILD_RELEASE_GUIDE.md`.
 
 ## 2. Application bootstrap (VERIFIED)
 
-`src/main.ts:40-67` — `startApp()`:
+`src/main.ts` › `startApp()`:
 
 1. `createApp(App)` + `i18n()` + `createPinia()` + `IonicVue({rippleEffect,
    animated, hardwareBackButton: true, swipeBackEnabled: false, mode: 'ios'})`
    + `router`.
-2. Registers `rbac` directive (`src/directives/rbac`). HTTP uses
+2. Registers `rbac` directive (`src/directives/rbac.ts`). HTTP uses
    `useApi()` (no provide/inject).
-3. `router.isReady()` → `authenStore.initialAuthData()` → on 403
-   `removeAuthToken()` + `router.replace('/auth/login')` → `app.mount('#app')`.
+3. `router.isReady()` → `authenStore.initialAuthData()` (`currentUserData`,
+   15 s timeout). `ApiFetchError` 403 → `removeAuthToken()` +
+   `router.replace('/auth/login')`; network/timeout errors fall through.
+   `.finally(() => app.mount('#app'))` — the app always mounts.
 
 Rules: keep `mode: 'ios'`; keep single bootstrap order; do not add a second
 HTTP client or global store outside Pinia without a task.
@@ -55,8 +58,16 @@ Follow imports from the actual route or component before extending a helper.
 - Env: `import.meta.env.VITE_*` via `useConfig()` (`src/composables/useConfig.ts`).
   Inspect environment keys without copying values; device `localhost` does
   not refer to the development machine.
-- Logging: `console.*` guarded by dev mode in places (`App.vue:30-32`,
-  `authenStore.ts:48-50`). Do not log tokens (see `AUTH.md`).
+- Logging: `console.*` guarded by dev mode in places (`App.vue` ›
+  `onBeforeMount`, `authenStore.ts` › `initialAuthDataProcess`). Do not log
+  tokens (see `AUTH.md`).
+- IDs: server IDs are snowflake numbers larger than 2^53. `useApi` parses them
+  as **strings** (json-bigint `storeAsString`), typed `IdType`
+  (`src/types/models.ts`); `RefreshTokenResponse.userId` is `string`. Never
+  `Number()`/`parseInt` an id (precision loss); compare/emit as strings.
+- Watchers: `watch(() => prop, fn, { immediate: true })` for "run on mount and
+  when X changes"; it calls `fn` synchronously, so define `fn` above it.
+  Avoid `watchEffect` when the effect reads flags it also writes.
 
 ## 5. Error handling
 

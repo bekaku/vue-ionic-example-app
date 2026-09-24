@@ -31,7 +31,7 @@ toasts, tap navigation, logout cleanup.
 
 1. Web path is a no-op via `isWeb()`; never register on web.
 2. Flows: check → request → register; logout → unsubscribe + unregister.
-3. Tap handler attempts `/post/view/:id` for `SYSTEM_ANNOUNMENT`/`LIKE_POST`;
+3. `onNotifyView` targets `/post/view/:id` for `SYSTEM_ANNOUNMENT`/`LIKE_POST`;
    that route is absent from `src/router/index.ts`. `CHAT` is a no-op.
 4. `addNotifyListeners()` (received/tap) is not called anywhere; wiring it
    needs a real tap destination, replace-not-stack handles like

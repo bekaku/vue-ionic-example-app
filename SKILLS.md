@@ -18,6 +18,7 @@ documentation-only audits use this map for review without loading every skill.
 | Camera, gallery, file pick/preview/upload/save/share | mobile-files-media; add mobile-native-plugins for device operations |
 | Native plugin calls, permissions or configuration | mobile-native-plugins |
 | Web/native build, Capacitor sync, release | mobile-build-release |
+| Dependencies: add/remove/update, `pnpm audit` fixes | mobile-core; add mobile-native-plugins for Capacitor plugins (then `npx cap sync` → mobile-build-release) |
 
 ## Canonical skill locations
 

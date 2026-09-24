@@ -35,6 +35,11 @@ upload/download progress, offline/timeout handling.
 3. Respect status ≥ 400 → `ApiFetchError`, `json-bigint`, and the shared 401
    refresh. Only a 403 from refresh removes auth; ordinary 403 rejects.
 4. `localhost` in-app ≠ dev machine — use env base URLs; verify per platform.
+5. IDs in responses/params are snowflake strings (json-bigint
+   `storeAsString`); type them `IdType`, never convert to numbers.
+6. `api.raw` still throws on status ≥ 400 — catch `ApiFetchError` (or check
+   `error.status`) where a page needs 4xx bodies; wrap loading UI in
+   `try/finally`.
 
 ## Implementation workflow
 
