@@ -20,16 +20,21 @@ const loading = ref(false);
 const onSubmit = async () => {
   const loading: any = await appLoading();
   loading.present();
-  const res = await selfUpdatePassword({
-    password: currentPassword.value,
-    newPassword: newPassword.value,
-    logoutAllDevice: logoutAllDevice.value,
-  });
-  loading.dismiss();
-  if (res && res.status == 'OK') {
-    timeout.value = setTimeout(() => {
-      signOut();
-    }, 500);
+  try {
+    const res = await selfUpdatePassword({
+      password: currentPassword.value,
+      newPassword: newPassword.value,
+      logoutAllDevice: logoutAllDevice.value,
+    });
+    if (res.status === 200) {
+      timeout.value = setTimeout(() => {
+        signOut();
+      }, 500);
+    }
+  } catch {
+    // useApi already shows the error toast
+  } finally {
+    loading.dismiss();
   }
 };
 onBeforeUnmount(() => {

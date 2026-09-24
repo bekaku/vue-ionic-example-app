@@ -4,11 +4,12 @@ import BaseCard from '@/components/base/BaseCard.vue';
 import BaseFilePicker from '@/components/base/BaseFilePicker.vue';
 import BasePage from '@/components/base/BasePage.vue';
 import { useFileSystem } from '@/composables/useFileSystem';
-import { useFileUpload } from '@/composables/useFileUpload';
+import { useUpload } from '@/composables/useUpload';
 import { FileTypeAcceptList } from '@/libs/constant';
 import type { ChoosePhotoItem } from '@/types/common';
-import type { FileManagerDto } from '@/types/models';
-import { generateUUID } from '@/utils/AppUtil';
+import type { FileManager } from '@/types/models';
+import { getFileMimeType } from '@/utils/FileUtils';
+import { generateSnowFlakeId, idToString } from '@/utils/snowflake';
 import { IonCardContent, IonList } from '@ionic/vue';
 import { cameraOutline, imageOutline } from 'ionicons/icons';
 import { defineAsyncComponent, ref, useTemplateRef } from 'vue';
@@ -21,16 +22,15 @@ const BaseFilePreviewItemAlt = defineAsyncComponent(
 
 const { onTakePicture, onPickPhoto } = useFileSystem();
 const {
-  files: fileChunks,
-  previews,
+  files,
   uploading,
   onStartUploadChunk,
-} = useFileUpload();
+} = useUpload();
 const dialogPickGallerryOrCamera = ref<boolean>(false);
 const dialogPickGallerryOrCameraMultiple = ref<boolean>(false);
-const imagePickItems = ref<FileManagerDto[]>([]);
+const imagePickItems = ref<FileManager[]>([]);
 
-const filePickItems = ref<FileManagerDto[]>([]);
+const filePickItems = ref<FileManager[]>([]);
 const filePickerRef =
   useTemplateRef<InstanceType<typeof BaseFilePicker>>('filePickerRef');
 
@@ -68,16 +68,17 @@ const onAddImagePreview = (
   pathUrl: string | undefined = undefined,
 ) => {
   if (f) {
+    const fileMimeType = getFileMimeType(f)
     imagePickItems.value.push({
-      id: 0,
-      uniqueId: generateUUID(),
+      id: null,
+      uniqueId: idToString(generateSnowFlakeId()),
       fileMime: f.type,
       fileName: name || '',
       filePath: pathUrl || '',
       fileThumbnailPath: '',
-      fileSize: f.size + '',
+      fileSize: f.size,
       functionId: 0,
-      isImage,
+      fileMimeType,
       file: f,
     });
   }
@@ -91,7 +92,7 @@ const openFilePicker = () => {
     filePickerRef.value.openFilePicker();
   }
 };
-const onFileAdded = async (files: File[]) => {
+const onFileAdded = async (files: File | File[] | null | undefined) => {
   console.log('onFileAdded', files);
 };
 </script>
@@ -100,8 +101,7 @@ const onFileAdded = async (files: File[]) => {
     <BaseCard flat title="Chunk upload">
       <ion-card-content>
         <BaseFilePicker
-          v-model:file-items="previews"
-          v-model="fileChunks"
+          v-model="files"
           label="Pick files"
           multiple
           format-size
@@ -110,7 +110,7 @@ const onFileAdded = async (files: File[]) => {
         <BaseButton
           label="Upload"
           full
-          :disabled="!fileChunks || fileChunks.length == 0 || uploading"
+          :disabled="!files || files.length == 0 || uploading"
           @click="onStartUploadChunk"
         />
       </ion-card-content>

@@ -1,6 +1,6 @@
 
 /* eslint-disable ts/no-unused-vars */
-import { useAxios } from '@/composables/useAxios';
+import { useApi } from '@/composables/useApi';
 import { usePaging } from '@/composables/usePaging';
 import { useSort } from '@/composables/useSort';
 import type { ApiListResponse, CrudListApiOptions } from '@/types/common';
@@ -12,7 +12,7 @@ import { useBase } from './useBase';
 
 
 export const usePagefecth = <T>(options: CrudListApiOptions) => {
-    const { callAxios } = useAxios();
+    const api = useApi();
     const { appToast } = useBase();
     const { pages, resetPaging } = usePaging(options?.itemsPerPage ? options.itemsPerPage : 10);
     const { sort } = useSort(options?.defaultSort);
@@ -52,10 +52,7 @@ export const usePagefecth = <T>(options: CrudListApiOptions) => {
     const loadData = async () => {
         loading.value = true;
         try {
-            const response = await callAxios<ApiListResponse<T>>({
-                API: apiEndpoint.value,
-                method: 'GET'
-            });
+            const response = await api<ApiListResponse<T>>(apiEndpoint.value);
             let list: T[] = [];
             if (!isAppException(response) && !isServerResponseMessage(response)) {
                 if (isListResponse(response)) {

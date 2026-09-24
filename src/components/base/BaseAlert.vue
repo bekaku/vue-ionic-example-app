@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IconSetType } from '@/types/common';
+import type { AppColor, IconSetType } from '@/types/common';
 import { IonIcon } from '@ionic/vue';
 import { close } from 'ionicons/icons';
 import { computed, ref } from 'vue';
@@ -29,14 +29,13 @@ const {
   secondary?: boolean;
 }>();
 const show = ref(true);
-const iconColor = computed(() => {
+const iconColor = computed((): AppColor | undefined => {
   if (secondary) {
     if (type === 'is-primary') {
       return 'primary';
-    } else if (type === 'is-link') {
-      return 'info';
-    } else if (type === 'is-info') {
-      return 'info';
+    } else if (type === 'is-link' || type === 'is-info') {
+      // no `info` color class exists; inherit text color as before
+      return undefined;
     } else if (type === 'is-success') {
       return 'success';
     } else if (type === 'is-warning') {

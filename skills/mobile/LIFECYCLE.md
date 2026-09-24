@@ -18,20 +18,23 @@ deviceStore.setAppStateChange(isActive))` (`App.vue:33-35`). Rules: refresh on
 resume explicitly; never assume background JS runs indefinitely or that
 termination callbacks fire.
 
-## 3. Ionic view vs Vue lifecycles (VERIFIED principle)
+## 3. Ionic view vs Vue lifecycles (implementation guidance)
 
 - Vue `onMounted/onBeforeMount` run once per cached page lifetime.
-- Ionic `onIonViewWillEnter/DidEnter/WillLeave/DidLeave` run per activation.
+- Ionic `onIonViewWillEnter/DidEnter/WillLeave/DidLeave` are available for
+  routed page activation; no current page imports them (`src/pages/` search).
 - Data refresh belongs on view-enter; subscriptions/listeners attach on enter
   (or once, guarded) and detach on leave/destroy. Stale closures over inactive
   pages are a known leak source (see `KNOWN_ISSUES.md`).
 
 ## 4. Listener safety checklist
 
-Registered once (back button, appStateChange, push listeners) → guarded by
-`isWeb()`/permission where native → not duplicated on re-entry → removed on
-logout/leave (`removeAllListeners` + `unregister` in `useAppStorage.ts:140-153`,
-`useNotification.ts:319-322,352-357`).
+Identify the owner first (app, routed view, composable, or auth session).
+Keep listener handles or an explicit registration guard, avoid duplicate
+registration, and remove listeners when the owner ends. Current
+`App.vue:33-35` registers `appStateChange` without saving a handle;
+`useNotification.ts` registers push listeners and removes all on logout.
+Treat this as an area to inspect, not an already-enforced invariant.
 
 ## 5. State restoration (VERIFIED)
 

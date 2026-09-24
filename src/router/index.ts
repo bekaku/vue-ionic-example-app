@@ -118,8 +118,8 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/example/swiper.vue')
   },
   {
-    path: '/example/composables/use-axios',
-    component: () => import('@/pages/example/composables/use-axios.vue')
+    path: '/example/composables/use-api',
+    component: () => import('@/pages/example/composables/use-api.vue')
   },
   {
     path: '/example/composables/use-base',

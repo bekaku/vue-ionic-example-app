@@ -12,8 +12,9 @@
         />
  */
 import FileManagerService from '@/api/FileManagerService';
+import { useBlobUrls } from '@/composables/useBlobUrls';
 import { IonAvatar, IonSkeletonText } from '@ionic/vue';
-import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue';
+import { onBeforeUnmount, ref, watch } from 'vue';
 import type { AvatarProps } from '@/types/props';
 import BaseBadge from '@/components/base/BaseBadge.vue';
 const {
@@ -29,36 +30,32 @@ const {
   borderedWidth = '2px',
 } = defineProps<AvatarProps>();
 const { fethCdnData } = FileManagerService();
+const { track, revokeAll } = useBlobUrls();
 const loading = ref(true);
 const firstLoaded = ref(false);
 const srcUrl = ref<any>();
-onMounted(async () => {
-  onFetchImage();
-});
-watchEffect(() => {
-  if (firstLoaded.value) {
-    onFetchImage();
-  }
-});
 const onFetchImage = async () => {
   if (!src) {
     loading.value = false;
     return;
   }
   if (fetchImage) {
+    revokeAll();
     const res = await fethCdnData(src);
-    if (res) {
-      srcUrl.value = res;
-    }
+    // fall back to the plain url when the fetch returns nothing
+    srcUrl.value = res ? track(res) : src;
   } else {
     srcUrl.value = src;
   }
-  srcUrl.value = src;
   loading.value = false;
   if (!firstLoaded.value) {
     firstLoaded.value = true;
   }
 };
+// fetch once on mount and again only when src changes
+// (the old watchEffect re-ran when firstLoaded flipped, fetching every avatar twice).
+// Must stay below onFetchImage: `immediate` calls it synchronously right here.
+watch(() => src, () => onFetchImage(), { immediate: true });
 onBeforeUnmount(() => {
   srcUrl.value = undefined;
 });

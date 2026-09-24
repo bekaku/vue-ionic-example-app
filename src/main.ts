@@ -2,8 +2,6 @@ import { IonicVue } from '@ionic/vue';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 import App from './App.vue';
-import appAxios from './plugins/axios';
-import { AxiosKey } from './plugins/AxiosSymbols';
 import i18n from './plugins/I18n';
 import router from './router';
 import rbac from '@/directives/rbac'
@@ -34,6 +32,7 @@ import './assets/css/size.sass';
 import './assets/css/typography.sass';
 import './assets/css/variables.scss';
 import '@/plugins/cropperjs';
+import { ApiFetchError } from './composables/useApi';
 import { useAppStorage } from './composables/useAppStorage';
 startApp();
 // async start function to enable waiting for refresh token call
@@ -48,20 +47,25 @@ async function startApp() {
   // app.component('DynamicScroller', DynamicScroller);
   // app.component('DynamicScrollerItem', DynamicScrollerItem);
   // app.component('RecycleScroller', RecycleScroller);
-  // app.config.globalProperties.$appAxios = { ...appAxios };
-  app.provide(AxiosKey, appAxios);
   app.directive('rbac', rbac)
-  router.isReady().then(async () => {
-    const authenStore = useAuthenStore();
-    const { removeAuthToken } = useAppStorage()
-    try {
-      const status = await authenStore.initialAuthData();
-      if (status == 403) {
-        await removeAuthToken();
-        await router.replace('/auth/login');
+  router.isReady()
+    .then(async () => {
+      const authenStore = useAuthenStore();
+      const { removeAuthToken } = useAppStorage()
+      try {
+        await authenStore.initialAuthData();
+      } catch (error) {
+        // api.raw throws on status >= 400; 401 refresh/logout is handled inside useApi
+        if (error instanceof ApiFetchError && error.status === 403) {
+          await removeAuthToken();
+          await router.replace('/auth/login');
+        }
+        // network/timeout: mount anyway, App.vue initAuthen retries once
       }
-    } catch {
-    }
-    app.mount('#app');
-  });
+    })
+    .catch((error) => {
+      console.error('startApp', error);
+    })
+    // always mount, otherwise a failed initial navigation leaves a blank screen
+    .finally(() => app.mount('#app'));
 }

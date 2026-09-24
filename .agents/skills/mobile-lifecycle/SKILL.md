@@ -30,9 +30,11 @@ background behavior, listener/memory-leak fixes.
 ## Mandatory rules
 
 1. `App.addListener('appStateChange')` is the only verified app-state hook.
-2. Cached pages stay mounted — refresh on Ionic view Enter, clean up on Leave.
+2. Cached routed pages may stay mounted; use Ionic view hooks when work must
+   recur on entry, with cleanup owned by the same page/session.
 3. Never assume background JS runs indefinitely or termination fires.
-4. Listeners must be registered once, guarded, and removed appropriately.
+4. Check existing listener ownership; `App.vue` does not retain the
+   `appStateChange` handle, and push registration can repeat.
 
 ## Implementation workflow
 

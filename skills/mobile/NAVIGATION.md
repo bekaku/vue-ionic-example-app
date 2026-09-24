@@ -41,9 +41,15 @@ handling verified — do not add competing handlers.
 `/tabs/home`. Gesture/stack behavior on iOS is UNKNOWN without device
 evidence — never claim parity with Android.
 
-## 6. Verified flow
+## 6. Startup order to preserve
 
 ```text
-App launch → router.isReady → initialAuthData → IonRouterOutlet
-→ beforeEach (auth guard) → Page activation → Page deactivation (cached)
+router module registers beforeEach → app.use(router)
+→ initial navigation may evaluate auth guard
+→ router.isReady → initialAuthData → app.mount → IonRouterOutlet
+→ page activation; routed pages may remain mounted when inactive
 ```
+
+Do not assume auth restoration has completed when the guard first runs
+(`src/main.ts:41-65`,
+`src/router/index.ts:237-254`).

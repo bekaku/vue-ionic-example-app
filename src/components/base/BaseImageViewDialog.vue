@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
-import type { FileManagerDto, ImageDto } from '@/types/models';
+import type { FileManager, ImageDto } from '@/types/models';
 import {
   IonButton,
   IonButtons,
@@ -33,7 +33,7 @@ const {
 } = defineProps<{
   showDeleteImage?: boolean;
   fetch?: boolean;
-  files?: FileManagerDto[];
+  files?: FileManager[];
   images?: ImageDto[];
   selectedIndex?: number;
   showDownload?: boolean;

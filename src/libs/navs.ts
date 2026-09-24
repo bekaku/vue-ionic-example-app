@@ -97,9 +97,9 @@ export const additionalMenu: LabelValue<any>[] = [
                 children: [
                     {
                         icon: { name: biDatabase, iconSet: 'bootstrap-icons' },
-                        label: 'useAxios',
+                        label: 'useApi',
                         translateLabel: false,
-                        to: '/example/composables/use-axios'
+                        to: '/example/composables/use-api'
                     },
                     {
                         icon: { name: biChevronRight, iconSet: 'bootstrap-icons' },

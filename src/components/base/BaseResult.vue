@@ -14,7 +14,7 @@ const AppResult = defineAsyncComponent(
 );
 */
 import { useTheme } from '@/composables/useTheme';
-import type { IconSetType, IResult } from '@/types/common';
+import type { AppColor, IconSetType, IResult } from '@/types/common';
 import { IonCol, IonGrid, IonRow } from '@ionic/vue';
 import {
   mdiAlert,
@@ -87,8 +87,8 @@ const getIcon = (): string => {
 
   return icon;
 };
-const getIconColor = () => {
-  let color = '';
+const getIconColor = (): AppColor => {
+  let color: AppColor;
   switch (status) {
     case '400':
     case '404':

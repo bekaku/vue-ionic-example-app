@@ -28,7 +28,8 @@ proposal (verify-first — none is implemented).
 
 ## Mandatory rules
 
-1. Persistence = Capacitor Preferences only. No SQLite/IndexedDB/migrations.
+1. App persistence uses Capacitor Preferences. No app-managed
+   SQLite/IndexedDB database or migration layer is present.
 2. `clearStorage` preserves locale/theme/FCM/device keys — keep that list.
 3. Any schema/key change must review existing data, upgrade path, Android/iOS
    parity, logout cleanup, and tests.

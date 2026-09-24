@@ -24,6 +24,7 @@
 <script setup lang="ts">
 // <base-image v-if="src" :class="`shadow-${shadow}`" :src="src" ratio="4/3"></base-image>
 import FileManagerService from '@/api/FileManagerService';
+import { useBlobUrls } from '@/composables/useBlobUrls';
 import type { ImgRatioType } from '@/types/common';
 import { IonSpinner } from '@ionic/vue';
 import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
@@ -39,6 +40,7 @@ const { src, alt = 'img', ratio = '1', loadingColor = 'text-white', fetch = fals
   fit?: 'cover' | 'fill' | 'contain' | 'none' | 'scale-down'// 4 / 3
 }>();
 const { fethCdnData } = FileManagerService();
+const { track, revokeAll } = useBlobUrls();
 
 const completed = ref(false);
 const error = ref(false);
@@ -63,34 +65,22 @@ const onFetchImage = async () => {
     return;
   }
   if (fetch) {
-    console.log('onFetchImage', src);
+    // src changed: release the previous blob before fetching the new one
+    revokeAll();
     fethCdnData(src)
       .then((res) => {
         clearLoading();
         if (res) {
-          srcUrl.value = res;
+          srcUrl.value = track(res);
         }
       })
       .catch(() => {
         clearLoading();
       });
   } else {
+    // <img @load/@error> in the template sets completed/error
     srcUrl.value = src;
-    onLoad();
     clearLoading();
-  }
-};
-const onLoad = () => {
-  const img = document.querySelector('img');
-  if (img) {
-    if (img.complete) {
-      onImgDidLoad();
-    } else {
-      img.addEventListener('load', onImgDidLoad);
-      img.addEventListener('error', () => {
-        onError();
-      });
-    }
   }
 };
 const clearLoading = () => {

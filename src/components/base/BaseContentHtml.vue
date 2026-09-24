@@ -20,9 +20,12 @@ const getSanitizeHtml = computed(() => {
     if (!highLightText) {
         return text;
     }
+    // text is already sanitized; escape the highlight term too, otherwise raw
+    // user input (e.g. a search query) would be injected into v-html unsanitized
+    const safeHighlight = escapeHtml(highLightText);
     return text.replaceAll(
-        highLightText,
-        `<span class='q-text-weight-bold text-primary'>${highLightText}</span>`,
+        safeHighlight,
+        `<span class='q-text-weight-bold text-primary'>${safeHighlight}</span>`,
     );
 });
 </script>

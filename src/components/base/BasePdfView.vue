@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import FileManagerService from '@/api/FileManagerService';
 import { useBase } from '@/composables/useBase';
+import { useBlobUrls } from '@/composables/useBlobUrls';
 import { useFileDownload } from '@/composables/useFileDownload';
 import { useLang } from '@/composables/useLang';
-import type { FileManagerDto } from '@/types/models';
+import type { FileManager } from '@/types/models';
 import { getCurrentFormattedDatetime } from '@/utils/DateUtil';
 import {
-    getBlobFromAxiosResponse,
-    getFileNameFromAxiosResponse,
+    getBlobUrlFromResponse,
+    getFileNameFromResponse,
 } from '@/utils/FileUtils';
 import {
     IonButton,
@@ -51,9 +52,10 @@ const {
   minWidth?: string;
   closeable?: boolean;
   showShare?: boolean;
-  item?: FileManagerDto;
+  item?: FileManager;
 }>();
-const { fethCdnData, downloadCdnData } = FileManagerService();
+const { fethCdnData } = FileManagerService();
+const { track } = useBlobUrls();
 const { downloadDocument, downloadState, downloadAndShareFile } =
   useFileDownload();
 const { t } = useLang();
@@ -73,11 +75,11 @@ onMounted(async () => {
 const onLoad = async () => {
   loading.value = true;
   if (fetch) {
-    const response = await fethCdnData(src, 'axiosresponse');
+    const response = await fethCdnData(src, 'response');
     if (response) {
-      pdfSrc.value = await getBlobFromAxiosResponse(response);
-      contentType.value = response.headers['content-type'];
-      fileName.value = getFileNameFromAxiosResponse(response);
+      pdfSrc.value = track(getBlobUrlFromResponse(response));
+      contentType.value = response.headers.get('content-type');
+      fileName.value = getFileNameFromResponse(response);
       loading.value = false;
     }
   } else {

@@ -36,7 +36,12 @@ export const useAuthen = () => {
     // const jwtKey = await loadStorage<string>(AppAuthTokenKey);
     if (currentToken && currentToken.authenticationToken) {
       if (!authenStore.auth) {
-        await authenStore.initialAuthDataProcess();
+        try {
+          await authenStore.initialAuthDataProcess();
+        } catch (error) {
+          // retry of the startup call failed (network/timeout/4xx); caller handles auth == null
+          console.warn('initAuthen', error);
+        }
       }
       if (authenStore.auth) {
         manageNotificationToken(authenStore.auth);

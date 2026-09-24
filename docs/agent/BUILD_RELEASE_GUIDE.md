@@ -7,7 +7,7 @@ pnpm install --shamefully-hoist   # per README
 pnpm build:vite                    # vue-tsc && vite build → dist/
 pnpm build                         # ionic build --prod → dist/
 pnpm preview                       # local preview
-pnpm lint                          # eslint
+pnpm lint                          # eslint (optional, not a verification gate)
 pnpm test:unit                     # vitest
 pnpm test:e2e                       # cypress
 ```
@@ -28,7 +28,8 @@ Mode helpers: `useConfig()` (`isDevMode/isTestMode/isDevelopMode/isProdMode`).
 ## Capacitor (VERIFIED config; projects NOT_FOUND)
 
 `appId com.bekaku.mobile.ion`, `appName Vue Ionic`, `androidScheme https`,
-`cleartext true`, `allowMixedContent true`, Keyboard/Push/Splash config.
+`cleartext`/`allowMixedContent` only with `CAP_ALLOW_HTTP=true` (dev sync;
+never for release), Keyboard/Push/Splash config.
 No `android/`/`ios/` committed:
 
 ```bash

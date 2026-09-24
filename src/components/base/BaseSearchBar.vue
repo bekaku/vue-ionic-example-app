@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonicColor } from '@/types/common';
+import type { IonicColor } from '@/types/common';
 import { IonSearchbar } from '@ionic/vue';
 import { closeCircle, searchOutline } from 'ionicons/icons';
 const {
@@ -27,5 +27,5 @@ const onSearchChange = (val: string | undefined) => {
 
 <template>
     <IonSearchbar :animated :color :placeholder="placeholder" :disabled :debounce :search-icon="icon" :clear-icon="clearIcon"
-        @ion-input="onSearchChange($event.target.value)" />
+        @ion-input="onSearchChange($event.target.value ?? undefined)" />
 </template>

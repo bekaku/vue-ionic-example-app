@@ -70,10 +70,15 @@ const onDeleteSession = async (index: number) => {
     if (item) {
       const loading: any = await appLoading();
       loading.present();
-      const res = await removeAccessTokenSession(item.id);
-      loading.dismiss();
-      if (res && res.status == 'OK') {
-        sessionList.value.splice(index, 1);
+      try {
+        const res = await removeAccessTokenSession(item.id);
+        if (res.status === 200) {
+          sessionList.value.splice(index, 1);
+        }
+      } catch {
+        // useApi already shows the error toast
+      } finally {
+        loading.dismiss();
       }
     }
   }

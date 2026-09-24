@@ -5,8 +5,9 @@ import BaseAvatarGroup from '@/components/base/BaseAvatarGroup.vue';
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BasePage from '@/components/base/BasePage.vue';
+import { useApi } from '@/composables/useApi';
 import { useAuthenStore } from '@/stores/authenStore';
-import type { IMenuItem } from '@/types/models';
+import type { IMenuItem, UserDto } from '@/types/models';
 import { IonCardContent, IonIcon, IonRow, IonButtons } from '@ionic/vue';
 import {
   addOutline,
@@ -18,8 +19,13 @@ import {
 import { ref } from 'vue';
 const authenStore = useAuthenStore();
 const { getUserSessionData } = UserService();
+const api = useApi();
 const test = async () => {
   await getUserSessionData();
+};
+const testFetch = async () => {
+  const user = await api.raw<UserDto>('/api/appUser/currentUserData');
+  console.log('testFetch', user);
 };
 </script>
 <template>
@@ -28,6 +34,7 @@ const test = async () => {
       <ion-card-content>
         <ion-row class="q-gutter-md">
           <BaseButton label="Test Func" @click="test" />
+          <BaseButton label="Test Fetch" @click="testFetch" />
         </ion-row>
       </ion-card-content>
     </BaseCard>

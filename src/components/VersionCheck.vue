@@ -10,7 +10,7 @@
         </div>
         <div class="q-text-subtitle1 q-my-md">
           {{
-            $t('base.appVersionChanged', {
+            t('base.appVersionChanged', {
               userVersion,
               storeVersion:
                 platForm == 'IOS' ? item.appVersionIos : item.appVersionAndroid,

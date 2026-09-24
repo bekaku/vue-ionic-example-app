@@ -1,15 +1,21 @@
 import UserNotifyService from '@/api/UserNotifyService';
 import { useNotificationStore } from '@/stores/notificationStore';
-import type { NotificationCount, NotifyFunctionType } from '@/types/models';
+import type { IdType, NotificationCount, NotifyFunctionType } from '@/types/models';
 import { AppAuthRefeshTokenKey, FCM_USER_TOPIC, FcmTokenKey, NotifyKey } from '@/libs/constant';
 import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 import { FCM } from '@capacitor-community/fcm';
+import type { PluginListenerHandle } from '@capacitor/core';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { toastController } from '@ionic/vue';
 import { useBase } from './useBase';
 import { useDevice } from './useDevice';
 import { useLang } from './useLang';
 import { useAppStorage } from './useAppStorage';
+
+// shared across useNotification() instances: addListeners is called from App.vue,
+// Index.vue, login and the notification toggle, so re-adding must replace, not stack
+let registrationHandles: PluginListenerHandle[] = [];
+let listenerQueue: Promise<unknown> = Promise.resolve();
 
 export const useNotification = () => {
   const {
@@ -73,36 +79,27 @@ export const useNotification = () => {
   const addListeners = async (from: string, updateToServer: boolean = true) => {
     const isPermited = await isNotifyPermited();
     if (!isPermited) {
-      return new Promise((resolve) => {
-        resolve(null);
-      });
+      return null;
     }
-    const fcmToken = await loadStorage<string>(FcmTokenKey);
-    await PushNotifications.addListener('registration', async (token: any) => {
-      console.log('PushNotifications > fcmToken from storage', fcmToken);
-
-      if (token.value) {
-        console.log('PushNotifications > registration', token.value);
-        await saveStorage(FcmTokenKey, token.value, true);
-      }
-      // if (
-      //     (!fcmToken || fcmToken != token.value) &&
-      //     updateToServer
-      // ) {
-      //     await saveStorage(FcmTokenKey, token.value);
-      // }
-      return new Promise((resolve) => {
-        resolve(token.value);
-      });
+    // serialize so two concurrent callers cannot both add before either removes
+    listenerQueue = listenerQueue.then(async () => {
+      await Promise.all(registrationHandles.map(h => h.remove()));
+      registrationHandles = [
+        await PushNotifications.addListener('registration', async (token) => {
+          // never log the token value
+          if (token.value) {
+            await saveStorage(FcmTokenKey, token.value, true);
+          }
+        }),
+        await PushNotifications.addListener('registrationError', (err) => {
+          console.error('Registration error: ', err.error);
+        })
+      ];
+    }).catch((error) => {
+      console.error('addListeners', from, error);
     });
-
-    await PushNotifications.addListener('registrationError', (err) => {
-      console.error('Registration error: ', err.error);
-    });
-
-    return new Promise((resolve) => {
-      resolve(null);
-    });
+    await listenerQueue;
+    return null;
   };
   const addNotifyListeners = async () => {
     const isPermited = await isNotifyPermited();
@@ -317,16 +314,17 @@ export const useNotification = () => {
     });
   };
   const removeAllListeners = async () => {
+    registrationHandles = [];
     await PushNotifications.removeAllListeners();
     await PushNotifications.unregister();
   };
-  const generateUserTopic = (userId: number) => {
-    return FCM_USER_TOPIC + userId;
+  const generateUserTopic = (userId: IdType) => {
+    return FCM_USER_TOPIC + String(userId);
   };
 
   const userSubscribeFcm = async (
     updateToServer: boolean = true,
-    userId: number | null | undefined = undefined
+    userId: IdType = undefined
   ) => {
     await registerNotifications();
     const token = await addListeners('userSubscribeFcm', updateToServer);
@@ -338,7 +336,7 @@ export const useNotification = () => {
     });
   };
   const userUnSubscribeFcm = async (
-    userId: number | undefined = undefined,
+    userId: IdType = undefined,
     updateSetting = true,
     isRemoveAllListeners = true
   ) => {
@@ -359,7 +357,7 @@ export const useNotification = () => {
       resolve(true);
     });
   };
-  const registerTopic = async (userId: number) => {
+  const registerTopic = async (userId: IdType) => {
     const isPermited = await isNotifyPermited();
     if (!isPermited) {
       return new Promise((resolve) => {
@@ -379,7 +377,7 @@ export const useNotification = () => {
       resolve(true);
     });
   };
-  const unRegisterTopic = async (userId: number) => {
+  const unRegisterTopic = async (userId: IdType) => {
     const isPermited = await isNotifyPermited();
     if (!isPermited) {
       return new Promise((resolve) => {

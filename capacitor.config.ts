@@ -1,6 +1,11 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
+// Plain-HTTP API (cleartext / mixed content) is dev-only. Enable it when syncing a
+// dev build that talks to an http:// backend:  CAP_ALLOW_HTTP=true npx cap sync
+// Release builds must be synced without it.
+const allowHttp = process.env.CAP_ALLOW_HTTP === 'true';
+
 const config: CapacitorConfig = {
   appId: 'com.bekaku.mobile.ion',
   appName: 'Vue Ionic',
@@ -8,10 +13,10 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'https',
     // androidScheme: 'http',
-    cleartext: true
+    cleartext: allowHttp
   },
   android: {
-    allowMixedContent: true
+    allowMixedContent: allowHttp
   },
   plugins: {
     // CapacitorHttp: {

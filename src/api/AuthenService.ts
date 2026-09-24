@@ -1,85 +1,63 @@
 import type {
+  IdType,
   LoginRequest,
   RefreshTokenRequest,
   RefreshTokenResponse
 } from '@/types/models';
 import type { AppException, ForgotPasswordRequest, ResponseMessage } from '@/types/common';
-import { useAxios } from '@/composables/useAxios';
-import type { AxiosResponse } from 'axios';
+import type { ApiFetchResponse } from '@/composables/useApi';
+import { ApiFetchError, useApi } from '@/composables/useApi';
 export default () => {
-  const { callAxios, callAxiosProcess } = useAxios();
+  const api = useApi();
+
+  // forgot-password pages read status + body themselves, so a 4xx response is returned instead of thrown
+  const rawResponse = async <T>(request: string, body: object): Promise<ApiFetchResponse<T>> => {
+    try {
+      return await api.raw<T>(request, { method: 'POST', body, notify: false });
+    } catch (error) {
+      if (error instanceof ApiFetchError && error.response) {
+        return error.response;
+      }
+      throw error;
+    }
+  };
 
   const singin = async (
     loginRequest: LoginRequest
   ): Promise<RefreshTokenResponse | null> => {
-    return await callAxios<RefreshTokenResponse>({
-      API: '/api/auth/login',
-      method: 'POST',
-      body: {
-        loginRequest
-      }
-    });
+    return await api<RefreshTokenResponse>('/api/auth/loginApi', { method: 'POST', body: { ...loginRequest } });
   };
 
   const singoutToServer = async (
     refreshToken: RefreshTokenRequest
   ): Promise<ResponseMessage | null> => {
-    return await callAxios<ResponseMessage>({
-      API: '/api/auth/logout',
-      method: 'POST',
-      body: { refreshToken }
-    });
+    return await api<ResponseMessage>('/api/auth/logoutApi', { method: 'POST', body: { ...refreshToken } });
   };
   const refreshToken = async (
     refreshToken: RefreshTokenRequest
   ): Promise<RefreshTokenResponse | null> => {
-    return await callAxios<RefreshTokenResponse>({
-      API: '/api/auth/refreshToken',
-      method: 'POST',
-      body: { refreshToken }
-    });
+    return await api<RefreshTokenResponse>('/api/auth/refreshTokenApi', { method: 'POST', body: { ...refreshToken } });
   };
   const removeAccessTokenSession = async (
-    id: number
-  ): Promise<ResponseMessage | null> => {
-    return await callAxios<ResponseMessage>({
-      API: `/api/appUser/removeAccessTokenSession?id=${id}`,
-      method: 'DELETE'
-    });
+    id: IdType
+  ): Promise<ApiFetchResponse<ResponseMessage>> => {
+    return await api.raw<ResponseMessage>(`/api/appUser/removeAccessTokenSession?id=${id}`, { method: 'DELETE' });
   };
   // Forgot password
   const requestVerifyCodeToResetPwd = async (
     req: ForgotPasswordRequest
-  ): Promise<AxiosResponse<ResponseMessage | AppException>> => {
-    return await callAxiosProcess<ResponseMessage | AppException>({
-      API: '/api/auth/requestVerifyCodeToResetPwd',
-      method: 'POST',
-      body: {
-        req
-      },
-    });
+  ): Promise<ApiFetchResponse<ResponseMessage | AppException>> => {
+    return await rawResponse<ResponseMessage | AppException>('/api/auth/requestVerifyCodeToResetPwd', { ...req });
   };
   const sendVerifyCodeToResetPwd = async (
     req: ForgotPasswordRequest
-  ): Promise<AxiosResponse<ResponseMessage | AppException>> => {
-    return await callAxiosProcess<ResponseMessage | AppException>({
-      API: '/api/auth/sendVerifyCodeToResetPwd',
-      method: 'POST',
-      body: {
-         req
-      },
-    });
+  ): Promise<ApiFetchResponse<ResponseMessage | AppException>> => {
+    return await rawResponse<ResponseMessage | AppException>('/api/auth/sendVerifyCodeToResetPwd', { ...req });
   };
   const resetPassword = async (
     req: ForgotPasswordRequest
-  ): Promise<AxiosResponse<ResponseMessage | AppException>> => {
-    return await callAxiosProcess<ResponseMessage | AppException>({
-      API: '/api/auth/resetPassword',
-      method: 'POST',
-      body: {
-         req
-      },
-    });
+  ): Promise<ApiFetchResponse<ResponseMessage | AppException>> => {
+    return await rawResponse<ResponseMessage | AppException>('/api/auth/resetPassword', { ...req });
   };
   return {
     singin,

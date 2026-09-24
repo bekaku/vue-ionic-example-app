@@ -29,11 +29,13 @@ native debugging task.
 
 ## Mandatory rules
 
-1. Gate every native call with `useDevice().isWeb()` + web fallback.
+1. Check each operation's platform support and existing wrapper. Use
+   `isWeb()` where behavior differs; Camera and Preferences have web paths.
 2. Classify each plugin ACTIVE / CONFIGURED_ONLY / UNUSED / LEGACY / UNKNOWN
    with import + config + usage evidence — never from `package.json` alone.
-3. `Haptics` + `Keyboard` direct usage is NOT_FOUND in `src` (Keyboard is
-   config-only); `cordova-plugin-file` is LEGACY.
+3. `Keyboard` direct usage is NOT_FOUND in `src` (config-only);
+   `cordova-plugin-file` is LEGACY (used via `window.cordova.file`).
+   `Haptics` was removed.
 4. Plugin install/update reviews: Capacitor 8 compat, pnpm pin, Android
    permissions/Gradle, iOS Info.plist/entitlements/Pods, `cap sync` need,
    device runtime check. Never sync during docs tasks.

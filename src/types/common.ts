@@ -53,6 +53,7 @@ export type AppColor = 'danger' | 'danger' | 'dark' | 'accent' | 'light' | 'medi
 export type ButtonFill = 'clear' | 'outline' | 'solid' | 'default';
 export type ItemLines = 'none' | 'inset' | 'full';
 export type GenerateLinkType = 'post' | 'profile';
+export type FileMimeType = 'IMAGE' | 'VIDEO' | 'FILE' | 'DIRECTORY';
 export type IAlert =
   | 'is-primary'
   | 'is-link'
@@ -69,7 +70,6 @@ export type IconSetType =
   | 'mdi';
 export type IconColor = 'grey' | 'color' | 'white' | 'outline';
 export type ICrudAction = 'new' | 'view' | 'copy';
-export type IMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 export type AppLocale = 'th' | 'en';
 export type AppTheme =
   | 'dark'
@@ -79,12 +79,20 @@ export type ImgRatioType = '1' | '16/9' | '4/3';
 export type IHrefTarget = '_blank' | '_parent' | '_self' | '_top';
 export type IHttpStatus =
   | '200 OK'
+  | 'OK'
   | '201 Created'
+  | 'Created'
   | '404 Not Found'
+  | 'Not Found'
   | '401 Unauthorized'
+  | 'Unauthorized'
   | '400 Bad Request'
+  | 'Bad Request'
   | '403 Forbidden'
-  | '500 Internal Server Error';
+  | 'Forbidden'
+  | '500 Internal Server Error'
+  | 'Internal Server Error'
+  ;
 export type IResult =
   | '400'
   | '404'
@@ -116,7 +124,7 @@ export type OsPlatForm =
   | 'hybrid';
 export type ITheme = 'dark' | 'light' | 'synapse';
 export type JwtStatus = 'VALID' | 'EXPIRED' | 'NO_EXPIRATION_TIME' | 'INVALID';
-export type ResponseDataType = 'arraybuffer' | 'blob' | 'json' | 'download' | 'axiosresponse';
+export type ResponseDataType = 'arraybuffer' | 'blob' | 'json' | 'download' | 'response';
 export type SearchOperation = ':' | '>' | '>=' | '<' | '<=' | '=' | '!=';
 export type MDPreviewTheme = 'default' | 'github' | 'vuepress' | 'mk-cute' | 'smart-blue' | 'cyanosis';
 export type MDCodeTheme =
@@ -203,6 +211,15 @@ export interface ChoosePhotoItem {
   file?: File | Blob
   fileBase64?: any
 }
+export interface ImageDimensions {
+  width: number;
+  height: number;
+}
+export interface ImageResizeOptions {
+  maxSizeMB: number;
+  maxWidthOrHeight: number;
+  useWebWorker: boolean
+}
 export interface CrudListApiOptions {
   apiEndpoint?: string;
   crudName?: string;
@@ -246,15 +263,6 @@ export interface CrudFormApiOptions {
   fectchDataOnLoad?: boolean
   autoPageTitle?: boolean
   preventRedirectToList?: boolean
-}
-export interface DefaultAxiosInstance {
-  Accept: string
-  //   baseURL: string;
-  'Content-Type': string
-  'X-language': string
-  'Code-Version': number
-  'X-Api-Client': string
-  Authorization?: string
 }
 export interface ForgotPasswordRequest {
   email: string
@@ -455,15 +463,6 @@ export interface RefeshTokenStatus {
   status: boolean
   fourceLogout: boolean
   token?: string
-}
-export interface RequestType {
-  API: string
-  baseURL?: string
-  method: IMethod
-  body?: any
-  contentType?: string
-  responseType?: | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream'
-  clearBaseUrl?: boolean
 }
 export interface ResponseMessage {
   status: IHttpStatus

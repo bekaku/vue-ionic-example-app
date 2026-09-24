@@ -2,11 +2,12 @@
 import FileManagerService from '@/api/FileManagerService';
 import BaseSwiperSlides from '@/components/base/BaseSwiperSlides.vue';
 import { useBase } from '@/composables/useBase';
+import { useBlobUrls } from '@/composables/useBlobUrls';
 import { useFileDownload } from '@/composables/useFileDownload';
 import { useFileSystem } from '@/composables/useFileSystem';
 import { useLang } from '@/composables/useLang';
 import type { SlideOptions, SwiperSlideChange } from '@/types/common';
-import type { FileManagerDto, ImageDto } from '@/types/models';
+import type { FileManager, ImageDto } from '@/types/models';
 import { IonCol, IonRow } from '@ionic/vue';
 import { onMounted, ref, useTemplateRef } from 'vue';
 const {
@@ -17,7 +18,7 @@ const {
   height = '95vh',
   width = '100%',
 } = defineProps<{
-  files: FileManagerDto[];
+  files: FileManager[];
   images?: ImageDto[];
   fetch?: boolean;
   dark?: boolean;
@@ -28,6 +29,7 @@ const emit = defineEmits(['on-slide-change', 'on-close', 'on-delete']);
 const { savePicture } = useFileSystem();
 const { t } = useLang();
 const { fethCdnData } = FileManagerService();
+const { track } = useBlobUrls();
 const { appConfirm, appLoading, appToast } = useBase();
 const { downloadImage, downloadAndShareFile } = useFileDownload();
 const baseImgViewSwiperRef = useTemplateRef('baseImgViewSwiperRef');
@@ -49,15 +51,7 @@ onMounted(async () => {
 });
 const fetchImage = async (src: string) => {
   const res = await fethCdnData(src);
-  if (res) {
-    return new Promise((resolve) => {
-      resolve(res);
-    });
-  } else {
-    return new Promise((resolve) => {
-      resolve(null);
-    });
-  }
+  return res ? track(res) : null;
 };
 const setList = async () => {
   if (files && files.length > 0) {
@@ -93,7 +87,7 @@ const onSlideChange = (item: SwiperSlideChange) => {
     selectedIndex.value = item.realIndex;
   }
 };
-const getCurrentItem = (index: number): Promise<FileManagerDto | undefined> => {
+const getCurrentItem = (index: number): Promise<FileManager | undefined> => {
   return new Promise((resolve) => {
     if (files && files.length > 0) {
       const item = files[index];

@@ -40,8 +40,7 @@ import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
 import { useTheme } from '@/composables/useTheme';
 import type { MDCodeTheme, MDPreviewTheme } from '@/types/common';
-import type { FileManagerDto } from '@/types/models';
-import { biQuestion } from '@quasar/extras/bootstrap-icons';
+import type { FileManager } from '@/types/models';
 import type { ToolbarNames } from 'md-editor-v3';
 import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
@@ -98,17 +97,6 @@ const onUploadImg = async (files: any, callback: any) => {
       return new Promise(async (rev, rej) => {
         const resPonse = await uploadApi(file);
         rev(resPonse);
-        // const form = new FormData();
-        // form.append('file', file);
-        //
-        // axios
-        //   .post('/api/img/upload', form, {
-        //     headers: {
-        //       'Content-Type': 'multipart/form-data'
-        //     }
-        //   })
-        //   .then((res) => rev(res))
-        //   .catch((error) => rej(error));
       });
     }),
   );
@@ -118,7 +106,7 @@ const onUploadImg = async (files: any, callback: any) => {
 
   // Approach 2
   callback(
-    res.map((item: FileManagerDto) => ({
+    res.map((item: FileManager) => ({
       url: item.filePath,
       alt: item.id,
       title: item.fileName,

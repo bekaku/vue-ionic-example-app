@@ -40,14 +40,19 @@ const canSubmit = computed(() => {
 const onSubmit = async () => {
   const loading: any = await appLoading();
   loading.present();
-  const res = await updatePersonalData(entity.value);
-  loading.dismiss();
-  // if (authenStore.auth && authenStore.auth.userData) {
-  //   authenStore.auth.userData.fullName = entity.value.fullName;
-  //   authenStore.auth.userData.positionName = entity.value.positionName;
-  //   authenStore.auth.userData.teamLeaderName = entity.value.teamLeaderName;
-  // }
-  onBack();
+  try {
+    await updatePersonalData(entity.value);
+    // if (authenStore.auth && authenStore.auth.userData) {
+    //   authenStore.auth.userData.fullName = entity.value.fullName;
+    //   authenStore.auth.userData.positionName = entity.value.positionName;
+    //   authenStore.auth.userData.teamLeaderName = entity.value.teamLeaderName;
+    // }
+    onBack();
+  } catch {
+    // useApi already shows the error toast
+  } finally {
+    loading.dismiss();
+  }
 };
 </script>
 <template>

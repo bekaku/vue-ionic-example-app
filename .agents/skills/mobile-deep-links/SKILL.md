@@ -2,7 +2,7 @@
 name: mobile-deep-links
 description: >
   Use this skill when handling inbound URLs, custom schemes, app links,
-  universal links, or notification navigation entries.
+  universal links, or URL-bearing notification payloads.
 ---
 
 # mobile-deep-links — Canonical Skill
@@ -13,8 +13,9 @@ Constrain deep-link work to verified behavior and untrusted-input handling.
 
 ## When to use
 
-Any inbound-URL handling, scheme/domain config, cold/warm-start routing, or
-auth-callback navigation.
+Any inbound-URL handling, scheme/domain config, cold/warm-start URL routing,
+or auth-callback navigation. Ordinary notification taps use
+`mobile-notifications` + `mobile-navigation`.
 
 ## Required reading
 
@@ -30,7 +31,8 @@ auth-callback navigation.
 
 1. No `appUrlOpen` listener and no committed intent-filters/associated
    domains are verified (NOT_FOUND) — do not claim support.
-2. Only verified inbound navigation is notification taps.
+2. Notification taps are the only verified external navigation entry; they
+   are not URL deep links unless a URL payload is introduced.
 3. Treat every incoming URL as untrusted: validate, whitelist destinations,
    pass the auth guard.
 4. Native link support needs Android + iOS config + `cap sync` + device proof.

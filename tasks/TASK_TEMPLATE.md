@@ -22,7 +22,7 @@
 
 ## Out of Scope
 
-<Backend/Quaker sibling repos, unrelated refactors, signing, deployments unless authorized.>
+<Backend/Quasar sibling repos, unrelated refactors, signing, deployments unless in scope.>
 
 ## Required Reading
 
@@ -101,6 +101,8 @@ Details: <keys, preservation plan>
 
 ## Testing and Verification
 
+- Static (typecheck `vue-tsc --noEmit`; lint not required): NOT_RUN
+- Unit/component/API (list targeted checks): NOT_RUN
 - Web build: NOT_RUN
 - Android build: NOT_RUN
 - iOS build: NOT_RUN
@@ -108,8 +110,9 @@ Details: <keys, preservation plan>
 - Physical device test: NOT_RUN
 
 (Use PASSED / FAILED / NOT_RUN / NOT_APPLICABLE / BLOCKED. Web ≠ native proof.
-Lint and unit tests are NOT required — run them only when the task touches
-code paths they cover and the suite is green on main.)
+Choose checks from the changed behavior and platform impacts. If a check
+fails, compare with the existing baseline and record both results; an old
+failure is not a reason to omit a relevant check.)
 
 ## Risks
 

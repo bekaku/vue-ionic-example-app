@@ -1,22 +1,23 @@
 # SKILLS.md — Canonical Skill Routing (Mobile Repository)
 
-Read `AGENTS.md` first. Then load **exactly** the skills below for your task.
-All implementation tasks require `mobile-core` + `mobile-testing`.
+Read `AGENTS.md` first. For implementation, load `mobile-core` and
+`mobile-testing`, then add each domain skill that matches the code or behavior
+being changed. Read each selected entry point and its required reference;
+documentation-only audits use this map for review without loading every skill.
 
-| Task | Required skills |
-| ---- | --------------- |
-| General mobile work | mobile-core, mobile-testing |
-| Ionic component | mobile-core, mobile-components, mobile-testing |
-| Navigation | mobile-core, mobile-navigation, mobile-lifecycle, mobile-testing |
-| Capacitor plugin | mobile-core, mobile-native-plugins, mobile-testing |
-| Lifecycle | mobile-core, mobile-lifecycle, mobile-testing |
-| REST API | mobile-core, mobile-api, mobile-testing |
-| Authentication | mobile-core, mobile-auth, mobile-api, mobile-testing |
-| SQLite/local storage | mobile-core, mobile-local-data, mobile-testing |
-| Push notifications | mobile-core, mobile-notifications, mobile-native-plugins, mobile-testing |
-| Deep links | mobile-core, mobile-deep-links, mobile-navigation, mobile-testing |
-| Files/media | mobile-core, mobile-files-media, mobile-native-plugins, mobile-testing |
-| Build/release | mobile-core, mobile-build-release, mobile-testing |
+| Change touches | Add skill(s) |
+| ------------ | ------------ |
+| Pages, components, forms, theme, safe area UI | mobile-components |
+| Routes, tabs, guards, back button, notification tap destination | mobile-navigation |
+| App or cached page lifecycle, listener ownership | mobile-lifecycle |
+| REST calls, HTTP client, upload/download transport | mobile-api |
+| Login, tokens, session, authorization | mobile-auth, mobile-api |
+| Preferences keys, cache, offline/sync behavior | mobile-local-data |
+| Push, FCM, notification permission or tap | mobile-notifications, mobile-native-plugins |
+| Incoming URLs, schemes, app/universal links | mobile-deep-links, mobile-navigation |
+| Camera, gallery, file pick/preview/upload/save/share | mobile-files-media; add mobile-native-plugins for device operations |
+| Native plugin calls, permissions or configuration | mobile-native-plugins |
+| Web/native build, Capacitor sync, release | mobile-build-release |
 
 ## Canonical skill locations
 
@@ -42,19 +43,27 @@ All implementation tasks require `mobile-core` + `mobile-testing`.
 | mobile-build-release | `.agents/skills/mobile-build-release/SKILL.md` | `skills/mobile/BUILD_RELEASE.md` |
 | mobile-testing | `.agents/skills/mobile-testing/SKILL.md` | `skills/mobile/TESTING.md` |
 
-## Cross-domain example
+## Cross-domain examples
 
 ```text
-Task: Implement push notification navigation for authenticated users.
+Task: Implement push notification tap navigation for authenticated users.
 
 Required skills:
-mobile-core, mobile-notifications, mobile-deep-links, mobile-navigation,
-mobile-auth, mobile-native-plugins, mobile-lifecycle, mobile-testing
+mobile-core, mobile-notifications, mobile-navigation,
+mobile-native-plugins, mobile-testing
 ```
+
+Add `mobile-auth` if the task changes token/session or guard behavior, and
+`mobile-lifecycle` if it changes listener ownership or cold-start timing.
+
+For a file upload UI using `useUpload`, add `mobile-components`,
+`mobile-files-media`, and `mobile-api`. Add `mobile-native-plugins` only if
+the change also touches capture, storage, sharing, or native permissions.
 
 ## Rules
 
-- Load additional skills only for the actual task domain.
-- Never auto-load all 13 skills.
+- Add skills for actual cross-domain behavior; a notification tap does not
+  require `mobile-deep-links` unless it also handles an incoming URL.
+- Do not load all 13 skills by default.
 - Canonical entry points use progressive disclosure; full rules live in
   `skills/mobile/*.md`, evidence in `docs/agent/*.md`.

@@ -1,7 +1,7 @@
 import { useDevice } from '@/composables/useDevice';
 import type { ChoosePhotoItem, FileSaveResult } from '@/types/common';
 import { AppAlbumName } from '@/libs/constant';
-import { base64FromPath, generateAutoName, urlToBlob } from '@/utils/FileUtils';
+import { base64FromPath, downloadFromBlob, generateAutoName, urlToBlob } from '@/utils/FileUtils';
 import type { MediaSaveOptions } from '@capacitor-community/media';
 import { Media } from '@capacitor-community/media';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
@@ -121,17 +121,17 @@ export const useFileSystem = () => {
     path: string,
     fileName: string | undefined = undefined
   ): Promise<FileSaveResult> => {
-    const web = await isWeb();
-    if (web || !path) { // TODO implement save on web version
-      return new Promise((resolve) => {
-        resolve({
-          filepath: '',
-          webviewPath: ''
-        });
-      });
+    if (!path) {
+      return { filepath: '', webviewPath: '' };
+    }
+    const saveName = fileName || `${generateAutoName()}.jpeg`;
+    if (await isWeb()) {
+      // web has no gallery: hand the image to the browser as a download
+      const blob = await urlToBlob(path);
+      downloadFromBlob(blob, saveName, blob.type);
+      return { filepath: saveName, webviewPath: path };
     }
     await createAlbumIfNotExist();
-    const saveName = fileName || `${generateAutoName()}.jpeg`;
     const base64Data = await base64FromPath(path!);
     const res = await saveProcess(path, saveName, base64Data);
     return new Promise((resolve) => {
@@ -142,14 +142,14 @@ export const useFileSystem = () => {
     base64Data: string,
     fileName: string
   ): Promise<FileSaveResult> => {
-    const web = await isWeb();
-    if (web || !base64Data || !fileName) { // TODO implement save on web version
-      return new Promise((resolve) => {
-        resolve({
-          filepath: '',
-          webviewPath: ''
-        });
-      });
+    if (!base64Data || !fileName) {
+      return { filepath: '', webviewPath: '' };
+    }
+    if (await isWeb()) {
+      // web has no gallery: decode base64 and hand it to the browser as a download
+      const bytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+      downloadFromBlob(new Blob([bytes]), fileName, '');
+      return { filepath: fileName, webviewPath: '' };
     }
     await createAlbumIfNotExist();
     const res = await saveProcess('', fileName, base64Data);
@@ -183,18 +183,16 @@ export const useFileSystem = () => {
         albumIdentifier: await ensureDemoAlbum(),
         fileName: generateAutoName()
       };
-      // await Media.savePhoto(opts);
-      Media
-        .savePhoto(opts)
-        .then((res) => {
-          console.warn('useFileSystem > saveProcess', JSON.stringify(res));
-          appToast({
-            text: i18n('success.saved')
-          });
-        })
-        .catch((e) => {
-          throw new Error(`${JSON.stringify(e)}`);
-        });
+      // await so callers only get a result after the gallery save succeeded;
+      // the old .then/.catch(throw) returned early and produced an unhandled rejection
+      try {
+        await Media.savePhoto(opts);
+      } catch (e) {
+        throw new Error(`Media.savePhoto failed: ${JSON.stringify(e)}`);
+      }
+      appToast({
+        text: i18n('success.saved')
+      });
     }
     return new Promise((resolve) => {
       resolve({

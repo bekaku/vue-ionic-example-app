@@ -33,7 +33,8 @@ Every mobile implementation task. Add domain skills per `SKILLS.md`.
 
 1. Composition API + `<script setup lang="ts">`, strict TS, `@/` alias.
 2. App mode forced `mode: 'ios'` (`src/main.ts`). Do not change per-platform.
-3. Pinia stores own domain state; composables own reusable logic.
+3. Trace state through Pinia stores, composables, and callers before choosing
+   the change location; `src/pages/example/` is demonstration code.
 4. Env via `import.meta.env` (`VITE_*`); never commit secret values.
 5. `pnpm` only; do not upgrade/alter dependencies in docs tasks.
 6. Classify findings with file:line evidence; no invented versions/contracts.
@@ -47,4 +48,5 @@ Every mobile implementation task. Add domain skills per `SKILLS.md`.
 
 ## Verification
 
-Lint + typecheck + relevant unit/component checks; disclose what was NOT_RUN.
+Typecheck + relevant unit/component checks; lint is not required
+(`skills/mobile/TESTING.md` §2). Disclose what was NOT_RUN.

@@ -15,9 +15,13 @@ JWT `authenticationToken` + `refreshToken`, multi-account capable
   `AppAuthRefeshTokenKey_<uid>`, `AppAuthCuurentUserKey`
   (`src/libs/constant.ts`, `useAppStorage.ts`). No secure-storage plugin —
   **documented risk**; never copy tokens into docs/logs.
-- Startup restore: `initialAuthDataProcess()` sets axios defaults then
-  `GET /api/appUser/currentUserData`; on 200 `setAuthen(data)` + permissions
-  into `appStore` (`authenStore.ts:37-61`).
+- Startup restore: `initialAuthDataProcess()` calls
+  `api.raw('/api/appUser/currentUserData', {notify:false, timeout:15000})`;
+  on 200 `setAuthen(_data)` + permissions into `appStore`
+  (`authenStore.ts:38-59`). `main.ts` catches `ApiFetchError` 403 →
+  `removeAuthToken()` + `/auth/login`; network/timeout still mounts, and
+  `initAuthen` retries once without throwing (`useAuthen.ts:38-45`). App
+  always mounts in `finally`.
 - Signout: confirm → `userUnSubscribeFcm` → `singoutToServer({refreshToken,
   email})` → `destroyAuthDataAndRedirect()` → `window.location.replace('/')`
   (`useAuthen.ts:93-146`). `removeAuthToken()` fails over to the next stored
@@ -26,9 +30,12 @@ JWT `authenticationToken` + `refreshToken`, multi-account capable
 
 ## 2. Refresh semantics (VERIFIED)
 
-See `API.md` §1. Concurrent 401s serialize on `isRefreshing`; replay with the
-new token; failed refresh with 403 logs out. Resume-after-background reuses
-stored tokens — no silent re-login is verified.
+See `API.md` §1. Concurrent 401s share one `refreshPromise`
+(`useApi.ts:75`); retry with the new token; failed refresh with 403 logs out.
+`useApi` dev logging prints url/method/status only (the token-logging axios
+interceptor was removed). Do not copy token values into issues, tests, or
+docs. Resume-after-background reuses stored tokens —
+no silent re-login is verified.
 
 ## 3. Route authorization (VERIFIED)
 

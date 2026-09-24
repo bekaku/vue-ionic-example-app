@@ -67,7 +67,7 @@ export const useAppStorage = () => {
     }
     return new Promise((resolve) => {
       resolve({
-        userId: Number.parseInt(currentUID),
+        userId: currentUID,
         authenticationToken: jwt,
         refreshToken: refreshKey,
       });

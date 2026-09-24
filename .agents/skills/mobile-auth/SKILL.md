@@ -32,10 +32,12 @@ or OAuth proposals (verify-first — neither is implemented).
 
 1. Tokens live in Capacitor Preferences (`AppAuthTokenKey_<uid>` etc.) —
    no secure-storage plugin exists (documented risk); never copy tokens.
-2. 401 → refresh queue + replay; refresh-403 → `removeAuthToken()` + login
-   redirect. Never change these semantics silently.
+2. 401 → shared refresh + retry via `/api/auth/refreshTokenApi` in
+   `useApi.ts`; refresh-403 → `removeAuthToken()` + login redirect.
 3. Guard rule: `noRequireAuth === true` or valid `authenticationToken`.
 4. Frontend role checks are UI-only; backend authorization is authoritative.
+   Never log request bodies/headers/responses carrying tokens (`useApi`
+   logs url/method/status only).
 
 ## Implementation workflow
 

@@ -45,7 +45,6 @@ onMounted(async () => {
 const validateIsLogedIn = async () => {
   const currentToken = await getCurrentUserToken();
   if (currentToken && currentToken.authenticationToken) {
-    console.log('currentToken', currentToken);
     window.location.replace('/tabs/home');
   } else {
     await destroyAuthDataAndRedirect(false);

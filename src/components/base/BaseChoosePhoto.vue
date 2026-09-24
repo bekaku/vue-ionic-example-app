@@ -22,8 +22,9 @@ import { useBase } from '@/composables/useBase';
 import { useFileSystem } from '@/composables/useFileSystem';
 import { useLang } from '@/composables/useLang';
 import type { ChoosePhotoItem } from '@/types/common';
-import type { FileManagerDto } from '@/types/models';
+import type { FileManager } from '@/types/models';
 import { generateUUID } from '@/utils/AppUtil';
+import { getFileMimeType } from '@/utils/FileUtils';
 import { IonIcon, IonItem, IonLabel, IonList } from '@ionic/vue';
 import { cameraOutline, imageOutline } from 'ionicons/icons';
 import { defineAsyncComponent, onMounted } from 'vue';
@@ -41,7 +42,7 @@ const emit = defineEmits<{
 
 
 const modelValue = defineModel<boolean>({ default: false });
-const fileItems = defineModel<FileManagerDto[]>('files', { default: () => [] });
+const fileItems = defineModel<FileManager[]>('files', { default: () => [] });
 const { requestCameraPermissions, onTakePicture, onPickPhoto } = useFileSystem();
 onMounted(() => {
   requestCameraPermissions();
@@ -96,15 +97,15 @@ const onAddFilePreview = (
 ) => {
   if (f) {
     fileItems.value.push({
-      id: 0,
+      id: null,
       uniqueId: generateUUID(),
       fileMime: f.type,
       fileName: '',
       filePath: pathUrl || '',
       fileThumbnailPath: '',
-      fileSize: f.size + '',
+      fileSize: f.size,
       functionId: 0,
-      isImage,
+      fileMimeType: isImage ? 'IMAGE' : getFileMimeType(f),
       file: f
     });
   }

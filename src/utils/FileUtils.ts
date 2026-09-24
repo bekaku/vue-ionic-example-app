@@ -1,9 +1,11 @@
 /* eslint-disable ts/no-unused-vars */
+import type { ApiFetchResponse } from '@/composables/useApi';
 import { FileNamePrefix } from '@/libs/constant';
-import type { FileType } from '@/types/common';
+import type { FileMimeType, FileType, ImageDimensions, ImageResizeOptions } from '@/types/common';
 import { getCurrentFormattedDatetime } from '@/utils/DateUtil';
 import { biCameraReels, biFileEarmarkImage, biFileEarmarkPpt, biFileEarmarkZip, biFiletypeCsv, biFiletypePdf, biFiletypeTxt, biFiletypeXlsx, biFileWord, biMic, biPaperclip } from '@quasar/extras/bootstrap-icons';
 import JSZip from 'jszip';
+import imageCompression from 'browser-image-compression';
 
 export const fileToBlob = (file: File): Promise<any> => {
   return new Promise((resolve) => {
@@ -109,27 +111,21 @@ export const downloadFromBlob = (
   URL.revokeObjectURL(url);
 };
 
-export const getBlobFromAxiosResponse = (response: any) => {
-  return new Promise((resolve) => {
-    const blob = new Blob([response.data as BlobPart], {
-      type: response.headers['content-type']
-    });
-    const fileUrlObject = URL.createObjectURL(blob);
-    resolve(fileUrlObject);
+export const getBlobUrlFromResponse = (response: ApiFetchResponse<BlobPart>): string => {
+  const blob = new Blob([response._data as BlobPart], {
+    type: response.headers.get('content-type') || ''
   });
+  return URL.createObjectURL(blob);
 };
-export const getFileNameFromAxiosResponse = (response: any): Promise<string | undefined> => {
-  return new Promise((resolve) => {
-    const contentDisposition = response.headers['content-disposition'];
-    let fileName;
-    if (contentDisposition) {
-      const match = contentDisposition.match(/filename="(.+)"/);
-      if (match && match[1]) {
-        fileName = match[1];
-      }
+export const getFileNameFromResponse = (response: ApiFetchResponse<any>): string | undefined => {
+  const contentDisposition = response.headers.get('content-disposition');
+  if (contentDisposition) {
+    const match = contentDisposition.match(/filename="(.+)"/);
+    if (match && match[1]) {
+      return match[1];
     }
-    resolve(fileName);
-  });
+  }
+  return undefined;
 };
 
 export const generateFileNameByExtesnsion = (extension: string | undefined, downloadFileName?: string): string | undefined => {
@@ -418,9 +414,71 @@ export const zipFile = async (file: File): Promise<File> => {
     resolve(zippedFile);
   });
 };
-export const isImageFile = (f: File) => {
+export const isImageFile = (f: File | Blob) => {
   if (!f) {
     return false;
   }
   return /^image\/\w+/.test(f.type);
 };
+export const isVideoFile = (f: File | Blob) => {
+  if (!f) {
+    return false
+  }
+  return /^video\/\w+/.test(f.type)
+}
+export const getFileMimeType = (f: File | Blob): FileMimeType | undefined => {
+  if (!f) {
+    return
+  }
+  if (isImageFile(f)) {
+    return 'IMAGE'
+  }
+  if (isVideoFile(f)) {
+    return 'VIDEO'
+  }
+}
+export const getImageDimensions = (file: File): Promise<ImageDimensions> => {
+  return new Promise((resolve, reject) => {
+    // 1. Create an Image object and a URL for the file
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    // 2. Wait for the image to load
+    img.onload = () => {
+      // Free up browser memory
+      URL.revokeObjectURL(objectUrl);
+
+      // Return the dimensions safely typed
+      resolve({
+        width: img.width,
+        height: img.height,
+      });
+    };
+
+    // 3. Handle errors
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('Failed to load the image.'));
+    };
+
+    // 4. Trigger the loading process
+    img.src = objectUrl;
+  });
+};
+
+export const resizeImage = async (file: File, options: ImageResizeOptions): Promise<File> => {
+  const compressedBlob = await imageCompression(file, options);
+
+  // console.log(`Original size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+  // console.log(`New size: ${(compressedBlob.size / 1024 / 1024).toFixed(2)} MB`);
+  return new Promise((resolve) => {
+    resolve(compressedBlob);
+  });
+}
+export const generateUniqueFilename = (originalName: string, uniqueId?: string): string => {
+    const lastDotIndex = originalName.lastIndexOf('.');
+    const ext = lastDotIndex !== -1 ? originalName.substring(lastDotIndex) : '';
+    const uuid = uniqueId || crypto.randomUUID();
+    const timestamp = Date.now();
+    return `${timestamp}_${uuid}${ext}`;
+}

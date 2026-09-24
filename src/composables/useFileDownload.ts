@@ -1,9 +1,8 @@
-import $appAxios from '@/plugins/axios';
+import { useApi } from '@/composables/useApi';
 import { FileOpener } from '@capacitor-community/file-opener';
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
-import type { AxiosProgressEvent } from 'axios';
 import { computed, reactive, ref } from 'vue';
 export interface DownloadOptions {
     url: string
@@ -29,6 +28,7 @@ export interface DownloadState {
 }
 
 export const useFileDownload = () => {
+    const api = useApi();
     // Reactive state
     const downloadState = reactive<DownloadState>({
         isDownloading: false,
@@ -120,14 +120,12 @@ export const useFileDownload = () => {
             downloadState.currentFile = filename;
 
             // reset baseUrl to empty
-            // Download the file using axios
-            const response = await $appAxios({
-                method: 'GET',
+            const blob = await api<Blob>(url, {
                 baseURL: '',
-                url,
                 responseType: 'blob',
                 timeout: 60000, // 60 second timeout
-                onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
+                notify: false,
+                onDownloadProgress: (progressEvent) => {
                     if (progressEvent.total) {
                         downloadState.progress = (progressEvent.loaded / progressEvent.total) * 100;
                     }
@@ -135,7 +133,7 @@ export const useFileDownload = () => {
             });
 
             // Convert blob to base64 for Capacitor
-            const base64Data = await blobToBase64(response.data);
+            const base64Data = await blobToBase64(blob);
 
             // Save file to device
             const result = await Filesystem.writeFile({
@@ -149,7 +147,7 @@ export const useFileDownload = () => {
             const downloadedFile: DownloadedFile = {
                 name: filename,
                 path: result.uri,
-                size: response.data.size || 0,
+                size: blob.size || 0,
                 downloadedAt: new Date(),
                 mimeType: getMimeType(filename)
             };

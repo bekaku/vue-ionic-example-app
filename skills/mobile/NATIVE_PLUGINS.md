@@ -6,48 +6,50 @@ Authoritative home for Capacitor plugin rules. Entry:
 
 ## 1. Classification method
 
-A plugin is ACTIVE only with import + initialization + call-site evidence in
+A plugin is ACTIVE only with import + call-site evidence in
 `src/` plus config where required. `package.json` presence alone =
 DECLARED, never ACTIVE.
 
-## 2. Verified matrix (Capacitor 8.3.4 core)
+## 2. Active integration map (check current package/lock versions)
 
 | Plugin | Verdict | Evidence |
 | ------ | ------- | -------- |
-| `App` 8.1.0 | ACTIVE (Android/iOS/Web*) | `App.vue:7,33,43`; `useAxios.ts:5` |
-| `Device` 8.0.2 | ACTIVE | `useDevice.ts:1`; `AppUtil.ts:4` |
-| `Preferences` 8.0.1 | ACTIVE | `StorageUtil.ts:1`; `useAppStorage.ts:5` |
-| `Camera` 8.2.0 | ACTIVE | `useFileSystem.ts:7,208-302` |
-| `Filesystem` 8.1.2 | ACTIVE | `useFileSystem.ts:8`; `useFileDownload.ts:4` |
-| `PushNotifications` 8.1.1 | ACTIVE | `useNotification.ts:7`; config `presentationOptions: []` |
-| `@capacitor-community/fcm` 8.1.0 | ACTIVE | `useNotification.ts:6,288-310` |
-| `@capacitor-community/file-opener` 8.0.1 | ACTIVE | `useFileDownload.ts:2,226` |
-| `@capacitor-community/media` 9.1.0 | ACTIVE | `useFileSystem.ts:5-6,18-41` |
-| `Share` 8.0.1 | ACTIVE | `useFileDownload.ts:5` |
-| `Clipboard` 8.0.1 | ACTIVE | `useBase.ts:14` |
-| `StatusBar` 8.0.2 | ACTIVE | `useTheme.ts:6,30-99` |
-| `@capacitor-community/device-security-detect` 8.0.0 | ACTIVE | `useDevice.ts:8,79` |
-| `capacitor-plugin-safe-area` 5.0.0 | ACTIVE | `useDevice.ts:9,84` |
-| `Keyboard` 8.0.3 | CONFIGURED_ONLY | `capacitor.config.ts:20-24`; no `src` import (NOT_FOUND) |
-| `Haptics` 8.0.2 | UNUSED | declared; no `src` import (NOT_FOUND) |
-| `cordova-plugin-file` 8.1.3 | LEGACY | declared; `cordovaClearCach` in `AppUtil`/`useAppStorage.ts:142` |
+| `App` | ACTIVE | `App.vue:7,33,43` |
+| `Device` | ACTIVE | `useDevice.ts:1`; `AppUtil.ts:4` |
+| `Preferences` | ACTIVE | `StorageUtil.ts:1`; `useAppStorage.ts:5` |
+| `Camera` | ACTIVE via `useFileSystem` | `useFileSystem.ts:7,208-302`; `useCamera.ts` is unreferenced |
+| `Filesystem` | ACTIVE | `useFileSystem.ts:8`; `useFileDownload.ts:4` |
+| `PushNotifications` | ACTIVE | `useNotification.ts:7`; config `presentationOptions: []` |
+| `@capacitor-community/fcm` | ACTIVE | `useNotification.ts:6,288-310` |
+| `@capacitor-community/file-opener` | ACTIVE | `useFileDownload.ts:2,226` |
+| `@capacitor-community/media` | ACTIVE | `useFileSystem.ts:5-6,18-41` |
+| `Share` | ACTIVE | `useFileDownload.ts:5,245` |
+| `Clipboard` | ACTIVE | `useBase.ts:14,256` |
+| `StatusBar` | ACTIVE | `useTheme.ts:6,30-99` |
+| `@capacitor-community/device-security-detect` | ACTIVE | `useDevice.ts:8,79` |
+| `capacitor-plugin-safe-area` | ACTIVE | `useDevice.ts:9,84` |
+| `Keyboard` | CONFIGURED_ONLY | `capacitor.config.ts:20-24`; no `src` import (NOT_FOUND) |
+| `Haptics` | REMOVED | `pnpm remove @capacitor/haptics` 2026-09-24 |
+| `cordova-plugin-file` | LEGACY | declared; `cordovaClearCach` in `AppUtil`/`useAppStorage.ts:142` |
 
-Android/iOS packages `8.3.4` are DECLARED; no `android/`/`ios/` dirs committed
+Android/iOS packages are DECLARED; no `android/`/`ios/` dirs committed
 (NOT_FOUND) so manifest/Info.plist/Pods claims are UNKNOWN until `cap add`.
 
 ## 3. Wrapper pattern (VERIFIED)
 
 Shared composables abstract plugins: `useDevice` (Device/SafeArea/Security),
-`useFileSystem` (Camera/Filesystem/Media), `useNotification`
+`useFileSystem` (active Camera/Filesystem/Media path), `useNotification`
 (Push/FCM), `useTheme` (StatusBar), `useAppStorage`+`StorageUtil`
 (Preferences). Reuse them; no new architecture without a task.
 
 ## 4. Platform guard (VERIFIED)
 
 `useDevice().isWeb()` (`Device.getInfo().platform == 'web'`,
-`useDevice.ts:39-44`) gates every native call with a web fallback/no-op
-pattern (notifications, save-to-gallery TODO, permission requests). Never call
-native APIs unguarded.
+`useDevice.ts:39-44`) is used where behavior differs by platform.
+`Preferences` and `Camera.getPhoto` also have web paths; `PushNotifications`
+registration is skipped on web. Before adding a call, check the operation's
+platform support, existing wrapper, permission path, and fallback. Do not
+assume the current wrappers gate every call.
 
 ## 5. Future install/update checklist
 

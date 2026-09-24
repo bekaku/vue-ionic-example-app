@@ -6,20 +6,21 @@
           :expand="full ? 'block' : undefined" :fill="fill" @click="$emit('on-next-page')">
           <BaseSpinner v-if="loading && showLoading" />
           <template v-else>
-            {{ label || $t('base.loadMore') }}
+            {{ label || t('base.loadMore') }}
           </template>
           <ion-icon v-if="!loading" slot="end" :icon></ion-icon>
         </ion-button>
       </template>
       <template v-else>
         <BaseSpinner v-if="loading && showLoading" />
-        <base-link-text v-else :label="label || $t('base.loadMore')" :color="color" @click="$emit('on-next-page')" />
+        <base-link-text v-else :label="label || t('base.loadMore')" :color="color" @click="$emit('on-next-page')" />
       </template>
     </ion-col>
   </ion-row>
 </template>
 <script setup lang="ts">
 import BaseLinkText from '@/components/base/BaseLinkText.vue';
+import { useLang } from '@/composables/useLang';
 import { useTheme } from '@/composables/useTheme';
 import type { IonicColor } from '@/types/common';
 import { IonButton, IonCol, IonIcon, IonRow } from '@ionic/vue';
@@ -48,4 +49,5 @@ const {
 }>();
 defineEmits(['on-next-page']);
 const { isDark } = useTheme();
+const { t } = useLang();
 </script>

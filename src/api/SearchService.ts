@@ -1,19 +1,14 @@
-import { useAxios } from '@/composables/useAxios';
+import { useApi } from '@/composables/useApi';
 import { SearchParamiter } from '@/libs/constant';
 import type { ISearch } from '@/types/models';
 export default () => {
-  const { callAxios } = useAxios();
+  const api = useApi();
   const searchApi = async (
     page: number,
     size: number,
     q: string
   ): Promise<ISearch[] | null> => {
-    return await callAxios<ISearch[]>({
-      API: `/api/search?page=${page}&size=${size}&${SearchParamiter}=${encodeURIComponent(
-        q
-      )}`,
-      method: 'GET'
-    });
+    return await api<ISearch[]>(`/api/search?page=${page}&size=${size}&${SearchParamiter}=${encodeURIComponent(q)}`);
   };
   return {
     searchApi

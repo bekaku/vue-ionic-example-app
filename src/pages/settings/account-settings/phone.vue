@@ -58,15 +58,18 @@ const phoneValid = computed(() => {
 const onSubmit = async () => {
   const loading: any = await appLoading();
   loading.present();
-  const res = await updatePersonalData(entity.value);
-  loading.dismiss();
-
-  if (res && res.status == 'OK') {
-    // if (authenStore.auth && authenStore.auth.userData) {
-    //   authenStore.auth.userData.mobilePhone = entity.value.mobilePhone;
-    // }
-
-    onBack();
+  try {
+    const res = await updatePersonalData(entity.value);
+    if (res.status === 200) {
+      // if (authenStore.auth && authenStore.auth.userData) {
+      //   authenStore.auth.userData.mobilePhone = entity.value.mobilePhone;
+      // }
+      onBack();
+    }
+  } catch {
+    // useApi already shows the error toast
+  } finally {
+    loading.dismiss();
   }
 };
 </script>

@@ -1,5 +1,5 @@
 import type { IChartSeries, ISeriresCategories } from './chart';
-import type { AppLocale, ChatMessageType, ChatType, EmojiType, UploadStatus } from './common';
+import type { AppLocale, ChatMessageType, ChatType, EmojiType, FileMimeType, UploadStatus } from './common';
 export type IPlatForm = 1 | 2 | 3; // 1=web, 2=ios, 3=android
 export type IPermissionOperationType = 1 | 2 | 3; // 1=crud, 2=report, 3=other
 export type SearchType = 'POST' | 'PROFILE' | 'HASHTAG' | 'THEME';
@@ -14,8 +14,9 @@ export type NotifyFunctionType =
   | 'SHARE'
   | 'CHAT'
   ;
+export type IdType = bigint | string | null | undefined;
 export interface Id {
-  id: number | null
+  id?: IdType
 }
 
 export interface Todo {
@@ -63,7 +64,6 @@ export interface UserDto extends Id {
   permissions?: string[] | undefined
 }
 export interface UserProfileDto extends Id {
-  id: number
   username: string
   fullName: string
   avatar: ImageDto | null
@@ -97,28 +97,79 @@ export interface UserChangePasswordRequest {
   logoutAllDevice: boolean
 }
 export interface RefreshTokenResponse {
-  userId: number
+  // snowflake id, arrives as string (json-bigint storeAsString)
+  userId: string
   authenticationToken: string
   refreshToken: string
   expiresAt?: string
 }
-export interface FileManagerDto {
-  id: number
-  uniqueId?: string
-  fileMime: string
-  fileName: string
-  filePath: string
-  fileThumbnailPath: string
-  fileSize: string
-  functionId?: number
-  isImage?: boolean
-  image?: boolean
-  file?: any
+export interface FileUploadChunkMergeRequest extends FileManagerMetaData {
+  totalChunks: number;
+  fileMime: string | null;
+  originalFilename?: string;
+  chunkFilename: string;
+  resizeImage: boolean;
+  fileDirectoryId?: number | null;
+}
+export interface FileUploadChunkResponse {
+  filename?: string | null;
+  fileMime?: string | null;
+  status?: boolean;
+  lastChunk?: boolean;
+}
+export interface FileManagerMetaData extends Id {
+  duration?: number | null;
+  title?: string | null;
+  description?: string | null;
+  thumbnailFileId?: number | string | null;
+  thumbnailFile?: any
+  width?: number
+  height?: number
+  view?: number
+  hidden?: boolean
+  resizeImage?: boolean
+  createThumbnail?: boolean
+}
+export interface FileUploadChunkResponse {
+  filename?: string | null;
+  fileMime?: string | null;
+  status?: boolean;
+  lastChunk?: boolean;
+}
+export interface VideoSrc {
+  src?: string
+  type?: string
+  size?: number
+}
+export interface VideoTrack {
+  kind?: string
+  label?: string
+  srclang?: string
+  src?: string
+  default?: boolean
+}
+export interface FileManager extends FileManagerMetaData {
+  fileMime: string;
+  fileName: string;
+  filePath: string;
+  streamPath?: string;
+  fileThumbnailPath?: string;
+  fileSize: number;
+  fileCount?: number;
+  functionId?: number;
+  createdDate?: string;
+  updatedDate?: string;
+  file?: any;
+  fileMimeType?: FileMimeType
+  videoSources?: VideoSrc[]
+  videoTracks?: VideoTrack[]
+  deleteFlag?: boolean | undefined
+  uniqueId?: string | null
   uploadProgress?: {
     uploading: boolean;
     progress: number;
     status: UploadStatus;
-    uploadData?: FileManagerDto | null
+    uploadData?: FileManager | null
   };
 }
 export interface FileUploadChunkResponseDto {
@@ -136,7 +187,7 @@ export interface FileUploadChunkMergeRequestDto {
   fileDirectoryId?: number | null;
 }
 export interface AccessTokenDto {
-  id: number
+  id: IdType
   ipAddredd: string
   hostName: string
   agent: string
@@ -340,7 +391,7 @@ export interface GroupChatRequest {
   avatarPreview?: string | undefined
 }
 export interface GroupChatFileDto extends Id {
-  fileManager?: FileManagerDto | null | undefined
+  fileManager?: FileManager | null | undefined
 }
 
 export interface EmojiCountDto {

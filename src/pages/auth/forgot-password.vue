@@ -159,7 +159,7 @@ const requestVerifyCode = async () => {
   const res = await requestVerifyCodeToResetPwd(entity.value);
   loading.dismiss();
   if (res && res.status && res.status == 200) {
-    const responseData = res.data as ResponseMessage;
+    const responseData = res._data as ResponseMessage;
     step.value = 2;
     if (responseData.message) {
       appToast({
@@ -172,8 +172,8 @@ const requestVerifyCode = async () => {
       });
     }
     slideAction.value = 'next';
-  } else if (res && res.data) {
-    notifyError(res.data as AppException);
+  } else if (res && res._data) {
+    notifyError(res._data as AppException);
   }
 };
 const verifyCode = async (code?: string) => {
@@ -187,7 +187,7 @@ const verifyCode = async (code?: string) => {
   const res = await sendVerifyCodeToResetPwd(entity.value);
   loading.dismiss();
   if (res && res.status != undefined && res.status != 200) {
-    notifyError(res.data as AppException);
+    notifyError(res._data as AppException);
   } else {
     step.value = 3;
     slideAction.value = 'next';
@@ -214,7 +214,7 @@ const setNewPassword = async () => {
   const res = await resetPassword(entity.value);
   loading.dismiss();
   if (res && res.status && res.status == 200) {
-    const responseData = res.data as ResponseMessage;
+    const responseData = res._data as ResponseMessage;
     if (responseData.message) {
       await appToast({
         headerText: t('authen.setPassword'),
@@ -226,8 +226,8 @@ const setNewPassword = async () => {
       });
     }
     appNavigateTo('/auth/login');
-  } else if (res && res.data) {
-    notifyError(res.data as AppException);
+  } else if (res && res._data) {
+    notifyError(res._data as AppException);
   }
 };
 watch(

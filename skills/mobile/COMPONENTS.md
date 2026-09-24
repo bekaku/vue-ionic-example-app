@@ -6,11 +6,13 @@ Authoritative home for component/page rules. Entry:
 ## 1. Page structure (VERIFIED)
 
 Standard page = `BasePage.vue` wrapping
-`IonPage > (IonHeader > Toolbar) > IonContent` (`src/components/base/BasePage.vue:78-...`).
+`IonPage > (IonHeader > Toolbar) > IonContent` (`src/components/base/BasePage.vue:78-129`).
 Representative: `src/pages/tabs/home.vue:42-64` uses `BasePage` with
 `#start` / `#actions-end` slots, then `BaseCard` sections. Rules:
 
-- Never ship raw-`<div>` pages; always `BasePage`/`IonPage`.
+- Route pages need an `IonPage` root. Prefer `BasePage` for a standard
+  header/content layout; `auth/login.vue:69`, `Index.vue:86`, and
+  `tabs/index.vue:55` use `IonPage` directly for custom layouts.
 - Props pattern per `BasePage.vue:14-50`: `pageTitle`, `showBackLink`,
   `pageDefaultBackLink='/tabs/home'`, `translucent`, `scrollY/fullscreen`, etc.
 - Reuse `src/components/base/*` (`BaseButton`, `BaseCard`, `BaseIcon`,
@@ -28,15 +30,15 @@ Representative: `src/pages/tabs/home.vue:42-64` uses `BasePage` with
 ## 3. Forms/validation/dialogs/loading
 
 Validation via `src/composables/useValidation.ts`; RBAC via `rbac` directive
-(`main.ts:53`); feedback via `useBase` toasts/confirms/loaders. Keep
-loading/error/empty states explicit on every data page.
+(`main.ts:53`); feedback via `useBase` toasts/confirms/loaders. Add
+loading/error/empty states where the new interaction needs them.
 
 ## 4. Ionic lifecycle (VERIFIED principle)
 
-Ionic caches tab pages: components stay mounted while inactive. `onMounted`
-alone misses re-entry refreshes — use `onIonViewWillEnter/DidEnter/WillLeave`
-for fetch/subscribe/cleanup decisions. Symmetric cleanup prevents stale
-listeners (see `LIFECYCLE.md`).
+Ionic can keep routed pages mounted while inactive. For work that must repeat
+on re-entry, use an Ionic view hook and pair listener setup with cleanup.
+Current `src/pages/` has no `onIonView*` call sites, so this is guidance for
+new behavior, not a claim about current page implementation. See `LIFECYCLE.md`.
 
 ## 5. Theme/UX (VERIFIED)
 

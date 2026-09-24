@@ -1,19 +1,13 @@
-import { useAxios } from '@/composables/useAxios';
+import { useApi } from '@/composables/useApi';
 import type { IAcl, Permission } from '@/types/models';
 import type { ApiListResponse } from '@/types/common';
 export default () => {
-  const { callAxios } = useAxios();
+  const api = useApi();
   const userAcl = async (getMenuList: number = 0): Promise<IAcl | null> => {
-    return await callAxios<IAcl>({
-      API: `/api/permission/userAcl?getMenuList=${getMenuList}`,
-      method: 'GET'
-    });
+    return await api<IAcl>(`/api/permission/userAcl?getMenuList=${getMenuList}`);
   };
   const findAll = async (q: string): Promise<ApiListResponse<Permission> | null> => {
-    return await callAxios<ApiListResponse<Permission>>({
-      API: `/api/permission${q}`,
-      method: 'GET'
-    });
+    return await api<ApiListResponse<Permission>>(`/api/permission${q}`);
   };
   return {
     userAcl,

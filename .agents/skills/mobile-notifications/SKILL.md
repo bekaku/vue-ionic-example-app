@@ -31,15 +31,18 @@ toasts, tap navigation, logout cleanup.
 
 1. Web path is a no-op via `isWeb()`; never register on web.
 2. Flows: check → request → register; logout → unsubscribe + unregister.
-3. Tap navigates to `/post/view/:id` only for `SYSTEM_ANNOUNMENT`/`LIKE_POST`;
-   `CHAT` is a verified no-op. Never invent new destinations.
-4. Avoid duplicate listeners; navigation must wait for router+auth readiness.
+3. Tap handler attempts `/post/view/:id` for `SYSTEM_ANNOUNMENT`/`LIKE_POST`;
+   that route is absent from `src/router/index.ts`. `CHAT` is a no-op.
+4. `addNotifyListeners()` (received/tap) is not called anywhere; wiring it
+   needs a real tap destination, replace-not-stack handles like
+   `addListeners`, and router/auth readiness for cold start.
 
 ## Implementation workflow
 
 1. Trace permission → registration → token → topic → listener chain.
 2. Handle foreground/background/cold-start distinctly.
-3. Never log real device tokens.
+3. Never log FCM tokens (the registration listener no longer does); do not
+   copy values into docs/tests.
 4. Verify per `mobile-testing`; device required for real delivery proof.
 
 ## Verification

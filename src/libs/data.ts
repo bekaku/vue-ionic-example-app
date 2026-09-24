@@ -1,10 +1,10 @@
 import type { ISeriresCategories } from '@/types/chart';
 import type { ApiListResponse, LabelValue } from '@/types/common';
-import type { FileManagerDto, GroupChatDto, GroupChatMsgDto, Permission, RefreshTokenResponse, UserDto } from '@/types/models';
+import type { FileManager, GroupChatDto, GroupChatMsgDto, Permission, RefreshTokenResponse, UserDto } from '@/types/models';
 import { FORMAT_DATE13, getCurrentDateByFormat } from '@/utils/DateUtil';
 import { biBarChart, biChatDots, biCreditCard, biCurrencyDollar, biGraphUp, biNewspaper, biPeople } from '@quasar/extras/bootstrap-icons';
 export const userData: UserDto = {
-    id: 1,
+    id: '1',
     email: 'admin@mydomain.com',
     username: 'admin',
     avatar: {
@@ -39,7 +39,7 @@ export const userData: UserDto = {
     ]
 }
 export const authenResponse: RefreshTokenResponse = {
-    userId: 1,
+    userId: '1',
     authenticationToken: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlNmM1ZmVhMi1iODU4LTQ5ZWQtOWViOS0wMjc3YTNiNzQ5M2YtMTc0MTg0MDUwMTA3MCIsImV4cCI6MTc0MTg0MTQwMSwiaWF0IjoxNzQxODQwNTAxLCJ1dWlkIjoiMGQxYWYwNjMtZWQ1Yy00Mzg3LTkxYjItMDQyOTI3OTliMDZjIn0.XLnamWBWipqEmKEfD-BHsVZQQmgO0qx0SutCIeMvTzg5UsMtV0MDQpx5h2fVe1OKUfyAgfRl3FVDeUaQN5SFnQ',
     refreshToken: 'e6c5fea2-b858-49ed-9eb9-0277a3b7493f-1741840501070',
     expiresAt: '2025-03-13T04:50:01.087+00:00'
@@ -134,7 +134,7 @@ export const permissionListApi: ApiListResponse<Permission> = {
 }
 export const userItems: UserDto[] = [
     {
-        id: 1,
+        id: '1',
         email: 'Cody@mydomain.com',
         username: 'Cody Fisher',
         avatar: {
@@ -144,7 +144,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 2,
+        id: '2',
         email: 'vue@mydomain.com',
         username: 'Vue Team',
         avatar: {
@@ -154,7 +154,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 3,
+        id: '3',
         email: 'fox@mydomain.com',
         username: 'Robert Fox',
         avatar: {
@@ -164,7 +164,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 4,
+        id: '4',
         email: 'Esther@mydomain.com',
         username: 'Esther Howard',
         avatar: {
@@ -174,7 +174,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 5,
+        id: '5',
         email: 'Darlene@mydomain.com',
         username: 'Darlene Robertson',
         avatar: {
@@ -184,7 +184,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 6,
+        id: '6',
         email: 'Ralph@mydomain.com',
         username: 'Ralph Edwards',
         avatar: {
@@ -194,7 +194,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 7,
+        id: '7',
         email: 'Darrell@mydomain.com',
         username: 'Darrell Steward',
         avatar: {
@@ -204,7 +204,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 8,
+        id: '8',
         email: 'Chanavee@mydomain.com',
         username: 'Chanavee Steward',
         avatar: {
@@ -214,7 +214,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 9,
+        id: '9',
         email: 'Fisher@mydomain.com',
         username: 'Cody Fisher',
         avatar: {
@@ -224,7 +224,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 10,
+        id: '10',
         email: 'kerean@mydomain.com',
         username: 'Kerean Fisher',
         avatar: {
@@ -234,7 +234,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 11,
+        id: '11',
         email: 'Fox@mydomain.com',
         username: 'Robert Fox',
         avatar: {
@@ -244,7 +244,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 12,
+        id: '12',
         email: 'Howard@mydomain.com',
         username: 'Esther Howard',
         avatar: {
@@ -254,7 +254,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 13,
+        id: '13',
         email: 'Robertson@mydomain.com',
         username: 'Darlene Robertson',
         avatar: {
@@ -264,7 +264,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 14,
+        id: '14',
         email: 'Edwards@mydomain.com',
         username: 'Ralph Edwards',
         avatar: {
@@ -274,7 +274,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 15,
+        id: '15',
         email: 'Steward@mydomain.com',
         username: 'Darrell Steward',
         avatar: {
@@ -284,7 +284,7 @@ export const userItems: UserDto[] = [
         active: true,
     },
     {
-        id: 16,
+        id: '16',
         email: 'Meeyae@mydomain.com',
         username: 'Meeyae Steward',
         avatar: {
@@ -496,151 +496,138 @@ export const dashboardHeroItems: LabelValue<string>[] = [
     },
 ];
 
-export const imageItemsData: FileManagerDto[] = [
+export const imageItemsData: FileManager[] = [
     {
-        id: 1,
+        id: '1',
         fileMime: 'image/jpeg',
         fileName: 'Img001.jpg',
         filePath:
             'https://images.unsplash.com/photo-1741540420894-46bc55554fc3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 2,
+        id: '2',
         fileMime: 'image/jpeg',
         fileName: 'Img002.jpg',
         filePath:
             'https://images.unsplash.com/photo-1734983234384-5a3edcec48ce?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 3,
+        id: '3',
         fileMime: 'image/jpeg',
         fileName: 'Img003.jpg',
         filePath:
             'https://images.unsplash.com/photo-1741531472824-b3fc55e2ff9c?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 4,
+        id: '4',
         fileMime: 'image/jpeg',
         fileName: 'Img004.jpg',
         filePath:
             'https://images.unsplash.com/photo-1741509541812-5d8f3e96df23?q=80&w=2127&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 5,
+        id: '5',
         fileMime: 'image/jpeg',
         fileName: 'Img005.jpg',
         filePath:
             'https://images.unsplash.com/photo-1734630378523-c6735d798820?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 6,
+        id: '6',
         fileMime: 'image/jpeg',
         fileName: 'Img006.jpg',
         filePath:
             'https://images.pexels.com/photos/21294005/pexels-photo-21294005/free-photo-of-portrait-of-woman-blowing-dandelion-flower.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 7,
+        id: '7',
         fileMime: 'image/jpeg',
         fileName: 'Img007.jpg',
         filePath:
             'https://images.pexels.com/photos/27869817/pexels-photo-27869817/free-photo-of-two-women-sitting-on-a-couch-together.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 8,
+        id: '8',
         fileMime: 'image/jpeg',
         fileName: 'Img008.jpg',
         filePath:
             'https://images.pexels.com/photos/28924817/pexels-photo-28924817/free-photo-of-hong-kong-island-dazzling-night-skyline.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 9,
+        id: '9',
         fileMime: 'image/jpeg',
         fileName: 'Img009.jpg',
         filePath:
             'https://images.pexels.com/photos/29008754/pexels-photo-29008754/free-photo-of-scenic-desert-highway-at-sunrise-in-utah.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 10,
+        id: '10',
         fileMime: 'image/jpeg',
         fileName: 'Img010.jpg',
         filePath:
             'https://images.pexels.com/photos/25244460/pexels-photo-25244460/free-photo-of-a-fashionable-young-woman-standing-on-a-meadow.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 11,
+        id: '11',
         fileMime: 'image/jpeg',
         fileName: 'Img011.jpg',
         filePath:
             'https://images.pexels.com/photos/27467770/pexels-photo-27467770/free-photo-of-laptop-and-camera-on-desk.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
     {
-        id: 12,
+        id: '12',
         fileMime: 'image/jpeg',
         fileName: 'Img011.jpg',
         filePath:
             'https://images.pexels.com/photos/28271613/pexels-photo-28271613/free-photo-of-a-car-mirror-is-shown-in-the-side-view-of-a-road.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: true,
-        image: true,
+        fileSize: 2097152,
+        fileMimeType: 'IMAGE',
     },
 ];
 
-export const pdfItemsData: FileManagerDto[] = ([
+export const pdfItemsData: FileManager[] = ([
     {
-        id: 1,
+        id: '1',
         fileMime: 'application/pdf',
         fileName: 'Trace-based Just-in-Time Type Specialization for Dynamic Languages',
         filePath: 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
         fileThumbnailPath: '',
-        fileSize: '2 MB',
-        isImage: false,
-        image: false,
+        fileSize: 2097152,
+        fileMimeType: 'FILE',
     },
 ]);
 
@@ -735,7 +722,7 @@ export const simpleCategories: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'J
 export const chatHistoryListApi: ApiListResponse<GroupChatDto> = {
     dataList: [
         {
-            id: 1,
+            id: '1',
             dtoAvatar: {
                 image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg',
                 thumbnail: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg'
@@ -753,7 +740,7 @@ export const chatHistoryListApi: ApiListResponse<GroupChatDto> = {
             online: true,
         },
         {
-            id: 2,
+            id: '2',
             dtoAvatar: null,
             chatType: 'GROUP',
             groupName: 'Vue Team',
@@ -768,7 +755,7 @@ export const chatHistoryListApi: ApiListResponse<GroupChatDto> = {
             online: true,
         },
         {
-            id: 3,
+            id: '3',
             dtoAvatar: {
                 image: 'https://randomuser.me/api/portraits/men/1.jpg',
                 thumbnail: 'https://randomuser.me/api/portraits/men/1.jpg'
@@ -786,7 +773,7 @@ export const chatHistoryListApi: ApiListResponse<GroupChatDto> = {
             online: false,
         },
         {
-            id: 4,
+            id: '4',
             dtoAvatar: {
                 image: 'https://randomuser.me/api/portraits/men/3.jpg',
                 thumbnail: 'https://randomuser.me/api/portraits/men/3.jpg'
@@ -804,7 +791,7 @@ export const chatHistoryListApi: ApiListResponse<GroupChatDto> = {
             online: true,
         },
         {
-            id: 5,
+            id: '5',
             dtoAvatar: {
                 image: 'https://randomuser.me/api/portraits/women/79.jpg',
                 thumbnail: 'https://randomuser.me/api/portraits/women/79.jpg'
@@ -822,7 +809,7 @@ export const chatHistoryListApi: ApiListResponse<GroupChatDto> = {
             online: false,
         },
         {
-            id: 6,
+            id: '6',
             dtoAvatar: {
                 image: 'https://randomuser.me/api/portraits/women/21.jpg',
                 thumbnail: 'https://randomuser.me/api/portraits/women/21.jpg'
@@ -842,7 +829,7 @@ export const chatHistoryListApi: ApiListResponse<GroupChatDto> = {
             totalFile: 1,
         },
         {
-            id: 7,
+            id: '7',
             dtoAvatar: {
                 image: 'https://randomuser.me/api/portraits/men/44.jpg',
                 thumbnail: 'https://randomuser.me/api/portraits/men/44.jpg'
@@ -860,7 +847,7 @@ export const chatHistoryListApi: ApiListResponse<GroupChatDto> = {
             online: true,
         },
         {
-            id: 8,
+            id: '8',
             dtoAvatar: null,
             chatType: 'PERSONAL',
             groupName: 'SA-Tester',
@@ -875,7 +862,7 @@ export const chatHistoryListApi: ApiListResponse<GroupChatDto> = {
             online: false,
         },
         {
-            id: 9,
+            id: '9',
             dtoAvatar: {
                 image: 'https://randomuser.me/api/portraits/men/22.jpg',
                 thumbnail: 'https://randomuser.me/api/portraits/men/22.jpg'
@@ -893,7 +880,7 @@ export const chatHistoryListApi: ApiListResponse<GroupChatDto> = {
             online: false,
         },
         {
-            id: 10,
+            id: '10',
             dtoAvatar: {
                 image: 'https://randomuser.me/api/portraits/women/44.jpg',
                 thumbnail: 'https://randomuser.me/api/portraits/women/44.jpg'
@@ -918,7 +905,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
 = {
     dataList: [
         {
-            id: 667,
+            id: '667',
             chatMsg: 'The rest of the documentation assumes basic familiarity with HTML, CSS, and JavaScript. If you are totally new to frontend development, it might not be the best idea to jump right into a framework as your first step - grasp the basics and then come back! You can check your knowledge level with these overviews for JavaScript, HTML and CSS if needed. Prior experience with other frameworks helps, but is not required.',
             msgDateTime: '2025-03-21 13:55:25',
             groupId: 17,
@@ -937,7 +924,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'TEXT'
         },
         {
-            id: 666,
+            id: '666',
             chatMsg: 'Just sent emoji \uD83D\uDCAF \uD83D\uDE0C ✨️ \uD83D\uDE42 \uD83D\uDE43 \uD83D\uDC4C \uD83D\uDCAF \uD83D\uDE0C ✨️ \uD83D\uDE42 \uD83D\uDE43',
             msgDateTime: '2025-03-21 13:55:12',
             groupId: 17,
@@ -953,7 +940,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'TEXT'
         },
         {
-            id: 567,
+            id: '567',
             chatMsg: '13.9795581,100.6267777',
             msgDateTime: '2024-10-11 15:36:47',
             groupId: 17,
@@ -969,7 +956,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'LOCATION'
         },
         {
-            id: 665,
+            id: '665',
             chatMsg: 'https://www.youtube.com/watch?v=_5hAk3ic5Ok',
             msgDateTime: '2025-03-21 13:54:12',
             groupId: 17,
@@ -985,7 +972,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'TEXT'
         },
         {
-            id: 664,
+            id: '664',
             chatMsg: null,
             msgDateTime: '2025-03-21 13:53:04',
             groupId: 17,
@@ -995,7 +982,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             sendUser: userItems[3],
             files: [
                 {
-                    id: 152,
+                    id: '152',
                     fileManager: pdfItemsData[0],
                 }
             ],
@@ -1006,7 +993,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'FILE'
         },
         {
-            id: 663,
+            id: '663',
             chatMsg: null,
             msgDateTime: '2025-03-21 13:52:48',
             groupId: 17,
@@ -1016,35 +1003,35 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             sendUser: userItems[4],
             files: [
                 {
-                    id: 147,
+                    id: '147',
                     fileManager: imageItemsData[0],
                 },
                 {
-                    id: 148,
+                    id: '148',
                     fileManager: imageItemsData[1],
                 },
                 {
-                    id: 149,
+                    id: '149',
                     fileManager: imageItemsData[2],
                 },
                 {
-                    id: 150,
+                    id: '150',
                     fileManager: imageItemsData[3],
                 },
                 {
-                    id: 151,
+                    id: '151',
                     fileManager: imageItemsData[4],
                 },
                 {
-                    id: 152,
+                    id: '152',
                     fileManager: imageItemsData[9],
                 },
                 {
-                    id: 153,
+                    id: '153',
                     fileManager: imageItemsData[10],
                 },
                 {
-                    id: 154,
+                    id: '154',
                     fileManager: imageItemsData[11],
                 }
             ],
@@ -1060,7 +1047,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'IMAGE'
         },
         {
-            id: 662,
+            id: '662',
             chatMsg: 'An approachable, performant and versatile framework for building web user interfaces.',
             msgDateTime: '2025-03-21 13:52:10',
             groupId: 17,
@@ -1073,7 +1060,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             emojiType: null,
             reactionEngage: [],
             dtoReplyTo: {
-                id: 667,
+                id: '667',
                 chatMsg: 'they will have to be a topic to see the deference of options and show the Silly things that the world on the way are not the same as you want me vuejs I don\'t want you change springboot I don\'t have any plans ',
                 msgDateTime: '2024-10-02 19:36:56',
                 groupId: 17,
@@ -1091,7 +1078,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'TEXT'
         },
         {
-            id: 646,
+            id: '646',
             chatMsg: 'Message unsent.',
             msgDateTime: '2025-01-11 11:55:03',
             groupId: 17,
@@ -1107,7 +1094,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'LOCATION'
         },
         {
-            id: 645,
+            id: '645',
             chatMsg: 'Message with photo',
             msgDateTime: '2025-01-10 12:59:52',
             groupId: 17,
@@ -1117,7 +1104,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             sendUser: userItems[7],
             files: [
                 {
-                    id: 142,
+                    id: '142',
                     fileManager: imageItemsData[5],
                 }
             ],
@@ -1133,7 +1120,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'IMAGE'
         },
         {
-            id: 649,
+            id: '649',
             chatMsg: 'Vue (pronounced /vjuː/, like view) is a JavaScript framework for building user interfaces. It builds on top of standard HTML, CSS, and JavaScript and provides a declarative, component-based programming model that helps you efficiently develop user interfaces of any complexity.',
             msgDateTime: '2025-01-10 12:42:20',
             groupId: 17,
@@ -1174,7 +1161,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'TEXT'
         },
         {
-            id: 644,
+            id: '644',
             chatMsg: null,
             msgDateTime: '2025-01-10 12:42:20',
             groupId: 17,
@@ -1184,7 +1171,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             sendUser: userItems[8],
             files: [
                 {
-                    id: 141,
+                    id: '141',
                     fileManager: imageItemsData[4],
                 }
             ],

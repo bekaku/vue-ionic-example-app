@@ -43,6 +43,7 @@ export const LatestSyncActiveStatusKey = PrefixKey + 'mb_latest_sync_active_stat
 export const CacheKey = {
   FCM_SETTING: PrefixKey + 'mb_fcm_setting',
 };
+export const MaxImageResize = 1776;
 export const AppAlbumName = 'myappalbum';
 export const ExpireCookieDays = 365;
 export const autoRefeshTokenDays = 30;
@@ -54,6 +55,9 @@ export const CompanyIdAtt = 'companyId';
 export const UserIdAtt = 'userId';
 export const ProfileNameAtt = 'userProfileId';
 export const FileNamePrefix = 'my_file';
+export const maxImageToResize = 1776
+export const maxImageToResizeMb = 10
+export const FileUploadKey = '_filesUploadName';
 export const FileExtensionAccept
   = '.png,.jpg,.jpeg,.gif,.doc,.docx,.pdf,.xls,.xlsx,.ppt,.pptx,.pps';
 export const FileExtensionVdoAccept = '.mp4,.m4v,.m4a,.mov,.mpg,.mpeg,.mpe,.mpv,.webm,.avi,.webm';
@@ -67,9 +71,11 @@ export const FileTypeAcceptList = [
   'application/pdf',
   'application/vnd.rar',
   'application/zip',
+  'application/x-zip-compressed',
   'image/jpeg',
   'image/png',
   'image/gif',
+  'image/webp',
   'text/plain',
   'text/csv',
   'video/mpeg',
@@ -77,6 +83,26 @@ export const FileTypeAcceptList = [
   'video/quicktime',
   'video/x-msvideo',
   'video/webm',
+  'audio/mpeg',
+  'audio/wav',
+  'audio/ogg',
+  'audio/flac',
+  'audio/mp4',
+  'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+  'application/vnd.ms-excel.sheet.macroenabled.12',
+  'image/tiff',
+  'image/bmp',
+  'image/svg+xml',
+  'text/markdown',
+  'text/x-rst',
+  'application/json',
+  'text/tab-separated-values',
+  'application/yaml',
+  'application/x-yaml',
+  'text/yaml',
+  'application/xml',
+  'text/xml',
+  'text/html'
 ];
 
 export const FILES_UPLOAD_ATT = '_filesUploadName';

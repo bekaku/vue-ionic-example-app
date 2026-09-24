@@ -32,7 +32,9 @@ notification/deep-link entry navigation.
 1. Guard: only `meta.noRequireAuth === true` bypasses auth (`router/index.ts`).
 2. Single `useBackButton(-1, …)` in `App.vue` — never add competing handlers.
 3. Tabs are children of `/tabs/` (`home/chat/other`); keep nesting consistent.
-4. Navigation from notifications/deep links must pass auth guard + readiness.
+4. Route navigation through the guard. The current notification target
+   `/post/view/:id` has no route entry; verify destination and router/auth
+   readiness before extending tap handling.
 
 ## Implementation workflow
 

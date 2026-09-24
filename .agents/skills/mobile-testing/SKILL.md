@@ -13,7 +13,8 @@ Define the task-appropriate verification matrix and stop invented test claims.
 
 ## When to use
 
-Every implementation task; also lint/typecheck/build/test-only tasks.
+Every implementation task; also typecheck/build/test-only tasks. Lint is
+not required unless the user asks (`skills/mobile/TESTING.md` §2).
 
 ## Required reading
 
@@ -21,13 +22,13 @@ Every implementation task; also lint/typecheck/build/test-only tasks.
 
 ## Relevant project locations
 
-- `tests/unit/example.spec.ts`, `tests/e2e/specs/test.cy.ts`
+- `tests/unit/useApi.spec.ts`, `tests/e2e/specs/test.cy.ts`
 - `package.json` (`test:unit` = vitest, `test:e2e` = cypress), `eslint.config.js`
 
 ## Mandatory rules
 
-1. Levels: STATIC, UNIT, COMPONENT, API, NATIVE_PLUGIN, ANDROID, IOS,
-   LIFECYCLE, SECURITY, BUILD, RELEASE — run only what fits task + env.
+1. Choose verification from the changed behavior and platform impact; use
+   the levels in `skills/mobile/TESTING.md` as reporting categories.
 2. Results vocabulary: PASSED / FAILED / NOT_RUN / NOT_APPLICABLE / BLOCKED.
 3. Web build ≠ Android/iOS/emulator/device proof; mock Capacitor plugins in
    unit tests.
@@ -36,7 +37,8 @@ Every implementation task; also lint/typecheck/build/test-only tasks.
 ## Implementation workflow
 
 1. Pick applicable levels from the task's Platform/Native/API/Data impacts.
-2. Run static → unit → component → API → build; device checks when required.
+2. Run relevant checks with bounded commands (`pnpm exec vitest run` for
+   one-shot unit tests); compare failures with the existing baseline.
 3. Mock native plugins (`@capacitor/*`, community) in jsdom/vitest.
 4. Record per-platform results in the task's Testing section.
 

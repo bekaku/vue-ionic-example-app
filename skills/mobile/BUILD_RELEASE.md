@@ -15,10 +15,12 @@ Authoritative home for build/release rules. Entry:
 ## 2. Capacitor workflow (VERIFIED config, NOT_FOUND projects)
 
 - `capacitor.config.ts`: `appId com.bekaku.mobile.ion`, `appName 'Vue Ionic'`,
-  `androidScheme https`, `cleartext true`, `allowMixedContent true`,
-  Keyboard + Push + SplashScreen plugin config.
-- No `android/`/`ios/` committed → sequence is `npx cap add android|ios`
-  first, then `npx cap sync[.md]` per README. Never sync during docs tasks or
+  `androidScheme https`, `cleartext`/`allowMixedContent` off unless
+  `CAP_ALLOW_HTTP=true npx cap sync` (dev only), Keyboard + Push + SplashScreen
+  plugin config.
+- No `android/`/`ios/` committed → add the target project with
+  `npx cap add android` or `npx cap add ios` first, then `npx cap sync` as
+  appropriate. Never sync during docs tasks or
   blindly on dirty trees.
 
 ## 3. Release rules

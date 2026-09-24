@@ -28,11 +28,12 @@ environment selection, release verification, CI.
 
 ## Mandatory rules
 
-1. Build is `ionic build --prod` → `dist/`; never claim native success from it.
-2. No `android/`/`ios/` committed — `npx cap add` first; never `cap sync`
-   during docs tasks or on a dirty tree without review.
-3. Env: `.env.development` (localhost:8080) vs `.env.production`
-   (api/cdn myapp.com); no secrets in frontend env files.
+1. `pnpm build` invokes `ionic build --prod` and targets `dist/`; web output
+   does not establish native success.
+2. No `android/`/`ios/` committed. A native project must exist before sync;
+   review generated/native changes and working-tree state before running it.
+3. Inspect current `.env*` keys and selected mode without copying values;
+   device localhost differs from the developer machine.
 4. Never touch signing creds/identifiers; record ANDROID/IOS results only
    when actually executed.
 

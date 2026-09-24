@@ -1,7 +1,7 @@
-import appAxios from '@/plugins/axios';
 import type { UserDto } from '@/types/models';
 import { defineStore } from 'pinia';
 // import router from '@/router';
+import { useApi } from '@/composables/useApi';
 import { useAppStorage } from '@/composables/useAppStorage';
 import { useConfig } from '@/composables/useConfig';
 import { computed, ref } from 'vue';
@@ -13,6 +13,7 @@ export const useAuthenStore = defineStore('authenStore', () => {
     getCurrentUserToken,
   } = useAppStorage()
   const appStore = useAppStore();
+  const api = useApi();
   const auth = ref<UserDto | null>();
   const alreadyFetchLoginedProfile = ref<boolean>(false);
   const loginedItems = ref<LoginedProfileItem[]>([]);
@@ -38,20 +39,15 @@ export const useAuthenStore = defineStore('authenStore', () => {
     const currentToken = await getCurrentUserToken();
     // const authTokenKey = await loadStorage<string>(AppAuthTokenKey);
     if (currentToken && currentToken?.authenticationToken) {
-      appAxios.defaults.headers.Authorization = `Bearer ${currentToken.authenticationToken}`;
-      appAxios.defaults.responseType = 'json';
-      appAxios.defaults.headers['Content-Type'] = 'application/json';
-      const response = await appAxios({
-        method: 'GET',
-        url: '/api/appUser/currentUserData'
-      });
+      // app mount waits for this call, keep startup short instead of the 180s default
+      const response = await api.raw<UserDto>('/api/appUser/currentUserData', { notify: false, timeout: 15000 });
       if (devMode) {
         console.log('initialAuthDataProcess > /api/appUser/currentUserData', response);
       }
-      if (response && response.status == 200) {
-        setAuthen(response.data);
-        if (response.data.permissions && response.data.permissions.length > 0) {
-          appStore.setPermissions(response.data.permissions);
+      if (response && response.status == 200 && response._data) {
+        setAuthen(response._data);
+        if (response._data.permissions && response._data.permissions.length > 0) {
+          appStore.setPermissions(response._data.permissions);
         }
       }
       setInitial(true);

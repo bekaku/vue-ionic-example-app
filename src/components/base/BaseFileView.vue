@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import type { FileManagerDto } from '@/types/models';
+import type { FileManager } from '@/types/models';
 import { useBase } from '@/composables/useBase';
 import { defineAsyncComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 import type { FileType } from '@/types/common';
-import FileManagerService from '@/api/FileManagerService';
 import { fileToBlob, getFileType } from '@/utils/FileUtils';
 import { useFileSystem } from '@/composables/useFileSystem';
+import { useFileDownload } from '@/composables/useFileDownload';
+import { useLang } from '@/composables/useLang';
+import { getCurrentFormattedDatetime } from '@/utils/DateUtil';
 const BasePdfViewDialog = defineAsyncComponent(() => import('@/components/base/BasePdfViewDialog.vue'));
 const BaseImageViewDialog = defineAsyncComponent(() => import('@/components/base/BaseImageViewDialog.vue'));
 const {
@@ -17,8 +19,8 @@ const {
     isBlob = false
 } = defineProps<{
     title?: string
-    item: FileManagerDto
-    imageList?: FileManagerDto[]
+    item: FileManager
+    imageList?: FileManager[]
     selectIndex?: number
     fetch?: boolean
     isBlob?: boolean;
@@ -27,14 +29,15 @@ defineEmits(['on-close']);
 
 const { checkFileSystemPermissions, requestFileSystemPermissions, requestCameraPermissions } = useFileSystem();
 const show = defineModel<boolean>('show', { default: false });
-const { appLoading } = useBase();
-const { downloadCdnData } = FileManagerService();
+const { appLoading, appToast } = useBase();
+const { downloadDocument } = useFileDownload();
+const { t } = useLang();
 const showView = ref(false);
 const fileType = ref<FileType | undefined>(undefined);
 
 const pdfSrc = ref<any>();
 const closeTimeout = ref<any>(null);
-const imageItems = ref<FileManagerDto[]>([]);
+const imageItems = ref<FileManager[]>([]);
 const selectFileIndex = ref(0);
 onMounted(async () => {
     if (selectIndex != undefined && selectIndex >= 0) {
@@ -92,7 +95,20 @@ const onDownloadFile = async () => {
     if (!file || !file.filePath || !fetch) {
         onClose();
     } else {
-        await downloadCdnData(file.filePath, title);
+        // downloadCdnData only built base64 and never saved; useFileDownload writes to Documents
+        const loader: any = await appLoading();
+        try {
+            loader.present();
+            await downloadDocument(
+                file.filePath,
+                file.fileName || title || `file_${getCurrentFormattedDatetime()}`,
+            );
+            appToast({ text: t('success.saved') });
+        } catch (error) {
+            appToast({ text: `Cannot download file: ${error}`, color: 'danger' });
+        } finally {
+            loader.dismiss();
+        }
     }
     return new Promise((resolve) => {
         resolve(true);

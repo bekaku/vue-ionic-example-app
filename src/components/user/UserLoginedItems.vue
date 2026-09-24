@@ -91,7 +91,7 @@ const findLoginedProcess = async (
   }
   try {
     const response = await findLoginedProfile({
-      refreshToken: { refreshToken: jwtToken },
+      refreshToken: jwtToken,
     });
     return new Promise((resolve) => resolve(response));
   } catch (error) {
@@ -108,8 +108,8 @@ const onSwithUserProcess = async (index: number) => {
         name: switchToUser.user?.username || switchToUser.user?.email || '',
       }),
     );
-    if (conf) {
-      emit('on-switch-profile', switchToUser.user.id);
+    if (conf && switchToUser.user.id) {
+      emit('on-switch-profile', String(switchToUser.user.id));
     }
   }
 };

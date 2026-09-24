@@ -8,11 +8,7 @@ import { useLang } from '@/composables/useLang';
 import { useAuthenStore } from '@/stores/authenStore';
 import type { UserPersonalEditRequest } from '@/types/models';
 import { validateEmail } from '@/utils/AppUtil';
-import {
-  IonButton,
-  IonButtons,
-  IonIcon
-} from '@ionic/vue';
+import { IonButton, IonButtons, IonIcon } from '@ionic/vue';
 import { checkmarkOutline, mailOutline } from 'ionicons/icons';
 import { computed, onMounted, ref } from 'vue';
 const { t } = useLang();
@@ -37,21 +33,28 @@ const emailValid = computed(() => {
 const onSubmit = async () => {
   const loading: any = await appLoading();
   loading.present();
-  const res = await updateEmail(entity.value);
-  loading.dismiss();
-
-  if (res && res.status == 'OK') {
-    if (authenStore.auth) {
-      authenStore.auth.email = entity.value.email as string;
+  try {
+    const res = await updateEmail(entity.value);
+    if (res.status === 200) {
+      if (authenStore.auth) {
+        authenStore.auth.email = entity.value.email as string;
+      }
+      onBack();
     }
-
-    onBack();
+  } catch {
+    // useApi already shows the error toast
+  } finally {
+    loading.dismiss();
   }
 };
 </script>
 <template>
-  <BasePage :page-title="t('authSessions')" fullscreen show-back-link
-    page-default-back-link="/settings/account-settings">
+  <BasePage
+    :page-title="t('authSessions')"
+    fullscreen
+    show-back-link
+    page-default-back-link="/settings/account-settings"
+  >
     <template #end>
       <ion-buttons>
         <ion-button :disabled="!canSubmit" @click="onSubmit">
@@ -61,7 +64,12 @@ const onSubmit = async () => {
       </ion-buttons>
     </template>
     <BaseCard>
-      <BaseInput v-model="entity.email" :icon="mailOutline" type="email" :label="t('base.emailEdit')" />
+      <BaseInput
+        v-model="entity.email"
+        :icon="{ name: mailOutline }"
+        type="email"
+        :label="t('base.emailEdit')"
+      />
     </BaseCard>
   </BasePage>
 </template>

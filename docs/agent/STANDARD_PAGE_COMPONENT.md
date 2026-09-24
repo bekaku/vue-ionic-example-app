@@ -11,14 +11,16 @@ true, default href `/tabs/home`), `translucent/scrollY/fullscreen`,
 
 ## Rules
 
-1. New pages wrap in `BasePage` with `page-title` + `show-back-link` set
-   deliberately (`home.vue:42-44` sets `false` for the root tab).
+1. New route pages need an `IonPage` root. Prefer `BasePage` with `page-title`
+   + `show-back-link` for standard screens (`home.vue:41-44` sets `false` for
+   the root tab); login/index/tabs shell use `IonPage` directly.
 2. Header actions via `#start` / `#actions-end` slots; content in
    `BaseCard` sections; lists via `IonList>IonItem`.
 3. State from Pinia (`useAuthenStore`), theme via `useTheme`, strings via
    `useLang`; no hardcoded user-visible copy without i18n.
-4. Data fetch on Ionic view-enter for cached pages (tabs), not `onMounted`
-   alone; cleanup listeners on leave.
+4. For new behavior that must repeat on cached-page re-entry, use Ionic view
+   hooks and cleanup listeners with the owning view. No existing page imports
+   those hooks as of this review.
 5. StatusBar per screen where needed (`login.vue:38-62` pattern).
 6. Conflicts: if implementations diverge, follow the majority + newest usage
    and log the conflict in `KNOWN_ISSUES.md` — do not invent a universal

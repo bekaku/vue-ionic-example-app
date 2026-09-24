@@ -1,100 +1,52 @@
-import { useAxios } from '@/composables/useAxios';
+import { useApi } from '@/composables/useApi';
 import { useConfig } from '@/composables/useConfig';
 import { FILES_DIRECTORY_ID_ATT, FILES_UPLOAD_ATT } from '@/libs/constant';
 import type { ResponseDataType, ResponseMessage, UploadRequest } from '@/types/common';
-import type { FileManagerDto, FileUploadChunkMergeRequestDto, FileUploadChunkResponseDto } from '@/types/models';
-import { base64FromArrayByffer, generateFileNameByExtesnsion, getFileExtension, getBlobFromAxiosResponse, getFileNameFromAxiosResponse } from '@/utils/FileUtils';
+import type { FileManager, FileUploadChunkMergeRequestDto, FileUploadChunkResponse } from '@/types/models';
+import { getBlobUrlFromResponse } from '@/utils/FileUtils';
 
 export default () => {
-  const { callAxios, callAxiosFile } = useAxios();
+  const api = useApi();
   const { getEnv } = useConfig();
   const uploadApi = async (
     file: any,
     fileDirectoryId: number = 0,
     resizeImage = true
-  ): Promise<FileManagerDto | null> => {
+  ): Promise<FileManager | null> => {
     const postData = new FormData();
     postData.append(FILES_UPLOAD_ATT, file);
     postData.append(FILES_DIRECTORY_ID_ATT, fileDirectoryId.toString());
     postData.append('resizeImage', resizeImage ? '1' : '0');
-    return await callAxios<FileManagerDto>({
-      API: '/api/fileManager/uploadApi',
-      method: 'POST',
-      body: postData,
-      baseURL: getEnv<string>('VITE_CDN_BASE_URL'),
-      contentType: 'multipart/form-data'
-    });
+    return await api<FileManager>('/api/fileManager/uploadApi', { method: 'POST', body: postData, baseURL: getEnv<string>('VITE_CDN_BASE_URL') });
   };
   const uploadBase64Api = async (
     req: UploadRequest
-  ): Promise<FileManagerDto | null> => {
-    return await callAxios<FileManagerDto>({
-      API: '/api/fileManager/uploadBase64Api',
-      method: 'POST',
-      body: {
-        uploadRequest: req
-      },
-      baseURL: getEnv<string>('VITE_CDN_BASE_URL')
-    });
+  ): Promise<FileManager | null> => {
+    return await api<FileManager>('/api/fileManager/uploadBase64Api', { method: 'POST', body: { uploadRequest: req }, baseURL: getEnv<string>('VITE_CDN_BASE_URL') });
   };
 
   const uploadChunkApi = async (
-    file: any,
-    chunkNumber = 0,
-    totalChunks = 0,
-    originalFilename: string = '',
-    chunkFilename: string = '',
-  ): Promise<FileUploadChunkResponseDto | null> => {
-    const postData = new FormData();
-    postData.append(FILES_UPLOAD_ATT, file);
-    postData.append('chunkNumber', chunkNumber.toString());
-    postData.append('totalChunks', totalChunks.toString());
-    postData.append('originalFilename', originalFilename);
-    postData.append('chunkFilename', chunkFilename);
-    return await callAxios<FileUploadChunkResponseDto>({
-      API: '/api/fileManager/uploadChunkApi',
-      method: 'POST',
-      body: postData,
-      baseURL: getEnv<string>('VITE_CDN_BASE_URL'),
-      contentType: 'multipart/form-data'
-    });
+    postData: FormData,
+  ): Promise<FileUploadChunkResponse | FileManager | void | null> => {
+    return await api<FileUploadChunkResponse | FileManager | void>('/api/fileManager/uploadChunkApi', { method: 'POST', body: postData, baseURL: getEnv<string>('VITE_CDN_BASE_URL') });
   };
 
-  const mergeChunkApi = async (req: FileUploadChunkMergeRequestDto): Promise<FileManagerDto | null> => {
-    return await callAxios<FileManagerDto>({
-      API: '/api/fileManager/mergeChunkApi',
-      method: 'POST',
-      body: {
-         req
-      },
-      baseURL: getEnv<string>('VITE_CDN_BASE_URL'),
-    });
+  const mergeChunkApi = async (req: FileUploadChunkMergeRequestDto): Promise<FileManager | null> => {
+    return await api<FileManager>('/api/fileManager/mergeChunkApi', { method: 'POST', body: { ...req }, baseURL: getEnv<string>('VITE_CDN_BASE_URL') });
   };
 
   const deleteFileApi = async (fileId: number): Promise<ResponseMessage | null> => {
-    return await callAxios<ResponseMessage>({
-      API: `/api/fileManager/deleteFileApi/${fileId}`,
-      method: 'DELETE',
-      baseURL: getEnv<string>('VITE_CDN_BASE_URL')
-    });
+    return await api<ResponseMessage>(`/api/fileManager/deleteFileApi/${fileId}`, { method: 'DELETE', baseURL: getEnv<string>('VITE_CDN_BASE_URL') });
   };
   const updateUserAvatar = async (
     fileManagerId: number
   ): Promise<ResponseMessage | null> => {
-    return await callAxios<ResponseMessage>({
-      API: `/api/fileManager/updateUserAvatar?fileManagerId=${fileManagerId}`,
-      method: 'PUT',
-      baseURL: getEnv<string>('VITE_CDN_BASE_URL')
-    });
+    return await api<ResponseMessage>(`/api/fileManager/updateUserAvatar?fileManagerId=${fileManagerId}`, { method: 'PUT', baseURL: getEnv<string>('VITE_CDN_BASE_URL') });
   };
   const updateUserCover = async (
     fileManagerId: number
   ): Promise<ResponseMessage | null> => {
-    return await callAxios<ResponseMessage>({
-      API: `/api/fileManager/updateUserCover?fileManagerId=${fileManagerId}`,
-      method: 'PUT',
-      baseURL: getEnv<string>('VITE_CDN_BASE_URL')
-    });
+    return await api<ResponseMessage>(`/api/fileManager/updateUserCover?fileManagerId=${fileManagerId}`, { method: 'PUT', baseURL: getEnv<string>('VITE_CDN_BASE_URL') });
   };
   const fethCdnData = async (
     path: string,
@@ -102,48 +54,21 @@ export default () => {
   ): Promise<any> => {
     // const cdnBase = getEnv<string>('VITE_CDN_BASE_URL');
     // const src = path ? path.replace(cdnBase || '', '') : path;
-    const response = await callAxiosFile<any>({
-      API: path,
+    const response = await api.raw<ArrayBuffer>(path, {
       // baseURL: cdnBase,
-      method: 'GET',
-      responseType: 'arraybuffer',
-      clearBaseUrl: true
+      baseURL: '',
+      responseType: 'arrayBuffer'
     });
-    if (response.data) {
+    if (response._data) {
       if (responseDataType == 'blob') {
-        const imageUrlObject = await getBlobFromAxiosResponse(response);
-        return new Promise(resolve => resolve(imageUrlObject));
+        return getBlobUrlFromResponse(response);
       } else if (responseDataType == 'arraybuffer') {
-        return new Promise(resolve => resolve(response.data));
-      } else if (responseDataType == 'axiosresponse') {
-        return new Promise(resolve => resolve(response));
+        return response._data;
+      } else if (responseDataType == 'response') {
+        return response;
       }
     }
-    return new Promise(resolve => resolve(null));
-  };
-  const downloadCdnData = async (
-    path: string,
-    downloadFileName?: string
-  ): Promise<any> => {
-    const response = await fethCdnData(path, 'axiosresponse');
-    if (response.data) {
-      const contentType = response.headers['content-type'];
-      // const contentDisposition = response.headers['content-disposition'];
-      let fileName = await getFileNameFromAxiosResponse(response);
-      if (!fileName) {
-        const fileExtension = getFileExtension(contentType);
-        fileName = generateFileNameByExtesnsion(fileExtension, downloadFileName);
-      }
-      if (fileName) {
-        // downloadFromArrayBuffer(response.data, fileName, contentType);
-        const base64 = await base64FromArrayByffer(response.data);
-        if (base64) {
-          // await saveFile(base64, fileName);
-        }
-      }
-      return new Promise(resolve => resolve(response.data));
-    }
-    return new Promise(resolve => resolve(null));
+    return null;
   };
   return {
     uploadApi,
@@ -153,7 +78,6 @@ export default () => {
     deleteFileApi,
     updateUserCover,
     updateUserAvatar,
-    fethCdnData,
-    downloadCdnData
+    fethCdnData
   };
 };

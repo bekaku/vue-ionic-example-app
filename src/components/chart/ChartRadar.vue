@@ -84,7 +84,27 @@ onUnmounted(() => {
 
 onMounted(() => {
   chartSetup();
+  observeVisibility();
 });
+onUnmounted(() => {
+  visibilityObserver?.disconnect();
+});
+// Render only while the container is visible with a real size: on cached
+// Ionic pages the chart would otherwise draw while hidden (width 0) and
+// ApexCharts measures NaN widths (SVG attribute errors on navigation).
+const viewActive = ref(false);
+const visibilityRef = useTemplateRef<any>('visibilityRef');
+let visibilityObserver: IntersectionObserver | undefined;
+const observeVisibility = () => {
+  visibilityObserver = new IntersectionObserver((entries) => {
+    const entry = entries[0];
+    const width = entry?.target instanceof Element ? entry.target.getBoundingClientRect().width : 0;
+    viewActive.value = entry?.isIntersecting === true && width > 0;
+  });
+  if (visibilityRef.value) {
+    visibilityObserver.observe(visibilityRef.value);
+  }
+};
 const updateTheme = (dark: boolean) => {
   if (options.value) {
     if (chartRadarRef.value) {
@@ -174,8 +194,9 @@ const chartSetup = () => {
 };
 </script>
 <template>
+  <div ref="visibilityRef">
     <apexchart
-      v-if="options"
+      v-if="options && viewActive"
       v-bind="$attrs"
       ref="chartRadarRef"
       :height="height"
@@ -183,4 +204,5 @@ const chartSetup = () => {
       :options="options"
       :series="chartSeries"
     />
+  </div>
 </template>

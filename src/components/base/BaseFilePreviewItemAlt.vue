@@ -2,7 +2,7 @@
 import BaseIcon from '@/components/base/BaseIcon.vue';
 import BaseImage from '@/components/base/BaseImage.vue';
 import type { ItemLines } from '@/types/common';
-import type { FileManagerDto } from '@/types/models';
+import type { FileManager } from '@/types/models';
 import { formatBytes } from '@/utils/AppUtil';
 import { getFileTypeIcon } from '@/utils/FileUtils';
 import {
@@ -16,6 +16,7 @@ import {
 } from '@ionic/vue';
 import { checkmarkCircle, trashOutline } from 'ionicons/icons';
 import BaseEllipsis from './BaseEllipsis.vue';
+import { computed } from 'vue';
 
 const {
   showDelete = true,
@@ -28,10 +29,12 @@ const {
   button = true,
   detail = false,
   limitLinesName = 2,
+  useThumbnail = false,
+  item,
 } = defineProps<{
   showDelete?: boolean;
   col?: string;
-  item: FileManagerDto;
+  item: FileManager;
   index: number;
   formatSize?: boolean;
   imageSize?: string;
@@ -41,6 +44,7 @@ const {
   button?: boolean;
   lines?: ItemLines;
   detail?: boolean;
+  useThumbnail?: boolean;
   limitLinesName?: number;
 }>();
 // const emit = defineEmits(['on-remove', 'on-click']);
@@ -48,6 +52,20 @@ const emit = defineEmits<{
   'on-remove': [index: number];
   'on-click': [index: number, event: any];
 }>();
+const isMedia = computed(
+  () => item.fileMimeType === 'IMAGE' || item.fileMimeType === 'VIDEO',
+);
+const getImagePath = computed(() => {
+  if (item.fileMimeType === 'IMAGE') {
+    return useThumbnail && item.fileThumbnailPath
+      ? item.fileThumbnailPath
+      : item.filePath;
+  }
+  if (item.fileMimeType === 'VIDEO') {
+    return item.fileThumbnailPath || '';
+  }
+  return '';
+});
 const onRemove = (event: any, index: number) => {
   if (event) {
     event.stopImmediatePropagation();
@@ -71,12 +89,11 @@ const onClick = (event: any, index: number) => {
     @click="onClick($event, index)"
   >
     <div slot="start">
-      <template v-if="item.isImage || item.image">
+      <template v-if="isMedia && getImagePath">
         <base-image
-          v-if="item.filePath"
           :style="{ height: `${imageSize}`, width: `${imageSize}` }"
           :fetch="fetch"
-          :src="item.filePath"
+          :src="getImagePath"
           ratio="4/3"
         />
       </template>
@@ -91,9 +108,7 @@ const onClick = (event: any, index: number) => {
     <ion-label :class="{ 'ion-text-nowrap': !wrapText }">
       <slot name="fileName">
         <BaseEllipsis :lines="limitLinesName">
-          <!-- <h4> -->
           {{ item.fileName }}
-          <!-- </h4> -->
         </BaseEllipsis>
       </slot>
       <slot name="size">
@@ -116,7 +131,9 @@ const onClick = (event: any, index: number) => {
         <template v-else-if="item.uploadProgress.status == 'COMPLETED'">
           <BaseIcon :name="checkmarkCircle" color="primary" />
         </template>
-        <span class="text-muted"> {{ Math.round(item.uploadProgress.progress * 100) }}% </span>
+        <span class="text-muted">
+          {{ Math.round(item.uploadProgress.progress) }}%
+        </span>
       </IonRow>
     </ion-label>
     <slot name="end">

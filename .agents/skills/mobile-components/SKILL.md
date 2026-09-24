@@ -28,14 +28,16 @@ change.
 
 ## Mandatory rules
 
-1. Pages use `BasePage` (`IonPage > IonHeader/Toolbar > IonContent`).
+1. Route pages need `IonPage`; prefer `BasePage` for standard layouts.
+   Login, index, and tabs shell have custom `IonPage` layouts.
 2. Reuse `src/components/base/*`; no Quasar/Nuxt components.
-3. Ionic page lifecycle governs cached pages — not `onMounted` alone.
+3. For re-entry behavior, use Ionic page lifecycle; current pages do not
+   establish a universal view-hook pattern.
 4. Do not invent brand colors; respect existing theme + safe-area handling.
 
 ## Implementation workflow
 
-1. Inspect 2+ representative pages/components before choosing a pattern.
+1. Inspect the target page and its nearest reusable component/peer pattern.
 2. Reuse base components; wire props/emits/slots/v-model consistently.
 3. Handle loading/error/empty states; clean up listeners on leave.
 4. Verify per `mobile-testing` (component + lifecycle where cached).
