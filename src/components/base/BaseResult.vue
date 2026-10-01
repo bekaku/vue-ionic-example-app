@@ -6,7 +6,7 @@
             :show-icon="false"
           >
             <template #extra>
-              <q-icon :icon="mdiAlert" :size="45" color="grey"></q-icon>
+              <q-icon :icon="mdiAlert" :size="45" color="gray-400"></q-icon>
             </template>
           </app-result>
 const AppResult = defineAsyncComponent(
@@ -95,22 +95,22 @@ const getIconColor = (): AppColor => {
     case '403':
     case '500':
     case '418':
-      color = 'amber';
+      color = 'amber-500';
       break;
     case 'success':
-      color = 'green';
+      color = 'green-500';
       break;
     case 'warning':
-      color = 'orange';
+      color = 'orange-500';
       break;
     case 'error':
-      color = 'red';
+      color = 'red-500';
       break;
     case 'empty':
-      color = 'grey-5';
+      color = 'gray-400';
       break;
     default:
-      color = 'blue';
+      color = 'blue-500';
       break;
   }
   return color;
@@ -123,22 +123,22 @@ const getBgColor = () => {
     case '403':
     case '500':
     case '418':
-      color = !isDark.value ? 'bg-amber-1' : 'bg-amber-2';
+      color = !isDark.value ? 'bg-amber-50' : 'bg-amber-100';
       break;
     case 'success':
-      color = !isDark.value ? 'bg-green-1' : 'bg-green-2';
+      color = !isDark.value ? 'bg-green-50' : 'bg-green-100';
       break;
     case 'warning':
-      color = !isDark.value ? 'bg-orange-1' : 'bg-orange-2';
+      color = !isDark.value ? 'bg-orange-50' : 'bg-orange-100';
       break;
     case 'error':
-      color = !isDark.value ? 'bg-red-1' : 'bg-red-2';
+      color = !isDark.value ? 'bg-red-50' : 'bg-red-100';
       break;
     case 'empty':
-      color = !isDark.value ? 'bg-grey-1' : 'bg-grey-8';
+      color = !isDark.value ? 'bg-gray-50' : 'bg-gray-600';
       break;
     default:
-      color = !isDark.value ? 'bg-blue-1' : 'bg-blue-2';
+      color = !isDark.value ? 'bg-blue-50' : 'bg-blue-100';
       break;
   }
   return color;
@@ -161,7 +161,7 @@ const getBgColor = () => {
         <div class="q-mt-md q-text-center">
           <slot name="text">
             <div v-if="title" class="q-text-h5 q-text-weight-bold q-mb-sm"
-              :class="status == 'empty' ? 'text-grey-6' : ''">
+              :class="status == 'empty' ? 'text-gray-400' : ''">
               {{ title }}
             </div>
 

@@ -114,7 +114,7 @@ const onSubmit = () => {
 
         <ion-item v-if="!isStrong" lines="none">
           <ion-label class="ion-text-wrap">
-            <p class="text-red">
+            <p class="text-red-500">
               {{ t('authen.helper2') }}
             </p>
           </ion-label>
@@ -140,7 +140,7 @@ const onSubmit = () => {
 
         <ion-item v-if="!isSamePwd" lines="none">
           <ion-label class="ion-text-wrap">
-            <p class="text-red">
+            <p class="text-red-500">
               {{ t('error.passwordNotMatchNew') }}
             </p>
           </ion-label>

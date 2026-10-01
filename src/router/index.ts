@@ -64,6 +64,10 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/settings/Appearance.vue')
   },
   {
+    path: '/chat/:chatId',
+    component: () => import('@/pages/chat/index.vue')
+  },
+  {
     path: '/tabs/',
     component: () => import('@/pages/tabs/index.vue'),
     children: [

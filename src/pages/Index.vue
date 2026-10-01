@@ -113,7 +113,7 @@ const checkAuth = async () => {
 </template>
 <style scoped lang="scss">
 ion-content {
-  --background: var(--v-color-white);
+  --background: var(--app-bg-surface);
 }
 
 ion-spinner {

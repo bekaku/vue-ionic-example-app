@@ -108,7 +108,7 @@ const onDeleteSession = async (index: number) => {
             <ion-label>
               <span class="q-text-weight-medium">[{{ item.ipAddredd }}]</span>
               <p>
-                <span class="text-grey-8"> {{ item.hostName }}</span>
+                <span class="text-gray-600"> {{ item.hostName }}</span>
                 <span v-if="item.activeNow">
                   <ion-icon :icon="ellipse" class="text-success" />
                 </span>

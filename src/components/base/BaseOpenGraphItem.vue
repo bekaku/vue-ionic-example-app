@@ -54,7 +54,7 @@ const {
 </script>
 <style scoped lang="scss">
 ion-item {
-    --background: var(--grey-1);
+    --background: var(--color-gray-50);
 }
 
 body[color-theme='dark'] {

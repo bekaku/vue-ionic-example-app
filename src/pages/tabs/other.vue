@@ -162,6 +162,6 @@ watch(notification, async (newVal) => {
 </template>
 <style scoped>
 /* ion-content {
-  --background: var(--v-color-white);
+  --background: var(--app-bg-surface);
 } */
 </style>

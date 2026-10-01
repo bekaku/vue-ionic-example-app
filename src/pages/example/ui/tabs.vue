@@ -49,7 +49,7 @@ const onTabChange = (name: any) => {
 </script>
 <template>
   <BasePage page-title="Tabs" fullscreen>
-    <BaseTabs :items="groupTabs" active-color="brown" @on-change="onTabChange">
+    <BaseTabs :items="groupTabs" active-color="amber-800" @on-change="onTabChange">
       <template #home>
         <BaseCard>
           <IonCardContent> Home </IonCardContent>

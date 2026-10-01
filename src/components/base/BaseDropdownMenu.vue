@@ -28,6 +28,8 @@ const {
 const emit = defineEmits<{
   'on-select': [item: T | undefined];
 }>();
+// Two root nodes (trigger + popover): forward class/aria-label/etc. to the trigger.
+defineOptions({ inheritAttrs: false });
 const popoverOpen = ref(false);
 const event = ref<Event>();
 const openPopover = (e: Event) => {
@@ -47,6 +49,7 @@ const onSelect = (item: LabelValue<T> | undefined) => {
 </script>
 <template>
   <BaseButton
+    v-bind="$attrs"
     :avatar="!textOnly ? avatar : undefined"
     :icon-only="label == undefined"
     :label

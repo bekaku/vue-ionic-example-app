@@ -11,9 +11,12 @@ true, default href `/tabs/home`), `translucent/scrollY/fullscreen`,
 
 ## Rules
 
-1. New route pages need an `IonPage` root. Prefer `BasePage` with `page-title`
-   + `show-back-link` for standard screens (`home.vue:41-44` sets `false` for
-   the root tab); login/index/tabs shell use `IonPage` directly.
+1. New route pages must use `BasePage` as the root, with `page-title` +
+   `show-back-link` (`home.vue:41-44` sets `false` for the root tab) and
+   `page-default-back-link` for the back target. Only the existing
+   login/index/tabs shell use `IonPage` directly. For a page that needs its
+   own `IonContent` ref or an `IonFooter`, use the `#content` slot
+   (`pages/chat/index.vue`; `skills/mobile/COMPONENTS.md` §1).
 2. Header actions via `#start` / `#actions-end` slots; content in
    `BaseCard` sections; lists via `IonList>IonItem`.
 3. State from Pinia (`useAuthenStore`), theme via `useTheme`, strings via

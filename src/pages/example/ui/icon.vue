@@ -71,8 +71,8 @@ import {
           <BaseIcon :name="biBagDash" icon-set="bootstrap-icons" />
           <BaseIcon :name="biBatteryHalf" icon-set="bootstrap-icons" />
           <BaseIcon :name="biBell" icon-set="bootstrap-icons" color="muted" />
-          <BaseIcon :name="biBicycle" icon-set="bootstrap-icons" color="pink" />
-          <BaseIcon :name="biBox2" icon-set="bootstrap-icons" color="red" />
+          <BaseIcon :name="biBicycle" icon-set="bootstrap-icons" color="pink-500" />
+          <BaseIcon :name="biBox2" icon-set="bootstrap-icons" color="red-500" />
           <BaseIcon
             :name="biCameraReels"
             icon-set="bootstrap-icons"

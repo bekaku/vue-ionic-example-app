@@ -422,7 +422,7 @@ export const dashboardSparkLineItems = [
         description: '12.030',
         value: '27%',
         color: '#15803d',
-        bg: 'green-1',
+        bg: 'green-50',
         series: [
             {
                 name: 'status',
@@ -436,7 +436,7 @@ export const dashboardSparkLineItems = [
         description: '5592',
         value: '12%',
         color: '#f97316',
-        bg: 'orange-1',
+        bg: 'orange-50',
         series: [
             {
                 name: 'view',
@@ -450,7 +450,7 @@ export const dashboardSparkLineItems = [
         description: '55.56%',
         value: '22%',
         color: '#ef4444',
-        bg: 'red-1',
+        bg: 'red-50',
         series: [
             {
                 name: 'rate',
@@ -464,7 +464,7 @@ export const dashboardSparkLineItems = [
         description: '12.56%',
         value: '17%',
         color: '#8b5cf6',
-        bg: 'purple-1',
+        bg: 'purple-50',
         series: [
             {
                 name: 'sale',
@@ -940,7 +940,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             chatMessageType: 'TEXT'
         },
         {
-            id: '567',
+            id: '665',
             chatMsg: '13.9795581,100.6267777',
             msgDateTime: '2024-10-11 15:36:47',
             groupId: 17,
@@ -1060,7 +1060,7 @@ export const chatMessageListApi: ApiListResponse<GroupChatMsgDto>
             emojiType: null,
             reactionEngage: [],
             dtoReplyTo: {
-                id: '667',
+                id: '649',
                 chatMsg: 'they will have to be a topic to see the deference of options and show the Silly things that the world on the way are not the same as you want me vuejs I don\'t want you change springboot I don\'t have any plans ',
                 msgDateTime: '2024-10-02 19:36:56',
                 groupId: 17,

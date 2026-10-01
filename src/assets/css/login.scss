@@ -4,7 +4,7 @@
 }
 
 .wee-login {
-  // background-color: var(--v-color-white);
+  // background-color: var(--app-bg-surface);
   // background: #3a9ec1;
   // background: -webkit-linear-gradient(to bottom, #3a9ec1, #add8e7);
   // background: linear-gradient(to bottom, #3a9ec1, #add8e7);
@@ -38,7 +38,7 @@
     --background: rgba(0, 0, 0, 0);
   }
 
-  background: var(--wee-messenger-inputarea-bg);
+  background: var(--app-chat-input-bg);
   border-radius: 15px;
   padding: 5px 15px;
 }

@@ -102,10 +102,14 @@ Before any implementation task:
 
 - Composition API + `<script setup lang="ts">`, TypeScript strict, `@/` alias
   (`tsconfig.json` paths). App mode is forced `mode: 'ios'` (`src/main.ts` › `startApp`).
-- Route pages need an `IonPage` root. Prefer `BasePage.vue` for standard pages;
+- New route pages must use `BasePage.vue` as the root (its `#content` slot
+  when the page needs its own `IonContent` ref or an `IonFooter`); only the
   existing login, index, and tabs shell pages use `IonPage` directly. Reuse
-  `src/components/base/*`; `@quasar/extras` supplies icons in some pages but
-  Quasar UI components are not part of this app.
+  `src/components/base/*` (`BaseButton`, `BaseIcon`, `BaseAvatar`,
+  `BaseImage` instead of raw Ionic/HTML elements; `BaseContentItem` with
+  `is-escape-html` for user-written text — `skills/mobile/COMPONENTS.md`
+  §1); `@quasar/extras` supplies icons in some pages but Quasar UI components
+  are not part of this app.
 - Ionic can cache routed pages. For refresh or listeners on re-entry, choose
   Ionic view hooks rather than assuming `onMounted` runs again. The current
   pages do not establish a universal view-hook pattern; verify the target

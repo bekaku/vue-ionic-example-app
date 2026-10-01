@@ -211,7 +211,7 @@ const onContentClick = (event: any) => {
 .text-holder {
     width: fit-content;
     background-color: var(--app-text-holder-backgroud);
-    color: var(--v-text-black);
+    color: var(--app-text-strong);
     padding: 10px;
     border-radius: 8px;
     margin-top: 5px;
@@ -225,7 +225,7 @@ const onContentClick = (event: any) => {
 
 body[color-theme='dark'] {
     .text-holder {
-        //background-color: var(--second-bg-color-theme-dark);
+        //background-color: var(--app-bg-surface-dark);
         color: #fafafa;
     }
 }

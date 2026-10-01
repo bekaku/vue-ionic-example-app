@@ -7,7 +7,7 @@
   margin: auto;
   /* padding: 0 16px; */
   padding-left: 10px;
-  background-color: var(--v-color-white);
+  background-color: var(--app-bg-surface);
   /* border: 1px solid transparent;  */
 }
 .m-0 {
@@ -38,7 +38,7 @@
   margin-left: 10px;
 }
 .comment-author {
-  color: var(--v-text-black);
+  color: var(--app-text-strong);
   font-weight: bold;
   text-decoration: none;
 }
@@ -60,12 +60,12 @@
   height: calc(100% - 50px);
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
-  background-color: var(--border-light-color);
+  background-color: var(--app-border-light);
   background-clip: padding-box;
   z-index: 99;
 }
 .comment-border-link:hover {
-  background-color: var(--app-border-color);
+  background-color: var(--app-border);
 }
 .comment-body {
   /* padding-left: 28px; */

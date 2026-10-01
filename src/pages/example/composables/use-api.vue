@@ -162,49 +162,49 @@ controller.abort();
     <BasePage page-title="useApi (fetch)" fullscreen show-back-link>
         <BaseCard>
             <BaseButton full clear label="Fetch via service" @click="fetchViaApiService" />
-            <div v-if="userData" class="pre-div bg-black text-light-green-13">
+            <div v-if="userData" class="pre-div bg-black text-lime-500">
                 <pre>{{ userData }}</pre>
             </div>
         </BaseCard>
         <BaseCard>
             <BaseButton full clear label="Fetch response API (query)" @click="fetchResponseApi" />
             <SkeletonListItem v-if="reaponseApiLoading" :item="3" />
-            <div v-else class="pre-div bg-black text-light-green-13">
+            <div v-else class="pre-div bg-black text-lime-500">
                 <pre>{{ reponseApiItem }}</pre>
             </div>
         </BaseCard>
         <BaseCard>
             <BaseButton full clear label="Fetch response LIST" @click="fetchResponseList" />
             <SkeletonListItem v-if="reponseListLoading" :item="3" />
-            <div v-else class="pre-div bg-black text-light-green-13">
+            <div v-else class="pre-div bg-black text-lime-500">
                 <pre>{{ reponseListItems }}</pre>
             </div>
         </BaseCard>
         <BaseCard>
             <BaseButton full clear label="Fetch response Object" @click="fetchResponseObject" />
             <SkeletonListItem v-if="reponseObjectLoading" :item="3" />
-            <div v-else class="pre-div bg-black text-light-green-13">
+            <div v-else class="pre-div bg-black text-lime-500">
                 <pre>{{ reponseObject }}</pre>
             </div>
         </BaseCard>
         <BaseCard>
             <BaseButton full clear label="Fetch RAW response (api.raw)" @click="fetchRaw" />
             <SkeletonListItem v-if="responseRawLoading" :item="3" />
-            <div v-else class="pre-div bg-black text-light-green-13">
+            <div v-else class="pre-div bg-black text-lime-500">
                 <pre>{{ responseRaw }}</pre>
             </div>
         </BaseCard>
         <BaseCard>
             <BaseButton full clear color="danger" label="Fetch ERROR handling" @click="fetchError" />
             <SkeletonListItem v-if="responseErrorLoading" :item="3" />
-            <div v-else class="pre-div bg-black text-red">
+            <div v-else class="pre-div bg-black text-red-500">
                 <pre>{{ responseError }}</pre>
             </div>
         </BaseCard>
         <BaseCard>
             <BaseButton full clear color="danger" label="Fetch TIMEOUT (1ms)" @click="fetchTimeout" />
             <SkeletonListItem v-if="responseTimeoutLoading" :item="3" />
-            <div v-else class="pre-div bg-black text-red">
+            <div v-else class="pre-div bg-black text-red-500">
                 <pre>{{ responseTimeout }}</pre>
             </div>
         </BaseCard>

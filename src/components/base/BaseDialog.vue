@@ -127,16 +127,16 @@ defineExpose({
 </template>
 <style scoped lang="scss">
 // ion-content {
-//   --background: var(--app-bg-color);
+//   --background: var(--app-bg-page);
 // }
 ion-content.dark {
-  --background: var(--app-bg-color-theme-dark);
-  --color: var(--v-main-text-body-theme-dark);
+  --background: var(--app-bg-page-dark);
+  --color: var(--app-text-body-dark);
 }
 
 ion-toolbar.dark {
-  --background: var(--second-bg-color-theme-dark);
-  --color: var(--v-main-text-body-theme-dark);
+  --background: var(--app-bg-surface-dark);
+  --color: var(--app-text-body-dark);
 }
 
 ion-modal.full-modal {

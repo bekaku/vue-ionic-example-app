@@ -69,6 +69,7 @@ const onClick = (event: any, index: number) => {
         :src="getImagePath"
         ratio="4/3"
       >
+        <slot />
       </base-image>
     </template>
     <template v-else>

@@ -86,57 +86,64 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-tint: #f5f6f9;
 
 
-  /* Custom variables */
-  --app-bg-color: #f1f1f1;
+  /*
+   * App design tokens (--app-*). Colours come from color.scss
+   * (--color-<name>-<shade>). Light values live here; body[color-theme='dark']
+   * overrides the same tokens. *-dark tokens are fixed dark-theme values for
+   * components that style dark mode explicitly.
+   */
 
-  --app-bg-color-theme-dark: var(--color-zinc-950);
-  --second-bg-color-theme-dark: var(--color-zinc-900);
-  // --app-bg-color-theme-dark: #1d232a;
-  // --second-bg-color-theme-dark: #242b34;
-  --third-bg-color-theme-dark: #161b20;
+  /* Background */
+  --app-bg-page: var(--color-gray-100);
+  --app-bg-surface: var(--color-white);
+  --app-bg-bar: var(--color-white);
+  --app-bg-page-dark: var(--color-zinc-950);
+  --app-bg-surface-dark: var(--color-zinc-900);
+  --app-bg-bar-dark: var(--app-bg-surface-dark);
 
-  --app-border-color: #e9e9ec;
-  --app-border-color-theme-dark: #394552;
+  /* Border */
+  --app-border: var(--color-gray-200);
+  --app-border-light: var(--app-border);
+  --app-border-lighter: var(--color-gray-50);
+  --app-border-dark: var(--color-gray-700);
+  --app-border-light-dark: var(--app-border-dark);
 
-  --border-light-color: var(--app-border-color);
-  --border-lighter-color: #f8f8f8;
-  --border-light-color-theme-dark: var(--app-border-color-theme-dark);
+  /* Text */
+  --app-text-body: var(--color-black);
+  --app-text-strong: var(--color-black);
+  --app-text-muted: var(--color-zinc-500);
+  --app-text-muted-alt: var(--color-gray-500);
+  --app-text-body-dark: var(--color-white);
+  --app-text-muted-dark: var(--color-gray-400);
 
-  --v-color-white: #fff;
-  --v-bar-background: #fff;
-  --v-bar-background-dark: var(--second-bg-color-theme-dark);
-  --app-segment-background-dark: #323c48;
-  --app-segment-button-selected-dark: var(--app-bg-color-theme-dark);
-  --app-segment-button-selected-text-dark: var(--ion-color-primary);
-  --app-input-backgroud: #f8f9fc;
-  // --app-input-backgroud: #f0f2f5;
-  --app-input-backgroud-dark: var(--app-bg-color-theme-dark);
+  /* Input */
+  --app-input-bg: var(--color-gray-50);
+  --app-input-bg-dark: var(--app-bg-page-dark);
+  --app-form-input-bg: var(--color-gray-50);
+  --app-form-input-border: var(--app-border);
 
+  /* Segment (dark theme) */
+  --app-segment-bg-dark: var(--color-gray-700);
+  --app-segment-indicator-dark: var(--app-bg-page-dark);
+  --app-segment-text-selected-dark: var(--ion-color-primary);
 
-  --v-text-muted: var(--color-zinc-500);
-  // --v-text-muted: #687782;
-  --v-text-muted2: #6b7982;
-  --v-text-muted-dark: #8b99a3;
-  --v-text-black: #000;
+  /* Chat */
+  --app-chat-bubble-received-bg: var(--color-gray-100);
+  --app-chat-bubble-received-text: var(--color-indigo-950);
+  --app-chat-bubble-sent-bg: var(--ion-color-primary);
+  --app-chat-meta-received-text: var(--color-gray-400);
+  --app-chat-meta-sent-text: var(--color-gray-200);
+  --app-chat-input-bg: var(--color-gray-100);
+  --app-chat-input-border: var(--app-border-lighter);
 
-  --v-main-text-body: #000000;
-  --v-main-text-body-theme-dark: #fff;
-
-  /* Chat  */
-  --wee-messenger-left-msg-bg: #2d2d2e;
-  --wee-messenger-left-msg-bg: #f5f7fb;
-  --wee-messenger-right-msg-bg: var(--ion-color-primary);
-  --wee-messenger-left-msg-text: #1b2248;
-  --wee-messenger-left-info-text: #a4a8bb;
-  --wee-messenger-right-info-text: #dee0e7;
-  --wee-messenger-inputarea-bg: #f5f7fb;
-  --wee-messenger-inputarea-border: var(--border-lighter-color);
-  /* End Custom Variables */
+  /* Misc */
+  --app-refresher-color: var(--ion-text-color);
+  /* End app design tokens */
 
   /* Modufy Ionic variables */
 
   /* Set the background of the entire app */
-  --ion-background-color: var(--app-bg-color);
+  --ion-background-color: var(--app-bg-page);
   /* Set the font family of the entire app */
   /* --ion-font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue","Roboto", sans-serif; */
   /* --ion-font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Kanit", sans-serif; */
@@ -145,34 +152,24 @@ http://ionicframework.com/docs/theming/ */
   --ion-font-family: var(--app-font-family);
 
   /* Tab bar  */
-  --ion-tab-bar-background: var(--v-bar-background);
-  --ion-tab-bar-border-color: var(--border-light-color);
+  --ion-tab-bar-background: var(--app-bg-bar);
+  --ion-tab-bar-border-color: var(--app-border-light);
   /* --ion-tab-bar-color : #fff; */
   /* --ion-tab-bar-color-selected : var(--ion-color-warning-tint); */
 
   /* Tool bar */
-  --ion-toolbar-background: var(--v-bar-background);
-  --ion-toolbar-border-color: var(--border-light-color);
+  --ion-toolbar-background: var(--app-bg-bar);
+  --ion-toolbar-border-color: var(--app-border-light);
 
   /* Item  */
-  --ion-item-background: var(--v-color-white);
-  --ion-item-border-color: var(--border-light-color);
+  --ion-item-background: var(--app-bg-surface);
+  --ion-item-border-color: var(--app-border-light);
 
-  --ion-card-color: var(--v-main-text-body);
+  --ion-card-color: var(--app-text-body);
 
-  --ion-text-color: var(--v-main-text-body);
+  --ion-text-color: var(--app-text-body);
   --ion-text-color-rgb: 48, 51, 54;
 
-  --body-font-size: 14px;
-  --body-line-height: 1.5;
-  // --separator-color: rgba(0, 0, 0, .12);
-  // --separator-dark-color: rgba(255, 255, 255, .28);
-  --separator-color: var(--app-border-color);
-  --separator-dark-color: var(--app-border-color-theme-dark);
-
-  --input-form-bg: var(--grey-1);
-  --input-form-border: var(--app-border-color);
-  --refresher-color: var(--ion-text-color);
 
   ion-segment-button::part(indicator-background) {
     border-radius: 20px;
@@ -180,18 +177,18 @@ http://ionicframework.com/docs/theming/ */
 
   ion-textarea,
   ion-input {
-    --background: var(--app-input-backgroud);
+    --background: var(--app-input-bg);
     --border-radius: 10px;
     --padding-start: 10px;
     --padding-end: 10px;
     // margin: 5px 0;
-    --placeholder-color: var(--v-text-muted);
-    // border: 1px solid var(--border-light-color);
+    --placeholder-color: var(--app-text-muted);
+    // border: 1px solid var(--app-border-light);
     // border-radius: 10px;
   }
 
   ion-label p {
-    color: var(--v-text-muted);
+    color: var(--app-text-muted);
   }
 
   ion-badge.outline-primary {
@@ -228,32 +225,32 @@ body[safe-area='edge-to-edge'] {
 
 body[color-theme='light'] {
   ion-tab-button {
-    --color-selected: var(--v-text-black);
-   --color: var(--v-text-black);
-   //--color: var(--v-text-muted);
+    --color-selected: var(--app-text-strong);
+   --color: var(--app-text-strong);
+   //--color: var(--app-text-muted);
    //--color-selected: var(--ion-color-primary);
  }
 
   ion-alert {
-    --background: var(--v-color-white);
+    --background: var(--app-bg-surface);
   }
 
   ion-modal {
-    --background: var(--v-color-white);
+    --background: var(--app-bg-surface);
 
     ion-content {
-      --background: var(--v-color-white);
+      --background: var(--app-bg-surface);
     }
   }
 
   ion-action-sheet {
-    --background: var(--v-color-white);
-    --button-background: var(--v-color-white);
-    --button-background-selected: var(--v-color-white);
+    --background: var(--app-bg-surface);
+    --button-background: var(--app-bg-surface);
+    --button-background-selected: var(--app-bg-surface);
   }
 
   ion-segment-button::part(indicator-background) {
-    background: #fff;
+    background: var(--color-white);
   }
 }
 
@@ -263,89 +260,73 @@ body[color-theme='light'] {
    * -------------------------------------------
    */
 body[color-theme='dark'] {
+  /* App design tokens: dark values */
+  --app-bg-page: var(--app-bg-page-dark);
+  --app-bg-surface: var(--app-bg-page-dark);
+  --app-border: var(--app-border-dark);
+  --app-border-light: var(--app-border-light-dark);
+  --app-border-lighter: var(--app-border-light-dark);
+  --app-text-body: var(--app-text-body-dark);
+  --app-text-strong: var(--color-white);
+  --app-text-muted: var(--color-zinc-400);
+  --app-input-bg: var(--app-input-bg-dark);
+  --app-form-input-bg: var(--color-black);
+  --app-form-input-border: var(--color-gray-600);
+  --app-chat-bubble-received-bg: var(--color-zinc-800);
+  --app-chat-bubble-received-text: var(--color-white);
+  --app-chat-meta-received-text: var(--color-zinc-400);
+  --app-chat-input-bg: var(--app-bg-surface-dark);
+  --app-chat-input-border: var(--app-border-light-dark);
+  --app-refresher-color: var(--color-white);
 
-  --app-bg-color: var(--app-bg-color-theme-dark);
-  --app-border-color: var(--app-border-color-theme-dark);
-  --border-light-color: var(--border-light-color-theme-dark);
-  --border-lighter-color: var(--border-light-color-theme-dark);
-  --separator-color: var(--separator-dark-color);
-  // --ion-background-color: var(--app-bg-color-theme-dark);
-  --ion-background-color: var(--app-bg-color-theme-dark);
+  /* Ionic variables */
+  --ion-background-color: var(--app-bg-page-dark);
   --ion-background-color-rgb: 0, 0, 0;
-  /* Tab bar  */
-  --ion-tab-bar-background: var(--v-bar-background-dark);
-  --ion-tab-bar-border-color: var(--border-light-color-theme-dark);
-
-  /* Tool bar */
-  --ion-toolbar-background: var(--v-bar-background-dark);
-  --ion-toolbar-border-color: var(--border-light-color-theme-dark);
-
-  /* Item  */
-  --ion-item-background: var(--second-bg-color-theme-dark);
-
-  /* Custom variable */
-  --v-color-white: var(--app-bg-color-theme-dark);
-  --ion-item-border-color: var(--border-light-color-theme-dark);
-  --v-text-muted: #8e8e93;
-  --v-text-muted2: #6b7982;
-  --v-text-black: #fff;
-
+  --ion-tab-bar-background: var(--app-bg-bar-dark);
+  --ion-tab-bar-border-color: var(--app-border-light-dark);
+  --ion-toolbar-background: var(--app-bg-bar-dark);
+  --ion-toolbar-border-color: var(--app-border-light-dark);
+  --ion-item-background: var(--app-bg-surface-dark);
+  --ion-item-border-color: var(--app-border-light-dark);
+  --ion-card-color: var(--app-text-body-dark);
   --ion-text-color: #ffffff;
   --ion-text-color-rgb: 255, 255, 255;
 
-  --ion-card-color: var(--v-main-text-body-theme-dark);
-  --app-input-backgroud: var(--app-input-backgroud-dark);
-
-  --v-main-text-body: var(--v-main-text-body-theme-dark);
-
-  /* Chat  */
-  --wee-messenger-left-msg-bg: #2d2d2e;
-  --wee-messenger-right-msg-bg: var(--ion-color-primary);
-  --wee-messenger-left-msg-text: #fff;
-  --wee-messenger-left-info-text: #acacae;
-  --wee-messenger-inputarea-bg: var(--second-bg-color-theme-dark);
-  --wee-messenger-inputarea-border: var(--border-light-color-theme-dark);
-
-  --input-form-bg: #000;
-  --input-form-border: var(--grey-8);
-  --refresher-color: '#fff';
-  /* End Custom variables */
-
   ion-tab-button {
-    --color: var(--v-text-muted-dark);
-    --color-selected: var(--v-main-text-body-theme-dark);
+    --color: var(--app-text-muted-dark);
+    --color-selected: var(--app-text-body-dark);
   }
 
   ion-content {
-    --background: var(--app-bg-color-theme-dark);
+    --background: var(--app-bg-page-dark);
   }
 
   ion-toolbar {
-    --background: var(--second-bg-color-theme-dark);
+    --background: var(--app-bg-surface-dark);
   }
 
   ion-list-header {
-    --color: #f7f7f7;
+    --color: var(--color-gray-100);
   }
 
   ion-segment {
-    --background: var(--app-segment-background-dark);
+    --background: var(--app-segment-bg-dark);
   }
 
   ion-segment-button::part(indicator-background) {
-    background: var(--app-segment-button-selected-dark);
+    background: var(--app-segment-indicator-dark);
   }
 
   .segment-button-checked {
-    color: var(--app-segment-button-selected-text-dark);
+    color: var(--app-segment-text-selected-dark);
   }
 
   ion-note {
-    --color: var(--v-text-muted-dark);
+    --color: var(--app-text-muted-dark);
   }
 
   ion-label p {
-    color: var(--v-text-muted-dark);
+    color: var(--app-text-muted-dark);
   }
 }
 
@@ -423,7 +404,7 @@ body[color-theme='dark'] {
 }
 
 .v-bg-white {
-  background-color: var(--v-color-white);
+  background-color: var(--app-bg-surface);
 }
 
 /* .wee-alert-danger .alert-title.sc-ion-alert-md,
@@ -501,70 +482,70 @@ body[color-theme='dark'] {
 
 
 .app-border {
-  border: 1px solid var(--app-border-color) !important;
+  border: 1px solid var(--app-border) !important;
 }
 
 .q-app-border {
-  border: 1px solid var(--app-border-color) !important;
+  border: 1px solid var(--app-border) !important;
 }
 
 .app-border-top {
-  border-top: 1px solid var(--app-border-color) !important;
+  border-top: 1px solid var(--app-border) !important;
 }
 
 .app-border-bottom {
-  border-bottom: 1px solid var(--app-border-color) !important;
+  border-bottom: 1px solid var(--app-border) !important;
 }
 
 .app-border-top-bottom {
-  border-top: 1px solid var(--app-border-color) !important;
-  border-bottom: 1px solid var(--app-border-color) !important;
+  border-top: 1px solid var(--app-border) !important;
+  border-bottom: 1px solid var(--app-border) !important;
 }
 
 .app-border-light {
-  border: 1px solid var(--border-light-color) !important;
+  border: 1px solid var(--app-border-light) !important;
 }
 
 .app-border-light-top {
-  border-top: 1px solid var(--border-light-color) !important;
+  border-top: 1px solid var(--app-border-light) !important;
 }
 
 .app-border-light-bottom {
-  border-bottom: 1px solid var(--border-light-color) !important;
+  border-bottom: 1px solid var(--app-border-light) !important;
 }
 
 .app-border-light-top-bottom {
-  border-bottom: 1px solid var(--border-light-color) !important;
-  border-top: 1px solid var(--border-light-color) !important;
+  border-bottom: 1px solid var(--app-border-light) !important;
+  border-top: 1px solid var(--app-border-light) !important;
 }
 
 .app-border-lighter {
-  border: 1px solid var(--border-lighter-color) !important;
+  border: 1px solid var(--app-border-lighter) !important;
 }
 
 .app-border-lighter-top {
-  border-top: 1px solid var(--border-lighter-color) !important;
+  border-top: 1px solid var(--app-border-lighter) !important;
 }
 
 .app-border-lighter-bottom {
-  border-bottom: 1px solid var(--border-lighter-color) !important;
+  border-bottom: 1px solid var(--app-border-lighter) !important;
 }
 
 .app-border-lighter-top-bottom {
-  border-bottom: 1px solid var(--border-lighter-color) !important;
-  border-top: 1px solid var(--border-lighter-color) !important;
+  border-bottom: 1px solid var(--app-border-lighter) !important;
+  border-top: 1px solid var(--app-border-lighter) !important;
 }
 
 .bg-separator {
-  background-color: var(--app-border-color);
+  background-color: var(--app-border);
 }
 
 .bg-separator-light {
-  background-color: var(--border-light-color);
+  background-color: var(--app-border-light);
 }
 
 .bg-separator-lighter {
-  background-color: var(--border-lighter-color);
+  background-color: var(--app-border-lighter);
 }
 
 /* .ion-page {
@@ -598,15 +579,15 @@ body[color-theme='dark'] {
 }
 
 .test-border {
-  border: 1px solid #2dd36f;
+  border: 1px solid var(--ion-color-success);
 }
 
 .form-input {
-  border: 1px solid var(--input-form-border) !important;
+  border: 1px solid var(--app-form-input-border) !important;
   border-radius: 4px;
   padding: 10px;
   margin: 10px 0;
-  background-color: var(--input-form-bg) !important;
+  background-color: var(--app-form-input-bg) !important;
   font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
@@ -633,26 +614,26 @@ body[color-theme='dark'] {
   background: var(--ion-color-primary);
   background: -webkit-linear-gradient(to bottom,
       var(--ion-color-primary),
-      #38ef7d);
-  background: linear-gradient(to bottom, var(--ion-color-primary), #38ef7d);
+      var(--color-green-400));
+  background: linear-gradient(to bottom, var(--ion-color-primary), var(--color-green-400));
   height: 150px;
 }
 
 body[color-theme='dark'] .report-header-holder {
-  background: var(--second-bg-color-theme-dark);
-  background: -webkit-linear-gradient(to bottom, var(--second-bg-color-theme-dark), #475566);
-  background: linear-gradient(to bottom, var(--second-bg-color-theme-dark), #475566);
+  background: var(--app-bg-surface-dark);
+  background: -webkit-linear-gradient(to bottom, var(--app-bg-surface-dark), var(--color-gray-600));
+  background: linear-gradient(to bottom, var(--app-bg-surface-dark), var(--color-gray-600));
   height: 150px;
 }
 
 .refresher {
-  --color: var(--refresher-color);
+  --color: var(--app-refresher-color);
 }
 
 .user-active-badge {
   top: 50px;
   left: 55px;
-  background-color: #2dd36f;
+  background-color: var(--ion-color-success);
   opacity: 0.8;
   width: 12px;
   height: 12px;

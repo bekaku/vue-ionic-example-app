@@ -143,7 +143,7 @@ onBeforeUnmount(() => {
 // @import '@/assets/css/login.scss';
 
 ion-content {
-  --background: var(--v-color-white);
+  --background: var(--app-bg-surface);
 }
 
 .login-holder {
@@ -180,14 +180,14 @@ ion-item.wee-login-input {
   align-items: center;
   width: 100%;
   margin: 26px 0;
-  background: var(--wee-messenger-inputarea-bg);
+  background: var(--app-chat-input-bg);
   border-radius: 15px;
   padding: 5px 15px;
 }
 
 body[color-theme='dark'] .wee-login-input {
   // background: #2d2d2e;
-  background: var(--app-bg-color-theme-dark);
+  background: var(--app-bg-page-dark);
 }
 
 /* .wee-login-input input {

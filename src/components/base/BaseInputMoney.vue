@@ -58,7 +58,7 @@ const changeField = (ev: any) => {
 
 <style scoped lang="scss">
 .num-holder {
-    background-color: var(--app-input-backgroud);
+    background-color: var(--app-input-bg);
     border-color: transparent;
     border-radius: 10px;
     width: 100%;
@@ -66,7 +66,7 @@ const changeField = (ev: any) => {
 }
 
 .bordered {
-    border: 1px solid var(--border-light-color);
+    border: 1px solid var(--app-border-light);
     border-radius: 10px;
 }
 

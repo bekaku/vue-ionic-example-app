@@ -140,6 +140,6 @@ const onClear = (event: any) => {
 </script>
 <style scoped lang="scss">
 ion-datetime {
-  --background: var(--v-color-white);
+  --background: var(--app-bg-surface);
 }
 </style>

@@ -236,12 +236,12 @@ const onRemove = (event: any, index: number) => {
 </template>
 <style scoped lang="scss">
 ion-item {
-  // border: 1px solid var(--app-border-color);
+  // border: 1px solid var(--app-border);
   border-radius: 10px;
-  --background: var(--app-input-backgroud);
+  --background: var(--app-input-bg);
 }
 
 ion-item.bordered {
-  border: 1px solid var(--border-light-color);
+  border: 1px solid var(--app-border-light);
 }
 </style>

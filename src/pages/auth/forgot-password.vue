@@ -46,7 +46,7 @@
                 "
               >
                 <ion-label class="ion-text-wrap">
-                  <p class="text-red">
+                  <p class="text-red-500">
                     {{ isMailValid }}
                   </p>
                 </ion-label>

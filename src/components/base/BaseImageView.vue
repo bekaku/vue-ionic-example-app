@@ -189,7 +189,7 @@ defineExpose({
 <template>
   <ion-row
     class="ion-align-items-center"
-    :class="{ 'bg-black': dark, 'bg-grey-1': !dark }"
+    :class="{ 'bg-black': dark, 'bg-gray-50': !dark }"
   >
     <ion-col class="ion-no-padding">
       <base-swiper-slides

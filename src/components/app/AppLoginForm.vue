@@ -173,7 +173,7 @@ const onVeryfyAccount = async () => {
               <base-icon
                 :name="personOutline"
                 icon-set="ion"
-                color="grey-8"
+                color="gray-600"
               ></base-icon>
               <ion-input
                 v-model="email"
@@ -189,7 +189,7 @@ const onVeryfyAccount = async () => {
                 <base-icon
                   :name="keyOutline"
                   icon-set="ion"
-                  color="grey-8"
+                  color="gray-600"
                 ></base-icon>
                 <ion-input
                   v-model="password"
@@ -294,13 +294,13 @@ ion-item.wee-login-input {
   align-items: center;
   width: 100%;
   margin: 15px 0;
-  background: var(--wee-messenger-inputarea-bg);
+  background: var(--app-chat-input-bg);
   border-radius: 15px;
   padding: 5px 15px;
 }
 
 body[color-theme='dark'] .wee-login-input {
   // background: #2d2d2e;
-  background: var(--app-bg-color-theme-dark);
+  background: var(--app-bg-page-dark);
 }
 </style>

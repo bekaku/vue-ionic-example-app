@@ -175,7 +175,7 @@ ion-input {
 }
 
 ion-input.bordered {
-  border: 1px solid var(--border-light-color);
+  border: 1px solid var(--app-border-light);
   border-radius: 10px;
 }
 </style>

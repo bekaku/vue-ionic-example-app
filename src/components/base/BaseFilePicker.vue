@@ -305,8 +305,8 @@ defineExpose({
 <style scoped lang="scss"></style>
 <style scoped lang="scss">
 ion-item.input {
-  border: 1px solid var(--app-border-color);
+  border: 1px solid var(--app-border);
   border-radius: 10px;
-  --background: var(--app-input-backgroud);
+  --background: var(--app-input-bg);
 }
 </style>

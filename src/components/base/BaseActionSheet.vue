@@ -34,6 +34,6 @@ const logResult = (ev: CustomEvent) => {
 </template>
 <style scoped lang="scss">
 ion-action-sheet {
-    --button-color: var(--v-main-text-body);
+    --button-color: var(--app-text-body);
 }
 </style>

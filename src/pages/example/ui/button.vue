@@ -14,7 +14,7 @@ import { ellipsisHorizontal, heart, videocam, wallet } from 'ionicons/icons';
         <ion-row class="q-gutter-md">
           <BaseButton label="Default" />
           <BaseButton disabled label="Disabled" />
-          <BaseButton label="Icon" :icon="{ name: videocam, color: 'amber' }" />
+          <BaseButton label="Icon" :icon="{ name: videocam, color: 'amber-500' }" />
           <BaseButton
             label="Image"
             :avatar="{ src: 'https://cdn.quasar.dev/img/avatar2.jpg' }"

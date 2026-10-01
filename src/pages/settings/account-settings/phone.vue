@@ -98,7 +98,7 @@ const onSubmit = async () => {
           </ion-item>
           <ion-item v-if="!phoneValid">
             <ion-label class="ion-text-wrap">
-              <p class="text-red">
+              <p class="text-red-500">
                 {{ t('error.validatePhone') }}
               </p>
             </ion-label>

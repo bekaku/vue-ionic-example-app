@@ -117,6 +117,6 @@ const onUploadImg = async (files: any, callback: any) => {
 </script>
 <style scoped lang="scss">
 .md-editor-dark {
-  --md-bk-color: var(--second-bg-color-theme-dark) !important;
+  --md-bk-color: var(--app-bg-surface-dark) !important;
 }
 </style>
