@@ -24,7 +24,7 @@ pnpm audit                         # dependency vulnerabilities (overrides live 
 | File | API | Notes |
 | ---- | --- | ----- |
 | `.env.development` | `http://localhost:8080` | CDN/WS same host |
-| `.env.production` | `https://api.myapp.com` (+cdn) | test-server URLs commented |
+| `.env.production` | `https://api.myapp.com` (+cdn) | 4 active `VITE_*` lines, no commented URLs |
 | `.env` | keys incl. timeout, paging, stores, versions | shared by all modes |
 | `.env.development.example` | template for `.env.development` (API/CDN/WS, dev mode) | tracked; `.env.development` is gitignored |
 

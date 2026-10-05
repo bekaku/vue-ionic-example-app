@@ -8,7 +8,7 @@ structure; implementation rules live in `AGENTS.md` and `skills/mobile/`.
 | Layer | Main files | Responsibility shown by source |
 | ----- | ---------- | ------------------------------ |
 | Bootstrap | `src/main.ts` › `startApp`, `src/App.vue` › `onBeforeMount` | Create Vue/Ionic/Pinia/router, restore auth before mount, initialize app listeners and root outlet |
-| Routes | `src/router/index.ts:4-255`, `src/pages/` | Route records, public-route metadata, auth guard, page entry points |
+| Routes | `src/router/index.ts:4-232`, `src/pages/` | Route records, public-route metadata, auth guard, page entry points |
 | Shared UI | `src/components/base/`, `src/assets/css/` | Standard page wrapper and reusable controls/theme |
 | State | `src/stores/` | Auth, app permissions, device state, notifications, tabs, utilities |
 | Behavior | `src/composables/` | Auth/session, navigation helpers, device/plugin wrappers, data fetch, file flows |
@@ -36,7 +36,7 @@ flowchart TD
 The router guard is registered when the module loads; `app.use(router)`
 precedes `router.isReady` and `initialAuthData()`. An initial navigation may
 evaluate the guard before auth restoration
-(`src/main.ts` › `startApp`, `src/router/index.ts:237-254`).
+(`src/main.ts` › `startApp`, `src/router/index.ts:241-258`).
 
 ## Router + guard (VERIFIED)
 
@@ -68,25 +68,29 @@ Signout → FCM unsubscribe → server signout → clear + `location.replace('/'
 
 ```text
 BaseChoosePhoto
-  → useCamera (takePhoto / chooseFromGallery / recordVideo → FileManager)
+  → useCamera (onTakePicture / onPickPhoto / onPickVideo / onRecordVideo → FileManager)
   → consuming page/component (v-model FileManager[] + on-change)
   → useUpload (File → FormData chunks → CDN uploadChunkApi → mergeChunkApi)
 ```
 
 `src/components/base/BaseChoosePhoto.vue` › `takePicture/pickPhoto/pickVideo/recordVideo`
-calls `useCamera`, not `useFileSystem`. Props `multiple/limit/choices/icon/label/fullWidth`,
-`v-model FileManager[]`, emits `on-change`; video paths validate `LIMIT_VDO_SIZE` /
+calls `useCamera`, not `useFileSystem`. Props `multiple/limit/choices/icon/label/fullWidth`
+(+ declared-but-unused `forWeb`), `v-model FileManager[]`, emits `on-change`
+(the other four declared emits are commented out at the send sites); video paths validate `LIMIT_VDO_SIZE` /
 `LIMIT_VIDEO_SECOND` and materialize `thumbnailFile` via `base64ToFile`
 (`initialFileVdo`). UI is a `BaseModal` + `IonList` choice sheet with a trigger
 `div` + slot fallback `IonButton`.
 `src/pages/example/ui/file-picker.vue` demonstrates both `BaseChoosePhoto` and direct
 `useCamera` (`onPickPhoto/onTakePicture`) alongside `BaseFilePicker` + `useUpload`.
-`src/composables/useCamera.ts` › `getFileFromResult` owns HEIC/HEIF → JPEG conversion
+`src/composables/useCamera.ts` exports `onTakePicture/onPickPhoto/onPickVideo/onRecordVideo`
+(backed by the `Camera.takePhoto` / `chooseFromGallery` / `recordVideo` plugin methods);
+`getFileFromResult` owns HEIC/HEIF → JPEG conversion
 (`heic-to`), snowflake `uniqueId`, and `FileManager` mapping (size, dimensions,
 duration, thumbnail). The photo-pick helpers in `src/composables/useFileSystem.ts`
 (`onTakePicture/onPickPhoto/pickPhotoAlbum` via `Camera.getPhoto/pickImages` →
 `ChoosePhotoItem`) have no `src/` import caller at this review; its active `src/`
-usage is gallery save/permissions (`savePicture/saveFile` in `BaseImageView`,
+usage is gallery save/permissions: `savePicture`/`saveFile` (note: `BaseImageView`'s
+`savePicture` call is commented out — its live path downloads via `useFileDownload`),
 permission checks in `BaseFileView`). `useFileDownload.ts` owns
 download/open/share (also used by `BaseFileView`, `BasePdfView`,
 `BaseImageView`), while `useFileSystem.ts` owns gallery saving (browser
@@ -104,7 +108,8 @@ options can override it. Backend guarantees are not established here.
 - Plugin calls use composable wrappers; inspect each operation's web support.
   Push registration is gated; Camera and Preferences have web paths.
 - `appStateChange` → `deviceStore`; for new cached-page re-entry behavior,
-  use Ionic view hooks and owned cleanup. No current page imports view hooks.
+  use Ionic view hooks and owned cleanup. The only current `onIonView*` call
+  site is `pages/chat/index.vue:297` (`onIonViewDidEnter`).
   Background execution is not guaranteed.
 
 Android/iOS packages are declared, but native project directories are not

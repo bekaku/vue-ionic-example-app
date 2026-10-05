@@ -23,7 +23,8 @@ termination callbacks fire.
 
 - Vue `onMounted/onBeforeMount` run once per cached page lifetime.
 - Ionic `onIonViewWillEnter/DidEnter/WillLeave/DidLeave` are available for
-  routed page activation; no current page imports them (`src/pages/` search).
+  routed page activation; the only current caller is `pages/chat/index.vue:297`
+  (`onIonViewDidEnter`, imported at `:18`).
 - Data refresh belongs on view-enter; subscriptions/listeners attach on enter
   (or once, guarded) and detach on leave/destroy. Stale closures over inactive
   pages are a known leak source (see `KNOWN_ISSUES.md`).

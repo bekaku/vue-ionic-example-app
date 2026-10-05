@@ -40,8 +40,9 @@ composables + `src/api/*Service` → `useApi` (fetch) → Spring Boot backend
 
 ACTIVE: App, Device, Preferences, Camera, Filesystem, PushNotifications,
 Share, Clipboard, StatusBar, community FCM/FileOpener/Media,
-DeviceSecurityDetect, SafeArea. `useFileSystem.ts` is the active camera
-wrapper; new `useCamera.ts` has no import caller in `src/` as of this review.
+DeviceSecurityDetect, SafeArea. `useCamera.ts` is the active camera wrapper
+(used by `BaseChoosePhoto.vue`); `useFileSystem.ts` photo-pick helpers have
+no `src/` caller — its active use is gallery save/permissions.
 CONFIGURED_ONLY: Keyboard. Haptics removed 2026-09-24.
 LEGACY: `cordova-plugin-file`. Details: `NATIVE_PLUGIN_INVENTORY.md`.
 

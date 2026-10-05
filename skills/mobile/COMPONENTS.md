@@ -6,14 +6,15 @@ Authoritative home for component/page rules. Entry:
 ## 1. Page structure (VERIFIED)
 
 Standard page = `BasePage.vue` wrapping
-`IonPage > (IonHeader > Toolbar) > IonContent` (`src/components/base/BasePage.vue:78-129`).
+`ion-page > (ion-header > Toolbar) > ion-content` (`src/components/base/BasePage.vue:85-167`).
 Representative: `src/pages/tabs/home.vue:42-64` uses `BasePage` with
 `#start` / `#actions-end` slots, then `BaseCard` sections. Rules:
 
 - Every new route page must use `BasePage` as its root; do not start a new
   page with a bare `IonPage`/`IonHeader`/`IonToolbar`. Only the existing
-  custom shells (`auth/login.vue`, `Index.vue`, `tabs/index.vue`) use
-  `IonPage` directly.
+  custom shells (`auth/login.vue`, `Index.vue`, `tabs/index.vue`) and the
+  tab-router example shell use `IonPage` directly (`TempAlt`/`TempFecth`
+  are unrouted legacy files).
 - Content goes in the default slot (wrapped in `BasePage`'s `IonContent`).
   When the page needs its own `IonContent` (a template ref for scrolling,
   `IonInfiniteScroll` at the top) or an `IonFooter`, fill the `#content`
@@ -21,7 +22,7 @@ Representative: `src/pages/tabs/home.vue:42-64` uses `BasePage` with
   back button still come from `BasePage` (`pages/chat/index.vue`). Scoped
   classes on elements in `#content` work as usual; a class passed through
   `content-class` lands on `BasePage`'s element, so style it with `:deep()`.
-- Props pattern per `BasePage.vue:14-50`: `pageTitle`, `showBackLink`,
+- Props pattern per `BasePage.vue:14-51`: `pageTitle`, `showBackLink`,
   `pageDefaultBackLink='/tabs/home'`, `translucent`, `scrollY/fullscreen`, etc.
 - Reuse `src/components/base/*` (`BaseButton`, `BaseCard`, `BaseIcon`,
   `BaseSegment`, `BaseTextHeader`, `BaseToolbar`, `BaseBackButton`,
@@ -93,8 +94,9 @@ Representative: `src/pages/tabs/home.vue:42-64` uses `BasePage` with
 ## 2. Ionic components in use (VERIFIED, sample)
 
 `IonApp` + `IonRouterOutlet` (`App.vue`), `IonPage/Header/Toolbar/Title/Content`,
-`IonButtons/Row`, `IonList/Item/Label/Badge/CardContent/Img`
-(`home.vue:24-31`, `BasePage.vue`). Modals/alerts/toasts exist via controllers
+`IonButtons/Row`, `IonList/Item/Label/Badge/CardContent`
+(`home.vue:23-30`, `BasePage.vue`). (The `<img>` at `home.vue:46` is raw HTML,
+not `IonImg`.) Modals/alerts/toasts exist via controllers
 (`toastController` in `useNotification.ts` › `reciveNotificationToast`;
 `appConfirm/appLoading` in `useBase.ts`). Inspect the target area before assuming a component is unused.
 
@@ -115,8 +117,8 @@ Component tests: `tests/unit/BaseAvatar.spec.ts` shows the jsdom + mocked
 
 Ionic can keep routed pages mounted while inactive. For work that must repeat
 on re-entry, use an Ionic view hook and pair listener setup with cleanup.
-Current `src/pages/` has no `onIonView*` call sites, so this is guidance for
-new behavior, not a claim about current page implementation. See `LIFECYCLE.md`.
+The only `onIonView*` call site is `pages/chat/index.vue:297`
+(`onIonViewDidEnter`, imported at `:18`). See `LIFECYCLE.md`.
 
 ## 5. Theme/UX (VERIFIED)
 

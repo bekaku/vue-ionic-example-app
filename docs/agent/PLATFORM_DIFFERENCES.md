@@ -6,7 +6,7 @@ until `npx cap add` + inspection. Below is only what `src/` + config prove.
 | Area | Android source path | iOS source path | Web source path |
 | ---- | ------------------ | -------------- | ----------------------- |
 | App mode | `mode:'ios'` forced (`main.ts` › `startApp`) | same | same |
-| Back button | `useBackButton(-1)` confirm-exit (`App.vue:38-46`) | `swipeBackEnabled:false`; gesture UNKNOWN | browser back via history |
+| Back button | `useBackButton(-1)` confirm-exit (`App.vue:38-47`) | `swipeBackEnabled:false`; gesture UNKNOWN | browser back via history |
 | Safe area | edge-to-edge + `--app-safe-area-*` when SDK≥35 (`useDevice.ts:91-97`) | inset fetch, visual proof UNKNOWN | n/a |
 | StatusBar | `setStyle/setBackgroundColor` (`useTheme.ts`) | same calls; visual proof UNKNOWN | no-op |
 | Notifications | register flow; channels UNKNOWN | permission flow; capabilities UNKNOWN | `isWeb()` → false/no-op |

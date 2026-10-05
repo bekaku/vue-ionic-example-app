@@ -22,8 +22,10 @@ Symbols below are in `useNotification.ts` unless noted.
   (if prompt) → register()`. `addListeners` adds `registration` (saves
   `FcmTokenKey`, never logs the token) + `registrationError`. Handles live in
   module-level `registrationHandles` and are removed before re-adding; calls
-  are serialized via `listenerQueue` — safe to call from App.vue, Index.vue,
-  login and the settings toggle.
+  are serialized via `listenerQueue` — verified callers are
+  `useAuthen.ts` › `manageNotificationToken` (startup session restore),
+  `auth/login.vue:42` → `userSubscribeFcm` (login), and
+  `tabs/other.vue:65` → `userSubscribeFcm` (settings toggle).
 - Notify listeners: `pushNotificationReceived` → `reciveNotificationToast`;
   `pushNotificationActionPerformed` → `onNotifyView` — both in
   `addNotifyListeners()`, which **nothing calls** (NOT_FOUND caller), so

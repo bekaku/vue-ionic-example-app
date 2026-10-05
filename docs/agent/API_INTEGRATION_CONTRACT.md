@@ -22,7 +22,8 @@ Migrated from `src/plugins/axios.ts` on 2026-09-24
 | POST | `/api/auth/refreshTokenApi` `{refreshToken}` | `useApi.ts` › `refreshToken` | VERIFIED_FRONTEND_USAGE |
 | POST | `/api/auth/loginApi`, `/api/auth/logoutApi` | `AuthenService.ts` › `singin`, `singoutToServer`; `useAuthen.ts` › `singinProcess`, `logoutToServer` | VERIFIED_FRONTEND_USAGE |
 | POST | `/api/fileManager/uploadChunkApi` (`FormData`), `/api/fileManager/mergeChunkApi` (DTO), CDN base URL | `src/composables/useUpload.ts`; `FileManagerService.ts` › `uploadChunkApi`, `mergeChunkApi` | VERIFIED_FRONTEND_USAGE |
-| POST/PUT | `refreshFcmToken`, `updateFcmSetting`, `findCountAllNotRead`, `updateReadNotify` (via `UserNotifyService`) | `useNotification.ts` (via `UserNotifyService`) | VERIFIED_FRONTEND_USAGE (exact paths per service file) |
+| POST/PUT | `refreshFcmToken`, `updateFcmSetting` (via `UserNotifyService`) | `useNotification.ts` (via `UserNotifyService`) | VERIFIED_FRONTEND_USAGE (exact paths per service file) |
+| STUB | `findAllByUser`, `findCountAllNotRead`, `updateReadNotify`, `updateReadNotifyAll` (via `UserNotifyService`) | `UserNotifyService.ts:9-17,30-49` resolve `[]`/`null`; real paths live only in comments | UNVERIFIED_BACKEND_ASSUMPTION (see KNOWN_ISSUES #25) |
 
 ## Assumptions (UNVERIFIED_BACKEND_ASSUMPTION)
 

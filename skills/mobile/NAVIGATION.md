@@ -5,16 +5,17 @@ Authoritative home for navigation rules. Entry:
 
 ## 1. Router setup (VERIFIED)
 
-`src/router/index.ts:230-233`: `createRouter` from `@ionic/vue-router` with
+`src/router/index.ts:234-237`: `createRouter` from `@ionic/vue-router` with
 `createWebHistory(import.meta.env.BASE_URL)`. Outlet: `IonRouterOutlet` in
 `src/App.vue:51`. Routes include `` (index, public), `/about`, `/auth/login`
-(public), `/auth/add-account`, `/auth/forgot-password` (public),
+(public), `/auth/add-account` (protected — no `noRequireAuth` flag),
+`/auth/forgot-password` (public),
 `/settings/*`, `/tabs/` → children `home/chat/other` (+ `''→/tabs/home`),
 `/example/*` (demo), `/test`, `/:catchAll → 404` (public).
 
 ## 2. Guard (VERIFIED)
 
-`router/index.ts:237-252` — `beforeEach` uses the Vue Router 5 return-value
+`router/index.ts:241-258` — `beforeEach` uses the Vue Router 5 return-value
 pattern (no `next()`): `to.meta.noRequireAuth === true` → `return true`;
 else `getCurrentUserToken()` must return `authenticationToken` → `return true`,
 else `return { path: '/auth/login/', replace: true }`. Rule: every new protected
@@ -53,4 +54,4 @@ router module registers beforeEach → app.use(router)
 ```
 
 Do not assume auth restoration has completed when the guard first runs
-(`src/main.ts` › `startApp`, `src/router/index.ts:237-254`).
+(`src/main.ts` › `startApp`, `src/router/index.ts:241-258`).

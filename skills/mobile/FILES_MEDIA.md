@@ -8,12 +8,15 @@ Authoritative home for file/media rules. Entry:
 Two picker paths exist; use the one the consuming UI already uses.
 
 - `BaseChoosePhoto.vue` › `takePicture/pickPhoto/pickVideo/recordVideo`
-  calls `useCamera` (not `useFileSystem`): `Camera.takePhoto` /
-  `Camera.chooseFromGallery` (photo/video, `allowMultipleSelection`,
-  `limit`) / `Camera.recordVideo` → `FileManager` via `getFileFromResult`
+  calls `useCamera` (not `useFileSystem`): its `onTakePicture/onPickPhoto/
+  onPickVideo/onRecordVideo` (backed by the `Camera.takePhoto` /
+  `chooseFromGallery` / `recordVideo` plugin methods) → `FileManager` via
+  `getFileFromResult`
   (HEIC/HEIF → JPEG via `heic-to`, snowflake `uniqueId`, size/dimensions/
   duration/thumbnail mapping). Props `multiple/limit/choices/icon/label/
-  fullWidth`, `v-model FileManager[]`, emits `on-change`; video picks
+  fullWidth` (+ declared-but-unused `forWeb`), `v-model FileManager[]`,
+  emits `on-change` (the other four declared emits are commented out at the
+  send sites); video picks
   validate `LIMIT_VDO_SIZE` / `LIMIT_VIDEO_SECOND` and materialize
   `thumbnailFile` (`initialFileVdo`). Choice UI is a `BaseModal` + `IonList`
   sheet. Consumed by avatar/cover settings and the file-picker /
@@ -57,7 +60,9 @@ Viewing chain (VERIFIED): `BaseFileItems` (`layout` grid/list, `limit`
 0 = all, `showViewDialog`, `+N` remaining overlay) → tap opens
 `BaseFileView` (`v-model:show`, `item`, `image-list`, `select-index`),
 which routes by `getFileType(file.fileMime)`: `pdf` →
-`BasePdfViewDialog` (direct `filePath`, or `fetch` via `fethCdnData`);
+`BasePdfViewDialog` (direct `filePath`, or a local `File` blob —
+`BaseFileView` never passes `:fetch`, so `fethCdnData` only runs when a
+caller sets `fetch` on `BasePdfView` directly);
 `image` → `BaseImageViewDialog` (single item, or the full `image-list`
 for swipe); other types → permission-gated `downloadDocument` (only when
 `fetch`). `BaseImageView` (`files`/`images`, `fetch`, `dark`,

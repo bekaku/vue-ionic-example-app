@@ -43,7 +43,7 @@ no silent re-login is verified.
 
 ## 3. Route authorization (VERIFIED)
 
-Router guard (`router/index.ts:237-254`) + in-app `rbac` directive
+Router guard (`router/index.ts:241-258`) + in-app `rbac` directive
 (`main.ts` › `startApp`) + `useRBAC`/`PermissionService`. Frontend checks are UI-only;
 backend authorization is authoritative.
 

@@ -70,7 +70,7 @@ Either way: type the response (`api<T>`, DTO in `src/types/`), keep
 path/method/body per §4 contract discipline, and pass `baseURL` per call
 (`getEnv('VITE_CDN_BASE_URL')` for CDN, `''` for absolute URLs) — no shared
 mutable defaults. Forgot-password service methods return the 4xx
-`ApiFetchResponse` instead of throwing (`AuthenService.ts:13-22`).
+`ApiFetchResponse` instead of throwing (`AuthenService.ts:13-23`).
 
 ## 3. Networking realities (VERIFIED config)
 

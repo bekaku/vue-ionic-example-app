@@ -17,7 +17,7 @@ DECLARED, never ACTIVE.
 | `App` | ACTIVE | `App.vue` › `onBeforeMount` (`appStateChange`, `exitApp`) |
 | `Device` | ACTIVE | `useDevice.ts` (`isWeb`, `getInfo`); `AppUtil.ts` |
 | `Preferences` | ACTIVE | `StorageUtil.ts`; `useAppStorage.ts` |
-| `Camera` | ACTIVE via `useFileSystem` | `useFileSystem.ts` › `onTakePicture`, `takePickSiglePicture`, `pickPhotoAlbum`; `useCamera.ts` is unreferenced |
+| `Camera` | ACTIVE via `useCamera` | `BaseChoosePhoto.vue` › `takePicture/pickPhoto/pickVideo/recordVideo` (`useCamera.ts` › `onTakePicture/onPickPhoto/onPickVideo/onRecordVideo`); `useFileSystem.ts` photo helpers (`onTakePicture/onPickPhoto/pickPhotoAlbum`) unreferenced |
 | `Filesystem` | ACTIVE | `useFileSystem.ts` › `saveProcess`; `useFileDownload.ts` › `downloadFile` |
 | `PushNotifications` | ACTIVE (registration only) | `useNotification.ts` › `registerNotifications`, `addListeners`; config `presentationOptions: []` |
 | `@capacitor-community/fcm` | ACTIVE | `useNotification.ts` › `subscribeTopic`, `unSubscribeTopic`, `deleteInstance` |
@@ -38,7 +38,8 @@ Android/iOS packages are DECLARED; no `android/`/`ios/` dirs committed
 ## 3. Wrapper pattern (VERIFIED)
 
 Shared composables abstract plugins: `useDevice` (Device/SafeArea/Security),
-`useFileSystem` (active Camera/Filesystem/Media path), `useNotification`
+`useCamera` (active Camera capture/pick path), `useFileSystem`
+(Filesystem/Media gallery save + permissions), `useNotification`
 (Push/FCM), `useTheme` (StatusBar), `useAppStorage`+`StorageUtil`
 (Preferences). Reuse them; no new architecture without a task.
 

@@ -14,7 +14,8 @@ true, default href `/tabs/home`), `translucent/scrollY/fullscreen`,
 1. New route pages must use `BasePage` as the root, with `page-title` +
    `show-back-link` (`home.vue:41-44` sets `false` for the root tab) and
    `page-default-back-link` for the back target. Only the existing
-   login/index/tabs shell use `IonPage` directly. For a page that needs its
+   login/index/tabs shell and the tab-router example shell use `IonPage`
+   directly (`TempAlt`/`TempFecth` are unrouted legacy files). For a page that needs its
    own `IonContent` ref or an `IonFooter`, use the `#content` slot
    (`pages/chat/index.vue`; `skills/mobile/COMPONENTS.md` §1).
 2. Header actions via `#start` / `#actions-end` slots; content in
@@ -22,8 +23,9 @@ true, default href `/tabs/home`), `translucent/scrollY/fullscreen`,
 3. State from Pinia (`useAuthenStore`), theme via `useTheme`, strings via
    `useLang`; no hardcoded user-visible copy without i18n.
 4. For new behavior that must repeat on cached-page re-entry, use Ionic view
-   hooks and cleanup listeners with the owning view. No existing page imports
-   those hooks as of this review.
+   hooks and cleanup listeners with the owning view. The only current
+   `onIonView*` call site is `pages/chat/index.vue:297` (`onIonViewDidEnter`,
+   imported at `:18`).
 5. StatusBar per screen where needed (`login.vue` › `onMounted` pattern).
 6. Conflicts: if implementations diverge, follow the majority + newest usage
    and log the conflict in `KNOWN_ISSUES.md` — do not invent a universal
