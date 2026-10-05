@@ -7,7 +7,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  IonText,
+  IonLabel,
 } from '@ionic/vue';
 import { computed, ref } from 'vue';
 import BaseIcon from './BaseIcon.vue';
@@ -31,7 +31,7 @@ const {
   isRouter?: boolean;
 }>();
 const { hasPermission } = useRbac();
-const currentTab = ref<string>(initTab || items[0].value);
+const currentTab = ref<string>(initTab || items[0]?.value || '');
 const emit = defineEmits<{
   'on-will-change': [tabName: string];
   'on-change': [tabName: string];
@@ -40,7 +40,7 @@ const canShow = (item: LabelValue<any>) => {
   return item.rbac == undefined || hasPermission(item.rbac);
 };
 const getItems = computed<LabelValue<any>[]>(() => {
-  return filterAcl ? items.filter(t => canShow(t) === true) : items;
+  return filterAcl ? items.filter((t) => canShow(t) === true) : items;
 });
 
 const onWillChange = (ev: any) => {
@@ -69,28 +69,45 @@ const onDidChange = (ev: any) => {
         </IonTab>
       </template>
     </slot>
-    <ion-router-outlet v-if="isRouter" :aria-hidden="true"></ion-router-outlet>
-    <IonTabBar :slot="position">
+    <ion-router-outlet v-if="isRouter" />
+    <IonTabBar
+      :slot="position"
+      class="app-tab-bar"
+      :class="{ 'app-tab-bar-top': position === 'top' }"
+      :style="{ '--app-tabs-count': getItems.length }"
+    >
       <IonTabButton
         v-for="(item, index) in getItems"
         :key="`tab-btn-${index}-${item.value}`"
         :tab="item.value"
+        :disabled="item.disable"
         :href="item.to || undefined"
       >
-        <BaseIcon
+        <span
           v-if="item.icon"
-          v-bind="item.icon"
+          class="tab-icon"
+          aria-hidden="true"
           :class="
-            currentTab === item.value ? `text-${activeColor}` : `text-${color}`
+            currentTab === item.value
+              ? `text-${activeColor}`
+              : color
+                ? `text-${color}`
+                : undefined
           "
-        />
-        <IonText
+        >
+          <BaseIcon v-bind="item.icon" :size="23" style="top: 0" />
+        </span>
+        <IonLabel
           :class="
-            currentTab === item.value ? `text-${activeColor}` : `text-${color}`
+            currentTab === item.value
+              ? `text-${activeColor}`
+              : color
+                ? `text-${color}`
+                : undefined
           "
         >
           {{ item.label }}
-        </IonText>
+        </IonLabel>
       </IonTabButton>
     </IonTabBar>
   </IonTabs>

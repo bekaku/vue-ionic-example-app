@@ -82,7 +82,7 @@ const logScrolling = (event: any) => {
 };
 </script>
 <template>
-  <ion-page v-bind="$attrs">
+  <ion-page class="app-base-page" v-bind="$attrs">
     <slot name="header">
       <ion-header
         :translucent="translucent"

@@ -1,16 +1,16 @@
 <script setup lang="ts">
+import BaseIcon from '@/components/base/BaseIcon.vue';
 import { useLang } from '@/composables/useLang';
 import { TabsName } from '@/libs/constant';
 import { useTabStore } from '@/stores/tabStore';
 import {
   IonBadge,
-  IonIcon,
   IonLabel,
   IonPage,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
-  IonTabs
+  IonTabs,
 } from '@ionic/vue';
 import {
   chatbubble,
@@ -18,7 +18,7 @@ import {
   ellipsisHorizontal,
   ellipsisHorizontalOutline,
   home,
-  homeOutline
+  homeOutline,
 } from 'ionicons/icons';
 import { onUnmounted, ref } from 'vue';
 const { t } = useLang();
@@ -52,13 +52,26 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ion-page>
-    <ion-tabs @ion-tabs-will-change="beforeTabChange" @ion-tabs-did-change="afterTabChange">
-      <ion-router-outlet :aria-hidden="true" />
-      <ion-tab-bar slot="bottom" @click="onTabClick">
+  <ion-page class="tabs-shell">
+    <ion-tabs
+      @ion-tabs-will-change="beforeTabChange"
+      @ion-tabs-did-change="afterTabChange"
+    >
+      <ion-router-outlet />
+      <ion-tab-bar
+        class="floating-tab-bar app-tab-bar"
+        slot="bottom"
+        @click="onTabClick"
+      >
         <ion-tab-button :tab="TabsName.HOME" href="/tabs/home">
-          <ion-icon v-if="TabsName.HOME === tabStore.currentTab" :icon="home" />
-          <ion-icon v-else :icon="homeOutline" />
+          <span class="tab-icon" aria-hidden="true">
+            <BaseIcon
+              :name="TabsName.HOME === tabStore.currentTab ? home : homeOutline"
+              icon-set="ion"
+              :size="23"
+              style="top: 0"
+            />
+          </span>
           <ion-label>{{ t('base.home') }}</ion-label>
         </ion-tab-button>
 
@@ -66,12 +79,33 @@ onUnmounted(() => {
           <ion-badge color="danger">
             {{ '99+' }}
           </ion-badge>
-          <ion-icon v-if="TabsName.CHAT === tabStore.currentTab" :icon="chatbubble" />
-          <ion-icon v-else :icon="chatbubbleOutline" />
+          <span class="tab-icon" aria-hidden="true">
+            <BaseIcon
+              :name="
+                TabsName.CHAT === tabStore.currentTab
+                  ? chatbubble
+                  : chatbubbleOutline
+              "
+              icon-set="ion"
+              :size="23"
+              style="top: 0"
+            />
+          </span>
           <ion-label>{{ t('nav.chats') }}</ion-label>
         </ion-tab-button>
         <ion-tab-button :tab="TabsName.OTHER" href="/tabs/other">
-          <ion-icon :icon="TabsName.OTHER === tabStore.currentTab ? ellipsisHorizontal : ellipsisHorizontalOutline" />
+          <span class="tab-icon" aria-hidden="true">
+            <BaseIcon
+              :name="
+                TabsName.OTHER === tabStore.currentTab
+                  ? ellipsisHorizontal
+                  : ellipsisHorizontalOutline
+              "
+              icon-set="ion"
+              :size="23"
+              style="top: 0"
+            />
+          </span>
           <ion-label>{{ t('base.other') }}</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
@@ -79,9 +113,8 @@ onUnmounted(() => {
   </ion-page>
 </template>
 <style lang="scss" scoped>
-/*
-.text-size {
-  font-size: 12px;
+/* Keep this bar in Ionic's layout flow so every tab reserves its height. */
+.tabs-shell ion-tabs {
+  background: var(--app-bg-page);
 }
-*/
 </style>

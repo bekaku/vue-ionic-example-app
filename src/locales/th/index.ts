@@ -4,6 +4,7 @@ import helper from './helper'
 import model from './model'
 import app from './app'
 import error from './error'
+import dashboard from './dashboard'
 // add all imported language files
 export default {
     ...base,
@@ -11,5 +12,6 @@ export default {
     ...helper,
     ...model,
     ...app,
-    ...error
+    ...error,
+    ...dashboard
 }

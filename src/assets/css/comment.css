@@ -76,8 +76,7 @@
 }
 
 .reply-form textarea {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--app-font-family);
   font-size: 16px;
   width: 100%;
   max-width: 100%;

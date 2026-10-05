@@ -7,8 +7,9 @@ Authoritative home for component/page rules. Entry:
 
 Standard page = `BasePage.vue` wrapping
 `ion-page > (ion-header > Toolbar) > ion-content` (`src/components/base/BasePage.vue:85-167`).
-Representative: `src/pages/tabs/home.vue:42-64` uses `BasePage` with
-`#start` / `#actions-end` slots, then `BaseCard` sections. Rules:
+Representative: `src/pages/tabs/home.vue` › `home-layout` uses `BasePage` with
+`#start` / `#actions-end` slots, then responsive `BaseCard` sections and
+`BaseSegment` to select overview, analytics or activity. Rules:
 
 - Every new route page must use `BasePage` as its root; do not start a new
   page with a bare `IonPage`/`IonHeader`/`IonToolbar`. Only the existing
@@ -95,10 +96,17 @@ Representative: `src/pages/tabs/home.vue:42-64` uses `BasePage` with
 
 `IonApp` + `IonRouterOutlet` (`App.vue`), `IonPage/Header/Toolbar/Title/Content`,
 `IonButtons/Row`, `IonList/Item/Label/Badge/CardContent`
-(`home.vue:23-30`, `BasePage.vue`). (The `<img>` at `home.vue:46` is raw HTML,
-not `IonImg`.) Modals/alerts/toasts exist via controllers
+(`tabs/home.vue` › `home-sales`, `BasePage.vue`). Home uses `BaseImage`
+for its brand logo. Modals/alerts/toasts exist via controllers
 (`toastController` in `useNotification.ts` › `reciveNotificationToast`;
 `appConfirm/appLoading` in `useBase.ts`). Inspect the target area before assuming a component is unused.
+
+`BaseTabs.vue` and the main tabs shell share `mobile-ui.scss` › `.app-tab-bar`
+for the inset surface and small selected icon pill. BaseTabs preserves its
+`activeColor`/`color` props, supports top/bottom placement, adapts button widths
+to the visible item count, and passes `item.disable` to Ionic. Both UI tab
+examples use this component. Its routed outlet leaves cached page visibility
+to Ionic; it is not hidden unconditionally from accessibility.
 
 ## 3. Forms/validation/dialogs/loading
 
@@ -122,7 +130,10 @@ The only `onIonView*` call site is `pages/chat/index.vue:297`
 
 ## 5. Theme/UX (VERIFIED)
 
-- Theme CSS in `src/assets/css/` (`color.scss`, `variables.scss`, …) + dark
+- App font: `variables.scss` › `@font-face` registers local Noto Sans Thai
+  Looped files at weights 300/400/500/700; `--app-font-family` feeds
+  `--ion-font-family` and custom form text. Use the family token for overrides.
+- Theme CSS in `src/assets/css/` (`color.scss`, `variables.scss`, `mobile-ui.scss`, …) + dark
   mode via `useTheme` (`isDark`, StatusBar sync). Do not invent brand colors.
 - Colour palette (`color.scss`) is the Tailwind CSS v4 default palette plus
   the brand palettes `primary/success/danger/warning/info`, all as

@@ -48,7 +48,7 @@ const onTabChange = (name: any) => {
 };
 </script>
 <template>
-  <BasePage page-title="Tabs" fullscreen>
+  <BasePage page-title="Tabs" :fullscreen="false">
     <BaseTabs :items="groupTabs" active-color="amber-800" @on-change="onTabChange">
       <template #home>
         <BaseCard>

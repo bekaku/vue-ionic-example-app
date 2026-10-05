@@ -1,18 +1,40 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
-/* @import url("https://fonts.googleapis.com/css2?family=Kanit&display=swap"); */
-// @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;400;600&display=swap');
 @font-face {
-  font-family: "Prompt";
-  src: url('../assets/fonts/Prompt-Regular.ttf')
+  font-family: 'Noto Sans Thai Looped';
+  src: url('../fonts/NotoSansThaiLooped-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
 }
 
+@font-face {
+  font-family: 'Noto Sans Thai Looped';
+  src: url('../fonts/NotoSansThaiLooped-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Thai Looped';
+  src: url('../fonts/NotoSansThaiLooped-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Thai Looped';
+  src: url('../fonts/NotoSansThaiLooped-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 /** Ionic CSS Variables **/
 :root {
-  // --app-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Prompt', sans-serif !important;
-  // --app-font-family: 'Prompt', sans-serif !important;
-  --app-font-family: "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+  --app-font-family: 'Noto Sans Thai Looped', "Helvetica Neue", "Segoe UI", Arial, sans-serif;
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -94,7 +116,7 @@ http://ionicframework.com/docs/theming/ */
    */
 
   /* Background */
-  --app-bg-page: var(--color-gray-100);
+  --app-bg-page: var(--color-slate-50);
   --app-bg-surface: var(--color-white);
   --app-bg-bar: var(--color-white);
   --app-bg-page-dark: var(--color-zinc-950);
@@ -109,8 +131,8 @@ http://ionicframework.com/docs/theming/ */
   --app-border-light-dark: var(--app-border-dark);
 
   /* Text */
-  --app-text-body: var(--color-black);
-  --app-text-strong: var(--color-black);
+  --app-text-body: var(--color-slate-700);
+  --app-text-strong: var(--color-slate-950);
   --app-text-muted: var(--color-zinc-500);
   --app-text-muted-alt: var(--color-gray-500);
   --app-text-body-dark: var(--color-white);
@@ -138,6 +160,19 @@ http://ionicframework.com/docs/theming/ */
 
   /* Misc */
   --app-refresher-color: var(--ion-text-color);
+  /* Surface, navigation and interaction */
+  --app-radius-card: 24px;
+  --app-radius-control: 14px;
+  --app-shadow-card: 0 4px 24px color-mix(in srgb, var(--color-slate-900) 4%, transparent);
+  --app-shadow-nav: 0 8px 32px color-mix(in srgb, var(--color-slate-900) 12%, transparent);
+  --app-bg-elevated: var(--color-white);
+  --app-bg-glass: color-mix(in srgb, var(--app-bg-surface) 88%, transparent);
+  --app-bg-accent: var(--color-primary-50);
+  --app-text-accent: var(--color-primary-700);
+  --app-bg-positive: var(--color-emerald-50);
+  --app-text-positive: var(--color-emerald-700);
+  --app-motion-fast: 160ms;
+  --app-motion-normal: 240ms;
   /* End app design tokens */
 
   /* Modufy Ionic variables */
@@ -145,9 +180,6 @@ http://ionicframework.com/docs/theming/ */
   /* Set the background of the entire app */
   --ion-background-color: var(--app-bg-page);
   /* Set the font family of the entire app */
-  /* --ion-font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue","Roboto", sans-serif; */
-  /* --ion-font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Kanit", sans-serif; */
-  // --ion-font-family: "Prompt", "Helvetica Neue", sans-serif;
 
   --ion-font-family: var(--app-font-family);
 
@@ -262,7 +294,7 @@ body[color-theme='light'] {
 body[color-theme='dark'] {
   /* App design tokens: dark values */
   --app-bg-page: var(--app-bg-page-dark);
-  --app-bg-surface: var(--app-bg-page-dark);
+  --app-bg-surface: var(--app-bg-surface-dark);
   --app-border: var(--app-border-dark);
   --app-border-light: var(--app-border-light-dark);
   --app-border-lighter: var(--app-border-light-dark);
@@ -278,6 +310,15 @@ body[color-theme='dark'] {
   --app-chat-input-bg: var(--app-bg-surface-dark);
   --app-chat-input-border: var(--app-border-light-dark);
   --app-refresher-color: var(--color-white);
+
+  --app-bg-elevated: var(--color-zinc-900);
+  --app-bg-glass: color-mix(in srgb, var(--app-bg-elevated) 88%, transparent);
+  --app-bg-accent: var(--color-primary-950);
+  --app-text-accent: var(--color-primary-300);
+  --app-bg-positive: var(--color-emerald-950);
+  --app-text-positive: var(--color-emerald-300);
+  --app-shadow-card: 0 4px 24px color-mix(in srgb, var(--color-black) 14%, transparent);
+  --app-shadow-nav: 0 8px 32px color-mix(in srgb, var(--color-black) 32%, transparent);
 
   /* Ionic variables */
   --ion-background-color: var(--app-bg-page-dark);
@@ -588,7 +629,7 @@ body[color-theme='dark'] {
   padding: 10px;
   margin: 10px 0;
   background-color: var(--app-form-input-bg) !important;
-  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-family: var(--app-font-family);
 }
 
 .app-modal-content {

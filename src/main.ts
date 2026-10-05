@@ -31,6 +31,7 @@ import './assets/css/positioning.sass';
 import './assets/css/size.sass';
 import './assets/css/typography.sass';
 import './assets/css/variables.scss';
+import './assets/css/mobile-ui.scss';
 import '@/plugins/cropperjs';
 import { ApiFetchError } from './composables/useApi';
 import { useAppStorage } from './composables/useAppStorage';

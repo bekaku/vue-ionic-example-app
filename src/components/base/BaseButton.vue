@@ -18,6 +18,7 @@ const {
 <template>
   <!-- <BaseRbac :rbac> -->
   <ion-button
+    class="app-base-button"
     v-bind="$attrs"
     :color
     :disabled

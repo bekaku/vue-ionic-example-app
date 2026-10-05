@@ -12,7 +12,7 @@ true, default href `/tabs/home`), `translucent/scrollY/fullscreen`,
 ## Rules
 
 1. New route pages must use `BasePage` as the root, with `page-title` +
-   `show-back-link` (`home.vue:41-44` sets `false` for the root tab) and
+   `show-back-link` (`tabs/home.vue` › `BasePage` sets `false` for the root tab) and
    `page-default-back-link` for the back target. Only the existing
    login/index/tabs shell and the tab-router example shell use `IonPage`
    directly (`TempAlt`/`TempFecth` are unrouted legacy files). For a page that needs its
@@ -32,3 +32,15 @@ true, default href `/tabs/home`), `translucent/scrollY/fullscreen`,
    pattern.
 7. Loaders from `appLoading()` are dismissed in `finally` around API calls
    (`pages/settings/account-settings/*.vue`); `useApi` already toasts errors.
+
+## UI refresh (2026-10-05, VERIFIED source; web visual check)
+
+`main.ts` imports `mobile-ui.scss` after `variables.scss`. BasePage and
+BaseButton expose `app-base-page` / `app-base-button` classes for shared
+visual defaults. `tabs/home.vue` › `home-layout` displays localized demo
+data with functional sections and responsive card grids;
+`mobile-ui.scss` › `.app-tab-bar` supplies the inset translucent surface to
+`tabs/index.vue` and `BaseTabs.vue`, including both UI tab examples, while
+remaining in Ionic layout flow. Button widths adapt to the tab count. CSS fallback and reduced-motion/transparency
+queries are present; OS preference behaviour and native safe areas remain
+unverified on devices. See `tasks/008-mobile-ui-refresh.md`.
