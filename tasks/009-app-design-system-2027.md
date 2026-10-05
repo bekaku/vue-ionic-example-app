@@ -274,3 +274,22 @@ the fixed `--color-primary-*` scale in `color.scss`.
 
 Web visual: PASSED. Other/Home/login in light and dark show teal chips, active
 tab, hero and aurora. Android/iOS (status bar colour): NOT_RUN.
+
+## Follow-up: primary-tinted backgrounds (2026-10-05, trial — ROLLED BACK)
+
+The user asked for primary-toned backgrounds: a faint wash in light mode and
+deep primary-toned neutrals in dark mode, as in their reference. Changes are
+in `variables.scss` only:
+- `--app-bg-page` = primary 7% on white; `--app-bg-bar` follows the page
+- dark page/surface/elevated = primary 10/14/18% on zinc-900/800/700
+- new `--app-tint-ink` for `--app-bg-sunken` and `--app-hairline`
+- chat received bubble/input, dark segment and dark glass tinted
+- dark hero brightened (70%→32% primary on black) so it stands out from cards
+
+Cards stay white in light mode. Web visual: PASSED (Home/Other/Chat, light +
+dark, 390×844).
+
+Rolled back on the user's request ("does not fit"): the patch was
+reverse-applied, so `variables.scss` matches its state before the trial
+(neutral zinc backgrounds; colour-source tokens from the previous follow-up
+kept). The patch file was removed.

@@ -36,12 +36,12 @@ http://ionicframework.com/docs/theming/ */
 :root {
   --app-font-family: 'Noto Sans Thai Looped', "Helvetica Neue", "Segoe UI", Arial, sans-serif;
   /** primary **/
-  --ion-color-primary: #00bba7;
-  --ion-color-primary-rgb: 0,187,167;
-  --ion-color-primary-contrast: #000000;
-  --ion-color-primary-contrast-rgb: 0,0,0;
-  --ion-color-primary-shade: #00a593;
-  --ion-color-primary-tint: #1ac2b0;
+     --ion-color-primary: #3880ff;
+  --ion-color-primary-rgb: 56, 128, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #3171e0;
+  --ion-color-primary-tint: #4c8dff;
 
   /** secondary **/
   --ion-color-secondary: #00aba9;

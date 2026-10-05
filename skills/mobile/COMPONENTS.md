@@ -325,6 +325,8 @@ spring-like motion that respects reduced-motion/transparency/contrast.
   contrast). Do not use the fixed `--color-primary-*` scale or other palette
   hues (`sky`, `indigo`, `violet`, `emerald`, …) for brand or state colour in
   shared UI; palette hues are for data/illustration (e.g. chart series).
+  Page/surface backgrounds stay neutral (zinc); a primary-tinted background
+  was tried and rolled back at the user's request (task 009).
 - Fallbacks live in `mobile-ui.scss` §8: no `backdrop-filter` → opaque chrome;
   `prefers-reduced-transparency`/`prefers-contrast: more` → solid surfaces and
   visible borders. Keep new glass/motion inside those guards.
