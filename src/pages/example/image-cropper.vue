@@ -6,6 +6,7 @@ import BaseImageCropperDialog from '@/components/base/BaseImageCropperDialog.vue
 import BasePage from '@/components/base/BasePage.vue';
 import BaseRadioItem from '@/components/base/BaseRadioItem.vue';
 import type { ChoosePhotoItem, LabelValue } from '@/types/common';
+import type { FileManager } from '@/types/models';
 import { getImgUrlFromFile } from '@/utils/FileUtils';
 import { IonCardContent } from '@ionic/vue';
 import { defineAsyncComponent, ref } from 'vue';
@@ -17,7 +18,7 @@ const cropedUrl = ref<string>();
 const cropedFile = ref<any>();
 
 const showChoosePhoto = ref(false);
-const imageFile = ref<ChoosePhotoItem | null>(null);
+const imagePath = ref<string | null>(null);
 
 const radioSelected = ref<number>(1);
 
@@ -42,14 +43,16 @@ const onCropImage = async (f: any) => {
   cropedFile.value = f;
 };
 
-const onTakePicture = (file: ChoosePhotoItem | null) => {
-  imageFile.value = file;
-  showChoosePhoto.value = false;
-  showImageCroper.value = true;
-};
-const onPickPicture = (images: ChoosePhotoItem[] | null) => {
-  imageFile.value = images != null ? images[0] : null;
-  showChoosePhoto.value = false;
+const onFileChange = (files: FileManager[] | null) => {
+  console.log('onFilePickerChange', files);
+  if (!files || files.length == 0) {
+    return;
+  }
+  const file = files[0];
+  if (!file.filePath) {
+    return;
+  }
+  imagePath.value = file.filePath;
   showImageCroper.value = true;
 };
 const onCropImageEnd = (imageUrl: string) => {
@@ -62,7 +65,15 @@ const onCropImageEnd = (imageUrl: string) => {
       <ion-card-content>
         <p>Ratio</p>
         <BaseRadioItem v-model="radioSelected" :items="radioOptions" />
-        <BaseButton full label="Choose image" @click="showChoosePhoto = true" />
+        <BaseChoosePhoto
+          full-width
+          :multiple="false"
+          :choices="['photo', 'camera']"
+          @on-change="onFileChange"
+        >
+          <BaseButton full label="Choose image" />
+        </BaseChoosePhoto>
+
         <BaseButton
           full
           label="Delete image"
@@ -98,18 +109,10 @@ const onCropImageEnd = (imageUrl: string) => {
       </ion-card-content>
     </BaseCard>
 
-    <BaseChoosePhoto
-      v-if="showChoosePhoto"
-      v-model="showChoosePhoto"
-      :multiple="false"
-      @on-pick-picture="onPickPicture"
-      @on-take-picture="onTakePicture"
-    />
-
     <BaseImageCropperDialog
-      v-if="showImageCroper && imageFile"
+      v-if="showImageCroper && imagePath"
       v-model="showImageCroper"
-      :initial-src="imageFile.webPath"
+      :initial-src="imagePath"
       :ratio="radioSelected"
       title="Edit image"
       @on-close="onCloseImageCropper"

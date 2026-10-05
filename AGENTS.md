@@ -104,7 +104,8 @@ Before any implementation task:
   (`tsconfig.json` paths). App mode is forced `mode: 'ios'` (`src/main.ts` › `startApp`).
 - New route pages must use `BasePage.vue` as the root (its `#content` slot
   when the page needs its own `IonContent` ref or an `IonFooter`); only the
-  existing login, index, and tabs shell pages use `IonPage` directly. Reuse
+  existing login, index, tabs shell, and tab-router example shell pages use
+  `IonPage` directly (`TempAlt`/`TempFecth` are unrouted legacy files). Reuse
   `src/components/base/*` (`BaseButton`, `BaseIcon`, `BaseAvatar`,
   `BaseImage` instead of raw Ionic/HTML elements; `BaseContentItem` with
   `is-escape-html` for user-written text — `skills/mobile/COMPONENTS.md`
@@ -165,7 +166,7 @@ Before any implementation task:
   service; use a service when reused, auth-related, or already there
   (`skills/mobile/API.md` §2). Verified endpoints:
   `/api/appUser/currentUserData`, `/api/auth/refreshTokenApi`, AuthenService
-  signin/signout. Never invent contracts — classify as
+  `singin`/`singoutToServer` (via `useAuthen.singinProcess`). Never invent contracts — classify as
   `VERIFIED_FRONTEND_USAGE` vs `UNVERIFIED_BACKEND_ASSUMPTION`.
 - Auth: JWT + refresh token in **Capacitor Preferences** (keys
   `AppAuthTokenKey_<uid>`, `AppAuthRefeshTokenKey_<uid>`,
@@ -190,9 +191,10 @@ Before any implementation task:
 - Deep links: **no `appUrlOpen` listener, no committed intent-filters /
   associated domains** (`NOT_FOUND`). Only verified inbound navigation is from
   notification taps. Treat every incoming URL as untrusted (`DEEP_LINKS.md`).
-- Files/media: Active picker path uses `useFileSystem.ts` (Camera `getPhoto`
-  Uri + `webUseInput`, `pickImages`); `useCamera.ts` is currently unreferenced.
-  `Filesystem.writeFile` to `Directory.Data`, community `Media.savePhoto` to
+- Files/media: `BaseChoosePhoto.vue` picks via `useCamera.ts` (`takePhoto` /
+  `chooseFromGallery` / `recordVideo` → `FileManager`); the photo-pick helpers
+  in `useFileSystem.ts` (`getPhoto`/`pickImages` → `ChoosePhotoItem`) have no
+  `src/` caller. `Filesystem.writeFile` to `Directory.Data`, community `Media.savePhoto` to
   `AppAlbumName` album, community `FileOpener.open`, `Share.share`. Chunked
   upload: default 1 MB chunks, one attempt unless overridden, `FormData`
   `uploadChunkApi` followed by `mergeChunkApi` (`useUpload.ts`). On web,

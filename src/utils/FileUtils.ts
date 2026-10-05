@@ -475,10 +475,33 @@ export const resizeImage = async (file: File, options: ImageResizeOptions): Prom
     resolve(compressedBlob);
   });
 }
-export const generateUniqueFilename = (originalName: string, uniqueId?: string): string => {
-    const lastDotIndex = originalName.lastIndexOf('.');
-    const ext = lastDotIndex !== -1 ? originalName.substring(lastDotIndex) : '';
+export const generateUniqueFilename = (originalName?: string | null, uniqueId?: string): string => {
+    const safeName = originalName || '';
+    const lastDotIndex = safeName.lastIndexOf('.');
+    const ext = lastDotIndex !== -1 ? safeName.substring(lastDotIndex) : '';
     const uuid = uniqueId || crypto.randomUUID();
     const timestamp = Date.now();
     return `${timestamp}_${uuid}${ext}`;
+}
+export const base64ToFile = async (
+  base64: string,
+  filename: string
+): Promise<File> => {
+  try {
+    // 1. โยน Base64 เข้า fetch ได้เลย มันจะจัดการแปลงให้เอง
+    const response = await fetch(base64);
+
+    // 2. แปลงเป็น Blob
+    const blob = await response.blob();
+
+    // 3. แนบชื่อไฟล์ (เลี่ยง new File)
+    const myFile: any = blob;
+    myFile.name = filename;
+    // eslint-disable-next-line e18e/prefer-date-now
+    myFile.lastModified = new Date().getTime();
+
+    return myFile as File;
+  } catch (err) {
+    throw new Error('Failed to convert base64 to file');
+  }
 }

@@ -3,22 +3,29 @@
 Authoritative home for file/media rules. Entry:
 `.agents/skills/mobile-files-media/SKILL.md`.
 
-## 1. Capture/pick (VERIFIED — active path)
+## 1. Capture/pick (VERIFIED — active paths)
 
-Symbols below are in `useFileSystem.ts` unless noted.
+Two picker paths exist; use the one the consuming UI already uses.
 
-- `onTakePicture()`: `Camera.getPhoto({quality 99, allowEditing false,
-  saveToGallery false, resultType Uri, source Camera, webUseInput true, …})`;
-  `onPickPhoto(multiple, limit)` dispatches to single `takePickSiglePicture()`
-  (Photos source, quality 100) or multi `pickPhotoAlbum(limit)`
-  (`Camera.pickImages`). Web paths converted by `getFileFromWebPath`
-  (`urlToBlob`) → `ChoosePhotoItem`.
-- Permissions helpers: `request/checkCameraPermissions`,
-  `request/checkFileSystemPermissions`, all `isWeb()`-guarded.
-- `src/composables/useCamera.ts` offers `takePhoto`,
-  `chooseFromGallery`, video capture/playback and HEIC conversion. It is
-  currently unreferenced by `src/` imports. Do not replace the active picker
-  path without tracing consumers and testing the new API per platform.
+- `BaseChoosePhoto.vue` › `takePicture/pickPhoto/pickVideo/recordVideo`
+  calls `useCamera` (not `useFileSystem`): `Camera.takePhoto` /
+  `Camera.chooseFromGallery` (photo/video, `allowMultipleSelection`,
+  `limit`) / `Camera.recordVideo` → `FileManager` via `getFileFromResult`
+  (HEIC/HEIF → JPEG via `heic-to`, snowflake `uniqueId`, size/dimensions/
+  duration/thumbnail mapping). Props `multiple/limit/choices/icon/label/
+  fullWidth`, `v-model FileManager[]`, emits `on-change`; video picks
+  validate `LIMIT_VDO_SIZE` / `LIMIT_VIDEO_SECOND` and materialize
+  `thumbnailFile` (`initialFileVdo`). Choice UI is a `BaseModal` + `IonList`
+  sheet. Consumed by avatar/cover settings and the file-picker /
+  image-cropper examples.
+- `useFileSystem.ts` photo helpers (`onTakePicture`, `onPickPhoto`,
+  `takePickSiglePicture`, `pickPhotoAlbum` via `Camera.getPhoto` /
+  `Camera.pickImages` → `ChoosePhotoItem`) have no `src/` import caller at
+  this review; do not wire new UI to them without tracing consumers and
+  testing per platform. Its active `src/` usage is gallery save/permissions
+  (§2, `BaseImageView`, `BaseFileView`).
+- Permission helpers (`request/checkCameraPermissions`,
+  `request/checkFileSystemPermissions`) are `isWeb()`-guarded.
 
 ## 2. Save to gallery (VERIFIED, native-only)
 
@@ -45,6 +52,23 @@ user-visible location per platform.
 Viewing remote files: `FileManagerService.fethCdnData(path, 'blob' |
 'arraybuffer' | 'response')` returns a blob URL / buffer / raw response;
 release blob URLs with `useBlobUrls().track` (auto-revoked on unmount).
+
+Viewing chain (VERIFIED): `BaseFileItems` (`layout` grid/list, `limit`
+0 = all, `showViewDialog`, `+N` remaining overlay) → tap opens
+`BaseFileView` (`v-model:show`, `item`, `image-list`, `select-index`),
+which routes by `getFileType(file.fileMime)`: `pdf` →
+`BasePdfViewDialog` (direct `filePath`, or `fetch` via `fethCdnData`);
+`image` → `BaseImageViewDialog` (single item, or the full `image-list`
+for swipe); other types → permission-gated `downloadDocument` (only when
+`fetch`). `BaseImageView` (`files`/`images`, `fetch`, `dark`,
+`height`/`width`) renders a zoomable swiper, fetching remote sources
+through `fethCdnData` + `useBlobUrls().track`, exposing
+`onNext/onPrev/zoomIn/zoomOut/onDelete/onDownload/onShare`.
+`BasePdfView` (`src`, `fetch`, `isBlob`, `showDownload`/`showShare`)
+renders `BasePdfViewCore` with a scale/page toolbar, fetching via
+`fethCdnData(src, 'response')` → `track(getBlobUrlFromResponse(...))`.
+Demo: `src/pages/example/image-view.vue` (grid/list/slide/mix from
+`libs/data` › `imageItemsData`/`pdfItemsData`).
 
 ## 4. Upload (VERIFIED)
 

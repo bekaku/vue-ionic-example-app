@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import BaseFilePreviewItemAlt from '@/components/base/BaseFilePreviewItemAlt.vue';
 import { useBase } from '@/composables/useBase';
 import { useLang } from '@/composables/useLang';
 import {
@@ -24,12 +23,11 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
-  IonList,
   IonNote,
-  IonRow,
+  IonRow
 } from '@ionic/vue';
 import { documentAttachOutline } from 'ionicons/icons';
-import { ref } from 'vue';
+import { defineEmits, defineExpose, defineModel, defineProps, ref } from 'vue';
 import BaseFileItems from './BaseFileItems.vue';
 
 const {
@@ -72,7 +70,7 @@ const modelImageFiles = ref<any>(null);
 const filePickerInputRef = ref<any>(null);
 
 const rejectTotal = ref(0);
-const openFilePicker = () => {
+const open = () => {
   if (!filePickerInputRef.value) {
     return;
   }
@@ -227,14 +225,14 @@ const onClick = async (event: any, index: number) => {
   console.log('onClick', { index, event });
 };
 defineExpose({
-  openFilePicker,
+  open,
 });
 </script>
 
 <template>
   <div v-if="modelValue" v-bind="$attrs">
-    <slot name="button">
-      <ion-item class="input" button :lines @click="openFilePicker">
+    <slot name="button" v-bind="{ open }">
+      <ion-item class="input" button :lines @click="open">
         <ion-icon slot="start" :icon="icon" />
         <ion-label>
           {{ label || t('base.chooseFromFile') }}
@@ -265,31 +263,6 @@ defineExpose({
         />
       </IonCol>
     </IonRow>
-    <!-- <ion-list
-      v-if="
-        showPreview &&
-        fileItems.length > 0 &&
-        modelValue &&
-        modelValue.length > 0
-      "
-      class="q-my-md"
-    >
-      <template
-        v-for="(f, fileIndex) in fileItems"
-        :key="`f-${fileIndex}-${f.uniqueId}-${f.id}`"
-      >
-        <BaseFilePreviewItemAlt
-          :item="f"
-          :index="fileIndex"
-          dense
-          :format-size="formatSize"
-          :image-size="imageSize"
-          :icon-size="iconSize"
-          :show-delete="showDelete"
-          @on-remove="onRemoveNewImage"
-        />
-      </template>
-    </ion-list> -->
 
     <input
       ref="filePickerInputRef"

@@ -67,20 +67,34 @@ Signout → FCM unsubscribe → server signout → clear + `location.replace('/'
 ## Files and media (VERIFIED source usage)
 
 ```text
-BaseChoosePhoto / file-picker example
-  → useFileSystem (Camera getPhoto/pickImages → ChoosePhotoItem)
-  → consuming page/component
+BaseChoosePhoto
+  → useCamera (takePhoto / chooseFromGallery / recordVideo → FileManager)
+  → consuming page/component (v-model FileManager[] + on-change)
   → useUpload (File → FormData chunks → CDN uploadChunkApi → mergeChunkApi)
 ```
 
-`src/components/base/BaseChoosePhoto.vue` and
-`src/pages/example/ui/file-picker.vue` use this path (`useFileSystem`).
-`src/composables/useCamera.ts` has photo/video helpers and HEIC conversion,
-but no `src/` import caller at this review. `useFileDownload.ts` owns
+`src/components/base/BaseChoosePhoto.vue` › `takePicture/pickPhoto/pickVideo/recordVideo`
+calls `useCamera`, not `useFileSystem`. Props `multiple/limit/choices/icon/label/fullWidth`,
+`v-model FileManager[]`, emits `on-change`; video paths validate `LIMIT_VDO_SIZE` /
+`LIMIT_VIDEO_SECOND` and materialize `thumbnailFile` via `base64ToFile`
+(`initialFileVdo`). UI is a `BaseModal` + `IonList` choice sheet with a trigger
+`div` + slot fallback `IonButton`.
+`src/pages/example/ui/file-picker.vue` demonstrates both `BaseChoosePhoto` and direct
+`useCamera` (`onPickPhoto/onTakePicture`) alongside `BaseFilePicker` + `useUpload`.
+`src/composables/useCamera.ts` › `getFileFromResult` owns HEIC/HEIF → JPEG conversion
+(`heic-to`), snowflake `uniqueId`, and `FileManager` mapping (size, dimensions,
+duration, thumbnail). The photo-pick helpers in `src/composables/useFileSystem.ts`
+(`onTakePicture/onPickPhoto/pickPhotoAlbum` via `Camera.getPhoto/pickImages` →
+`ChoosePhotoItem`) have no `src/` import caller at this review; its active `src/`
+usage is gallery save/permissions (`savePicture/saveFile` in `BaseImageView`,
+permission checks in `BaseFileView`). `useFileDownload.ts` owns
 download/open/share (also used by `BaseFileView`, `BasePdfView`,
 `BaseImageView`), while `useFileSystem.ts` owns gallery saving (browser
 download on web). Remote image/PDF display goes through
 `FileManagerService.fethCdnData` with blob URLs released by `useBlobUrls`.
+Preview chain: `BaseFileItems` → `BaseFileView` → `BaseImageViewDialog` /
+`BasePdfViewDialog` (demo `src/pages/example/image-view.vue`); details in
+`skills/mobile/FILES_MEDIA.md` §3.
 The upload default is 1 MB chunks and one attempt (`useUpload.ts:14-15`);
 options can override it. Backend guarantees are not established here.
 

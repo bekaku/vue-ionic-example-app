@@ -6,31 +6,19 @@
 
 ## Setup
 
-Make sure to install the dependencies:
+Make sure to install the dependencies (this repo uses **pnpm**):
 
 ```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
 # pnpm
 pnpm install --shamefully-hoist
 ```
 
 ## Development Server
 
-Start the development server on http://localhost:3000
+Start the development server on http://localhost:3004
 
 ```bash
-npm run dev
-```
-
-or
-
-```bash
-yarn dev
+pnpm dev
 ```
 
 ## Production
@@ -38,14 +26,19 @@ yarn dev
 Build the application for production:
 
 ```bash
-build:prod 
-npm run build
+pnpm build:vite
+```
+
+or (needs the global Ionic CLI):
+
+```bash
+pnpm build
 ```
 
 Locally preview production build:
 
 ```bash
-npm run preview
+pnpm preview
 ```
 
 Sync code to Android studio and Xcode:

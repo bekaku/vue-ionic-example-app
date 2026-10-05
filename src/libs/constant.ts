@@ -118,7 +118,10 @@ export const CrudAction = {
   COPY: 'copy'
 };
 export const LIMIT_FILE_SIZE_MB = 50;
+export const LIMIT_VDO_SIZE_MB = 100;
+export const LIMIT_VIDEO_SECOND = 300;
 export const LIMIT_FILE_SIZE = LIMIT_FILE_SIZE_MB * 1024 * 1024;
+export const LIMIT_VDO_SIZE = LIMIT_VDO_SIZE_MB * 1024 * 1024;
 export const DEFULT_ITEM_PER_PAGET = 10;
 export const SearchOperation = {
   MATCH: ':',

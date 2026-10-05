@@ -7,11 +7,10 @@ import { useUpload } from '@/composables/useUpload';
 import { useLang } from '@/composables/useLang';
 import { useTheme } from '@/composables/useTheme';
 import { useAuthenStore } from '@/stores/authenStore';
-import type { ChoosePhotoItem } from '@/types/common';
 import type { FileManager } from '@/types/models';
 import { IonButton, IonIcon } from '@ionic/vue';
 import { cameraOutline } from 'ionicons/icons';
-import { defineAsyncComponent, ref } from 'vue';
+import { defineAsyncComponent, ref, useTemplateRef } from 'vue';
 
 const ProfileCard = defineAsyncComponent(
   () => import('@/components/profile/Card.vue'),
@@ -29,24 +28,26 @@ const { isDark } = useTheme();
 const dialog = ref(false);
 const isAvatar = ref(true);
 const isLoading = ref(false);
-const showChoosePhoto = ref(false);
-const imageFile = ref<ChoosePhotoItem | null>(null);
+const imageFile = ref<FileManager | null>(null);
+const choosePhotoRef =
+  useTemplateRef<{ open: () => void }>('choosePhotoRef');
 const openAvatar = () => {
   isAvatar.value = true;
-  showChoosePhoto.value = true;
+  choosePhotoRef.value?.open();
 };
 const openCover = () => {
   isAvatar.value = false;
-  showChoosePhoto.value = true;
+  choosePhotoRef.value?.open();
 };
-const onTakePicture = (file: ChoosePhotoItem | null) => {
+const onFileChange = (files: FileManager[] | null) => {
+  if (!files || files.length == 0) {
+    return;
+  }
+  const file = files[0];
+  if (!file.filePath) {
+    return;
+  }
   imageFile.value = file;
-  showChoosePhoto.value = false;
-  dialog.value = true;
-};
-const onPickPicture = (images: ChoosePhotoItem[] | null) => {
-  imageFile.value = images != null ? images[0] : null;
-  showChoosePhoto.value = false;
   dialog.value = true;
 };
 const conSubmit = (f: any) => {
@@ -92,9 +93,10 @@ const onUploadCover = async (f: any) => {
   l.dismiss();
 };
 const onUploadFileProcess = async (f: any): Promise<FileManager | null> => {
-  // const response = await uploadApi(f);
+  // cropped result from BaseImageCropper is a nameless Blob: reuse the picked file name
   const response = await onUploadChunk(f, {
     setProgress: false,
+    filename: imageFile.value?.fileName || f?.name || 'cropped.jpg',
   });
   return new Promise((resolve) => {
     resolve(response);
@@ -148,9 +150,9 @@ const onUploadFileProcess = async (f: any): Promise<FileManager | null> => {
     </profile-card>
 
     <BaseImageCropperDialog
-      v-if="dialog && imageFile && imageFile.webPath"
+      v-if="dialog && imageFile && imageFile.filePath"
       v-model="dialog"
-      :initial-src="imageFile.webPath"
+      :initial-src="imageFile.filePath"
       :title="isAvatar ? t('cropAvatar') : t('base.changeCover')"
       :ratio="isAvatar ? 1 : 16 / 9"
       :auto-close="false"
@@ -164,11 +166,12 @@ const onUploadFileProcess = async (f: any): Promise<FileManager | null> => {
     />
 
     <BaseChoosePhoto
-      v-if="showChoosePhoto"
-      v-model="showChoosePhoto"
+      ref="choosePhotoRef"
       :multiple="false"
-      @on-pick-picture="onPickPicture"
-      @on-take-picture="onTakePicture"
-    />
+      :choices="['photo', 'camera']"
+      @on-change="onFileChange"
+    >
+      <span style="display: none" />
+    </BaseChoosePhoto>
   </BasePage>
 </template>

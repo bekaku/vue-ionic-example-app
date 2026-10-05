@@ -1,99 +1,44 @@
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
+import BaseFileItems from '@/components/base/BaseFileItems.vue';
 import BaseFilePicker from '@/components/base/BaseFilePicker.vue';
 import BasePage from '@/components/base/BasePage.vue';
-import { useFileSystem } from '@/composables/useFileSystem';
+import { useCamera } from '@/composables/useCamera';
 import { useUpload } from '@/composables/useUpload';
 import { FileTypeAcceptList } from '@/libs/constant';
-import type { ChoosePhotoItem } from '@/types/common';
 import type { FileManager } from '@/types/models';
-import { getFileMimeType } from '@/utils/FileUtils';
-import { generateSnowFlakeId, idToString } from '@/utils/snowflake';
-import { IonCardContent, IonList } from '@ionic/vue';
+import { IonCardContent, IonCol, IonRow } from '@ionic/vue';
 import { cameraOutline, imageOutline } from 'ionicons/icons';
 import { defineAsyncComponent, ref, useTemplateRef } from 'vue';
 const BaseChoosePhoto = defineAsyncComponent(
   () => import('@/components/base/BaseChoosePhoto.vue'),
 );
-const BaseFilePreviewItemAlt = defineAsyncComponent(
-  () => import('@/components/base/BaseFilePreviewItemAlt.vue'),
-);
 
-const { onTakePicture, onPickPhoto } = useFileSystem();
-const {
-  files,
-  uploading,
-  onStartUploadChunk,
-} = useUpload();
-const dialogPickGallerryOrCamera = ref<boolean>(false);
-const dialogPickGallerryOrCameraMultiple = ref<boolean>(false);
-const imagePickItems = ref<FileManager[]>([]);
+const { onPickPhoto, onTakePicture } = useCamera();
+const { files, uploading, onStartUploadChunk } = useUpload();
 
 const filePickItems = ref<FileManager[]>([]);
+const fileChooseItems = ref<FileManager[]>([]);
 const filePickerRef =
   useTemplateRef<InstanceType<typeof BaseFilePicker>>('filePickerRef');
 
-const onPickImage = (files: ChoosePhotoItem[] | null) => {
-  console.log('onPickImage', files);
-  dialogPickGallerryOrCamera.value = false;
-  dialogPickGallerryOrCameraMultiple.value = false;
-};
-const onTackPicture = (file: ChoosePhotoItem | null) => {
-  console.log('onTackPicture', file);
-  dialogPickGallerryOrCamera.value = false;
-  dialogPickGallerryOrCameraMultiple.value = false;
-};
-
 const onPickImageProcess = async () => {
-  const files = await onPickPhoto(true);
-  console.log('onPickImageProcess', files);
-  if (files && files.length > 0) {
-    for (const f of files) {
-      onAddImagePreview(f.file, true, '', f.webPath);
-    }
-  }
+  const files = await onPickPhoto(1);
+  console.log('onPickPhoto', files);
 };
 const onTakeImageProcess = async () => {
   const file = await onTakePicture();
-  console.log('onTakeImageProcess', file);
-  if (file) {
-    onAddImagePreview(file.file, true, '', file.webPath);
-  }
-};
-const onAddImagePreview = (
-  f: File | Blob | undefined,
-  isImage: boolean,
-  name: string | undefined,
-  pathUrl: string | undefined = undefined,
-) => {
-  if (f) {
-    const fileMimeType = getFileMimeType(f)
-    imagePickItems.value.push({
-      id: null,
-      uniqueId: idToString(generateSnowFlakeId()),
-      fileMime: f.type,
-      fileName: name || '',
-      filePath: pathUrl || '',
-      fileThumbnailPath: '',
-      fileSize: f.size,
-      functionId: 0,
-      fileMimeType,
-      file: f,
-    });
-  }
-};
-const onRemoveImagePickItem = (index: number) => {
-  imagePickItems.value.splice(index, 1);
+  console.log('onTakePicture', file);
 };
 
 const openFilePicker = () => {
   if (filePickerRef.value) {
-    filePickerRef.value.openFilePicker();
+    filePickerRef.value.open();
   }
 };
-const onFileAdded = async (files: File | File[] | null | undefined) => {
-  console.log('onFileAdded', files);
+const onFilePickerChange = (files: FileManager[] | null) => {
+  console.log('onFilePickerChange', files);
 };
 </script>
 <template>
@@ -118,16 +63,29 @@ const onFileAdded = async (files: File | File[] | null | undefined) => {
 
     <BaseCard flat title="Image picker">
       <ion-card-content>
-        <BaseButton
-          full
-          label="Single From gallerry/Camera"
-          @click="dialogPickGallerryOrCamera = true"
-        />
-        <BaseButton
-          full
-          label="Multiple from gallerry/Camera"
-          @click="dialogPickGallerryOrCameraMultiple = true"
-        />
+        <BaseChoosePhoto
+          v-model="fileChooseItems"
+          full-width
+          :multiple="false"
+          @on-change="onFilePickerChange"
+        >
+          <BaseButton full label="Single From gallerry/Camera" />
+        </BaseChoosePhoto>
+
+        <BaseChoosePhoto
+          v-model="fileChooseItems"
+          full-width
+          multiple
+          @on-change="onFilePickerChange"
+        >
+          <BaseButton full label="Multiple from gallerry/Camera" />
+        </BaseChoosePhoto>
+
+        <IonRow>
+          <IonCol>
+            <BaseFileItems :items="fileChooseItems" show-delete />
+          </IonCol>
+        </IonRow>
 
         <BaseButton
           label="From gallerry"
@@ -140,65 +98,27 @@ const onFileAdded = async (files: File | File[] | null | undefined) => {
           @click="onTakeImageProcess"
         />
       </ion-card-content>
-      <ion-card-content>
-        <IonList>
-          <BaseFilePreviewItemAlt
-            v-for="(f, fileIndex) in imagePickItems"
-            :key="`pick-f-${f.id}-${fileIndex}${f.uniqueId ? f.uniqueId : ''}`"
-            :item="f"
-            :index="fileIndex"
-            show-delete
-            :button="false"
-            format-size
-            @on-remove="onRemoveImagePickItem"
-          />
-        </IonList>
-      </ion-card-content>
     </BaseCard>
 
     <BaseCard flat title="File picker">
       <ion-card-content>
         <BaseFilePicker
-          v-model:file-items="filePickItems"
+          ref="filePickerRef"
+          v-model="filePickItems"
           label="Simple picker"
           multiple
           :accept="FileTypeAcceptList"
-        />
-        <BaseButton
-          full
-          label="Custom UI picker"
-          :icon="{ name: imageOutline, iconSet: 'ion' }"
-          @click="openFilePicker"
-        />
+        >
+          <template #button="{ open }">
+            <BaseButton
+              full
+              label="Custom UI picker"
+              :icon="{ name: imageOutline, iconSet: 'ion' }"
+              @click="open"
+            />
+          </template>
+        </BaseFilePicker>
       </ion-card-content>
     </BaseCard>
-
-    <BaseChoosePhoto
-      v-if="dialogPickGallerryOrCamera"
-      v-model="dialogPickGallerryOrCamera"
-      v-model:files="imagePickItems"
-      @on-pick-picture="onPickImage"
-      @on-take-picture="onTackPicture"
-    />
-    <BaseChoosePhoto
-      v-if="dialogPickGallerryOrCameraMultiple"
-      v-model="dialogPickGallerryOrCameraMultiple"
-      v-model:files="imagePickItems"
-      multiple
-      @on-pick-picture="onPickImage"
-      @on-take-picture="onTackPicture"
-    />
-
-    <div style="display: none">
-      <BaseFilePicker
-        ref="filePickerRef"
-        :icon="imageOutline"
-        :show-preview="false"
-        :wildcard="false"
-        multiple
-        @on-file-add="onFileAdded"
-      >
-      </BaseFilePicker>
-    </div>
   </BasePage>
 </template>
