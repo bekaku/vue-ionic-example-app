@@ -40,8 +40,10 @@ Representative: `src/pages/tabs/home.vue` › `home-layout` uses `BasePage` with
   styles (`chat/MessageItem.vue` › `.message-action`, `.reply-preview`).
 - Use `BaseIcon` for icons in new code; do not add a bare `<ion-icon>`.
   Ionicons: `:name="<ionicon>" icon-set="ion"`; SVG sets (`bootstrap-icons`,
-  `mdi`, …) pass the path string as `name`. Size with `:size` (px, default
-  20), not CSS `font-size` — `BaseIcon` sets `font-size` inline.
+  `mdi`, …) pass the path string as `name`. Lucide passes an imported Vue
+  component as `name` with `icon-set="lucide"` (see the Lucide section below).
+  Size with `:size` (px, default 20); Ionicons use inline font-size, SVG sets
+  and Lucide use width/height.
   `BaseIcon` also sets an inline `top: 3px` on ion icons to align them with
   text; pass `style="top: 0"` when the icon must sit centered (icon-only
   buttons, `chat/MessageItem.vue`). Colour comes from `color` (theme class)
@@ -93,6 +95,39 @@ Representative: `src/pages/tabs/home.vue` › `home-layout` uses `BasePage` with
   lines before "see more", tapping the text toggles expand unless `to` is
   set, and links/hashtags use `text-primary`. It renders nothing when
   `content` is empty, so keep any fallback text as a `v-else` sibling.
+
+### Lucide icons (VERIFIED)
+
+`BaseIcon.vue` supports `icon-set="lucide"` with an individually imported Vue
+component from `@lucide/vue`, e.g. `<BaseIcon :name="House" icon-set="lucide"
+:size="24" color="primary" :stroke-width="1.5" />`. `name` accepts a component
+for Lucide or a string for the existing icon sets. Lucide defaults to stroke
+width 2, inherits `currentColor`, and forwards attrs/events to its SVG. Use
+explicit aria labels on icon-only actions. Do not import the entire icon map;
+individual imports keep unused icons out of the bundle. `BaseButton` accepts
+the same `IconProps` via `icon`/`iconRight`, e.g.
+`:icon="{ name: Download, iconSet: 'lucide' }"`. See `example/ui/icon.vue` for
+sizes, theme colours, stroke widths, both button positions and usage snippets.
+The package is a direct, pinned dependency (`package.json`/`pnpm-lock.yaml`);
+Lucide has no Capacitor integration or native sync requirement.
+
+```vue
+<script setup lang="ts">
+import BaseIcon from '@/components/base/BaseIcon.vue';
+import BaseButton from '@/components/base/BaseButton.vue';
+import { House, Download, ArrowRight, Heart } from '@lucide/vue';
+</script>
+
+<template>
+  <BaseIcon :name="House" icon-set="lucide" :size="24" color="primary" />
+  <BaseIcon :name="House" icon-set="lucide" :size="32" :stroke-width="1.5" />
+  <BaseButton :icon="{ name: Download, iconSet: 'lucide' }" label="Download" />
+  <BaseButton :icon-right="{ name: ArrowRight, iconSet: 'lucide' }" label="Next" />
+  <BaseButton :icon="{ name: Heart, iconSet: 'lucide' }" icon-only aria-label="Favorite" />
+</template>
+```
+
+Demo labels above are illustrative; product labels/aria labels use `useLang`.
 
 ## 2. Ionic components in use (VERIFIED, sample)
 
@@ -237,7 +272,8 @@ spring-like motion that respects reduced-motion/transparency/contrast.
   gradient card per screen (`--app-bg-hero`, white text). Do not combine
   `flat`/`bordered` with these — the system has no card borders.
 - **Lists**: `IonList` inside `ion-card`/`.app-surface` gets transparent rows,
-  52px min height and inset hairline separators automatically. Menu rows use
+  52px min height and inset hairline separators automatically
+  (`IonList lines="none"` opts out — never use list rows for form inputs). Menu rows use
   `BaseMenuItem` (tinted `.app-menu-icon` chip, `color: 'danger'` → red chip).
   A hand-written row that needs the same chip uses
   `<span slot="start" class="app-menu-icon">` + `BaseIcon :size="18"
@@ -249,6 +285,22 @@ spring-like motion that respects reduced-motion/transparency/contrast.
   on the hero) for status/period/delta pills; `.app-icon-tile` (tinted
   squircle, size via `--app-icon-tile-size`); `.app-live-dot` for live state;
   `.app-grid` (`--app-grid-cols`, default 2) for tiles.
+- **Forms**: one borderless filled field per input —
+  `<label class="app-field"><BaseIcon … style="top: 0" /><ion-input
+  :aria-label … /></label>` (trailing `BaseButton clear round icon-only` for
+  actions such as show password), stacked in `.app-form`. No
+  `IonList`/`IonItem` wrappers and no separators between fields. Primary
+  submit: full-width pill `BaseButton type="submit"` 54px high. Long consent
+  text on `ion-checkbox` wraps via `::part(label) { white-space: normal }`.
+  Inputs use `label-placement="floating"` + `:label` (the label is the
+  accessible name). Reference: `components/app/AppLoginForm.vue`
+  (`show-language` prop toggles its language chip).
+- **Signature screens** (login/onboarding only): `pages/auth/login.vue` —
+  animated brand aurora (palette radial orbs + static SVG grain, stopped by
+  reduced motion), glass squircle logo, glass top-bar buttons (theme →
+  `/settings/appearance`, language → `/settings/languge`, both
+  `noRequireAuth`), solid form card. Regular pages stay on the tonal system
+  above; do not reuse the aurora elsewhere.
 - **Controls**: `BaseSegment` renders the capsule segmented control
   (`.app-segment`); `ion-searchbar` inside `BasePage` is a capsule; buttons
   stay `BaseButton` (spring press). Pill buttons: `--border-radius:
@@ -263,8 +315,16 @@ spring-like motion that respects reduced-motion/transparency/contrast.
   -edge/-highlight/-filter`, `--app-bg-accent`/`--app-text-accent`,
   `--app-bg-positive/-negative` + `--app-text-positive/-negative`,
   `--app-bg-hero`/`--app-text-on-hero`, `--app-motion-slow`,
-  `--app-ease-out/-spring`, `--app-tab-bar-space`. Each has a dark value under
-  `body[color-theme='dark']`; new tokens must add both.
+  `--app-ease-out/-spring`, `--app-tab-bar-space`, `--app-live`. Each has a
+  dark value under `body[color-theme='dark']`; new tokens must add both.
+- **Colour source**: every tint, gradient, active state and chip colour
+  derives from the Ionic theme colours in `variables.scss`
+  (`--ion-color-primary` + `-tint/-shade/-contrast`, `--ion-color-success`,
+  `--ion-color-danger`) via `color-mix()`, so changing them re-themes the
+  whole app (accent text = primary mixed 75% with black / 70% with white for
+  contrast). Do not use the fixed `--color-primary-*` scale or other palette
+  hues (`sky`, `indigo`, `violet`, `emerald`, …) for brand or state colour in
+  shared UI; palette hues are for data/illustration (e.g. chart series).
 - Fallbacks live in `mobile-ui.scss` §8: no `backdrop-filter` → opaque chrome;
   `prefers-reduced-transparency`/`prefers-contrast: more` → solid surfaces and
   visible borders. Keep new glass/motion inside those guards.

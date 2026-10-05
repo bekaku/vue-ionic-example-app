@@ -8,7 +8,7 @@ import {
   LIMIT_VIDEO_SECOND,
 } from '@/libs/constant';
 import type { FileManager } from '@/types/models';
-import { formatDurationFromSecond } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import { base64ToFile } from '@/utils/FileUtils';
 import { generateSnowFlakeId } from '@/utils/snowflake';
 import { IonButton, IonIcon, IonItem, IonLabel, IonList } from '@ionic/vue';
@@ -20,6 +20,7 @@ import {
 } from 'ionicons/icons';
 import { defineAsyncComponent, defineEmits, defineExpose, defineModel, defineProps, ref } from 'vue';
 
+const { formatDurationFromSecond } = useDateFns();
 type ChoiceType = 'photo' | 'camera' | 'video' | 'record-video'
 const {
   multiple = false,

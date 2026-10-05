@@ -48,8 +48,12 @@ ion-modal.modal-sheet {
     --border-color: var(--app-hairline);
   }
 
-  /* Hairline separators start after the leading icon/avatar, like iOS */
-  ion-item:not(:last-child) {
+  /*
+   * Hairline separators start after the leading icon/avatar, like iOS.
+   * Only for list rows: an IonList with lines="none" (forms) opts out.
+   */
+  > ion-item:not(:last-child),
+  ion-list:not([lines='none']) > ion-item:not(:last-child) {
     --inner-border-width: 0 0 0.55px 0;
   }
 }
@@ -163,6 +167,57 @@ ion-segment.app-segment {
   --placeholder-color: var(--app-text-muted);
   --icon-color: var(--app-text-muted);
   padding-inline: var(--app-space-page);
+}
+
+/*
+ * Form fields: one filled, borderless field per input (no IonItem/IonList
+ * wrapper, no separators). Markup:
+ *   <label class="app-field"><BaseIcon …/><ion-input …/><BaseButton …/></label>
+ * Stack fields in .app-form (vertical gap).
+ */
+.app-form {
+  display: grid;
+  gap: 12px;
+}
+
+.app-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 0 8px 0 16px;
+  border-radius: var(--app-radius-md);
+  background: var(--app-bg-sunken);
+  color: var(--app-text-muted);
+  box-shadow: inset 0 0 0 1.5px transparent;
+  transition:
+    box-shadow var(--app-motion-fast) ease,
+    background-color var(--app-motion-fast) ease;
+
+  &:focus-within {
+    background: var(--app-bg-surface);
+    box-shadow: inset 0 0 0 1.5px var(--ion-color-primary);
+    color: var(--ion-color-primary);
+  }
+
+  ion-input,
+  ion-textarea {
+    flex: 1;
+    min-width: 0;
+    --background: transparent;
+    --padding-start: 0;
+    --padding-end: 0;
+    --color: var(--app-text-strong);
+    --placeholder-color: var(--app-text-muted);
+    --placeholder-opacity: 1;
+    font-size: 1rem;
+  }
+
+  .app-base-button {
+    flex-shrink: 0;
+    margin: 0;
+    --color: var(--app-text-muted);
+  }
 }
 
 /* 4. Page chrome: glass header, large titles ------------------------------ */
@@ -534,7 +589,7 @@ ion-tabs.app-tabs-overlay {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--color-emerald-500);
+  background: var(--app-live);
 
   &::after {
     content: '';

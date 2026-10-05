@@ -57,17 +57,14 @@
 <script setup lang="ts">
 import { useLang } from '@/composables/useLang';
 import type { DatetimePresentation, ItemLines } from '@/types/common';
-import {
-  convertDateFormatToThai,
-  FORMAT_DATE14,
-  formatDateBy,
-  getDateNow,
-} from '@/utils/DateUtil';
+import { FORMAT_DATE14 } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import { IonButtons, IonCol, IonIcon, IonItem, IonLabel } from '@ionic/vue';
 import { calendarOutline, close } from 'ionicons/icons';
 import { computed, defineAsyncComponent, ref } from 'vue';
 import BaseButton from './BaseButton.vue';
 import BaseDatePicker from './BaseDatePicker.vue';
+const { convertDateFormatToThai, formatDateBy, getDateNow } = useDateFns();
 const {
   required = false,
   disabled = false,

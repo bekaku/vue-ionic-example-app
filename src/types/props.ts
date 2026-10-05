@@ -1,3 +1,4 @@
+import type { Component } from 'vue';
 import type { AppColor, ButtonFill, IconSetType, IHrefTarget, IonicColor } from './common'
 
 export interface AvatarProps {
@@ -40,11 +41,12 @@ export interface ButtonProps {
   rbac?: RBACProps;
 }
 export interface IconProps {
-  name: string
+  name: string | Component
   iconSet?: IconSetType
   size?: number
   color?: AppColor | undefined
   additionalReplce?: string
+  strokeWidth?: number
 }
 export interface BadgeProps {
   color?: IonicColor;

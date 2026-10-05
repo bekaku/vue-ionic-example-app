@@ -19,6 +19,7 @@ import {
 } from '@ionic/vue';
 import { onMounted, ref, useTemplateRef } from 'vue';
 
+const avatarUrl = 'https://cdn.quasar.dev/img/avatar.png';
 const scrollerDynamicRef = useTemplateRef<any>('scrollerDynamicRef');
 const scrollerRecycleRef = useTemplateRef<any>('scrollerRecycleRef');
 const scrollPosition = ref<number>(10);
@@ -144,7 +145,7 @@ const scrollTo = () => {
                 </template>
                 <template #default="{ item, index, }">
                     <IonItem :key="index">
-                        <BaseAvatar slot="start" src="https://cdn.quasar.dev/img/avatar.png" />
+                        <BaseAvatar slot="start" :src="avatarUrl" />
                         <IonLabel>
                             #{{ index }} - {{ item.label }}
                         </IonLabel>

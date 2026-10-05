@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 import { LatestDeviceActiveKey } from '@/libs/constant';
 export const useDeviceStore = defineStore('deviceStore', () => {
+  const { getCurrentTimestamp, getDateDiffMinutes } = useDateFns('en');
   const isActive = ref(false);
   const deviceFourceReloadData = ref(false);
   const setAppStateChange = async (state: boolean) => {

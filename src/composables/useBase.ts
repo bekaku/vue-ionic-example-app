@@ -4,13 +4,6 @@ import type {
   AppToastOptions,
   GenerateLinkType
 } from '@/types/common';
-import {
-  FORMAT_DATE,
-  FORMAT_DATE17,
-  formatDate,
-  formatDateTime,
-  formatDistanceFromNow
-} from '@/utils/DateUtil';
 import { Clipboard } from '@capacitor/clipboard';
 import {
   alertController,
@@ -26,7 +19,7 @@ export const useBase = () => {
   const router = useIonRouter();
   const route = useRoute();
   const routerVue = useRouter();
-  const { t, locale } = useLang();
+  const { t } = useLang();
   const { getEnv } = useConfig();
   const getCurrentPath = (fullPath = true) => {
     return fullPath ? route.fullPath : route.path;
@@ -201,15 +194,6 @@ export const useBase = () => {
       resolve(loading);
     });
   };
-  const appFormatDateTime = (d: string, fmt: string = FORMAT_DATE17) => {
-    return d ? formatDateTime(d, fmt, locale.value) : '';
-  };
-  const appFormatDate = (d: string, fmt: string = FORMAT_DATE) => {
-    return formatDate(d, fmt, locale.value);
-  };
-  const appFormatDateDistance = (d: string) => {
-    return formatDistanceFromNow(d, locale.value);
-  };
 
   /**
    * <div ref="bottomSection"></div>
@@ -293,9 +277,6 @@ export const useBase = () => {
     appLoading,
     onBack,
     scrollToTop,
-    appFormatDateTime,
-    appFormatDate,
-    appFormatDateDistance,
     getCurrentPath,
     onReplaceUrl,
     readableNumber,

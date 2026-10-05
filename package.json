@@ -38,6 +38,7 @@
     "@coders-tm/vue-number-format": "^3.35.4",
     "@ionic/vue": "^9.0.6",
     "@ionic/vue-router": "^9.0.6",
+    "@lucide/vue": "1.17.0",
     "@quasar/extras": "^2.1.0",
     "@tato30/vue-pdf": "^2.2.0",
     "apexcharts": "^7.8.0",

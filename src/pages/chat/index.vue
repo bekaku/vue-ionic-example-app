@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useDateFns } from '@/composables/useDateFns';
+import { FORMAT_DATE13 } from '@/utils/DateUtil';
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseIcon from '@/components/base/BaseIcon.vue';
 import BasePage from '@/components/base/BasePage.vue';
@@ -30,6 +32,7 @@ import {
   mdiThumbUp,
 } from '@quasar/extras/mdi-v7';
 
+const { getDateNow, formatDateBy } = useDateFns();
 const PAGE_SIZE = 15;
 const { t } = useLang();
 const { appConfirm, appToast, writeToClipboard } = useBase();
@@ -123,12 +126,11 @@ const sendMessage = async (content?: string) => {
     return;
   }
 
-  const now = new Date();
-  const pad = (value: number) => String(value).padStart(2, '0');
+  const now = getDateNow();
   localMessages.value.push({
     id: `local-${now.getTime()}`,
     chatMsg,
-    msgDateTime: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`,
+    msgDateTime: formatDateBy(now, FORMAT_DATE13),
     readCount: 0,
     sent: true,
     unsend: false,

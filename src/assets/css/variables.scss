@@ -36,12 +36,12 @@ http://ionicframework.com/docs/theming/ */
 :root {
   --app-font-family: 'Noto Sans Thai Looped', "Helvetica Neue", "Segoe UI", Arial, sans-serif;
   /** primary **/
-  --ion-color-primary: #3880ff;
-  --ion-color-primary-rgb: 56, 128, 255;
-  --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3171e0;
-  --ion-color-primary-tint: #4c8dff;
+  --ion-color-primary: #00bba7;
+  --ion-color-primary-rgb: 0,187,167;
+  --ion-color-primary-contrast: #000000;
+  --ion-color-primary-contrast-rgb: 0,0,0;
+  --ion-color-primary-shade: #00a593;
+  --ion-color-primary-tint: #1ac2b0;
 
   /** secondary **/
   --ion-color-secondary: #00aba9;
@@ -193,17 +193,25 @@ http://ionicframework.com/docs/theming/ */
   --app-glass-filter: saturate(180%) blur(24px);
 
   /* Tints */
-  --app-bg-accent: color-mix(in srgb, var(--ion-color-primary) 10%, var(--app-bg-elevated));
-  --app-text-accent: var(--color-primary-700);
-  --app-bg-positive: var(--color-emerald-50);
-  --app-text-positive: var(--color-emerald-700);
-  --app-bg-negative: var(--color-rose-50);
-  --app-text-negative: var(--color-rose-600);
+  /*
+   * Every tint derives from the Ionic theme colours above, so changing
+   * --ion-color-primary/-success/-danger re-themes the whole app.
+   * Text tints are mixed toward black (light) / white (dark) for contrast.
+   */
+  --app-bg-accent: color-mix(in srgb, var(--ion-color-primary) 12%, var(--app-bg-elevated));
+  --app-text-accent: color-mix(in srgb, var(--ion-color-primary) 75%, var(--color-black));
+  --app-bg-positive: color-mix(in srgb, var(--ion-color-success) 14%, var(--app-bg-elevated));
+  --app-text-positive: color-mix(in srgb, var(--ion-color-success) 65%, var(--color-black));
+  --app-bg-negative: color-mix(in srgb, var(--ion-color-danger) 12%, var(--app-bg-elevated));
+  --app-text-negative: color-mix(in srgb, var(--ion-color-danger) 80%, var(--color-black));
+  --app-live: var(--ion-color-success);
   --app-bg-hero: radial-gradient(120% 90% at 100% 0%,
-      color-mix(in srgb, var(--color-sky-300) 60%, transparent) 0%, transparent 55%),
+      color-mix(in srgb, var(--ion-color-primary-tint) 70%, transparent) 0%, transparent 55%),
     radial-gradient(90% 70% at 0% 100%,
-      color-mix(in srgb, var(--color-indigo-500) 55%, transparent) 0%, transparent 60%),
-    linear-gradient(150deg, var(--ion-color-primary) 0%, var(--color-primary-800) 100%);
+      color-mix(in srgb, var(--color-white) 14%, transparent) 0%, transparent 60%),
+    linear-gradient(150deg,
+      color-mix(in srgb, var(--ion-color-primary) 82%, var(--color-black)) 0%,
+      color-mix(in srgb, var(--ion-color-primary) 45%, var(--color-black)) 100%);
   --app-text-on-hero: var(--color-white);
 
   /* Motion */
@@ -363,16 +371,18 @@ body[color-theme='dark'] {
   --app-glass-edge: color-mix(in srgb, var(--color-black) 40%, transparent);
   --app-glass-highlight: inset 0 1px 0 color-mix(in srgb, var(--color-white) 10%, transparent);
   --app-bg-accent: color-mix(in srgb, var(--ion-color-primary) 22%, var(--app-bg-surface-dark));
-  --app-text-accent: var(--color-primary-300);
-  --app-bg-positive: color-mix(in srgb, var(--color-emerald-500) 16%, transparent);
-  --app-text-positive: var(--color-emerald-300);
-  --app-bg-negative: color-mix(in srgb, var(--color-rose-500) 16%, transparent);
-  --app-text-negative: var(--color-rose-300);
+  --app-text-accent: color-mix(in srgb, var(--ion-color-primary) 70%, var(--color-white));
+  --app-bg-positive: color-mix(in srgb, var(--ion-color-success) 16%, transparent);
+  --app-text-positive: color-mix(in srgb, var(--ion-color-success) 70%, var(--color-white));
+  --app-bg-negative: color-mix(in srgb, var(--ion-color-danger) 16%, transparent);
+  --app-text-negative: color-mix(in srgb, var(--ion-color-danger) 70%, var(--color-white));
   --app-bg-hero: radial-gradient(120% 90% at 100% 0%,
-      color-mix(in srgb, var(--color-sky-400) 40%, transparent) 0%, transparent 55%),
+      color-mix(in srgb, var(--ion-color-primary) 45%, transparent) 0%, transparent 55%),
     radial-gradient(90% 70% at 0% 100%,
-      color-mix(in srgb, var(--color-violet-600) 45%, transparent) 0%, transparent 60%),
-    linear-gradient(150deg, var(--color-primary-700) 0%, var(--color-primary-950) 100%);
+      color-mix(in srgb, var(--color-white) 8%, transparent) 0%, transparent 60%),
+    linear-gradient(150deg,
+      color-mix(in srgb, var(--ion-color-primary) 55%, var(--color-black)) 0%,
+      color-mix(in srgb, var(--ion-color-primary) 20%, var(--color-black)) 100%);
   --app-shadow-card: 0 0 0 1px var(--app-hairline);
   --app-shadow-float: 0 1px 2px color-mix(in srgb, var(--color-black) 40%, transparent),
     0 4px 12px -2px color-mix(in srgb, var(--color-black) 40%, transparent);

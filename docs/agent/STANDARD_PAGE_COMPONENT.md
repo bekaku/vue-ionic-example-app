@@ -71,3 +71,10 @@ the utilities instead of page-scoped look CSS:
 
 Reference pages: `tabs/home.vue` (dashboard), `tabs/other.vue`
 (settings/grouped list), `tabs/chat.vue` (searchable list).
+
+## Icon examples (2026-10-05, VERIFIED)
+
+`pages/example/ui/icon.vue` demonstrates Lucide through `BaseIcon` and
+`BaseButton`, alongside the existing icon sets. For the icon API and copyable
+examples, use [COMPONENTS.md — Lucide icons](../../skills/mobile/COMPONENTS.md#lucide-icons-verified).
+Use these shared wrappers when adding icons to a new page.

@@ -366,6 +366,10 @@ export default {
         'monthShorts': 'Jan._Feb._Mar._Apr._May_Jun._Jul._Aug._Sep._Oct._Nov._Dec.'
     },
     'authen': {
+        'welcomeBack': 'Welcome back',
+        'loginSubtitle': 'Sign in to continue to your workspace',
+        'showPassword': 'Show password',
+        'hidePassword': 'Hide password',
         'login': 'Log in',
         'helper1': 'Enter the verification code we just sent you on email address.',
         'helper2': 'For safety in using the system, the new password \'must have a length of 8 characters or more\' and \'must be mixed with numbers and letters\' and \'use both lowercase and uppercase letters\'.',

@@ -54,6 +54,7 @@ export type IAlert =
   | 'is-danger'
   | 'is-light';
 export type IconSetType =
+  | 'lucide'
   | 'bootstrap-icons'
   | 'line-awesome'
   | 'ion'

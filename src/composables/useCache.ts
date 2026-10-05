@@ -4,10 +4,11 @@ import {
   CacheDateCheckKey,
   NotifyKey
 } from '@/libs/constant';
-import { getDateNow, getMonthNow, getYearNow } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import { loadStorage, removeStorage, saveStorage } from '@/utils/StorageUtil';
 
 export const useCache = () => {
+  const { getDateNow, getMonthNow, getYearNow, formatLocalDateBy } = useDateFns('en');
   const getCacheKeyList = async (): Promise<CacheDateAndKey[]> => {
     const cacheKeyCheckList = await loadStorage<CacheDateAndKey[]>(CacheDateCheckKey, true);
     if (cacheKeyCheckList && cacheKeyCheckList.length > 0) {
@@ -53,7 +54,7 @@ export const useCache = () => {
       const d = getDateNow();
       cacheKeyCheckList.push({
         key: k,
-        date: d.toLocaleDateString()
+        date: formatLocalDateBy(d)
       });
       await saveCacheKeyList(cacheKeyCheckList);
     }
@@ -76,7 +77,7 @@ export const useCache = () => {
     }
 
     const d = getDateNow();
-    return new Promise(resolve => resolve(item.date != d.toLocaleDateString()));
+    return new Promise(resolve => resolve(item.date != formatLocalDateBy(d)));
   };
   const canFecthToServerMonth = async (k: string): Promise<boolean> => {
     const item = await findByKey(k);

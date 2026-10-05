@@ -2,11 +2,12 @@
 import type { ApiFetchResponse } from '@/composables/useApi';
 import { FileNamePrefix } from '@/libs/constant';
 import type { FileMimeType, FileType, ImageDimensions, ImageResizeOptions } from '@/types/common';
-import { getCurrentFormattedDatetime } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import { biCameraReels, biFileEarmarkImage, biFileEarmarkPpt, biFileEarmarkZip, biFiletypeCsv, biFiletypePdf, biFiletypeTxt, biFiletypeXlsx, biFileWord, biMic, biPaperclip } from '@quasar/extras/bootstrap-icons';
 import JSZip from 'jszip';
 import imageCompression from 'browser-image-compression';
 
+const { getCurrentFormattedDatetime } = useDateFns('en');
 export const fileToBlob = (file: File): Promise<any> => {
   return new Promise((resolve) => {
     const blob = new Blob([file as BlobPart], {

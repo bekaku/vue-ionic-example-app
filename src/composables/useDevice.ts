@@ -4,10 +4,11 @@ import type { IPlatForm, PlatformType } from '@/types/models';
 import { isPlatform, getPlatforms } from '@ionic/vue';
 import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 import { LatestSyncActiveStatusKey } from '@/libs/constant';
-import { getCurrentTimestamp, getDateDiffMinutes } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import { DeviceSecurityDetect } from '@capacitor-community/device-security-detect';
 import { SafeArea } from 'capacitor-plugin-safe-area'
 export const useDevice = () => {
+  const { getCurrentTimestamp, getDateDiffMinutes } = useDateFns('en');
   const isIOS = async (): Promise<boolean> => {
     const info = await Device.getInfo();
     return new Promise((resolve) => {

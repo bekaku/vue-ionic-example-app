@@ -88,6 +88,36 @@ const parseJson = (text: string) => {
   }
 };
 
+// dev-only response logging: never print tokens/secrets even in dev
+const SENSITIVE_KEYS = ['accesstoken', 'authenticationtoken', 'refreshtoken', 'idtoken', 'password', 'newpassword', 'oldpassword'];
+const redactSensitive = (value: any): any => {
+  if (Array.isArray(value)) {
+    return value.map(redactSensitive);
+  }
+  if (value && typeof value === 'object' && value.constructor === Object) {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [
+        k,
+        SENSITIVE_KEYS.includes(k.toLowerCase()) ? '***' : redactSensitive(v),
+      ]),
+    );
+  }
+  return value;
+};
+const toLoggableData = (data: unknown): unknown => {
+  if (data instanceof Blob) {
+    return `[Blob ${data.size} bytes, ${data.type}]`;
+  }
+  if (data instanceof ArrayBuffer) {
+    return `[ArrayBuffer ${data.byteLength} bytes]`;
+  }
+  try {
+    return redactSensitive(data);
+  } catch {
+    return '[unloggable]';
+  }
+};
+
 const isJsonBody = (body: any) => {
   if (body === undefined || body === null || typeof body !== 'object') {
     return false;
@@ -293,8 +323,13 @@ export const useApi = () => {
     }
 
     if (isDevMode()) {
-      // no body/headers/_data: refresh + login payloads carry tokens
-      console.log('[fetch response]', { url, method: options.method || 'GET', status: response.status });
+      // body logged with tokens/secrets redacted (login/refresh payloads stay safe)
+      console.log('[fetch response]', {
+        url,
+        method: options.method || 'GET',
+        status: response.status,
+        data: toLoggableData(response._data),
+      });
     }
     if (!response.ok) {
       throw new ApiFetchError(`[${options.method || 'GET'}] "${url}": ${response.status} ${response.statusText}`, url, options, response);

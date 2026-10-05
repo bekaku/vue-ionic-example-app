@@ -5,7 +5,7 @@ import { useBlobUrls } from '@/composables/useBlobUrls';
 import { useFileDownload } from '@/composables/useFileDownload';
 import { useLang } from '@/composables/useLang';
 import type { FileManager } from '@/types/models';
-import { getCurrentFormattedDatetime } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import {
     getBlobUrlFromResponse,
     getFileNameFromResponse,
@@ -31,6 +31,7 @@ import SkeletonListItem from '../skeleton/SkeletonListItem.vue';
 import BaseIcon from './BaseIcon.vue';
 import BasePdfViewCore from './BasePdfViewCore.vue';
 import BaseSpinner from './BaseSpinner.vue';
+const { getCurrentFormattedDatetime } = useDateFns();
 const {
   src,
   title,

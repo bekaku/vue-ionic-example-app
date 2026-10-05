@@ -8,6 +8,7 @@ import BaseSegment from '@/components/base/BaseSegment.vue';
 import ChartArea from '@/components/chart/ChartArea.vue';
 import ChartSparklines from '@/components/chart/ChartSparklines.vue';
 import UserItem from '@/components/user/UserItem.vue';
+import { useDateFns } from '@/composables/useDateFns';
 import { useLang } from '@/composables/useLang';
 import { useTheme } from '@/composables/useTheme';
 import {
@@ -30,6 +31,7 @@ import { computed, ref } from 'vue';
 
 const authenStore = useAuthenStore();
 const { t, locale } = useLang();
+const { formatDateBy } = useDateFns(locale);
 const { isDark } = useTheme();
 const section = ref('overview');
 const sections = computed(() =>
@@ -68,9 +70,7 @@ const chartSeries = computed(() =>
 );
 const chartCategories = computed(() =>
   dashboardChartData.categories.map((_, index) =>
-    new Intl.DateTimeFormat(locale.value, { month: 'short' }).format(
-      new Date(2026, index, 1),
-    ),
+    formatDateBy(new Date(2026, index, 1), 'MMM'),
   ),
 );
 </script>

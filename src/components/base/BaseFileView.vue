@@ -7,7 +7,8 @@ import { fileToBlob, getFileType } from '@/utils/FileUtils';
 import { useFileSystem } from '@/composables/useFileSystem';
 import { useFileDownload } from '@/composables/useFileDownload';
 import { useLang } from '@/composables/useLang';
-import { getCurrentFormattedDatetime } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
+const { getCurrentFormattedDatetime } = useDateFns();
 const BasePdfViewDialog = defineAsyncComponent(() => import('@/components/base/BasePdfViewDialog.vue'));
 const BaseImageViewDialog = defineAsyncComponent(() => import('@/components/base/BaseImageViewDialog.vue'));
 const {

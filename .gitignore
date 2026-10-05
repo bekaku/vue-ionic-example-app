@@ -39,3 +39,4 @@ android/.idea/compiler.xml
 .env.development
 # pnpm-lock.yaml
 public/assets/sql-wasm.wasm
+/.pnpm-store/

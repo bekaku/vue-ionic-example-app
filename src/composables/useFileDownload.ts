@@ -1,3 +1,4 @@
+import { useDateFns } from '@/composables/useDateFns';
 import { useApi } from '@/composables/useApi';
 import { useFileSystem } from '@/composables/useFileSystem';
 import { FileOpener } from '@capacitor-community/file-opener';
@@ -30,6 +31,7 @@ export interface DownloadState {
 }
 
 export const useFileDownload = () => {
+    const { formatDateBy, getDateNow } = useDateFns();
     const api = useApi();
     const { savePicture } = useFileSystem();
     // Reactive state
@@ -163,7 +165,7 @@ export const useFileDownload = () => {
                 name: filename,
                 path: result.uri,
                 size: blob.size || 0,
-                downloadedAt: new Date(),
+                downloadedAt: getDateNow(),
                 mimeType: getMimeType(filename)
             };
 
@@ -396,13 +398,7 @@ export const useFileDownload = () => {
 
     // Format date
     const formatDate = (date: Date): string => {
-        return new Intl.DateTimeFormat('default', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        }).format(date);
+        return formatDateBy(date, 'd MMM yyyy HH:mm');
     };
 
     // Load existing files on mount

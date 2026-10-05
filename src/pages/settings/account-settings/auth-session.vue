@@ -5,6 +5,7 @@ import BaseCard from '@/components/base/BaseCard.vue';
 import BasePage from '@/components/base/BasePage.vue';
 import BaseSpinner from '@/components/base/BaseSpinner.vue';
 import { useBase } from '@/composables/useBase';
+import { useDateFns } from '@/composables/useDateFns';
 import { useLang } from '@/composables/useLang';
 import { usePaging } from '@/composables/usePaging';
 import type { AccessTokenDto } from '@/types/models';
@@ -23,7 +24,8 @@ const LoadMore = defineAsyncComponent(
   () => import('@/components/base/BaseLoadMore.vue'),
 );
 const { t } = useLang();
-const { appLoading, appConfirm, appFormatDateTime } = useBase();
+const { appLoading, appConfirm } = useBase();
+const { formatDateTime } = useDateFns();
 const { removeAccessTokenSession } = AuthenService();
 const { currentAuthSession } = UserService();
 const { pages } = usePaging(10);
@@ -118,7 +120,7 @@ const onDeleteSession = async (index: number) => {
                 {{
                   t('lastestActive')
                   + ' '
-                  + appFormatDateTime(item.lastestActive, FORMAT_DATETIME)
+                  + formatDateTime({ date: item.lastestActive, format: FORMAT_DATETIME })
                 }}
               </p>
             </ion-label>

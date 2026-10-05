@@ -75,3 +75,22 @@ Follow imports from the actual route or component before extending a helper.
 UI feedback also uses
 `useBase` (`appToast/appConfirm/appLoading`). Inspect both layers before
 changing error handling.
+
+## 6. Date/time helpers (VERIFIED)
+
+Use `src/composables/useDateFns.ts` for date parsing/formatting, comparisons,
+differences, current dates, filename timestamps and duration helpers.
+`src/utils/DateUtil.ts` contains only format constants and descriptive aliases.
+No Nuxt injection is required. In component setup, `useDateFns()` follows
+`useLang().locale`; outside setup, pass an explicit locale (e.g.
+`useDateFns('en')` for machine formats), or a ref/getter for reactive locale.
+
+Formatting uses option objects, e.g.
+`formatDateTime({ date: value, format: FORMAT_DATE_TIME_ALT })`. `format` is
+the output pattern; use `inputFormat` for a custom input pattern, or `iso: true`
+for ISO-only parsing. The default datetime output is `dd/MM/yyyy HH:mm`.
+Invalid/empty inputs return an empty string in rendering helpers. Auto formats
+use local calendar days. Signed difference helpers compute end minus start;
+retain that order for device/sync thresholds. Cache daily keys use
+`formatLocalDateBy` to preserve the existing device-locale representation.
+`useBase` no longer exposes date-format wrappers; call this composable directly.

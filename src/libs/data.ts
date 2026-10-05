@@ -1,8 +1,10 @@
 import type { ISeriresCategories } from '@/types/chart';
 import type { ApiListResponse, LabelValue } from '@/types/common';
 import type { FileManager, GroupChatDto, GroupChatMsgDto, Permission, RefreshTokenResponse, UserDto } from '@/types/models';
-import { FORMAT_DATE13, getCurrentDateByFormat } from '@/utils/DateUtil';
+import { FORMAT_DATE13 } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import { biBarChart, biChatDots, biCreditCard, biCurrencyDollar, biGraphUp, biNewspaper, biPeople } from '@quasar/extras/bootstrap-icons';
+const { getCurrentDateByFormat } = useDateFns('en');
 export const userData: UserDto = {
     id: '1',
     email: 'admin@mydomain.com',

@@ -9,7 +9,7 @@ import BasePopover from '@/components/base/BasePopover.vue';
 import { useLang } from '@/composables/useLang';
 import type { ChatMessageAction, EmojiType, LabelValue } from '@/types/common';
 import type { FileManager, GroupChatMsgDto, IdType } from '@/types/models';
-import { formatDateTime } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import { IonLabel } from '@ionic/vue';
 import {
   arrowRedoOutline,
@@ -23,13 +23,14 @@ import {
 } from 'ionicons/icons';
 import { computed, ref, useId } from 'vue';
 
+const { formatDateTime } = useDateFns();
 const { message } = defineProps<{ message: GroupChatMsgDto }>();
 const emit = defineEmits<{
   (event: 'reply-click', id: IdType): void;
   (event: 'message-action', message: GroupChatMsgDto, action: ChatMessageAction): void;
   (event: 'reaction-select', message: GroupChatMsgDto, emojiType: EmojiType): void;
 }>();
-const { t, locale } = useLang();
+const { t } = useLang();
 const contentId = useId();
 
 const reactionEmoji: Record<EmojiType, string> = {
@@ -83,7 +84,7 @@ const avatar = computed(() =>
   message.sendUser?.avatar?.thumbnail || message.sendUser?.avatar?.image || undefined,
 );
 const messageTime = computed(() =>
-  formatDateTime(message.msgDateTime, 'MMM d, HH:mm', locale.value),
+  formatDateTime({ date: message.msgDateTime, format: 'MMM d, HH:mm' }),
 );
 const reply = computed(() => message.dtoReplyTo);
 const replyText = computed(() =>

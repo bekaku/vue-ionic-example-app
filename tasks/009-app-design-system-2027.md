@@ -199,3 +199,78 @@ Web visual: PASSED at 390×844. All 19 charts render after scrolling and stay
 mounted. Back navigation and Home analytics → Chat → Home are clean, with no
 NaN/SVG console errors. STATIC: same 2 baseline errors. UNIT: 13/13 PASSED.
 Android/iOS: NOT_RUN.
+
+## Follow-up: login page (2026-10-05)
+
+User reported the login form looked odd with borders between inputs. Causes:
+the task-009 card list rule added separators to every `ion-item` in a card,
+including the form rows, and the global `ion-input --background` drew a second
+box inside `.wee-login-input`. Fixes:
+
+- `mobile-ui.scss`: separators only for direct card rows or `IonList` without
+  `lines="none"`; new `.app-form` / `.app-field` filled-field utilities
+  (focus ring, transparent inner input). Documented in COMPONENTS.md §6.
+- `AppLoginForm.vue`: `app-field` inputs (no IonList/IonItem), `BaseButton`
+  password toggle with localized `aria-label`
+  (`authen.showPassword/hidePassword`, en + th), wrapping consent checkbox,
+  pill submit (`BaseButton type="submit"`), compact language chip. Submit,
+  verify-duplicate, terms gating and `#top`/`#additionalAction` slots kept.
+- `login.vue`: brand gradient hero (`--app-bg-hero`, `BaseImage` logo) with
+  rounded overlapping sheet; animated squares removed. Status bar, login
+  check and timers unchanged.
+
+Web visual: PASSED at 390×844 and 320×640, light and dark, field focus, and
+terms checked → submit enabled. The form was not submitted. `add-account.vue`
+reuses the form but was not opened (it requires auth); it uses only the
+`#top` slot. STATIC: PASSED (0 errors; the working tree also contains
+concurrent task-010 edits, including the virtual-scroller fix). UNIT: PASSED
+(23/23, includes task-010 tests). Android/iOS: NOT_RUN. Not committed.
+
+## Follow-up: signature login screen (2026-10-05)
+
+The user asked for a world-class login and a link to the theme page.
+`login.vue` now has:
+- an animated brand aurora (three palette radial orbs, transform-only
+  animation, static SVG grain), which stops under `prefers-reduced-motion`
+- a glass squircle logo
+- a glass top bar with a theme button → `/settings/appearance` and a language
+  button → `/settings/languge` (both `noRequireAuth`)
+- a solid form card headed by `authen.welcomeBack` / `authen.loginSubtitle`
+  (en + th)
+
+`AppLoginForm` changes:
+- floating labels
+- a gradient pill submit with a sheen sweep, clipped by the native part,
+  that stops under reduced motion; muted disabled state
+- new `showLanguage` prop (default `true`; login passes `false`)
+
+`add-account.vue` behaviour is unchanged.
+
+Web visual: PASSED at 390×844 and 320×640, light and dark. Terms checked →
+submit enabled. The theme button navigates to `/settings/appearance` and back.
+`aria-label` is forwarded to the native button. The form was not submitted.
+Android/iOS: NOT_RUN. Performance of backdrop blur plus animated orbs on
+low-end Android is unverified.
+
+## Follow-up: colours follow `--ion-color-primary` (2026-10-05)
+
+The user changed `--ion-color-primary` to teal (`#00bba7`). Several
+task-009 colours did not follow, because they used the fixed
+`--color-primary-*` scale or fixed palette hues:
+- `--app-text-accent`: icon-chip icons and the active tab
+- `--app-bg-hero`, the login aurora and the login submit gradient
+- live/online dots
+
+All of these now derive from `--ion-color-primary` (+ `-tint/-shade/-contrast`),
+`--ion-color-success` and `--ion-color-danger` via `color-mix()`. New
+`--app-live` token. The login status bar reads the computed
+`--ion-color-primary` (falling back to `DefaultColor`). Rule recorded in
+COMPONENTS.md §6 "Colour source".
+
+Left as is: the pre-existing `--app-chat-bubble-received-text` (indigo-950
+text), `DefaultColor` in `libs/constant.ts` (still `#3880ff`, only a fallback
+now), the `/example/ui/tabs` demo's explicit `active-color="amber-800"`, and
+the fixed `--color-primary-*` scale in `color.scss`.
+
+Web visual: PASSED. Other/Home/login in light and dark show teal chips, active
+tab, hero and aurora. Android/iOS (status bar colour): NOT_RUN.

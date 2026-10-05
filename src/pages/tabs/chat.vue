@@ -6,7 +6,7 @@ import { useLang } from '@/composables/useLang';
 import { useBase } from '@/composables/useBase';
 import { chatHistoryListApi } from '@/libs/data';
 import type { GroupChatDto } from '@/types/models';
-import { formatDateTime } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import {
   IonBadge,
   IonItem,
@@ -16,8 +16,9 @@ import {
 } from '@ionic/vue';
 import { computed, ref } from 'vue';
 
-const PAGE_SIZE = 5;
-const { t, locale } = useLang();
+const { formatDateTime } = useDateFns();
+const PAGE_SIZE = 15;
+const { t } = useLang();
 const { appNavigateTo } = useBase();
 const searchText = ref('');
 const visibleCount = ref(PAGE_SIZE);
@@ -86,7 +87,7 @@ const formatChatTime = (value?: string | null) => {
   if (!value) {
     return '';
   }
-  return formatDateTime(value, 'MMM d, HH:mm', locale.value);
+  return formatDateTime({ date: value, format: 'MMM d, HH:mm' });
 };
 
 const getChatAvatar = (chat: GroupChatDto) =>
@@ -215,7 +216,7 @@ const getChatAvatar = (chat: GroupChatDto) =>
   height: 13px;
   border: 2.5px solid var(--app-bg-surface);
   border-radius: 50%;
-  background: var(--color-emerald-500);
+  background: var(--app-live);
 }
 
 .chat-label {

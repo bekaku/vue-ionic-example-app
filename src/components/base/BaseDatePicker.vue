@@ -30,14 +30,12 @@
 <script setup lang="ts">
 import { useLang } from '@/composables/useLang';
 import type { DatetimePresentation, IonicColor } from '@/types/common';
-import {
-  convertDateFormatToThai,
-  FORMAT_DATE14,
-  formatIso,
-} from '@/utils/DateUtil';
+import { FORMAT_DATE14 } from '@/utils/DateUtil';
+import { useDateFns } from '@/composables/useDateFns';
 import { IonCol, IonDatetime, IonRow } from '@ionic/vue';
 import { computed } from 'vue';
 
+const { convertDateFormatToThai, formatIso } = useDateFns();
 const {
   color = 'primary',
   showSelected = false,
@@ -65,7 +63,7 @@ const getSelected = computed(() => {
 const onSelect = (ev: any) => {
   if (ev && ev.detail && ev.detail.value) {
     if (presentation == 'date') {
-      modelValue.value = formatIso(ev.detail.value, FORMAT_DATE14);
+      modelValue.value = formatIso({ date: ev.detail.value, forMatString: FORMAT_DATE14 });
     } else if (presentation == 'time') {
       console.log('time', ev.detail.value);
       modelValue.value = ev.detail.value;

@@ -22,7 +22,6 @@ Resolved when fixed, with the date and the fixing change.
 | 23 | Links/tap targets to pages that do not exist (fall to catch-all 404) | VERIFIED gap | `/post/view/:id` `useNotification.ts` › `onNotifyView`; `/user/view/:id` `useConstant.ts` (profile menu), `useBase.ts` › `onOpenProfile`; `/notifications` `AppNotification.vue`; `/hashtag/*` `BaseContentItem.vue`; menus `/permission` `/role` `/user` `/chats` `/feed` `navs.ts` | Needs pages + backend contracts (product decision) |
 | 24 | `addNotifyListeners()` (foreground toast + tap navigation) is never called | VERIFIED gap | `useNotification.ts` › `addNotifyListeners`; no caller in `src` | Push taps do nothing; wire only after #23 destination exists |
 | 25 | Stubbed services return fake data | VERIFIED gap | `UtilService.getAppVersion` hardcoded (force-update never triggers); `UserNotifyService` findAllByUser/findCountAllNotRead/updateReadNotify/updateReadNotifyAll | Enable real endpoints once backend contract is confirmed |
-| 27 | Current typecheck baseline has two undefined template names | VERIFIED 2026-10-05 | `pages/example/virtual-scroller.vue:149` references `index` / `item` outside their slot scope; `pnpm exec vue-tsc --noEmit` before task 008 | STATIC gate fails; unrelated to UI refresh |
 
 ## Resolved / merged
 
@@ -40,3 +39,4 @@ Resolved when fixed, with the date and the fixing change.
 | 21 | `saveProcess` returned before `Media.savePhoto` resolved | RESOLVED 2026-09-24 | `useFileSystem.ts:161-195` awaits and throws on failure | Verify gallery save on device |
 | 2 | Notification tap target `/post/view/:id` has no route | CONFLICTING | merged into #23 | See #23 |
 | 26 | `useCamera.ts` unreferenced (no import caller) | RESOLVED (wired in) | `BaseChoosePhoto.vue:3,53` + `example/ui/file-picker.vue:7,18` import `useCamera`; `useFileSystem.ts` photo helpers are the unreferenced ones | `heic-to` stays via the live HEIC→JPEG path |
+| 27 | Two virtual-scroller slot names reported undefined by typecheck | RESOLVED 2026-10-05 | `pages/example/virtual-scroller.vue` › `avatarUrl` and bound `BaseAvatar :src`; the slot scope was valid, but vue-tsc 3.3.12 generated malformed TS for the static HTTPS src literal. Moving it to a script constant restores valid generated code; `pnpm exec vue-tsc --noEmit` passes | Same avatar URL and slot behavior; no dependency upgrade or suppressed diagnostics |
