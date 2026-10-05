@@ -36,7 +36,7 @@ http://ionicframework.com/docs/theming/ */
 :root {
   --app-font-family: 'Noto Sans Thai Looped', "Helvetica Neue", "Segoe UI", Arial, sans-serif;
   /** primary **/
-     --ion-color-primary: #3880ff;
+  --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -116,46 +116,46 @@ http://ionicframework.com/docs/theming/ */
    */
 
   /* Background */
-  --app-bg-page: var(--color-zinc-100);
+  --app-bg-page: var(--color-slate-100);
   --app-bg-surface: var(--color-white);
   --app-bg-bar: var(--color-white);
-  --app-bg-page-dark: var(--color-zinc-950);
-  --app-bg-surface-dark: var(--color-zinc-900);
+  --app-bg-page-dark: var(--color-slate-950);
+  --app-bg-surface-dark: var(--color-slate-900);
   --app-bg-bar-dark: var(--app-bg-surface-dark);
 
   /* Border */
-  --app-border: var(--color-gray-200);
+  --app-border: var(--color-slate-200);
   --app-border-light: var(--app-border);
-  --app-border-lighter: var(--color-gray-50);
-  --app-border-dark: var(--color-gray-700);
+  --app-border-lighter: var(--color-slate-50);
+  --app-border-dark: var(--color-slate-700);
   --app-border-light-dark: var(--app-border-dark);
 
   /* Text */
   --app-text-body: var(--color-slate-700);
   --app-text-strong: var(--color-slate-950);
-  --app-text-muted: var(--color-zinc-500);
-  --app-text-muted-alt: var(--color-gray-500);
+  --app-text-muted: var(--color-slate-500);
+  --app-text-muted-alt: var(--color-slate-500);
   --app-text-body-dark: var(--color-white);
-  --app-text-muted-dark: var(--color-gray-400);
+  --app-text-muted-dark: var(--color-slate-400);
 
   /* Input */
-  --app-input-bg: var(--color-gray-50);
+  --app-input-bg: var(--color-slate-50);
   --app-input-bg-dark: var(--app-bg-page-dark);
-  --app-form-input-bg: var(--color-gray-50);
+  --app-form-input-bg: var(--color-slate-50);
   --app-form-input-border: var(--app-border);
 
   /* Segment (dark theme) */
-  --app-segment-bg-dark: var(--color-gray-700);
+  --app-segment-bg-dark: var(--color-slate-700);
   --app-segment-indicator-dark: var(--app-bg-page-dark);
   --app-segment-text-selected-dark: var(--ion-color-primary);
 
   /* Chat */
-  --app-chat-bubble-received-bg: var(--color-gray-100);
+  --app-chat-bubble-received-bg: var(--color-slate-100);
   --app-chat-bubble-received-text: var(--color-indigo-950);
   --app-chat-bubble-sent-bg: var(--ion-color-primary);
-  --app-chat-meta-received-text: var(--color-gray-400);
-  --app-chat-meta-sent-text: var(--color-gray-200);
-  --app-chat-input-bg: var(--color-gray-100);
+  --app-chat-meta-received-text: var(--color-slate-400);
+  --app-chat-meta-sent-text: var(--color-slate-200);
+  --app-chat-input-bg: var(--color-slate-100);
   --app-chat-input-border: var(--app-border-lighter);
 
   /* Misc */
@@ -176,19 +176,19 @@ http://ionicframework.com/docs/theming/ */
 
   /* Surfaces: tone separates layers; borders and shadows stay hairline/soft */
   --app-bg-elevated: var(--color-white);
-  --app-bg-sunken: color-mix(in srgb, var(--color-zinc-900) 6%, transparent);
-  --app-hairline: color-mix(in srgb, var(--color-zinc-900) 8%, transparent);
-  --app-shadow-card: 0 1px 2px color-mix(in srgb, var(--color-zinc-900) 4%, transparent),
-    0 8px 24px -12px color-mix(in srgb, var(--color-zinc-900) 10%, transparent);
-  --app-shadow-float: 0 1px 2px color-mix(in srgb, var(--color-zinc-900) 8%, transparent),
-    0 4px 12px -2px color-mix(in srgb, var(--color-zinc-900) 10%, transparent);
-  --app-shadow-nav: 0 10px 36px -6px color-mix(in srgb, var(--color-zinc-900) 22%, transparent),
-    0 2px 6px color-mix(in srgb, var(--color-zinc-900) 6%, transparent);
+  --app-bg-sunken: color-mix(in srgb, var(--color-slate-900) 6%, transparent);
+  --app-hairline: color-mix(in srgb, var(--color-slate-900) 8%, transparent);
+  --app-shadow-card: 0 1px 2px color-mix(in srgb, var(--color-slate-900) 4%, transparent),
+    0 8px 24px -12px color-mix(in srgb, var(--color-slate-900) 10%, transparent);
+  --app-shadow-float: 0 1px 2px color-mix(in srgb, var(--color-slate-900) 8%, transparent),
+    0 4px 12px -2px color-mix(in srgb, var(--color-slate-900) 10%, transparent);
+  --app-shadow-nav: 0 10px 36px -6px color-mix(in srgb, var(--color-slate-900) 22%, transparent),
+    0 2px 6px color-mix(in srgb, var(--color-slate-900) 6%, transparent);
 
   /* Glass material for floating chrome (header, tab bar, overlays) */
   --app-bg-glass: color-mix(in srgb, var(--color-white) 70%, transparent);
   --app-glass-border: color-mix(in srgb, var(--color-white) 80%, transparent);
-  --app-glass-edge: color-mix(in srgb, var(--color-zinc-900) 7%, transparent);
+  --app-glass-edge: color-mix(in srgb, var(--color-slate-900) 7%, transparent);
   --app-glass-highlight: inset 0 1px 0 color-mix(in srgb, var(--color-white) 90%, transparent);
   --app-glass-filter: saturate(180%) blur(24px);
 
@@ -282,21 +282,25 @@ http://ionicframework.com/docs/theming/ */
     border: 1px solid var(--ion-color-primary);
   }
 }
+
 body[safe-area='edge-to-edge'] {
   --ion-safe-area-top: var(--app-safe-area-top);
   --ion-safe-area-left: var(--app-safe-area-left);
   --ion-safe-area-right: var(--app-safe-area-right);
   --ion-safe-area-bottom: var(--app-safe-area-bottom);
+
   ion-content {
-      --padding-bottom: var(--app-safe-area-bottom);
-      // --padding-end: var(--app-safe-area-right);
-      // --padding-start: var(--app-safe-area-left);
-      // --padding-top: var(--app-safe-area-top);
+    --padding-bottom: var(--app-safe-area-bottom);
+    // --padding-end: var(--app-safe-area-right);
+    // --padding-start: var(--app-safe-area-left);
+    // --padding-top: var(--app-safe-area-top);
   }
+
   .q-fixed-bottom2 {
     padding-bottom: var(--app-safe-area-bottom);
   }
 }
+
 .ios {
   --ion-font-family: var(--app-font-family);
 }
@@ -310,10 +314,10 @@ body[safe-area='edge-to-edge'] {
 body[color-theme='light'] {
   ion-tab-button {
     --color-selected: var(--app-text-strong);
-   --color: var(--app-text-strong);
-   //--color: var(--app-text-muted);
-   //--color-selected: var(--ion-color-primary);
- }
+    --color: var(--app-text-strong);
+    //--color: var(--app-text-muted);
+    //--color-selected: var(--ion-color-primary);
+  }
 
   ion-alert {
     --background: var(--app-bg-surface);
@@ -352,21 +356,21 @@ body[color-theme='dark'] {
   --app-border-lighter: var(--app-border-light-dark);
   --app-text-body: var(--app-text-body-dark);
   --app-text-strong: var(--color-white);
-  --app-text-muted: var(--color-zinc-400);
+  --app-text-muted: var(--color-slate-400);
   --app-input-bg: var(--app-input-bg-dark);
   --app-form-input-bg: var(--color-black);
-  --app-form-input-border: var(--color-gray-600);
-  --app-chat-bubble-received-bg: var(--color-zinc-800);
+  --app-form-input-border: var(--color-slate-600);
+  --app-chat-bubble-received-bg: var(--color-slate-800);
   --app-chat-bubble-received-text: var(--color-white);
-  --app-chat-meta-received-text: var(--color-zinc-400);
+  --app-chat-meta-received-text: var(--color-slate-400);
   --app-chat-input-bg: var(--app-bg-surface-dark);
   --app-chat-input-border: var(--app-border-light-dark);
   --app-refresher-color: var(--color-white);
 
-  --app-bg-elevated: var(--color-zinc-800);
+  --app-bg-elevated: var(--color-slate-800);
   --app-bg-sunken: color-mix(in srgb, var(--color-white) 7%, transparent);
   --app-hairline: color-mix(in srgb, var(--color-white) 8%, transparent);
-  --app-bg-glass: color-mix(in srgb, var(--color-zinc-900) 68%, transparent);
+  --app-bg-glass: color-mix(in srgb, var(--color-slate-900) 68%, transparent);
   --app-glass-border: color-mix(in srgb, var(--color-white) 12%, transparent);
   --app-glass-edge: color-mix(in srgb, var(--color-black) 40%, transparent);
   --app-glass-highlight: inset 0 1px 0 color-mix(in srgb, var(--color-white) 10%, transparent);
@@ -416,7 +420,7 @@ body[color-theme='dark'] {
   }
 
   ion-list-header {
-    --color: var(--color-gray-100);
+    --color: var(--color-slate-100);
   }
 
   ion-segment {
@@ -731,8 +735,8 @@ body[color-theme='dark'] {
 
 body[color-theme='dark'] .report-header-holder {
   background: var(--app-bg-surface-dark);
-  background: -webkit-linear-gradient(to bottom, var(--app-bg-surface-dark), var(--color-gray-600));
-  background: linear-gradient(to bottom, var(--app-bg-surface-dark), var(--color-gray-600));
+  background: -webkit-linear-gradient(to bottom, var(--app-bg-surface-dark), var(--color-slate-600));
+  background: linear-gradient(to bottom, var(--app-bg-surface-dark), var(--color-slate-600));
   height: 150px;
 }
 
