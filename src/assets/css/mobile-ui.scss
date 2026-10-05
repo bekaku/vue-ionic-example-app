@@ -1,4 +1,13 @@
-/* Shared UI foundations. Colour and motion values come from theme tokens. */
+/*
+ * App design system (tasks 008 + 009). Every page inherits these defaults;
+ * rules for new pages live in skills/mobile/COMPONENTS.md §6.
+ * Colour, radius and motion values come from variables.scss tokens.
+ *
+ * Sections: 1 surfaces · 2 lists · 3 controls · 4 page chrome
+ *           5 tab bar · 6 page utilities · 7 motion · 8 accessibility fallbacks
+ */
+
+/* 1. Surfaces ------------------------------------------------------------- */
 ion-card {
   --background: var(--app-bg-surface);
   border-radius: var(--app-radius-card);
@@ -12,6 +21,77 @@ ion-card-title {
   line-height: 1.5;
 }
 
+ion-card-subtitle {
+  color: var(--app-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+ion-modal.modal-sheet {
+  --border-radius: var(--app-radius-card);
+}
+
+/* 2. Lists: inset grouped rows inside cards and .app-surface ------------- */
+:is(ion-card, .app-surface) {
+  ion-list {
+    padding: 0;
+    background: transparent;
+  }
+
+  ion-item {
+    --background: transparent;
+    --min-height: 52px;
+    --padding-start: 16px;
+    --inner-padding-end: 16px;
+    --border-color: var(--app-hairline);
+  }
+
+  /* Hairline separators start after the leading icon/avatar, like iOS */
+  ion-item:not(:last-child) {
+    --inner-border-width: 0 0 0.55px 0;
+  }
+}
+
+/* Leading icon chip used by BaseMenuItem (tinted rounded square) */
+.app-menu-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-inline-end: 14px;
+  border-radius: 10px;
+  background: var(--app-bg-accent);
+  color: var(--app-text-accent);
+
+  &.app-menu-icon-danger {
+    background: var(--app-bg-negative);
+    color: var(--app-text-negative);
+  }
+}
+
+.app-menu-item ion-label {
+  margin-block: 12px;
+  font-size: 0.9375rem;
+}
+
+/* Section label above a grouped list (BaseMenuItems, settings-style pages) */
+.app-section-label {
+  margin: var(--app-space-section) 20px 8px;
+  color: var(--app-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* BaseCard margins are !important utilities; keep a label tight to its group */
+.app-section-label + ion-card {
+  margin-top: 0 !important;
+}
+
+/* 3. Controls ------------------------------------------------------------- */
 /* Restrict control styling to wrappers: raw Ionic controls keep their own API. */
 :where(.app-base-button:not(.button-round)) {
   --border-radius: var(--app-radius-control);
@@ -23,12 +103,12 @@ ion-card-title {
 
   &::part(native) {
     transition:
-      transform var(--app-motion-fast) ease,
+      transform var(--app-motion-normal) var(--app-ease-spring),
       box-shadow var(--app-motion-fast) ease;
   }
 
   &:active::part(native) {
-    transform: scale(0.97);
+    transform: scale(0.96);
   }
 
   &:focus-visible::part(native) {
@@ -37,36 +117,126 @@ ion-card-title {
   }
 }
 
+/* BaseSegment: capsule track with a floating thumb */
+ion-segment.app-segment {
+  --background: var(--app-bg-sunken);
+  padding: 3px;
+  border-radius: var(--app-radius-full);
+
+  ion-segment-button {
+    --border-radius: var(--app-radius-full);
+    --color: var(--app-text-muted);
+    --color-checked: var(--app-text-strong);
+    --indicator-box-shadow: none;
+    min-height: 36px;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* No iOS divider lines between capsule options */
+  ion-segment-button::before {
+    border: 0;
+    opacity: 0;
+  }
+
+  ion-segment-button::part(indicator-background) {
+    border-radius: var(--app-radius-full);
+    background: var(--app-bg-elevated);
+    box-shadow: var(--app-shadow-float);
+  }
+
+  .segment-button-checked {
+    color: var(--app-text-strong);
+  }
+
+  ion-label {
+    font-size: 0.8125rem;
+    white-space: normal;
+  }
+}
+
+.app-base-page ion-searchbar {
+  --background: var(--app-bg-sunken);
+  --border-radius: var(--app-radius-full);
+  --box-shadow: none;
+  --placeholder-color: var(--app-text-muted);
+  --icon-color: var(--app-text-muted);
+  padding-inline: var(--app-space-page);
+}
+
+/* 4. Page chrome: glass header, large titles ------------------------------ */
 .app-base-page > ion-header {
   box-shadow: none;
 
   ion-toolbar {
     --border-width: 0;
-    --min-height: 60px;
+    --min-height: 56px;
+    --color: var(--app-text-strong);
+  }
+
+  ion-title {
+    font-size: 1.0625rem;
+  }
+
+  /* BasePage is translucent by default: chrome floats over the content */
+  &.header-translucent ion-toolbar {
+    --background: var(--app-bg-glass);
+    --opacity: 1;
+  }
+
+  &.header-translucent .header-background {
+    backdrop-filter: var(--app-glass-filter);
+    -webkit-backdrop-filter: var(--app-glass-filter);
+  }
+
+  &.header-translucent::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 0.55px;
+    background: var(--app-hairline);
+    pointer-events: none;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --app-motion-fast: 0ms;
-    --app-motion-normal: 0ms;
+/* Large title header (BasePage collapse="condense") sits on the page tone */
+.app-base-page ion-header.header-collapse-condense {
+  ion-toolbar {
+    --background: transparent;
+    --border-width: 0;
   }
 
-  .app-base-button:active::part(native) {
-    transform: none;
+  ion-title.title-large {
+    padding-inline: calc(var(--app-space-page) + 4px);
+    color: var(--app-text-strong);
+    font-size: 2.125rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 }
 
-/* Shared by main navigation and BaseTabs, with space reserved by Ionic. */
+/* Until the large title scrolls away, the compact bar has no glass/hairline */
+.app-base-page > ion-header.header-collapse-condense-inactive {
+  &::after {
+    opacity: 0;
+  }
+
+  ion-toolbar {
+    --background: transparent;
+  }
+}
+
+/* 5. Tab bar (main navigation + BaseTabs) --------------------------------- */
 .app-tab-bar {
   position: relative;
   isolation: isolate;
   height: auto;
-  min-height: calc(76px + var(--ion-safe-area-bottom, 0px));
+  min-height: calc(80px + var(--ion-safe-area-bottom, 0px));
   --background: transparent;
   --border: 0;
-  padding: 8px max(16px, var(--ion-safe-area-right, 0px))
-    calc(8px + var(--ion-safe-area-bottom, 0px))
+  padding: 10px max(16px, var(--ion-safe-area-right, 0px))
+    calc(10px + var(--ion-safe-area-bottom, 0px))
     max(16px, var(--ion-safe-area-left, 0px));
   contain: none;
   border: 0;
@@ -75,85 +245,405 @@ ion-card-title {
     content: '';
     position: absolute;
     z-index: -1;
-    inset: 8px max(16px, var(--ion-safe-area-right, 0px))
-      calc(8px + var(--ion-safe-area-bottom, 0px))
+    inset: 10px max(16px, var(--ion-safe-area-right, 0px))
+      calc(10px + var(--ion-safe-area-bottom, 0px))
       max(16px, var(--ion-safe-area-left, 0px));
-    max-width: 520px;
+    max-width: 480px;
     margin-inline: auto;
-    border-radius: 28px;
-    border: 1px solid var(--app-border-light);
+    border-radius: var(--app-radius-full);
+    border: 0.5px solid var(--app-glass-border);
     background: var(--app-bg-surface);
-    box-shadow: var(--app-shadow-nav);
+    box-shadow: var(--app-glass-highlight), var(--app-shadow-nav);
   }
 
   ion-tab-button {
     flex: 1;
-    max-width: calc(520px / var(--app-tabs-count, 3));
+    max-width: calc(480px / var(--app-tabs-count, 3));
     min-height: 60px;
     --background: transparent;
     --color: var(--app-text-muted);
     --color-selected: var(--app-text-accent);
-    --ripple-color: var(--ion-color-primary);
-    border-radius: 22px;
+    --ripple-color: transparent;
     transition: color var(--app-motion-fast) ease;
   }
 
   ion-tab-button::part(native) {
     margin: 0;
-    border-radius: 22px;
-    padding-block: 5px;
+    border-radius: var(--app-radius-full);
+    padding-block: 4px;
   }
+
   .tab-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 30px;
-    border-radius: 16px;
+    width: 54px;
+    height: 32px;
+    border-radius: var(--app-radius-full);
     background: transparent;
-    transition: background-color var(--app-motion-fast) ease;
+    transition:
+      background-color var(--app-motion-fast) ease,
+      transform var(--app-motion-slow) var(--app-ease-spring);
   }
+
   .tab-icon ion-icon {
     margin: 0;
   }
-  ion-tab-button.tab-selected .tab-icon {
-    background: color-mix(in srgb, currentColor 12%, var(--app-bg-elevated));
+
+  ion-tab-button:active .tab-icon {
+    transform: scale(0.9);
   }
+
+  ion-tab-button.tab-selected .tab-icon {
+    background: color-mix(in srgb, currentColor 14%, transparent);
+  }
+
   ion-tab-button:focus-visible::part(native) {
     outline: 2px solid var(--ion-color-primary);
     outline-offset: -2px;
   }
+
   ion-label {
-    margin-top: 4px;
+    margin-top: 3px;
     font-size: 0.6875rem;
     font-weight: 500;
   }
+
   ion-badge {
     font-size: 0.625rem;
   }
 }
 
+/* Beats the theme-level ion-tab-button colours in variables.scss */
+ion-tab-bar.app-tab-bar ion-tab-button {
+  --color: var(--app-text-muted);
+  --color-selected: var(--app-text-accent);
+}
+
+.app-tab-bar.app-tab-bar-top {
+  min-height: 80px;
+  padding-bottom: 10px;
+
+  &::before {
+    bottom: 10px;
+  }
+}
+
+/*
+ * Main tabs: the bar floats over edge-to-edge content (ion-tabs.app-tabs-overlay).
+ * Every page rendered inside reserves --app-tab-bar-space at the bottom.
+ */
+ion-tabs.app-tabs-overlay {
+  > ion-tab-bar.app-tab-bar,
+  ion-tab-bar.app-tab-bar[slot='bottom'] {
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    /* Soft scroll-edge so content fades under the floating bar */
+    --background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--app-bg-page) 92%, transparent) 0%,
+      color-mix(in srgb, var(--app-bg-page) 0%, transparent) 100%
+    );
+  }
+
+  .ion-page ion-content {
+    --padding-bottom: var(--app-tab-bar-space);
+  }
+}
+
+/* 6. Page utilities (use these in new pages instead of page-scoped look) --- */
+.app-page {
+  display: grid;
+  gap: var(--app-space-section);
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 12px var(--app-space-page) 32px;
+  color: var(--app-text-body);
+
+  &.app-page-narrow {
+    max-width: 680px;
+  }
+
+  /* Spacing comes from the grid gaps, not from IonCard's default margins */
+  ion-card {
+    margin: 0;
+  }
+}
+
+.app-eyebrow {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.app-title-xl {
+  margin: 0;
+  color: var(--app-text-strong);
+  font-size: clamp(1.875rem, 7vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.app-muted {
+  color: var(--app-text-muted);
+}
+
+.app-num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.app-display {
+  color: var(--app-text-strong);
+  font-size: clamp(2.25rem, 10vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.035em;
+}
+
+.app-section {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.app-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 32px;
+  padding-inline: 4px;
+
+  h2 {
+    margin: 0;
+    color: var(--app-text-strong);
+    font-size: 1.1875rem;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  .app-base-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    margin: 0 -8px 0 0;
+    font-size: 0.875rem;
+  }
+}
+
+.app-surface {
+  position: relative;
+  min-width: 0;
+  padding: 20px;
+  overflow: hidden;
+  border-radius: var(--app-radius-card);
+  background: var(--app-bg-surface);
+  box-shadow: var(--app-shadow-card);
+  color: var(--app-text-body);
+
+  &.app-surface-flush {
+    padding: 6px 0;
+  }
+
+  /* Brand gradient hero with on-colour text */
+  &.app-surface-hero {
+    padding: 24px;
+    background: var(--app-bg-hero);
+    box-shadow: var(--app-shadow-nav);
+    color: var(--app-text-on-hero);
+
+    .app-display,
+    .app-eyebrow,
+    .app-muted {
+      color: inherit;
+    }
+
+    .app-eyebrow,
+    .app-muted {
+      opacity: 0.82;
+    }
+  }
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--app-grid-cols, 2), minmax(0, 1fr));
+  gap: 12px;
+}
+
+.app-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 26px;
+  padding: 3px 10px;
+  border-radius: var(--app-radius-full);
+  background: var(--app-bg-sunken);
+  color: var(--app-text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+
+  &.app-chip-accent {
+    background: var(--app-bg-accent);
+    color: var(--app-text-accent);
+  }
+
+  &.app-chip-positive {
+    background: var(--app-bg-positive);
+    color: var(--app-text-positive);
+  }
+
+  &.app-chip-negative {
+    background: var(--app-bg-negative);
+    color: var(--app-text-negative);
+  }
+
+  /* On a hero or image: frosted chip */
+  &.app-chip-glass {
+    border: 0.5px solid color-mix(in srgb, var(--color-white) 30%, transparent);
+    background: color-mix(in srgb, var(--color-white) 18%, transparent);
+    color: inherit;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+.app-icon-tile {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: var(--app-icon-tile-size, 44px);
+  height: var(--app-icon-tile-size, 44px);
+  border-radius: calc(var(--app-icon-tile-size, 44px) * 0.32);
+  background: var(--app-bg-accent);
+  color: var(--app-text-accent);
+}
+
+.app-live-dot {
+  position: relative;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-emerald-500);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    animation: app-live-pulse 2s var(--app-ease-out) infinite;
+  }
+}
+
+/* 7. Motion --------------------------------------------------------------- */
+.app-pressable {
+  transition: transform var(--app-motion-slow) var(--app-ease-spring);
+
+  &:active {
+    transform: scale(0.97);
+    transition-duration: var(--app-motion-fast);
+  }
+}
+
+/* Entrance: add .app-enter and style="--app-enter-index: n" for a stagger */
+.app-enter {
+  animation: app-enter var(--app-motion-slow) var(--app-ease-out) both;
+  animation-delay: calc(var(--app-enter-index, 0) * 50ms);
+}
+
+@keyframes app-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+}
+
+@keyframes app-live-pulse {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+
+/* 8. Accessibility fallbacks ---------------------------------------------- */
 @supports (
   (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px))
 ) {
   .app-tab-bar::before {
     background: var(--app-bg-glass);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: var(--app-glass-filter);
+    -webkit-backdrop-filter: var(--app-glass-filter);
   }
 }
+
+@supports not (
+  (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px))
+) {
+  .app-base-page > ion-header.header-translucent ion-toolbar {
+    --background: var(--app-bg-page);
+  }
+}
+
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .app-tab-bar::before {
     background: var(--app-bg-surface);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
+
+  .app-base-page > ion-header.header-translucent ion-toolbar {
+    --background: var(--app-bg-page);
+  }
+
+  .app-chip.app-chip-glass {
+    background: color-mix(in srgb, var(--color-black) 30%, transparent);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
-.app-tab-bar.app-tab-bar-top {
-  min-height: 76px;
-  padding-bottom: 8px;
-  &::before {
-    bottom: 8px;
+@media (prefers-contrast: more) {
+  :root,
+  body[color-theme='dark'] {
+    --app-hairline: var(--app-border);
+  }
+
+  .app-surface,
+  ion-card {
+    box-shadow: 0 0 0 1px var(--app-border);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --app-motion-fast: 0ms;
+    --app-motion-normal: 0ms;
+    --app-motion-slow: 0ms;
+  }
+
+  .app-base-button:active::part(native),
+  .app-pressable:active,
+  .app-tab-bar ion-tab-button:active .tab-icon {
+    transform: none;
+  }
+
+  .app-enter,
+  .app-live-dot::after {
+    animation: none;
   }
 }

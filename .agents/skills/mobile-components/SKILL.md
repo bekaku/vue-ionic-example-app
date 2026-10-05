@@ -19,7 +19,7 @@ change.
 ## Required reading
 
 - `skills/mobile/COMPONENTS.md`
-- `docs/agent/STANDARD_PAGE_COMPONENT.md`
+- `docs/agent/STANDARD_PAGE_COMPONENT.md` (new-page skeleton)
 
 ## Relevant project locations
 
@@ -51,6 +51,14 @@ change.
 5. For page-specific dark styles in a scoped Vue SFC, target the page class under
    `body[color-theme='dark']`; for Ionic `IonContent`, set `--background`.
    Check the selector pattern in `skills/mobile/COMPONENTS.md` §5.
+
+6. Every page — including new ones — uses the shared design system
+   (`skills/mobile/COMPONENTS.md` §6): `BasePage` glass header (large title
+   via `collapse="condense"` for root/list pages), `.app-page` layout,
+   `.app-section(-header|-label)`, `BaseCard` + `.app-surface*`, chips,
+   `.app-num` for figures, `BaseSegment`, `--app-*` tokens for radius,
+   shadow and motion. Do not restyle cards, lists, headers or tab bars per
+   page; extend `mobile-ui.scss`/tokens instead (both themes + fallbacks).
 
 ## Implementation workflow
 

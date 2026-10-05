@@ -24,7 +24,9 @@ Representative: `src/pages/tabs/home.vue` › `home-layout` uses `BasePage` with
   classes on elements in `#content` work as usual; a class passed through
   `content-class` lands on `BasePage`'s element, so style it with `:deep()`.
 - Props pattern per `BasePage.vue:14-51`: `pageTitle`, `showBackLink`,
-  `pageDefaultBackLink='/tabs/home'`, `translucent`, `scrollY/fullscreen`, etc.
+  `pageDefaultBackLink='/tabs/home'`, `translucent` (default `true` — glass
+  header over `fullscreen` content, §6), `scrollY/fullscreen`, `collapse`
+  (`'condense'` = iOS large title), etc.
 - Reuse `src/components/base/*` (`BaseButton`, `BaseCard`, `BaseIcon`,
   `BaseSegment`, `BaseTextHeader`, `BaseToolbar`, `BaseBackButton`,
   `BaseAvatar`). Do not add Quasar components.
@@ -102,7 +104,10 @@ for its brand logo. Modals/alerts/toasts exist via controllers
 `appConfirm/appLoading` in `useBase.ts`). Inspect the target area before assuming a component is unused.
 
 `BaseTabs.vue` and the main tabs shell share `mobile-ui.scss` › `.app-tab-bar`
-for the inset surface and small selected icon pill. BaseTabs preserves its
+for the floating glass capsule and small selected icon pill. Only the main
+shell (`tabs/index.vue` › `ion-tabs.app-tabs-overlay`) floats the bar over
+content; every page inside it gets `--app-tab-bar-space` bottom padding on its
+`IonContent`, so new tab pages need no extra spacing (§6). BaseTabs preserves its
 `activeColor`/`color` props, supports top/bottom placement, adapts button widths
 to the visible item count, and passes `item.disable` to Ionic. Both UI tab
 examples use this component. Its routed outlet leaves cached page visibility
@@ -198,3 +203,70 @@ The only `onIonView*` call site is `pages/chat/index.vue:297`
   no direct `@capacitor/keyboard` import in `src` (NOT_FOUND) — verify before
   claiming behavior. StatusBar colors set per screen (`login.vue` ›
   `onMounted` → `setStatusBarColor`; `useTheme.ts`).
+
+## 6. Design system (VERIFIED source, task 009) — applies to every page
+
+The app look is a system, not per-page styling: tokens in `variables.scss`,
+shared styles in `mobile-ui.scss`, defaults in `src/components/base/*`.
+**Every new page must use it** so it matches the existing screens; do not
+re-create cards, chips, section headers or list styles in scoped CSS.
+`tabs/home.vue` is the reference composition; `tabs/other.vue` the reference
+settings/list page; `tabs/chat.vue` the reference list page with search.
+
+Principles (iOS 26 Liquid Glass / Material 3 Expressive direction):
+floating translucent chrome over edge-to-edge content; tone (not borders)
+separates layers; concentric radii; one strong number per card; short
+spring-like motion that respects reduced-motion/transparency/contrast.
+
+- **Chrome**: `BasePage` header is glass by default (`--app-bg-glass` +
+  `--app-glass-filter`, hairline). Root tab pages and list/settings pages use
+  `collapse="condense"` + `fullscreen` for a large title (`tabs/chat.vue`,
+  `tabs/other.vue`). Dashboard-style pages keep a compact title with their own
+  hero (`tabs/home.vue`). Do not add opaque toolbars or header borders.
+- **Layout**: wrap custom page content in `<main class="app-page">` (grid,
+  `--app-space-section` gaps, `--app-space-page` gutters, max 1080px;
+  `app-page-narrow` = 680px for forms/settings). Inside it `ion-card` margins
+  are reset — spacing comes from the grid gaps.
+- **Sections**: `.app-section` + `.app-section-header` (`h2` + optional
+  `BaseButton clear size="small"` action). Settings-style groups use
+  `<h2 class="app-section-label">` above a `BaseCard` (what `BaseMenuItems`
+  renders for items with `children`).
+- **Surfaces**: `BaseCard` (`:margin="false"` inside `.app-page`) plus
+  `.app-surface` (20px padding, `--app-radius-card`, `--app-shadow-card`);
+  `app-surface-flush` for lists; `app-surface-hero` for at most one brand
+  gradient card per screen (`--app-bg-hero`, white text). Do not combine
+  `flat`/`bordered` with these — the system has no card borders.
+- **Lists**: `IonList` inside `ion-card`/`.app-surface` gets transparent rows,
+  52px min height and inset hairline separators automatically. Menu rows use
+  `BaseMenuItem` (tinted `.app-menu-icon` chip, `color: 'danger'` → red chip).
+  A hand-written row that needs the same chip uses
+  `<span slot="start" class="app-menu-icon">` + `BaseIcon :size="18"
+  style="top: 0"` on an `IonItem class="app-menu-item"` (`tabs/other.vue` notification row).
+- **Text**: `.app-title-xl` (page hero title), `.app-eyebrow` (small muted
+  line above a title/number), `.app-display` (hero number), `.app-num`
+  (tabular numerals for any figure, time or count), `.app-muted`.
+- **Small parts**: `.app-chip` (+ `-accent`/`-positive`/`-negative`, `-glass`
+  on the hero) for status/period/delta pills; `.app-icon-tile` (tinted
+  squircle, size via `--app-icon-tile-size`); `.app-live-dot` for live state;
+  `.app-grid` (`--app-grid-cols`, default 2) for tiles.
+- **Controls**: `BaseSegment` renders the capsule segmented control
+  (`.app-segment`); `ion-searchbar` inside `BasePage` is a capsule; buttons
+  stay `BaseButton` (spring press). Pill buttons: `--border-radius:
+  var(--app-radius-full)`.
+- **Motion**: `.app-enter` with `style="--app-enter-index: n"` for a staggered
+  entrance of the first screenful (≤ 8 items); `.app-pressable` for custom
+  tappable surfaces. Durations/easing only from `--app-motion-*` /
+  `--app-ease-out` / `--app-ease-spring`; `prefers-reduced-motion` zeroes them.
+- **Tokens added in task 009**: `--app-radius-xs/sm/md/lg/card/full`,
+  `--app-space-page/-section`, `--app-bg-elevated/-sunken`, `--app-hairline`,
+  `--app-shadow-card/-float/-nav`, `--app-bg-glass`, `--app-glass-border/
+  -edge/-highlight/-filter`, `--app-bg-accent`/`--app-text-accent`,
+  `--app-bg-positive/-negative` + `--app-text-positive/-negative`,
+  `--app-bg-hero`/`--app-text-on-hero`, `--app-motion-slow`,
+  `--app-ease-out/-spring`, `--app-tab-bar-space`. Each has a dark value under
+  `body[color-theme='dark']`; new tokens must add both.
+- Fallbacks live in `mobile-ui.scss` §8: no `backdrop-filter` → opaque chrome;
+  `prefers-reduced-transparency`/`prefers-contrast: more` → solid surfaces and
+  visible borders. Keep new glass/motion inside those guards.
+- Native glass/blur, safe areas and spring timing are web-verified only;
+  device rendering is NOT_RUN (task 009).

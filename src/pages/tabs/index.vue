@@ -54,12 +54,13 @@ onUnmounted(() => {
 <template>
   <ion-page class="tabs-shell">
     <ion-tabs
+      class="app-tabs-overlay"
       @ion-tabs-will-change="beforeTabChange"
       @ion-tabs-did-change="afterTabChange"
     >
       <ion-router-outlet />
       <ion-tab-bar
-        class="floating-tab-bar app-tab-bar"
+        class="app-tab-bar"
         slot="bottom"
         @click="onTabClick"
       >
@@ -113,7 +114,10 @@ onUnmounted(() => {
   </ion-page>
 </template>
 <style lang="scss" scoped>
-/* Keep this bar in Ionic's layout flow so every tab reserves its height. */
+/*
+ * The tab bar floats over the content (mobile-ui.scss › .app-tabs-overlay);
+ * tab pages reserve --app-tab-bar-space so their last row stays reachable.
+ */
 .tabs-shell ion-tabs {
   background: var(--app-bg-page);
 }

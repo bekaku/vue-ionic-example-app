@@ -116,7 +116,7 @@ http://ionicframework.com/docs/theming/ */
    */
 
   /* Background */
-  --app-bg-page: var(--color-slate-50);
+  --app-bg-page: var(--color-zinc-100);
   --app-bg-surface: var(--color-white);
   --app-bg-bar: var(--color-white);
   --app-bg-page-dark: var(--color-zinc-950);
@@ -160,19 +160,63 @@ http://ionicframework.com/docs/theming/ */
 
   /* Misc */
   --app-refresher-color: var(--ion-text-color);
-  /* Surface, navigation and interaction */
-  --app-radius-card: 24px;
-  --app-radius-control: 14px;
-  --app-shadow-card: 0 4px 24px color-mix(in srgb, var(--color-slate-900) 4%, transparent);
-  --app-shadow-nav: 0 8px 32px color-mix(in srgb, var(--color-slate-900) 12%, transparent);
+  /*
+   * Design system (task 009, skills/mobile/COMPONENTS.md §6).
+   * Concentric radii: an inner element's radius = outer radius - its inset.
+   */
+  --app-radius-xs: 10px;
+  --app-radius-sm: 14px;
+  --app-radius-md: 18px;
+  --app-radius-lg: 22px;
+  --app-radius-card: 26px;
+  --app-radius-full: 999px;
+  --app-radius-control: var(--app-radius-sm);
+  --app-space-page: 16px;
+  --app-space-section: 28px;
+
+  /* Surfaces: tone separates layers; borders and shadows stay hairline/soft */
   --app-bg-elevated: var(--color-white);
-  --app-bg-glass: color-mix(in srgb, var(--app-bg-surface) 88%, transparent);
-  --app-bg-accent: var(--color-primary-50);
+  --app-bg-sunken: color-mix(in srgb, var(--color-zinc-900) 6%, transparent);
+  --app-hairline: color-mix(in srgb, var(--color-zinc-900) 8%, transparent);
+  --app-shadow-card: 0 1px 2px color-mix(in srgb, var(--color-zinc-900) 4%, transparent),
+    0 8px 24px -12px color-mix(in srgb, var(--color-zinc-900) 10%, transparent);
+  --app-shadow-float: 0 1px 2px color-mix(in srgb, var(--color-zinc-900) 8%, transparent),
+    0 4px 12px -2px color-mix(in srgb, var(--color-zinc-900) 10%, transparent);
+  --app-shadow-nav: 0 10px 36px -6px color-mix(in srgb, var(--color-zinc-900) 22%, transparent),
+    0 2px 6px color-mix(in srgb, var(--color-zinc-900) 6%, transparent);
+
+  /* Glass material for floating chrome (header, tab bar, overlays) */
+  --app-bg-glass: color-mix(in srgb, var(--color-white) 70%, transparent);
+  --app-glass-border: color-mix(in srgb, var(--color-white) 80%, transparent);
+  --app-glass-edge: color-mix(in srgb, var(--color-zinc-900) 7%, transparent);
+  --app-glass-highlight: inset 0 1px 0 color-mix(in srgb, var(--color-white) 90%, transparent);
+  --app-glass-filter: saturate(180%) blur(24px);
+
+  /* Tints */
+  --app-bg-accent: color-mix(in srgb, var(--ion-color-primary) 10%, var(--app-bg-elevated));
   --app-text-accent: var(--color-primary-700);
   --app-bg-positive: var(--color-emerald-50);
   --app-text-positive: var(--color-emerald-700);
+  --app-bg-negative: var(--color-rose-50);
+  --app-text-negative: var(--color-rose-600);
+  --app-bg-hero: radial-gradient(120% 90% at 100% 0%,
+      color-mix(in srgb, var(--color-sky-300) 60%, transparent) 0%, transparent 55%),
+    radial-gradient(90% 70% at 0% 100%,
+      color-mix(in srgb, var(--color-indigo-500) 55%, transparent) 0%, transparent 60%),
+    linear-gradient(150deg, var(--ion-color-primary) 0%, var(--color-primary-800) 100%);
+  --app-text-on-hero: var(--color-white);
+
+  /* Motion */
   --app-motion-fast: 160ms;
   --app-motion-normal: 240ms;
+  --app-motion-slow: 480ms;
+  --app-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Soft spring with a small overshoot; browsers without linear() fall back to ease */
+  --app-ease-spring: linear(0, 0.06 3%, 0.24 7%, 0.53 13%, 0.79 20%, 0.95 28%,
+      1.03 36%, 1.045 44%, 1.03 55%, 1.005 70%, 1);
+
+  /* Space the floating tab bar covers at the bottom of tab pages */
+  --app-tab-bar-space: calc(96px + var(--ion-safe-area-bottom, 0px));
   /* End app design tokens */
 
   /* Modufy Ionic variables */
@@ -311,14 +355,29 @@ body[color-theme='dark'] {
   --app-chat-input-border: var(--app-border-light-dark);
   --app-refresher-color: var(--color-white);
 
-  --app-bg-elevated: var(--color-zinc-900);
-  --app-bg-glass: color-mix(in srgb, var(--app-bg-elevated) 88%, transparent);
-  --app-bg-accent: var(--color-primary-950);
+  --app-bg-elevated: var(--color-zinc-800);
+  --app-bg-sunken: color-mix(in srgb, var(--color-white) 7%, transparent);
+  --app-hairline: color-mix(in srgb, var(--color-white) 8%, transparent);
+  --app-bg-glass: color-mix(in srgb, var(--color-zinc-900) 68%, transparent);
+  --app-glass-border: color-mix(in srgb, var(--color-white) 12%, transparent);
+  --app-glass-edge: color-mix(in srgb, var(--color-black) 40%, transparent);
+  --app-glass-highlight: inset 0 1px 0 color-mix(in srgb, var(--color-white) 10%, transparent);
+  --app-bg-accent: color-mix(in srgb, var(--ion-color-primary) 22%, var(--app-bg-surface-dark));
   --app-text-accent: var(--color-primary-300);
-  --app-bg-positive: var(--color-emerald-950);
+  --app-bg-positive: color-mix(in srgb, var(--color-emerald-500) 16%, transparent);
   --app-text-positive: var(--color-emerald-300);
-  --app-shadow-card: 0 4px 24px color-mix(in srgb, var(--color-black) 14%, transparent);
-  --app-shadow-nav: 0 8px 32px color-mix(in srgb, var(--color-black) 32%, transparent);
+  --app-bg-negative: color-mix(in srgb, var(--color-rose-500) 16%, transparent);
+  --app-text-negative: var(--color-rose-300);
+  --app-bg-hero: radial-gradient(120% 90% at 100% 0%,
+      color-mix(in srgb, var(--color-sky-400) 40%, transparent) 0%, transparent 55%),
+    radial-gradient(90% 70% at 0% 100%,
+      color-mix(in srgb, var(--color-violet-600) 45%, transparent) 0%, transparent 60%),
+    linear-gradient(150deg, var(--color-primary-700) 0%, var(--color-primary-950) 100%);
+  --app-shadow-card: 0 0 0 1px var(--app-hairline);
+  --app-shadow-float: 0 1px 2px color-mix(in srgb, var(--color-black) 40%, transparent),
+    0 4px 12px -2px color-mix(in srgb, var(--color-black) 40%, transparent);
+  --app-shadow-nav: 0 10px 36px -6px color-mix(in srgb, var(--color-black) 60%, transparent),
+    0 0 0 1px var(--app-hairline);
 
   /* Ionic variables */
   --ion-background-color: var(--app-bg-page-dark);

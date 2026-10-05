@@ -17,7 +17,7 @@ const {
   backText = '',
   avatarSize = 35,
   contentPadding = false,
-  translucent = false,
+  translucent = true,
   scrollY = true,
   fullscreen = true,
   hideHeaderOnScroll = false,

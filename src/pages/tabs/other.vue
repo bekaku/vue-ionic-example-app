@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue';
+import BaseIcon from '@/components/base/BaseIcon.vue';
 import BaseMenuItem from '@/components/base/BaseMenuItem.vue';
 import BaseMenuItems from '@/components/base/BaseMenuItems.vue';
 import BasePage from '@/components/base/BasePage.vue';
@@ -18,7 +19,6 @@ import { useAuthenStore } from '@/stores/authenStore';
 import { useTabStore } from '@/stores/tabStore';
 import { loadStorage, saveStorage } from '@/utils/StorageUtil';
 import {
-  IonIcon,
   IonItem,
   IonList,
   IonText,
@@ -74,11 +74,17 @@ watch(notification, async (newVal) => {
 });
 </script>
 <template>
-  <BasePage :page-title="t('base.other')" fullscreen :show-back-link="false">
+  <BasePage
+    :page-title="t('base.other')"
+    collapse="condense"
+    fullscreen
+    :show-back-link="false"
+  >
     <UserLoginedCard />
     <BaseMenuItems v-if="appNavs.length > 0" :items="appNavs"> </BaseMenuItems>
     <BaseMenuItems :items="additionalMenu" />
-    <BaseCard :title="t('base.setting')">
+    <h2 class="app-section-label">{{ t('base.setting') }}</h2>
+    <BaseCard>
       <ion-list>
         <BaseMenuItem
           :item="{
@@ -115,13 +121,17 @@ watch(notification, async (newVal) => {
             </ion-text>
           </template>
         </BaseMenuItem>
-        <ion-item button :detail="false" lines="none">
-          <ion-icon
-            slot="start"
-            :icon="
-              notification ? notificationsOutline : notificationsOffOutline
-            "
-          />
+        <ion-item :detail="false" lines="none" class="app-menu-item">
+          <span slot="start" class="app-menu-icon" aria-hidden="true">
+            <BaseIcon
+              :name="
+                notification ? notificationsOutline : notificationsOffOutline
+              "
+              icon-set="ion"
+              :size="18"
+              style="top: 0"
+            />
+          </span>
           <ion-toggle
             v-model="notification"
             justify="space-between"
@@ -158,10 +168,15 @@ watch(notification, async (newVal) => {
         />
       </ion-list>
     </BaseCard>
+    <p class="app-version app-muted">
+      {{ t('app.name') }} · {{ t('app.appVersion', [userVersion]) }}
+    </p>
   </BasePage>
 </template>
 <style scoped>
-/* ion-content {
-  --background: var(--app-bg-surface);
-} */
+.app-version {
+  margin: 20px 0 8px;
+  text-align: center;
+  font-size: 0.75rem;
+}
 </style>

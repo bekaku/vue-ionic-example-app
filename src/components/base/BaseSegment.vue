@@ -47,6 +47,7 @@ const segmentChanged = (even: any) => {
 <template>
   <ion-segment
     v-if="getItems != undefined && getItems.length > 0"
+    class="app-segment"
     :value="modelValue"
     :color="color"
     :scrollable="scrollable"

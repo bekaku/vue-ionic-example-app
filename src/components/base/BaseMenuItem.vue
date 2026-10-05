@@ -7,7 +7,7 @@ import { IonItem, IonLabel, IonText } from '@ionic/vue';
 const {
   item,
   lines = 'none',
-  iconSize = 20,
+  iconSize = 18,
   avatarSize = 42,
   detail = true,
 } = defineProps<{
@@ -26,6 +26,7 @@ const { t } = useLang();
   <ion-item
     v-if="item"
     v-bind="$attrs"
+    class="app-menu-item"
     :button="item.button == true || item?.to != undefined"
     :detail="!detail ? false : item.button == true || item?.to != undefined"
     :lines="lines"
@@ -38,30 +39,18 @@ const { t } = useLang();
         slot="start"
         v-bind="{ ...item.avatar, size: item.avatar?.size || avatarSize }"
       />
-      <template v-if="item.icon">
+      <span
+        v-if="item.icon"
+        slot="start"
+        class="app-menu-icon"
+        :class="item.color ? `app-menu-icon-${item.color}` : undefined"
+        aria-hidden="true"
+      >
         <BaseIcon
-            v-if="item.icon != undefined"
-            slot="start"
-            v-bind="{ ...item.icon, size: item.icon.size || iconSize }"
-          />
-        <!-- <ion-icon
-          v-if="item.iconSet == 'ion'"
-          slot="start"
-          :icon="item.icon"
-          :style="
-            item.iconSize ? `font-size:${item.iconSize}px` : `${iconSize}px`
-          "
-          :class="item.iconColor ? item.iconColor : ''"
-        ></ion-icon>
-        <span v-else slot="start">
-          <base-icon
-            :icon="item.icon"
-            :size="item.iconSize ? item.iconSize : iconSize"
-            :icon-set="item.iconSet"
-            :color="item.iconColor ? item.iconColor : undefined"
-          />
-        </span> -->
-      </template>
+          v-bind="{ ...item.icon, size: item.icon.size || iconSize }"
+          style="top: 0"
+        />
+      </span>
     </slot>
     <slot name="label">
       <ion-label>

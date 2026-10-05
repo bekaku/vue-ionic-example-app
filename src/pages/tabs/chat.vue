@@ -96,6 +96,7 @@ const getChatAvatar = (chat: GroupChatDto) =>
 <template>
   <BasePage
     :page-title="t('nav.chats')"
+    collapse="condense"
     fullscreen
     :content-padding="false"
     :show-back-link="false"
@@ -108,7 +109,7 @@ const getChatAvatar = (chat: GroupChatDto) =>
       @ion-input="onSearchInput"
     />
 
-    <ion-list v-if="visibleChats.length" class="chat-history-list">
+    <ion-list v-if="visibleChats.length" class="chat-history-list app-surface app-surface-flush">
       <ion-item
         v-for="chat in visibleChats"
         :key="String(chat.id)"
@@ -177,18 +178,22 @@ const getChatAvatar = (chat: GroupChatDto) =>
 
 <style scoped>
 .chat-history-list {
-  margin: 0;
+  margin: 8px var(--app-space-page) 0;
 }
 
 .chat-history-item {
-  --padding-start: 16px;
-  --inner-padding-end: 16px;
-  --min-height: 78px;
+  --min-height: 76px;
+}
+
+/* Separators start after the avatar, like an inset grouped list */
+.chat-history-item:not(:last-child) {
+  --inner-border-width: 0 0 0.55px 0;
 }
 
 .chat-avatar {
   position: relative;
   overflow: visible;
+  margin-inline-end: 14px;
 }
 
 .chat-avatar-fallback {
@@ -197,8 +202,8 @@ const getChatAvatar = (chat: GroupChatDto) =>
   height: 50px;
   place-items: center;
   border-radius: 50%;
-  background: var(--ion-color-light);
-  color: var(--ion-color-primary);
+  background: var(--app-bg-accent);
+  color: var(--app-text-accent);
   font-weight: 700;
 }
 
@@ -206,21 +211,21 @@ const getChatAvatar = (chat: GroupChatDto) =>
   position: absolute;
   right: 0;
   bottom: 1px;
-  width: 12px;
-  height: 12px;
-  border: 2px solid var(--ion-background-color, #fff);
+  width: 13px;
+  height: 13px;
+  border: 2.5px solid var(--app-bg-surface);
   border-radius: 50%;
-  background: var(--ion-color-success);
+  background: var(--color-emerald-500);
 }
 
 .chat-label {
   min-width: 0;
-  padding-block: 8px;
+  padding-block: 10px;
 }
 
 .chat-title-row {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 12px;
 }
@@ -228,39 +233,40 @@ const getChatAvatar = (chat: GroupChatDto) =>
 .chat-title-row h2 {
   overflow: hidden;
   margin: 0;
-  font-size: 15px;
-  font-weight: 650;
+  color: var(--app-text-strong);
+  font-size: 0.9375rem;
+  font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.chat-time,
-.chat-label small {
-  color: var(--ion-color-medium);
-  font-size: 11px;
+.chat-time {
+  color: var(--app-text-muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .chat-label p {
   overflow: hidden;
-  margin: 6px 0 0;
-  color: var(--ion-color-medium-shade);
+  margin: 4px 0 0;
+  color: var(--app-text-muted);
+  font-size: 0.875rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.chat-label small {
-  display: block;
-  margin-top: 4px;
-}
-
 .unread-badge {
+  min-width: 22px;
   margin-inline-start: 8px;
+  padding: 4px 7px;
+  border-radius: var(--app-radius-full);
+  font-variant-numeric: tabular-nums;
 }
 
 .empty-state {
   padding: 48px 20px;
-  color: var(--ion-color-medium);
+  color: var(--app-text-muted);
   text-align: center;
 }
 </style>

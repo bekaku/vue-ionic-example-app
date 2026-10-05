@@ -2,12 +2,11 @@
 import BaseModal from '@/components/base/BaseModal.vue';
 import { useAppStorage } from '@/composables/useAppStorage';
 import { useLang } from '@/composables/useLang';
-import { useTheme } from '@/composables/useTheme';
 import { useAuthenStore } from '@/stores/authenStore';
-import { IonBadge, IonCardContent, IonRow } from '@ionic/vue';
+import { IonBadge, IonCardContent } from '@ionic/vue';
 import { chevronDownOutline } from 'ionicons/icons';
 import { defineAsyncComponent, onMounted, ref } from 'vue';
-import BaseButton from '../base/BaseButton.vue';
+import BaseIcon from '../base/BaseIcon.vue';
 import BaseCard from '../base/BaseCard.vue';
 import UserItem from './UserItem.vue';
 import { useBase } from '@/composables/useBase';
@@ -19,7 +18,6 @@ const authenStore = useAuthenStore();
 const { auth } = authenStore;
 const { getAllJwtTokens } = useAppStorage();
 const { onSwithUser } = useAuthen();
-const { isDark } = useTheme();
 const { t } = useLang();
 const { appNavigateTo } = useBase();
 const dialogOpen = ref<boolean>(false);
@@ -45,10 +43,10 @@ const onSwithUserProcess = async (userId: number | string) => {
 };
 </script>
 <template>
-  <BaseCard :subtitle="t('authen.allProfiles')">
-    <IonCardContent class="q-pa-sm">
+  <h2 v-if="auth" class="app-section-label">{{ t('authen.allProfiles') }}</h2>
+  <BaseCard v-if="auth" class="profile-card">
+    <IonCardContent class="ion-no-padding">
       <UserItem
-        v-if="auth"
         :lines-name="1"
         :name="auth.username || ''"
         :lines-description="1"
@@ -60,38 +58,17 @@ const onSwithUserProcess = async (userId: number | string) => {
          @click="openDialog"
       >
         <template #end>
-          <IonRow>
-            <div
-              :style="{
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                background: !isDark
-                  ? 'var(--color-zinc-100)'
-                  : 'var(--color-zinc-700)',
-              }"
-            >
-              <IonRow class="ion-align-items-center ion-justify-content-center">
-                <BaseButton
-                  class="q-mt-sm"
-                  :icon="{
-                    name: chevronDownOutline,
-                    iconSet: 'ion',
-                  }"
-                  icon-only
-                  clear
-                >
-                </BaseButton>
-                <IonBadge
-                  color="danger"
-                  class="q-relative-position"
-                  :style="{ top: '-40px', right: '-20px' }"
-                >
-                  {{ totalProfiles }}
-                </IonBadge>
-              </IonRow>
-            </div>
-          </IonRow>
+          <span class="profile-switch" aria-hidden="true">
+            <BaseIcon
+              :name="chevronDownOutline"
+              icon-set="ion"
+              :size="18"
+              style="top: 0"
+            />
+            <IonBadge v-if="totalProfiles > 1" color="danger" class="profile-count">
+              {{ totalProfiles }}
+            </IonBadge>
+          </span>
         </template>
       </UserItem>
     </IonCardContent>
@@ -110,3 +87,25 @@ const onSwithUserProcess = async (userId: number | string) => {
     />
   </BaseModal>
 </template>
+<style scoped>
+.profile-card :deep(ion-item) {
+  --min-height: 76px;
+}
+
+.profile-switch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--app-bg-sunken);
+  color: var(--app-text-muted);
+}
+
+.profile-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+}
+</style>

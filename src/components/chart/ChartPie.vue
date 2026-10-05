@@ -76,7 +76,9 @@ const observeVisibility = () => {
   visibilityObserver = new IntersectionObserver((entries) => {
     const entry = entries[0];
     const width = entry?.target instanceof Element ? entry.target.getBoundingClientRect().width : 0;
-    viewActive.value = entry?.isIntersecting === true && width > 0;
+    // Mount once it scrolls into view; keep it while scrolled away and drop
+    // it only when the page is hidden (width 0), so it does not re-animate.
+    viewActive.value = width > 0 && (entry?.isIntersecting === true || viewActive.value);
   });
   if (visibilityRef.value) {
     visibilityObserver.observe(visibilityRef.value);
@@ -152,7 +154,8 @@ watch(isDark, (state) => {
 });
 </script>
 <template>
-  <div ref="visibilityRef">
+  <div ref="visibilityRef" style="width: 100%; min-width: 0">
+    <!-- Full width: as a 0px flex item (e.g. in IonRow) it never becomes visible -->
     <apexchart
       v-if="options && viewActive"
        v-bind="$attrs"

@@ -1,11 +1,11 @@
 <script setup lang="ts" generic="T">
 import { useLang } from '@/composables/useLang';
 import type { LabelValue } from '@/types/common';
-import { IonCardHeader, IonCardSubtitle, IonCol, IonList, IonRow } from '@ionic/vue';
+import { IonCol, IonList, IonRow } from '@ionic/vue';
 import BaseCard from './BaseCard.vue';
 import BaseMenuItem from './BaseMenuItem.vue';
 
-const { items, iconSize = 20, detail=true } = defineProps<{
+const { items, iconSize = 18, detail=true } = defineProps<{
     items: LabelValue<T>[]
     iconSize?: number
     detail?: boolean
@@ -18,14 +18,10 @@ const { t } = useLang();
             <slot name="top" />
             <template v-if="items.length > 0">
                 <template v-for="(item, index) in items" :key="`parent-${index}`">
-                    <BaseCard>
-                        <template v-if="item.label" #header>
-                            <IonCardHeader>
-                                <IonCardSubtitle>
-                                    {{ item?.translateLabel !== false ? t(`${item.label}`) : item.label }}
-                                </IonCardSubtitle>
-                            </IonCardHeader>
-                        </template>
+                    <h2 v-if="item.label && item.children?.length" class="app-section-label">
+                        {{ item?.translateLabel !== false ? t(`${item.label}`) : item.label }}
+                    </h2>
+                    <BaseCard class="app-menu-group">
                         <template v-if="item.children && item.children.length > 0">
                             <template v-for="(page, pageIndex) in item.children"
                                 :key="`parent-${index}-page-${pageIndex}`">
