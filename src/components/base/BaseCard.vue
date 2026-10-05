@@ -6,7 +6,7 @@ import {
   IonCardSubtitle,
 } from '@ionic/vue';
 const {
-  flat = true,
+  flat = false,
   bordered = false,
   textCapitalize = false,
   margin = true,
