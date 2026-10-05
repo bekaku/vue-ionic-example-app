@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import BaseButton from '@/components/base/BaseButton.vue';
 import BaseIcon from '@/components/base/BaseIcon.vue';
 import BaseImage from '@/components/base/BaseImage.vue';
 import type { FileManager } from '@/types/models';
 import { getFileTypeIcon } from '@/utils/FileUtils';
+import { trashOutline } from 'ionicons/icons';
 import { computed } from 'vue';
 
 const {
@@ -60,7 +62,20 @@ const onClick = (event: any, index: number) => {
 </script>
 
 <template>
-  <div v-bind="$attrs" @click="onClick($event, index)">
+  <div v-bind="$attrs" class="grid-tile" @click="onClick($event, index)">
+    <BaseButton
+      v-if="
+        showDelete &&
+        (!item.uploadProgress || item.uploadProgress.status != 'UPLOADING')
+      "
+      class="grid-delete"
+      clear
+      icon-only
+      color="danger"
+      size="small"
+      :icon="{ name: trashOutline, iconSet: 'ion' }"
+      @click="onRemove($event, index)"
+    />
     <template v-if="isMedia && getImagePath">
       <base-image
         :class="{ 'img-radius': radius }"
@@ -83,6 +98,17 @@ const onClick = (event: any, index: number) => {
 </template>
 
 <style scoped lang="scss">
+.grid-tile {
+  position: relative;
+}
+.grid-delete {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 11;
+  --background: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+}
 .img-radius {
   border-radius: v-bind(radiusSize);
 }

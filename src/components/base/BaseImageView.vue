@@ -4,12 +4,11 @@ import BaseSwiperSlides from '@/components/base/BaseSwiperSlides.vue';
 import { useBase } from '@/composables/useBase';
 import { useBlobUrls } from '@/composables/useBlobUrls';
 import { useFileDownload } from '@/composables/useFileDownload';
-import { useFileSystem } from '@/composables/useFileSystem';
 import { useLang } from '@/composables/useLang';
 import type { SlideOptions, SwiperSlideChange } from '@/types/common';
 import type { FileManager, ImageDto } from '@/types/models';
 import { IonCol, IonRow } from '@ionic/vue';
-import { onMounted, ref, useTemplateRef } from 'vue';
+import { defineEmits, defineExpose, defineModel, defineProps, onMounted, ref, useTemplateRef } from 'vue';
 const {
   files,
   images = [],
@@ -26,7 +25,6 @@ const {
   width?: string;
 }>();
 const emit = defineEmits(['on-slide-change', 'on-close', 'on-delete']);
-const { savePicture } = useFileSystem();
 const { t } = useLang();
 const { fethCdnData } = FileManagerService();
 const { track } = useBlobUrls();

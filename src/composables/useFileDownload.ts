@@ -1,4 +1,5 @@
 import { useApi } from '@/composables/useApi';
+import { useFileSystem } from '@/composables/useFileSystem';
 import { FileOpener } from '@capacitor-community/file-opener';
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
@@ -10,6 +11,7 @@ export interface DownloadOptions {
     directory?: Directory
     showOpenDialog?: boolean
     showShareDialog?: boolean
+    saveToGallery?: boolean
 }
 
 export interface DownloadedFile {
@@ -29,6 +31,7 @@ export interface DownloadState {
 
 export const useFileDownload = () => {
     const api = useApi();
+    const { savePicture } = useFileSystem();
     // Reactive state
     const downloadState = reactive<DownloadState>({
         isDownloading: false,
@@ -81,6 +84,9 @@ export const useFileDownload = () => {
             png: 'image/png',
             gif: 'image/gif',
             webp: 'image/webp',
+            heic: 'image/heic',
+            heif: 'image/heif',
+            svg: 'image/svg+xml',
             doc: 'application/msword',
             docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             xls: 'application/vnd.ms-excel',
@@ -108,16 +114,25 @@ export const useFileDownload = () => {
             filename,
             directory = Directory.Documents,
             showOpenDialog = false,
-            showShareDialog = false
+            showShareDialog = false,
+            saveToGallery = false
         } = options;
 
-        console.log('downloadFile', JSON.stringify({
-            url, filename, showOpenDialog, showShareDialog
-        }));
         try {
             resetDownloadState();
             downloadState.isDownloading = true;
             downloadState.currentFile = filename;
+
+            // Writing to public Documents requires storage permission on Android
+            if (Capacitor.getPlatform() === 'android') {
+                const status = await Filesystem.checkPermissions();
+                if (status.publicStorage !== 'granted') {
+                    const req = await Filesystem.requestPermissions();
+                    if (req.publicStorage !== 'granted') {
+                        throw new Error('Storage permission denied');
+                    }
+                }
+            }
 
             // reset baseUrl to empty
             const blob = await api<Blob>(url, {
@@ -152,9 +167,27 @@ export const useFileDownload = () => {
                 mimeType: getMimeType(filename)
             };
 
+            // Save images to the device photo album (native only).
+            // Reuses the verified gallery flow (Filesystem + Media.savePhoto
+            // into the app album); a gallery failure must not fail the download.
+            if (
+                saveToGallery &&
+                Capacitor.isNativePlatform() &&
+                downloadedFile.mimeType.startsWith('image/')
+            ) {
+                const objectUrl = URL.createObjectURL(blob);
+                try {
+                    await savePicture(objectUrl, filename);
+                } catch (e) {
+                    console.warn('saveToGallery failed:', e);
+                } finally {
+                    URL.revokeObjectURL(objectUrl);
+                }
+            }
+
             // Add to downloaded files
-            // downloadedFiles.value.push(downloadedFile);
-            // downloadHistory.value.push(downloadedFile);
+            downloadedFiles.value.push(downloadedFile);
+            downloadHistory.value.push(downloadedFile);
 
             // Optional actions
             if (showOpenDialog) {
@@ -182,7 +215,8 @@ export const useFileDownload = () => {
             url,
             filename,
             directory: Directory.Documents,
-            showOpenDialog: true
+            showOpenDialog: true,
+            saveToGallery: true
         });
     };
 

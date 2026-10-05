@@ -32,6 +32,11 @@ const onTakeImageProcess = async () => {
   console.log('onTakePicture', file);
 };
 
+const onRemove = (index: number) => {
+  if (fileChooseItems.value[index]) {
+    fileChooseItems.value.splice(index, 1);
+  }
+};
 const openFilePicker = () => {
   if (filePickerRef.value) {
     filePickerRef.value.open();
@@ -83,7 +88,7 @@ const onFilePickerChange = (files: FileManager[] | null) => {
 
         <IonRow>
           <IonCol>
-            <BaseFileItems :items="fileChooseItems" show-delete />
+            <BaseFileItems :items="fileChooseItems" show-delete layout="grid" @on-remove="onRemove" />
           </IonCol>
         </IonRow>
 

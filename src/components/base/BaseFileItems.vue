@@ -163,6 +163,7 @@ const handleItemClick = (event: any, index: number) => {
             :icon-size="iconSize"
             :show-delete="showDelete"
             @on-click="handleItemClick($event, i)"
+            @on-remove="emit('on-remove', i)"
           >
             <div
               v-if="

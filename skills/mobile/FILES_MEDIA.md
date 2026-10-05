@@ -49,7 +49,13 @@ active one — edit the active one.)
 (`Directory.Documents`); `openFile` → community `FileOpener.open`,
 `shareFile` → `Share.share`. Wrappers: `downloadImage`, `downloadPDF`,
 `downloadDocument`, `downloadAndShareFile`. Use these for user downloads
-(`BaseFileView`, `BasePdfView`, `BaseImageView`). Confirm MIME, filename, and
+(`BaseFileView`, `BasePdfView`, `BaseImageView`). `downloadImage` additionally
+saves images to the device photo album on native (`saveToGallery` →
+`useFileSystem.savePicture` → `Media.savePhoto` into the app album; gallery
+failure only warns and never fails the download); other types stay in
+`Documents` + `FileOpener`/share. `downloadFile` ensures Filesystem storage
+permission on Android before writing (public Documents is readable by file
+managers; Android 11+ only shows files the app created). Confirm MIME, filename, and
 user-visible location per platform.
 
 Viewing remote files: `FileManagerService.fethCdnData(path, 'blob' |

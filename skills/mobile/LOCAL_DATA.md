@@ -18,7 +18,7 @@ Capacitor Preferences only via `src/utils/StorageUtil.ts`:
 
 SQLite / Capacitor-SQLite / jeep-sqlite / app-managed IndexedDB / migrations / encryption /
 offline-first sync / conflict resolution. Searches for `sqlite|jeep|indexedDB`
-hit only noise — do not invent a database layer or copy MySQL/Flyway
+hit only noise — do not invent a database layer or copy PostgreSQL/Flyway
 conventions here.
 
 ## 3. Change rules (future tasks)

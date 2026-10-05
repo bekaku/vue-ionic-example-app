@@ -1,7 +1,7 @@
 # AGENTS.md — Mobile Repository (Ionic Vue + Capacitor)
 
 > Scope: this file governs AI agents working **inside the mobile repository only**
-> (`vue-ionic-mobile`). Backend (Spring Boot + MySQL) and Web frontend (Quasar SSR)
+> (`vue-ionic-mobile`). Backend (Spring Boot + PostgreSQL) and Web frontend (Nuxt + Nuxt UI)
 > are separate repositories and are out of scope for edits.
 
 ## Quick Reference
@@ -33,7 +33,7 @@ Summary only — each row links to the authoritative home.
    listed in "Source of Truth" below. Application source (`src/`, `public/`,
    configs) is read-only for those tasks. Implementation tasks follow §11 and
    may edit application code within this repository.
-4. Do not add Quasar UI, Nuxt, backend (Spring/MySQL/Flyway), or AI/RAG
+4. Do not add Quasar UI, Nuxt, backend (Spring/PostgreSQL/Flyway), or AI/RAG
    architecture to this app. Existing `@quasar/extras` icon imports are assets.
 
 ## 2. Source of Truth and Instruction Precedence
@@ -60,7 +60,7 @@ the higher document. Historical docs live only in
   `package.json`, lockfiles, Gradle/Pods, signing, permissions, auth behavior,
   API integrations, or run `npx cap sync/add/update`, builds, or deployments
   during documentation tasks. Never expose secrets, tokens, keystores.
-- MUST NOT touch sibling repos (backend, Quasar). If a task needs backend/web
+- MUST NOT touch sibling repos (backend, Nuxt web). If a task needs backend/web
   changes, document the dependency in the task (`API Contract Impact:
   Backend changes required`) and stop at the boundary.
 - MUST NOT assume `android/` and `ios/` behave identically. No native projects
