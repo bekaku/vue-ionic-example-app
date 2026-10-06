@@ -254,8 +254,6 @@ const chartCategories = computed(() =>
             :categories="chartCategories"
             :label-rotate="-45"
             :xaxis-tickamount="4"
-            :dark="isDark"
-            :mode="isDark ? 'dark' : 'light'"
           />
         </BaseCard>
         <div class="app-grid home-trend-grid">
@@ -276,7 +274,6 @@ const chartCategories = computed(() =>
               height="72"
               :series="item.series"
               :categories="item.categories"
-              :mode="isDark ? 'dark' : 'light'"
               :stroke-width="2"
               strokestyle="smooth"
               :tooltip-enable="false"

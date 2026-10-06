@@ -1,322 +1,235 @@
 <script setup lang="ts">
-import { useTheme } from '@/composables/useTheme';
-import type {
-  ChartMode,
-  ChartPosition,
-  ChartThemePalete,
-} from '@/types/chart';
-import { onMounted, onUnmounted, ref, useTemplateRef, watch, watchEffect } from 'vue';
-import apexchart from 'vue3-apexcharts';
-interface GridPadding {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-}
+// Radial progress rings (ECharts polar bars), one ring per value; the first
+// value is outermost and shown in the centre. Values are out of `max`.
+import ChartBase from '@/components/chart/ChartBase.vue';
+import type { ChartThemeContext } from '@/libs/chartTheme';
+import { resolveColor, resolvePalette } from '@/libs/chartTheme';
+import { formatNumber } from '@/libs/chartOptions';
+import type { ChartOption } from '@/libs/echarts';
+import type { ChartPosition, ChartThemePalete } from '@/types/chart';
+import { computed } from 'vue';
+
 const {
-  chartId = 'chart-radial-id',
+  chartId,
   height = 'auto',
   width = '100%',
-  mode = 'light',
   palette = 'palette1',
   series,
   colors,
   categories,
-  gridPadding = {
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  },
+  max = 100,
   showLegend = true,
-  legendUseSeriesColors = true,
-  legendFloating = false,
-  legendOffsetX = 0,
-  legendOffsetY = 0,
   legendPosition = 'bottom',
   showDataLabels = true,
-  dataLabelsSize = '14px',
-  dataValueSize = '18px',
   showDataLabelsName = true,
   showDataLabelsValue = true,
-  dataLabelsValueOfsetY = 0,
+  dataLabelsSize = '13px',
+  dataValueSize = '24px',
   startAngle = 0,
   endAngle = 360,
   stokeLineCap = 'round',
   semi = false,
-  hollowBg = true,
   hollowSize = '55%',
-  trackBackgroud = '#f0f0f0',
-  trackBackgroudDark = '#383a42',
-  fillType = 'gradient',
-  valUnit,
+  trackColor,
+  valUnit = '',
 } = defineProps<{
-  chartId?: string;
-  height?: string;
-  width?: string;
-  showLegend?: boolean;
-  legendUseSeriesColors?: boolean;
-  legendOffsetX?: number;
-  legendOffsetY?: number;
-  legendFloating?: boolean;
-  showDataLabels?: boolean;
-  showDataLabelsName?: boolean;
-  showDataLabelsValue?: boolean;
-  dataLabelsSize?: string;
-  dataValueSize?: string;
-  dataLabelsValueOfsetY?: number;
-  legendPosition?: ChartPosition;
-  labelunit?: string;
-  stokeLineCap?: 'round' | 'square' | 'butt';
-  fillType?: 'fill' | 'gradient';
-  endAngle?: number;
-  startAngle?: number;
-  mode?: ChartMode;
-  palette?: ChartThemePalete;
-  series: number[];
-  colors?: string[];
-  categories: string[];
-  gridPadding?: GridPadding;
-  semi?: boolean;
-  hollowBg?: boolean;
-  hollowSize?: string;
-  valUnit?: string;
-  trackBackgroud?: string;
-  trackBackgroudDark?: string;
+  chartId?: string
+  height?: string | number
+  width?: string
+  palette?: ChartThemePalete
+  series: number[]
+  colors?: string[]
+  categories: string[]
+  /** Value of a full ring. */
+  max?: number
+  showLegend?: boolean
+  /** `left`/`right` fall back to `bottom`. */
+  legendPosition?: ChartPosition
+  /** Centre label (first value). */
+  showDataLabels?: boolean
+  showDataLabelsName?: boolean
+  showDataLabelsValue?: boolean
+  dataLabelsSize?: string
+  dataValueSize?: string
+  /** Degrees clockwise from 12 o'clock (as ApexCharts). */
+  startAngle?: number
+  endAngle?: number
+  stokeLineCap?: 'round' | 'square' | 'butt'
+  /** Half ring (-90° → 90°) with the label under the arc. */
+  semi?: boolean
+  /** Inner hole as a share of the ring radius. */
+  hollowSize?: string
+  /** Ring background (CSS colour or token); default from the theme. */
+  trackColor?: string
+  valUnit?: string
 }>();
-const chartSeries = ref(series);
-const options = ref<any>();
-const { isDark } = useTheme();
-const chartRadialRef = useTemplateRef<any>('chartRadialRef');
-watchEffect(() => {
-  if (series && series.length > 0) {
-    chartSeries.value = series;
-  }
-});
-onUnmounted(() => {
-  options.value = undefined;
-  chartSeries.value = [];
-});
 
-onMounted(() => {
-  chartSetup();
-  observeVisibility();
+const arc = computed(() => {
+  const start = semi ? -90 : startAngle;
+  const end = semi ? 90 : endAngle;
+  // ECharts angles: 90 = 12 o'clock, counter-clockwise; clamp to one turn.
+  const span = Math.min(360, Math.max(0, end - start));
+  return { start: 90 - start, end: 90 - start - span };
 });
-onUnmounted(() => {
-  visibilityObserver?.disconnect();
-});
-// Render only while the container is visible with a real size: on cached
-// Ionic pages the chart would otherwise draw while hidden (width 0) and
-// ApexCharts measures NaN widths (SVG attribute errors on navigation).
-const viewActive = ref(false);
-const visibilityRef = useTemplateRef<any>('visibilityRef');
-let visibilityObserver: IntersectionObserver | undefined;
-const observeVisibility = () => {
-  visibilityObserver = new IntersectionObserver((entries) => {
-    const entry = entries[0];
-    const width = entry?.target instanceof Element ? entry.target.getBoundingClientRect().width : 0;
-    // Mount once it scrolls into view; keep it while scrolled away and drop
-    // it only when the page is hidden (width 0), so it does not re-animate.
-    viewActive.value = width > 0 && (entry?.isIntersecting === true || viewActive.value);
-  });
-  if (visibilityRef.value) {
-    visibilityObserver.observe(visibilityRef.value);
-  }
-};
-const updateTheme = (dark: boolean) => {
-  if (chartRadialRef.value) {
-    chartRadialRef.value.updateOptions({
-      theme: {
-        mode: dark ? 'dark' : 'light',
-      },
-      plotOptions: {
-        radialBar: {
-          hollow: {
-            background: dark ? 'transparent' : '#fff',
-            dropShadow: {
-              enabled: !semi && !dark,
-            },
-          },
-          track: {
-            background: !dark ? trackBackgroud : trackBackgroudDark,
-          },
-          dataLabels: {
-            value: {
-              color: dark ? '#fff' : '#000',
-            },
-          },
-        },
-      },
-    });
-  }
-};
-watch(isDark, (state) => {
-  updateTheme(state);
-});
-const chartSetup = () => {
-  if (series.length > 0) {
-    options.value = {
-      // series: series.value,
-      chart: {
-        id: chartId,
-        background: 'transparent',
-        width,
-        height,
-        type: 'radialBar',
-        toolbar: {
-          show: false,
-        },
-        animations: {
-          enabled: true,
-          easing: 'easein', // linear, easeout, easein, easeinout, swing, bounce, elastic
-          speed: 800,
-        },
-        // sparkline: {
-        //   enabled: sparkline || semi,
-        // },
-        // offsetY: semi ? -20 : 0,
-      },
-      theme: {
-        mode,
-        palette,
-      },
-      plotOptions: {
-        radialBar: {
-          offsetY: 0,
-          startAngle,
-          endAngle,
-          hollow: {
-            margin: 0,
-            size: hollowSize,
-            background:
-              mode === 'dark' || !hollowBg || semi ? 'transparent' : '#fff',
-            position: 'front',
-            dropShadow: {
-              enabled: true,
-              top: 3,
-              left: 0,
-              blur: 3,
-              opacity: 0.15,
-            },
-          },
-          track: {
-            background: isDark.value ? trackBackgroudDark : trackBackgroud,
-            strokeWidth: '100%',
-            margin: 2, // margin is in pixels
-            dropShadow: {
-              enabled: false,
-              top: 2,
-              left: 0,
-              color: '#999',
-              opacity: 1,
-              blur: 2,
-            },
-          },
+const centerY = computed(() => (semi ? '68%' : '50%'));
 
-          dataLabels: {
-            show: showDataLabels,
-            name: {
-              offsetY: semi ? -30 : 0,
-              show: showDataLabelsName,
-              // color: dark ? '#fff' : '#000',
-              fontSize: dataLabelsSize,
-              fontWeight: 400,
-            },
-            value: {
-              show: showDataLabelsValue,
-              offsetY:
-                dataLabelsValueOfsetY > 0
-                  ? dataLabelsValueOfsetY
-                  : semi
-                  ? -20
-                  : 5,
-              formatter(val: any) {
-                return val + (valUnit || '');
-              },
-              // color: dark ? '#fff' : '#000',
-              fontSize: dataValueSize,
-            },
-          },
+const items = computed(() => {
+  // Palette hues are the same in both themes, so the legend can read them here.
+  const ringColors = resolvePalette(palette, colors);
+  return series.map((value, index) => ({
+    name: categories[index] ?? '',
+    value,
+    label: `${formatNumber(value)}${valUnit}`,
+    color: ringColors[index % ringColors.length],
+  }));
+});
+const first = computed(() => items.value[0]);
+
+const buildOption = (theme: ChartThemeContext): ChartOption => {
+  const ringColors = theme.palette(palette, colors);
+  const outer = semi ? 96 : 90;
+  const hollow = Math.min(95, Math.max(0, Number.parseFloat(hollowSize) || 0));
+  const ring = {
+    type: 'bar' as const,
+    coordinateSystem: 'polar' as const,
+    roundCap: stokeLineCap === 'round',
+    barCategoryGap: series.length > 1 ? '30%' : '18%',
+  };
+  return {
+    color: ringColors,
+    tooltip: { trigger: 'item', confine: true, valueFormatter: value => `${formatNumber(value)}${valUnit}` },
+    polar: {
+      center: ['50%', centerY.value],
+      radius: [`${(outer * hollow) / 100}%`, `${outer}%`],
+    },
+    angleAxis: {
+      type: 'value',
+      min: 0,
+      max,
+      startAngle: arc.value.start,
+      endAngle: arc.value.end,
+      clockwise: true,
+      show: false,
+    },
+    radiusAxis: {
+      type: 'category',
+      data: items.value.map(item => item.name),
+      inverse: true,
+      show: false,
+    },
+    series: [
+      // Track: a full-value ring under each value. (showBackground would
+      // ignore start/end angles and always draw a full circle.)
+      {
+        ...ring,
+        silent: true,
+        tooltip: { show: false },
+        animation: false,
+        itemStyle: {
+          color: trackColor ? resolveColor(trackColor, theme.track) : theme.track,
         },
+        data: items.value.map(() => max),
       },
-      colors: colors && colors.length > 0 ? colors : undefined,
-      stroke: {
-        // lineCap: semi ? 'butt' : stokeLineCap,
-        lineCap: stokeLineCap,
+      {
+        ...ring,
+        barGap: '-100%',
+        data: items.value.map((item, index) => ({
+          name: item.name,
+          value: item.value,
+          itemStyle: { color: ringColors[index % ringColors.length] },
+        })),
       },
-      fill: {
-        type: fillType, // fill, gradient
-        gradient: {
-          shade: 'light',
-          type: 'horizontal',
-          shadeIntensity: 0.5,
-          inverseColors: true,
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [0, 100],
-        },
-      },
-      labels: categories,
-      legend: {
-        show: showLegend,
-        floating: legendFloating,
-        fontSize: '16px',
-        offsetX: legendOffsetX,
-        offsetY: legendOffsetY,
-        position: legendPosition, // whether to position legends in 1 of 4
-        // direction - top, bottom, left, right
-        horizontalAlign: 'center', // when position top/bottom, you can
-        // specify whether to align legends
-        // left, right or center
-        verticalAlign: 'middle',
-        labels: {
-          colors: '#8E8E93',
-          useSeriesColors: legendUseSeriesColors,
-        },
-      },
-      grid: {
-        padding: gridPadding,
-      },
-      tooltip: {
-        y: {
-          formatter(val: any) {
-            return val;
-          },
-        },
-      },
-      responsive: [
-        // {
-        //   breakpoint: 480,
-        //   options: {
-        //     chart: {
-        //       width: 200,
-        //     },
-        //     legend: {
-        //       position: 'bottom',
-        //     },
-        //   },
-        // },
-      ],
-    };
-    // chart.value = new ApexCharts(
-    //   document.querySelector('#' + chartId),
-    //   options
-    // );
-    // chart.value.render();
-  }
+    ],
+  };
 };
 </script>
 <template>
-  <div ref="visibilityRef" style="width: 100%; min-width: 0">
-    <!-- Full width: as a 0px flex item (e.g. in IonRow) it never becomes visible -->
-    <apexchart
-      v-if="options && viewActive"
-      v-bind="$attrs"
-      ref="chartRadialRef"
-      :height="height"
-      type="radialBar"
-      :options="options"
-      :series="chartSeries"
-    />
+  <div class="chart-radial" :class="{ 'chart-radial-legend-top': legendPosition === 'top' }">
+    <div class="chart-radial-plot">
+      <ChartBase :id="chartId" :option="buildOption" :height="height" :width="width" />
+      <div
+        v-if="showDataLabels && first"
+        class="chart-radial-center"
+        :style="{ top: centerY }"
+        aria-hidden="true"
+      >
+        <strong
+          v-if="showDataLabelsValue"
+          class="app-num"
+          :style="{ fontSize: dataValueSize }"
+        >{{ first.label }}</strong>
+        <span v-if="showDataLabelsName" :style="{ fontSize: dataLabelsSize }">{{ first.name }}</span>
+      </div>
+    </div>
+    <ul v-if="showLegend && items.length > 0" class="chart-radial-legend">
+      <li v-for="item in items" :key="item.name">
+        <i :style="{ background: item.color }" />
+        <span>{{ item.name }}</span>
+        <strong class="app-num">{{ item.label }}</strong>
+      </li>
+    </ul>
   </div>
 </template>
+<style scoped lang="scss">
+.chart-radial {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+.chart-radial-legend-top {
+  flex-direction: column-reverse;
+}
+.chart-radial-plot {
+  position: relative;
+}
+.chart-radial-center {
+  position: absolute;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  text-align: center;
+
+  strong {
+    color: var(--app-text-strong);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  span {
+    color: var(--app-text-muted);
+  }
+}
+.chart-radial-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--app-text-muted);
+  }
+
+  i {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--app-radius-full, 999px);
+  }
+
+  strong {
+    color: var(--app-text-strong);
+    font-weight: 600;
+  }
+}
+</style>

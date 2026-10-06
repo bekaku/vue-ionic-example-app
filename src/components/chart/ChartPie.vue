@@ -1,169 +1,95 @@
 <script lang="ts" setup>
-import { useTheme } from '@/composables/useTheme';
-import type {
-  ChartMode,
-  ChartPosition,
-  ChartThemePalete,
-  Strokestyle,
-} from '@/types/chart';
-import { onMounted, onUnmounted, ref, useTemplateRef, watch, watchEffect } from 'vue';
-import apexchart from 'vue3-apexcharts';
+// Pie / donut chart: one value per category.
+import ChartBase from '@/components/chart/ChartBase.vue';
+import type { ChartThemeContext } from '@/libs/chartTheme';
+import { formatNumber, legendOption } from '@/libs/chartOptions';
+import type { ChartOption } from '@/libs/echarts';
+import type { ChartPosition, ChartThemePalete } from '@/types/chart';
+
 const {
-  chartId = 'chart-pie-id',
+  chartId,
   height = 'auto',
-  width = 'auto',
+  width = '100%',
+  labelunit = '',
   showLegend = true,
-  legendUseSeriesColors = true,
   legendPosition = 'bottom',
   type = 'pie',
-  mode = 'light',
   palette = 'palette1',
   series,
   colors,
   showDataLabels = true,
   categories,
-  strokestyle = 'smooth',
-  strokeWidth = 1,
 } = defineProps<{
-  chartId?: string;
-  height?: string;
-  width?: string;
-  labelunit?: string;
-  showLegend?: boolean;
-  legendUseSeriesColors?: boolean;
-  legendPosition?: ChartPosition;
-  type?: 'pie' | 'donut';
-  mode?: ChartMode;
-  palette?: ChartThemePalete;
-  series: number[];
-  colors?: string[];
-  dark?: boolean;
-  showDataLabels?: boolean;
-  labelRotate?: number;
-  categories: string[];
-  strokestyle?: Strokestyle;
-  strokeWidth?: number;
+  chartId?: string
+  height?: string | number
+  width?: string
+  /** Appended to values in the tooltip. */
+  labelunit?: string
+  showLegend?: boolean
+  legendPosition?: ChartPosition
+  type?: 'pie' | 'donut'
+  palette?: ChartThemePalete
+  series: number[]
+  colors?: string[]
+  /** Percentage on each slice. */
+  showDataLabels?: boolean
+  categories: string[]
 }>();
 
-const { isDark } = useTheme();
-const chartSeries = ref(series);
-const options = ref<any>();
-const chartPieRef = useTemplateRef<any>('chartPieRef');
-watchEffect(() => {
-  if (series && series.length > 0) {
-    chartSeries.value = series;
+// Move the pie away from the legend side.
+const center = () => {
+  if (!showLegend) {
+    return ['50%', '50%'];
   }
-});
-onUnmounted(() => {
-  options.value = undefined;
-  chartSeries.value = [];
-});
-
-onMounted(() => {
-  chartSetup();
-  observeVisibility();
-});
-onUnmounted(() => {
-  visibilityObserver?.disconnect();
-});
-// Render only while the container is visible with a real size: on cached
-// Ionic pages the chart would otherwise draw while hidden (width 0) and
-// ApexCharts measures NaN widths (SVG attribute errors on navigation).
-const viewActive = ref(false);
-const visibilityRef = useTemplateRef<any>('visibilityRef');
-let visibilityObserver: IntersectionObserver | undefined;
-const observeVisibility = () => {
-  visibilityObserver = new IntersectionObserver((entries) => {
-    const entry = entries[0];
-    const width = entry?.target instanceof Element ? entry.target.getBoundingClientRect().width : 0;
-    // Mount once it scrolls into view; keep it while scrolled away and drop
-    // it only when the page is hidden (width 0), so it does not re-animate.
-    viewActive.value = width > 0 && (entry?.isIntersecting === true || viewActive.value);
-  });
-  if (visibilityRef.value) {
-    visibilityObserver.observe(visibilityRef.value);
-  }
-};
-const updateTheme = (dark: boolean) => {
-  if (chartPieRef.value) {
-    chartPieRef.value.updateOptions({
-      theme: {
-        mode: dark ? 'dark' : 'light',
-      },
-    });
-  }
+  return {
+    top: ['50%', '56%'],
+    bottom: ['50%', '45%'],
+    left: ['62%', '50%'],
+    right: ['38%', '50%'],
+  }[legendPosition];
 };
 
-const chartSetup = () => {
-  if (series.length > 0) {
-    options.value = {
-      // series: series.value,
-      // series: series,
-      chart: {
-        id: chartId,
-        background: 'transparent',
-        width,
-        height,
-        type,
-        toolbar: {
-          show: false,
+const buildOption = (theme: ChartThemeContext): ChartOption => {
+  const donut = type === 'donut';
+  return {
+    color: theme.palette(palette, colors),
+    legend: legendOption(showLegend, legendPosition),
+    tooltip: {
+      trigger: 'item',
+      confine: true,
+      formatter: (params) => {
+        const item = Array.isArray(params) ? params[0] : params;
+        return `${item?.marker ?? ''}${item?.name ?? ''}: <b>${formatNumber(item?.value)}${labelunit}</b> (${item?.percent ?? 0}%)`;
+      },
+    },
+    series: [
+      {
+        type: 'pie',
+        center: center(),
+        radius: donut ? ['46%', '70%'] : [0, '70%'],
+        minShowLabelAngle: 12,
+        // Gap between slices in the card colour.
+        itemStyle: {
+          borderColor: theme.background,
+          borderWidth: 2,
+          borderRadius: donut ? 6 : 0,
         },
-        animations: {
-          enabled: true,
-          easing: 'easein', // linear, easeout, easein, easeinout, swing, bounce, elastic
-          speed: 800,
+        label: {
+          show: showDataLabels,
+          position: 'inside',
+          formatter: '{d}%',
+          color: '#fff',
+          fontSize: 11,
+          fontWeight: 600,
         },
+        labelLine: { show: false },
+        emphasis: { scale: true, scaleSize: 6 },
+        data: categories.map((name, index) => ({ name, value: series[index] ?? 0 })),
       },
-      theme: {
-        mode,
-        palette,
-      },
-      plotOptions: {},
-      colors: colors && colors.length > 0 ? colors : undefined,
-      labels: categories,
-      stroke: {
-        width: strokeWidth,
-        curve: strokestyle,
-      },
-      fill: {
-        opacity: 1,
-        type: 'gradient',
-      },
-      legend: {
-        show: showLegend,
-        position: legendPosition, // whether to position legends in 1 of 4
-        // direction - top, bottom, left, right
-        horizontalAlign: 'center', // when position top/bottom, you can
-        // specify whether to align legends
-        // left, right or center
-        verticalAlign: 'middle',
-        labels: {
-          colors: '#8E8E93',
-          useSeriesColors: legendUseSeriesColors,
-        },
-      },
-      dataLabels: {
-        enabled: showDataLabels,
-      },
-      responsive: [],
-    };
-  }
+    ],
+  };
 };
-watch(isDark, (state) => {
-  updateTheme(state);
-});
 </script>
 <template>
-  <div ref="visibilityRef" style="width: 100%; min-width: 0">
-    <!-- Full width: as a 0px flex item (e.g. in IonRow) it never becomes visible -->
-    <apexchart
-      v-if="options && viewActive"
-       v-bind="$attrs"
-      ref="chartPieRef"
-      :height="height"
-      :type="type"
-      :options="options"
-      :series="chartSeries"
-    />
-  </div>
+  <ChartBase :id="chartId" :option="buildOption" :height="height" :width="width" />
 </template>

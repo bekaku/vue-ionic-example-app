@@ -129,9 +129,7 @@ const simpleCategories: string[] = [
             </IonRow>
             <IonRow class="ion-justify-content-center">
                 <ChartRadial chart-id="radial-4" val-unit="%" :colors="['#8E8CD8']" :start-angle="-180" :end-angle="360"
-                    :show-legend="false" :grid-padding="{
-                        bottom: -100,
-                    }" :series="simpleSeries.slice(2, 3)" :categories="simpleCategories.slice(2, 3)" />
+                    :show-legend="false" :series="simpleSeries.slice(2, 3)" :categories="simpleCategories.slice(2, 3)" />
             </IonRow>
         </BaseCard>
         <BaseCard title="Sparklines">

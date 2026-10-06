@@ -38,8 +38,9 @@ change.
    `BaseImage` — never a bare `<img>`/`<ion-img>`; user-written text
    must use `BaseContentItem` with `is-escape-html` and a `useId()`
    `content-id`; action menus must use `BaseDropdownMenu` (`items` +
-   `@on-select`), not a hand-built `BasePopover` list
-   (see `skills/mobile/COMPONENTS.md` §1).
+   `@on-select`), not a hand-built `BasePopover` list; charts must use
+   `src/components/chart/*` (ECharts via `ChartBase`), never a direct
+   `echarts.init` (see `skills/mobile/COMPONENTS.md` §1).
 3. For re-entry behavior, use Ionic page lifecycle; current pages do not
    establish a universal view-hook pattern.
 4. Do not invent brand colors; respect existing theme + safe-area handling.

@@ -1,25 +1,19 @@
 <script setup lang="ts">
-import { useTheme } from '@/composables/useTheme';
-import type {
-  ChartMode,
-  ChartPosition,
-  ChartThemePalete,
-  IChartSeries,
-} from '@/types/chart';
-import { onMounted, onUnmounted, ref, useTemplateRef, watch, watchEffect } from 'vue';
-import apexchart from 'vue3-apexcharts';
-interface GridPadding {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
-}
+// Radar chart: each series is a polygon over the category axes.
+import ChartBase from '@/components/chart/ChartBase.vue';
+import type { ChartThemeContext } from '@/libs/chartTheme';
+import { resolveColor } from '@/libs/chartTheme';
+import { formatNumber, legendOption, niceMax } from '@/libs/chartOptions';
+import type { ChartOption } from '@/libs/echarts';
+import type { ChartPosition, ChartThemePalete, IChartSeries } from '@/types/chart';
+
 const {
-  chartId = 'chart-radar-id',
-  height = '350',
-  width = 'auto',
+  chartId,
+  height = 350,
+  width = '100%',
+  labelunit = '',
   showLegend = true,
-  mode = 'light',
+  legendPosition = 'bottom',
   palette = 'palette1',
   series,
   colors,
@@ -27,185 +21,82 @@ const {
   categories,
   yaxisShow = false,
   yaxisTickamount = 5,
-  xaxisTickamount = 0,
-  gridPadding = {
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  },
-  labelRotate,
-  gridColors,
   yaxisMax,
-  yaxisMin,
+  yaxisMin = 0,
   markers = 0,
-  strokeWidth = 1,
+  strokeWidth = 2,
+  gridColors,
   opacity = 0.2,
 } = defineProps<{
-  chartId?: string;
-  height?: string;
-  width?: string;
-  labelunit?: string;
-  showLegend?: boolean;
-  legendUseSeriesColors?: boolean;
-  legendPosition?: ChartPosition;
-  mode?: ChartMode;
-  palette?: ChartThemePalete;
-  series: IChartSeries[];
-  colors?: string[];
-  showDataLabels?: boolean;
-  labelRotate?: number;
-  categories: string[];
-  yaxisShow?: boolean;
-  yaxisTickamount?: number;
-  xaxisTickamount?: number;
-  gridPadding?: GridPadding;
-  yaxisMax?: number;
-  yaxisMin?: number;
-  markers?: number;
-  strokeWidth?: number;
-  gridColors?: string[];
-  opacity?: number;
+  chartId?: string
+  height?: string | number
+  width?: string
+  /** Appended to values in the tooltip. */
+  labelunit?: string
+  showLegend?: boolean
+  legendPosition?: ChartPosition
+  palette?: ChartThemePalete
+  series: IChartSeries[]
+  colors?: string[]
+  showDataLabels?: boolean
+  categories: string[]
+  /** Scale labels on the first axis. */
+  yaxisShow?: boolean
+  /** Number of rings. */
+  yaxisTickamount?: number
+  /** Shared axis max (default: rounded-up data max). */
+  yaxisMax?: number
+  yaxisMin?: number
+  /** Point size; 0 hides the points. */
+  markers?: number
+  strokeWidth?: number
+  /** Alternating ring fills (CSS colours or tokens). */
+  gridColors?: string[]
+  /** Polygon fill opacity. */
+  opacity?: number
 }>();
-const chartSeries = ref(series);
-const options = ref<any>();
-const { isDark } = useTheme();
 
-const chartRadarRef = useTemplateRef<any>('chartRadarRef');
-watchEffect(() => {
-  if (series && series.length > 0) {
-    chartSeries.value = series;
-  }
-});
-onUnmounted(() => {
-  options.value = undefined;
-  chartSeries.value = [];
-});
-
-onMounted(() => {
-  chartSetup();
-  observeVisibility();
-});
-onUnmounted(() => {
-  visibilityObserver?.disconnect();
-});
-// Render only while the container is visible with a real size: on cached
-// Ionic pages the chart would otherwise draw while hidden (width 0) and
-// ApexCharts measures NaN widths (SVG attribute errors on navigation).
-const viewActive = ref(false);
-const visibilityRef = useTemplateRef<any>('visibilityRef');
-let visibilityObserver: IntersectionObserver | undefined;
-const observeVisibility = () => {
-  visibilityObserver = new IntersectionObserver((entries) => {
-    const entry = entries[0];
-    const width = entry?.target instanceof Element ? entry.target.getBoundingClientRect().width : 0;
-    // Mount once it scrolls into view; keep it while scrolled away and drop
-    // it only when the page is hidden (width 0), so it does not re-animate.
-    viewActive.value = width > 0 && (entry?.isIntersecting === true || viewActive.value);
-  });
-  if (visibilityRef.value) {
-    visibilityObserver.observe(visibilityRef.value);
-  }
-};
-const updateTheme = (dark: boolean) => {
-  if (options.value) {
-    if (chartRadarRef.value) {
-      chartRadarRef.value.updateOptions({
-        theme: {
-          mode: dark ? 'dark' : 'light',
-        },
-        plotOptions: {
-          radar: {
-            polygons: {
-              fill: {
-                colors: gridColors,
-              },
-            },
-          },
-        },
-      });
-    }
-  }
-};
-watch(isDark, (state) => {
-  updateTheme(state);
-});
-const chartSetup = () => {
-  if (series.length > 0) {
-    options.value = {
-      // series: series.value,
-      // series: series,
-      chart: {
-        id: chartId,
-        background: 'transparent',
-        width,
-        height,
-        type: 'radar',
-        parentHeightOffset: 0,
-        toolbar: {
-          show: false,
-        },
-      },
-      theme: {
-        mode,
-        palette,
-      },
-      plotOptions: {
-        radar: {
-          polygons: {
-            fill: {
-              colors: gridColors,
-            },
-          },
-        },
-      },
-      colors: colors && colors.length > 0 ? colors : undefined,
-      xaxis: {
-        labels: {
-          rotate: labelRotate,
-        },
-        categories,
-        tickAmount: xaxisTickamount > 0 ? xaxisTickamount : undefined,
-      },
-      yaxis: {
+const buildOption = (theme: ChartThemeContext): ChartOption => {
+  const max = yaxisMax ?? niceMax(Math.max(0, ...series.flatMap(item => item.data)));
+  const legend = showLegend && series.length > 0;
+  return {
+    color: theme.palette(palette, colors),
+    legend: legendOption(legend, legendPosition),
+    tooltip: { trigger: 'item', confine: true },
+    radar: {
+      radius: '68%',
+      center: ['50%', legend && legendPosition === 'bottom' ? '46%' : '50%'],
+      splitNumber: yaxisTickamount,
+      indicator: categories.map(name => ({ name, max, min: yaxisMin })),
+      axisLabel: {
         show: yaxisShow,
-        tickAmount: yaxisTickamount,
-        max: yaxisMax,
-        min: yaxisMin,
+        color: theme.textMuted,
+        fontSize: 10,
+        showMinLabel: false,
       },
-      dataLabels: {
-        enabled: showDataLabels,
+      splitArea: gridColors && gridColors.length > 0
+        ? { show: true, areaStyle: { color: gridColors.map(c => resolveColor(c, c)) } }
+        : { show: false },
+    },
+    series: [
+      {
+        type: 'radar',
+        symbol: markers > 0 ? 'circle' : 'none',
+        symbolSize: markers * 2,
+        lineStyle: { width: strokeWidth },
+        areaStyle: { opacity },
+        label: {
+          show: showDataLabels,
+          color: theme.textMuted,
+          fontSize: 10,
+          formatter: (params: { value: unknown }) => `${formatNumber(params.value)}${labelunit}`,
+        },
+        data: series.map(item => ({ name: item.name, value: item.data })),
       },
-      stroke: {
-        width: strokeWidth,
-      },
-      fill: {
-        opacity,
-      },
-      markers: {
-        size: markers,
-      },
-      legend: {
-        show: showLegend,
-      },
-      grid: {
-        padding: gridPadding,
-      },
-    };
-  }
+    ],
+  };
 };
 </script>
 <template>
-  <div ref="visibilityRef" style="width: 100%; min-width: 0">
-    <!-- Full width: as a 0px flex item (e.g. in IonRow) it never becomes visible -->
-    <apexchart
-      v-if="options && viewActive"
-      v-bind="$attrs"
-      ref="chartRadarRef"
-      :height="height"
-      type="radar"
-      :options="options"
-      :series="chartSeries"
-    />
-  </div>
+  <ChartBase :id="chartId" :option="buildOption" :height="height" :width="width" />
 </template>

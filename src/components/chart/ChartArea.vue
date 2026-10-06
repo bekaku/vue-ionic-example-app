@@ -1,27 +1,35 @@
 <script setup lang="ts">
-import { useTheme } from '@/composables/useTheme';
+// Area / line / bar chart (vertical or horizontal) on a category axis.
+import ChartBase from '@/components/chart/ChartBase.vue';
+import type { ChartThemeContext } from '@/libs/chartTheme';
+import { resolveColor } from '@/libs/chartTheme';
+import {
+  formatNumber,
+  gridOption,
+  labelInterval,
+  legendOption,
+  lineShape,
+} from '@/libs/chartOptions';
+import type { ChartOption } from '@/libs/echarts';
 import type {
-  ChartMode,
+  ChartAnnotation,
   ChartPosition,
   ChartThemePalete,
   IChartSeries,
   Strokestyle,
 } from '@/types/chart';
-import { onMounted, onUnmounted, ref, useTemplateRef, watch, watchEffect } from 'vue';
-import apexchart from 'vue3-apexcharts';
+
 const {
-  chartId = 'chartId',
+  chartId,
   height = 'auto',
-  width = 'auto',
+  width = '100%',
+  labelunit = '',
   showLegend = true,
-  legendUseSeriesColors = true,
   legendPosition = 'bottom',
   type = 'area',
-  mode = 'light',
   palette = 'palette1',
   series = [],
   colors = [],
-  dark = false,
   showDataLabels = false,
   labelRotate = 0,
   yaxisShow = true,
@@ -31,242 +39,177 @@ const {
   yaxisDecimalsInFloat = 0,
   categories,
   strokestyle = 'smooth',
-  strokeWidth = 1,
+  strokeWidth = 2,
   sparkline = false,
   annotationsYaxis = [],
   annotationsXaxis = [],
   minYVal = 0,
   maxYVal,
-  showToolbar = false,
   zoom = false,
   horizontal = false,
   opacity = 1,
 } = defineProps<{
-  chartId?: string;
-  height?: string;
-  width?: string;
-  labelunit?: string;
-  showLegend?: boolean;
-  legendUseSeriesColors?: boolean;
-  legendPosition?: ChartPosition;
-  type?: 'area' | 'bar' | 'line';
-  mode?: ChartMode;
-  palette?: ChartThemePalete;
-  series?: IChartSeries[];
-  colors?: string[];
-  dark?: boolean;
-  showDataLabels?: boolean;
-  labelRotate?: number;
-  yaxisShow?: boolean;
-  yaxisTickamount?: number;
-  xaxisTickamount?: number;
-  xaxisDecimalsInFloat?: number;
-  yaxisDecimalsInFloat?: number;
-  categories: string[];
-  strokestyle?: Strokestyle;
-  strokeWidth?: number;
-  sparkline?: boolean;
-  annotationsYaxis?: any[];
-  annotationsXaxis?: any[];
-  minYVal?: number;
-  maxYVal?: number;
-  showToolbar?: boolean;
-  zoom?: boolean;
-  horizontal?: boolean;
-  opacity?: number;
+  chartId?: string
+  height?: string | number
+  width?: string
+  /** Appended to values in the tooltip and data labels. */
+  labelunit?: string
+  showLegend?: boolean
+  legendPosition?: ChartPosition
+  type?: 'area' | 'bar' | 'line'
+  palette?: ChartThemePalete
+  series?: IChartSeries[]
+  colors?: string[]
+  showDataLabels?: boolean
+  /** Category label angle in degrees (negative = slanted down, as before). */
+  labelRotate?: number
+  yaxisShow?: boolean
+  /** Number of value-axis intervals. */
+  yaxisTickamount?: number
+  /** About how many category labels to show (0 = auto). */
+  xaxisTickamount?: number
+  /** Value-axis decimals when `horizontal`. */
+  xaxisDecimalsInFloat?: number
+  /** Value-axis decimals. */
+  yaxisDecimalsInFloat?: number
+  categories: string[]
+  strokestyle?: Strokestyle
+  strokeWidth?: number
+  /** Hide axes, grid and legend. */
+  sparkline?: boolean
+  /** Reference lines on the vertical axis. */
+  annotationsYaxis?: ChartAnnotation[]
+  /** Reference lines on the horizontal axis. */
+  annotationsXaxis?: ChartAnnotation[]
+  minYVal?: number
+  maxYVal?: number
+  /** Pinch / drag to zoom the category axis. */
+  zoom?: boolean
+  /** Bars along the vertical axis (type `bar` only). */
+  horizontal?: boolean
+  /** Fill opacity (area gradient strength, bar opacity). */
+  opacity?: number
 }>();
-const { isDark } = useTheme();
-const chartSeries = ref(series);
-const options = ref<any>();
-const chartAreaRef = useTemplateRef<any>('chartAreaRef');
-watchEffect(() => {
-  if (series && series.length > 0) {
-    chartSeries.value = series;
-  }
-});
-onUnmounted(() => {
-  options.value = undefined;
-  chartSeries.value = [];
-});
 
-onMounted(() => {
-  chartSetup();
-  observeVisibility();
-});
-onUnmounted(() => {
-  visibilityObserver?.disconnect();
-});
-// Render only while the container is visible with a real size: on cached
-// Ionic pages the chart would otherwise draw while hidden (width 0) and
-// ApexCharts measures NaN widths (SVG attribute errors on navigation).
-const viewActive = ref(false);
-const visibilityRef = useTemplateRef<any>('visibilityRef');
-let visibilityObserver: IntersectionObserver | undefined;
-const observeVisibility = () => {
-  visibilityObserver = new IntersectionObserver((entries) => {
-    const entry = entries[0];
-    const width = entry?.target instanceof Element ? entry.target.getBoundingClientRect().width : 0;
-    // Mount once it scrolls into view; keep it while scrolled away and drop
-    // it only when the page is hidden (width 0), so it does not re-animate.
-    viewActive.value = width > 0 && (entry?.isIntersecting === true || viewActive.value);
-  });
-  if (visibilityRef.value) {
-    visibilityObserver.observe(visibilityRef.value);
-  }
-};
-const updateTheme = (dark: boolean) => {
-  if (chartAreaRef.value) {
-    chartAreaRef.value.updateOptions({
-      theme: {
-        mode: dark ? 'dark' : 'light',
-      },
-    });
-  }
-};
-const chartSetup = () => {
-  if (series.length > 0) {
-    options.value = {
-      chart: {
-        id: chartId,
-        background: 'transparent',
-        width,
-        height,
-        type,
-        toolbar: {
-          show: showToolbar,
-          tools: {
-            download: true,
-            selection: true,
-            zoom: true,
-            zoomin: true,
-            zoomout: true,
-            pan: true,
-            customIcons: [],
-          },
-        },
-        zoom: {
-          enabled: zoom,
-        },
-        animations: {
-          enabled: true,
-          easing: 'easein', // linear, easeout, easein, easeinout, swing, bounce, elastic
-          speed: 800,
-        },
-        sparkline: {
-          enabled: sparkline,
-        },
-      },
-      theme: {
-        mode,
-        palette,
-      },
-      plotOptions: {
-        bar: {
-          //   borderRadius: 4,
-          //   borderRadiusApplication: "end",
-          horizontal,
-          // columnWidth: "55%",
-          borderRadius: 3,
-          borderRadiusApplication: 'end',
-        },
-      },
-      colors: colors && colors.length > 0 ? colors : undefined,
-      xaxis: {
-        labels: {
-          rotate: labelRotate,
-        },
-        categories,
-        decimalsInFloat: xaxisDecimalsInFloat,
-        tickAmount: xaxisTickamount > 0 ? xaxisTickamount : undefined,
-      },
-      yaxis: {
-        show: yaxisShow,
-        tickAmount: yaxisTickamount,
-        decimalsInFloat: yaxisDecimalsInFloat,
-        min: minYVal,
-        // max: maxYVal != undefined ? maxYVal : undefined
-      },
-      annotations: {
-        yaxis: annotationsYaxis,
-        xaxis: annotationsXaxis,
-      },
-      stroke: {
-        width: strokeWidth,
-        curve: strokestyle,
-      },
-      fill: {
-        opacity,
-      },
-      legend: {
-        show: showLegend,
-        position: legendPosition, // whether to position legends in 1 of 4
-        // direction - top, bottom, left, right
-        horizontalAlign: 'center', // when position top/bottom, you can
-        // specify whether to align legends
-        // left, right or center
-        verticalAlign: 'middle',
-        labels: {
-          colors: '#8E8E93',
-          useSeriesColors: legendUseSeriesColors,
-        },
-      },
-      grid: {
-        borderColor: dark ? '#282829' : '#f0f0f0', // transparent
-        // row: {
-        //   colors: [dark ? '#353537' : '#e9ebec', 'transparent'], // takes an array which will be repeated on columns
-        //   opacity: 0.2,
-        // },
-      },
-      tooltip: {
-        y: {
-          formatter(val: any) {
-            return val;
-          },
-        },
-      },
-      dataLabels: {
-        enabled: showDataLabels,
-      },
-      responsive: [
-        // {
-        //   breakpoint: 480,
-        //   options: {
-        //     chart: {
-        //       width: 200,
-        //     },
-        //     legend: {
-        //       position: 'bottom',
-        //     },
-        //   },
-        // },
-      ],
+const markLine = (theme: ChartThemeContext) => {
+  const line = (axis: 'xAxis' | 'yAxis', item: ChartAnnotation) => {
+    const color = item.color ? resolveColor(item.color, theme.textMuted) : theme.textMuted;
+    return {
+      [axis]: item.value,
+      name: item.label,
+      lineStyle: { color, type: 'dashed' as const },
+      label: { show: !!item.label, formatter: item.label ?? '', color },
     };
-    if (maxYVal != undefined) {
-      options.value.yaxis.max = maxYVal;
-    }
-
-    // chart.value = new ApexCharts(
-    //   document.querySelector('#' + chartId),
-    //   options
-    // );
-    // chart.value.render();
-  }
+  };
+  const data = [
+    ...annotationsYaxis.map(item => line('yAxis', item)),
+    ...annotationsXaxis.map(item => line('xAxis', item)),
+  ];
+  return data.length > 0
+    ? { symbol: 'none', silent: true, label: { position: 'insideEndTop' as const }, data }
+    : undefined;
 };
-watch(isDark, (state) => {
-  updateTheme(state);
-});
+
+const buildOption = (theme: ChartThemeContext): ChartOption => {
+  const seriesColors = theme.palette(palette, colors);
+  const isBar = type === 'bar';
+  const isHorizontal = isBar && horizontal;
+  const decimals = isHorizontal ? xaxisDecimalsInFloat : yaxisDecimalsInFloat;
+  const legend = showLegend && !sparkline;
+  const format = (value: unknown) => `${formatNumber(value, decimals)}${labelunit}`;
+
+  const categoryAxis = {
+    type: 'category' as const,
+    data: categories,
+    show: !sparkline,
+    boundaryGap: isBar,
+    axisLine: { show: true },
+    axisLabel: {
+      rotate: -labelRotate,
+      interval: labelInterval(categories.length, xaxisTickamount),
+      hideOverlap: xaxisTickamount === 0,
+    },
+  };
+  const valueAxis = {
+    type: 'value' as const,
+    show: yaxisShow && !sparkline,
+    splitNumber: yaxisTickamount,
+    min: minYVal,
+    max: maxYVal,
+    minInterval: decimals > 0 ? undefined : 1,
+    axisLabel: { formatter: (value: number) => formatNumber(value, decimals) },
+  };
+
+  return {
+    color: seriesColors,
+    legend: legendOption(legend, legendPosition),
+    grid: sparkline ? { top: 2, right: 0, bottom: 0, left: 0 } : gridOption(legend, legendPosition),
+    tooltip: {
+      trigger: 'axis',
+      confine: true,
+      axisPointer: { type: isBar ? 'shadow' : 'line' },
+      valueFormatter: format,
+    },
+    xAxis: isHorizontal ? valueAxis : categoryAxis,
+    // Horizontal: first category on top, labels unrotated.
+    yAxis: isHorizontal
+      ? { ...categoryAxis, inverse: true, axisLabel: { ...categoryAxis.axisLabel, rotate: 0 } }
+      : valueAxis,
+    dataZoom: zoom ? [{ type: 'inside', [isHorizontal ? 'yAxisIndex' : 'xAxisIndex']: 0 }] : [],
+    series: series.map((item, index) => {
+      const color = seriesColors[index % seriesColors.length] ?? theme.textMuted;
+      const label = {
+        show: showDataLabels,
+        position: isHorizontal ? ('right' as const) : ('top' as const),
+        color: theme.textMuted,
+        fontSize: 10,
+        formatter: (params: { value: unknown }) => format(params.value),
+      };
+      const extra = index === 0 ? { markLine: markLine(theme) } : {};
+      if (isBar) {
+        return {
+          ...extra,
+          type: 'bar',
+          name: item.name,
+          data: item.data,
+          label,
+          barMaxWidth: 18,
+          itemStyle: {
+            opacity,
+            borderRadius: isHorizontal ? [0, 4, 4, 0] : [4, 4, 0, 0],
+          },
+        };
+      }
+      return {
+        ...extra,
+        type: 'line',
+        name: item.name,
+        data: item.data,
+        label,
+        ...lineShape(strokestyle),
+        showSymbol: false,
+        symbolSize: 6,
+        lineStyle: { width: strokeWidth },
+        areaStyle: type === 'area'
+          ? {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  { offset: 0, color: theme.alpha(color, 0.32 * opacity) },
+                  { offset: 1, color: theme.alpha(color, 0.02) },
+                ],
+              },
+            }
+          : undefined,
+      };
+    }),
+  };
+};
 </script>
 <template>
-  <div ref="visibilityRef" style="width: 100%; min-width: 0">
-    <!-- Full width: as a 0px flex item (e.g. in IonRow) it never becomes visible -->
-    <apexchart
-      v-if="options && viewActive"
-       v-bind="$attrs"
-      ref="chartAreaRef"
-      :height="height"
-      :type="type"
-      :options="options"
-      :series="chartSeries"
-    />
-  </div>
+  <ChartBase :id="chartId" :option="buildOption" :height="height" :width="width" />
 </template>

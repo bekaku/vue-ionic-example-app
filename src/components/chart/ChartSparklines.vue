@@ -1,213 +1,98 @@
 <script setup lang="ts">
-import { useTheme } from '@/composables/useTheme';
-import type {
-    ChartMode,
-    ChartThemePalete,
-    IChartSeries,
-    Strokestyle,
-} from '@/types/chart';
-import { onMounted, onUnmounted, ref, useTemplateRef, watch, watchEffect } from 'vue';
-import apexchart from 'vue3-apexcharts';
-interface GridPadding {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
-}
+// Sparkline: a small area/line/bar trend with no axes, grid or legend.
+import ChartBase from '@/components/chart/ChartBase.vue';
+import type { ChartThemeContext } from '@/libs/chartTheme';
+import { formatNumber, lineShape } from '@/libs/chartOptions';
+import type { ChartOption } from '@/libs/echarts';
+import type { ChartThemePalete, IChartSeries, Strokestyle } from '@/types/chart';
+
 const {
-  chartId = 'chart-radar-id',
-  height = '160',
-  width = 'auto',
-  mode = 'light',
+  chartId,
+  height = 160,
+  width = '100%',
+  labelunit = '',
   palette = 'palette1',
   series,
   colors,
   categories,
-  gridPadding = {
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  },
   strokeWidth = 1.5,
   opacity = 0.3,
   tooltipEnable = true,
   type = 'area',
   strokestyle = 'straight',
 } = defineProps<{
-  chartId?: string;
-  height?: string;
-  width?: string;
-  labelunit?: string;
-  mode?: ChartMode;
-  palette?: ChartThemePalete;
-  series: IChartSeries[];
-  colors?: string[];
-  tooltipEnable?: boolean;
-  categories: string[];
-  gridPadding?: GridPadding;
-  strokeWidth?: number;
-  strokestyle?: Strokestyle;
-  opacity?: number;
-  type?: 'area' | 'line' | 'bar';
+  chartId?: string
+  height?: string | number
+  width?: string
+  /** Appended to values in the tooltip. */
+  labelunit?: string
+  palette?: ChartThemePalete
+  series: IChartSeries[]
+  colors?: string[]
+  tooltipEnable?: boolean
+  /** Point labels for the tooltip (index is shown when missing). */
+  categories: string[]
+  strokeWidth?: number
+  strokestyle?: Strokestyle
+  /** Fill opacity (area gradient strength, bar opacity). */
+  opacity?: number
+  type?: 'area' | 'line' | 'bar'
 }>();
-const chartSeries = ref(series);
-const options = ref<any>();
-const { isDark } = useTheme();
 
-const chartSparkLinesRef = useTemplateRef<any>('chartSparkLinesRef');
-watchEffect(() => {
-  if (series && series.length > 0) {
-    chartSeries.value = series;
-  }
-});
-onUnmounted(() => {
-  options.value = undefined;
-  chartSeries.value = [];
-});
-
-onMounted(() => {
-  chartSetup();
-  observeVisibility();
-});
-onUnmounted(() => {
-  visibilityObserver?.disconnect();
-});
-// Render only while the container is visible with a real size: on cached
-// Ionic pages the chart would otherwise draw while hidden (width 0) and
-// ApexCharts measures NaN widths (SVG attribute errors on navigation).
-const viewActive = ref(false);
-const visibilityRef = useTemplateRef<any>('visibilityRef');
-let visibilityObserver: IntersectionObserver | undefined;
-const observeVisibility = () => {
-  visibilityObserver = new IntersectionObserver((entries) => {
-    const entry = entries[0];
-    const width = entry?.target instanceof Element ? entry.target.getBoundingClientRect().width : 0;
-    // Mount once it scrolls into view; keep it while scrolled away and drop
-    // it only when the page is hidden (width 0), so it does not re-animate.
-    viewActive.value = width > 0 && (entry?.isIntersecting === true || viewActive.value);
-  });
-  if (visibilityRef.value) {
-    visibilityObserver.observe(visibilityRef.value);
-  }
-};
-const updateTheme = (dark: boolean) => {
-  if (chartSparkLinesRef.value) {
-    chartSparkLinesRef.value.updateOptions({
-      theme: {
-        mode: dark ? 'dark' : 'light',
-      },
-    });
-  }
-};
-watch(isDark, (state) => {
-  updateTheme(state);
-});
-const getCateByIndex = (index: number) =>
-  categories?.length > 0 ? categories[index] : '-';
-const chartSetup = () => {
-  if (series && series.length > 0) {
-    options.value = {
-      // series: series.value,
-      // series: series,
-      chart: {
-        background: 'transparent',
-        id: chartId,
-        width,
-        height,
-        type,
-        toolbar: {
-          show: false,
-        },
-        animations: {
-          enabled: true,
-          easing: 'easein', // linear, easeout, easein, easeinout, swing, bounce, elastic
-          speed: 800,
-        },
-        sparkline: {
-          enabled: true,
-        },
-      },
-      theme: {
-        mode,
-        palette,
-      },
-      plotOptions: {},
-      colors: colors && colors.length > 0 ? colors : undefined,
-      stroke: {
-        width: type == 'bar' ? 0 : strokeWidth,
-        curve: strokestyle,
-      },
-      fill: {
-        // opacity: type == "bar" ? 1 : 0.3,
-        opacity,
-      },
-      xaxis: {
-        crosshairs: {
-          width: 1,
-        },
-      },
-      yaxis: {
-        min: 0,
-      },
-      grid: {
-        padding: gridPadding,
-      },
-      tooltip: {
-        enabled: tooltipEnable,
-        fixed: {
-          enabled: false,
-        },
-        x: {
-          show: true,
-          formatter(value: any, options: any) {
-            return getCateByIndex(options.dataPointIndex) || '-';
-          },
-        },
-        y: {
-          title: {
-            formatter(seriesName: any) {
-              return seriesName || '-';
-            },
-          },
-        },
-        marker: {
-          show: false,
-        },
-      },
-      responsive: [
-        // {
-        //   breakpoint: 480,
-        //   options: {
-        //     chart: {
-        //       width: 200,
-        //     },
-        //     legend: {
-        //       position: 'bottom',
-        //     },
-        //   },
-        // },
-      ],
-    };
-    // chart.value = new ApexCharts(
-    //   document.querySelector('#' + chartId),
-    //   options
-    // );
-    // chart.value.render();
-  }
+const buildOption = (theme: ChartThemeContext): ChartOption => {
+  const seriesColors = theme.palette(palette, colors);
+  const length = Math.max(0, ...series.map(item => item.data.length));
+  const labels = Array.from({ length }, (_, index) => categories[index] ?? String(index + 1));
+  return {
+    color: seriesColors,
+    grid: { top: 2, right: 0, bottom: 0, left: 0 },
+    tooltip: {
+      show: tooltipEnable,
+      trigger: 'axis',
+      confine: true,
+      axisPointer: { type: type === 'bar' ? 'shadow' : 'line' },
+      valueFormatter: value => `${formatNumber(value)}${labelunit}`,
+    },
+    xAxis: { type: 'category', data: labels, show: false, boundaryGap: type === 'bar' },
+    yAxis: { type: 'value', show: false, min: 0 },
+    series: series.map((item, index) => {
+      const color = seriesColors[index % seriesColors.length] ?? theme.textMuted;
+      if (type === 'bar') {
+        return {
+          type: 'bar',
+          name: item.name,
+          data: item.data,
+          barCategoryGap: '30%',
+          itemStyle: { opacity: Math.max(opacity, 0.6), borderRadius: [2, 2, 0, 0] },
+        };
+      }
+      return {
+        type: 'line',
+        name: item.name,
+        data: item.data,
+        ...lineShape(strokestyle),
+        showSymbol: false,
+        lineStyle: { width: strokeWidth },
+        areaStyle: type === 'area'
+          ? {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  { offset: 0, color: theme.alpha(color, opacity) },
+                  { offset: 1, color: theme.alpha(color, 0) },
+                ],
+              },
+            }
+          : undefined,
+      };
+    }),
+  };
 };
 </script>
 <template>
-  <div ref="visibilityRef" style="width: 100%; min-width: 0">
-    <!-- Full width: as a 0px flex item (e.g. in IonRow) it never becomes visible -->
-    <apexchart
-      v-if="options && viewActive"
-      v-bind="$attrs"
-      ref="chartSparkLinesRef"
-      :height="height"
-      :type="type"
-      :options="options"
-      :series="chartSeries"
-    />
-  </div>
+  <ChartBase :id="chartId" :option="buildOption" :height="height" :width="width" />
 </template>

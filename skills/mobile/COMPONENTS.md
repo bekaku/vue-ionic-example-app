@@ -129,6 +129,39 @@ import { House, Download, ArrowRight, Heart } from '@lucide/vue';
 
 Demo labels above are illustrative; product labels/aria labels use `useLang`.
 
+### Charts (VERIFIED, task 012)
+
+Charts use **ECharts** (`echarts`, tree-shaken) through the components in
+`src/components/chart/`; ApexCharts was removed. Pages use a chart component and
+never call `echarts.init` themselves.
+
+- Ready-made components (data in, option built inside): `ChartArea`
+  (`type` `area | line | bar`, `horizontal`, `sparkline`, `zoom`,
+  `annotations*` → markLine), `ChartPie` (`pie | donut`), `ChartRadar`,
+  `ChartRadial` (progress rings, centre label + legend in HTML), and
+  `ChartSparklines` (no axes). Data shapes are `IChartSeries[]` + `categories`
+  or `number[]` (`src/types/chart.ts`). Pass `chart-id` as the DOM id.
+- `ChartBase` renders any ECharts option. Use it for a custom chart:
+  `<ChartBase :option="(theme) => ({ … })" height="240" />`. A function option
+  gets `ChartThemeContext` (`palette()`, `textMuted`, `line`, `track`,
+  `background`, `alpha()`, `dark`) and is rebuilt on theme change.
+  `ChartBase` creates the chart only when it is on screen with a real width
+  (cached hidden Ionic pages have width 0), resizes it with `ResizeObserver`,
+  re-themes it when `useTheme().isDark` changes, turns animation off for
+  `prefers-reduced-motion`, enables ECharts `aria`, and disposes it on unmount.
+- Colours come from tokens, not hex: `src/libs/chartTheme.ts` reads
+  `--app-text-*`, `--app-bg-*` and the palette (`palette1…10` →
+  `--ion-color-primary`, `--color-<name>-<shade>`) from `body` at render time,
+  so charts follow light/dark and a re-themed primary. `colors` accepts hex,
+  `var(--…)` or a token name. Do not pass `mode`/`dark` — there are none.
+- A new series type or component (e.g. `GaugeChart`, `ToolboxComponent`) must
+  be registered in `src/libs/echarts.ts` (`use([...])`) and added to
+  `ChartOption`; unregistered parts render nothing. Shared option pieces
+  (legend, grid, line smoothing, number format) live in
+  `src/libs/chartOptions.ts`.
+- Renderer is SVG (crisp, low memory in WebViews). Demo: `/example/charts`;
+  reference composition: `tabs/home.vue` analytics section.
+
 ## 2. Ionic components in use (VERIFIED, sample)
 
 `IonApp` + `IonRouterOutlet` (`App.vue`), `IonPage/Header/Toolbar/Title/Content`,
