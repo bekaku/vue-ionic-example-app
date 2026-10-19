@@ -5,7 +5,7 @@
 ```bash
 pnpm install --shamefully-hoist   # per README
 pnpm exec vue-tsc --noEmit         # typecheck (verification gate)
-pnpm exec vitest run               # unit/component tests, one-shot
+pnpm exec vitest run [path]        # unit/component tests (scope to relevant spec; full suite for release)
 pnpm exec vite build               # web build → dist/ (no Ionic CLI needed)
 pnpm build:vite                    # vue-tsc && vite build → dist/
 pnpm build                         # ionic build --prod → dist/ (global Ionic CLI)

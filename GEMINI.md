@@ -18,5 +18,6 @@ This file is a thin adapter. The authority is `AGENTS.md` + `SKILLS.md`.
 5. Gemini-specific note: prefer grounding claims in file contents you actually
    read this session; cite code as file + symbol (see `AGENTS.md` §13).
 6. Start from `AGENTS.md` "Quick Reference" for commands (typecheck/tests/
-   build), the lint-not-required rule, and git rules (commit on the active
+   build), the test-scope rule (run only relevant tests, do not rerun full
+   suite), the lint-not-required rule, and git rules (commit on the active
    branch only when asked).

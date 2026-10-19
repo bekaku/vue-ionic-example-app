@@ -36,14 +36,18 @@ not required unless the user asks (`skills/mobile/TESTING.md` §2).
 3. Web build ≠ Android/iOS/emulator/device proof; mock Capacitor plugins in
    unit tests.
 4. Never claim tests passed unless executed; disclose missing SDKs/devices.
+5. Scope tests to relevant files: run only test files relevant to the change
+   (e.g. `pnpm exec vitest run tests/unit/<spec>.ts`); do not rerun the full
+   test suite unless explicitly requested.
 
 ## Implementation workflow
 
 1. Pick applicable levels from the task's Platform/Native/API/Data impacts.
 2. Run relevant checks with bounded commands: `pnpm exec vue-tsc --noEmit`,
-   `pnpm exec vitest run`, `pnpm exec vite build`; compare failures with the
-   existing baseline. Typecheck/build do not catch runtime errors — add a
-   test when a change affects mount/lifecycle behavior.
+   `pnpm exec vitest run <path/to/spec.ts>` (scope to relevant tests),
+   `pnpm exec vite build`; compare failures with the existing baseline.
+   Typecheck/build do not catch runtime errors — add a test when a change
+   affects mount/lifecycle behavior.
 3. Mock native plugins (`@capacitor/*`, community) in jsdom/vitest.
 4. Record per-platform results in the task's Testing section.
 

@@ -52,5 +52,6 @@ Every mobile implementation task. Add domain skills per `SKILLS.md`.
 
 ## Verification
 
-`pnpm exec vue-tsc --noEmit` + relevant `pnpm exec vitest run` checks; lint
-is not required (`skills/mobile/TESTING.md` §2). Disclose what was NOT_RUN.
+`pnpm exec vue-tsc --noEmit` + relevant `pnpm exec vitest run <path>` checks
+(run only relevant test files, do not run full suite); lint is not required
+(`skills/mobile/TESTING.md` §2). Disclose what was NOT_RUN.

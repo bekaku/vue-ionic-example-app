@@ -187,11 +187,7 @@ const onCheckboxChange = (event: any) => {
         />
 
         <BaseTextHeader title="Money" />
-        <IonItem lines="none">
-          <IonLabel>
-            <BaseInputMoney v-model="money" label="Money format" />
-          </IonLabel>
-        </IonItem>
+        <BaseInputMoney v-model="money" label="Money format" />
 
         <BaseTextHeader title="Textarea" />
         <BaseTextarea

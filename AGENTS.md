@@ -11,7 +11,7 @@ Summary only — each row links to the authoritative home.
 | Need | Use |
 | ---- | --- |
 | Typecheck (the `STATIC` gate) | `pnpm exec vue-tsc --noEmit` (`TESTING.md` §2) |
-| Unit/component tests | `pnpm exec vitest run` (one-shot; `pnpm test:unit` is watch mode) |
+| Unit/component tests | `pnpm exec vitest run <path>` (scope to relevant spec; do not run full suite unless requested; `pnpm test:unit` is watch mode) |
 | Web build | `pnpm exec vite build`; `pnpm build:vite` = typecheck + build; `pnpm build` needs the global Ionic CLI |
 | Dev server | `pnpm dev` (vite :3004) |
 | Lint | not required — skip unless the user asks (`TESTING.md` §2) |
@@ -225,6 +225,9 @@ Before any implementation task:
   `@vue/test-utils`, `jsdom` (see `tests/unit/useApi.spec.ts`,
   `tests/e2e/specs/test.cy.ts`). Typecheck: `vue-tsc`. Lint (eslint) is not
   required — do not run it unless the user asks (`TESTING.md` §2).
+- Test scope rule: run only test files relevant to the changed code (e.g.
+  `pnpm exec vitest run tests/unit/<spec>.ts`). Do not run the entire test suite
+  for targeted changes unless explicitly requested.
 - Verification levels: `STATIC, UNIT, COMPONENT, API, NATIVE_PLUGIN, ANDROID,
   IOS, LIFECYCLE, SECURITY, BUILD, RELEASE` — run only what the task needs and
   the environment supports. Web build ≠ native proof. Mock Capacitor plugins in

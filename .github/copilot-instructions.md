@@ -18,6 +18,7 @@ The authority is `AGENTS.md` + `SKILLS.md` at the repository root.
 - Do not run `npx cap sync` or change native config/signing/permissions unless
   the task asks for it; never claim Android/iOS verification from a web-only
   build. Record platform results separately (web / Android / iOS).
-- Verify with `pnpm exec vue-tsc --noEmit` and `pnpm exec vitest run`; lint is
+- Verify with `pnpm exec vue-tsc --noEmit` and relevant `pnpm exec vitest run <path>`
+  (run only tests related to changes, do not rerun the full suite); lint is
   not required. Commit only when asked, on the active branch (see
   `AGENTS.md` Quick Reference).

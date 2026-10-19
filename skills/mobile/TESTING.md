@@ -8,7 +8,7 @@ Authoritative home for verification rules. Entry:
 | Check | Command | Notes |
 | ----- | ------- | ----- |
 | Typecheck (`STATIC`) | `pnpm exec vue-tsc --noEmit` | covers `src/**` only (not `tests/`) |
-| Unit/component | `pnpm exec vitest run [path]` | `pnpm test:unit` is watch mode |
+| Unit/component | `pnpm exec vitest run [path]` | scope to relevant spec file; `pnpm test:unit` is watch mode |
 | Web build (`BUILD`) | `pnpm exec vite build` | add `--outDir <tmp>` to keep `dist/` untouched |
 | E2E | `pnpm test:e2e` (cypress) | needs a running app |
 
@@ -36,6 +36,11 @@ Establish whether a failure predates your change.
 `LIFECYCLE` (view-enter/leave, resume) · `SECURITY` (secrets, tokens,
 untrusted input) · `BUILD` · `RELEASE`. Run only what the task needs and the
 environment supports.
+
+**Test scope rule: run only relevant tests.** For unit/component tests, run only
+the spec file(s) related to the changed code (e.g. `pnpm exec vitest run
+tests/unit/<spec>.ts`). Do not run the full test suite (`pnpm exec vitest run`
+without path) for targeted changes unless explicitly requested.
 
 **Lint is not required.** `STATIC` = `pnpm exec vue-tsc --noEmit` only. Do not
 run `pnpm lint` / eslint as a verification step and do not report a lint
