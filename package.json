@@ -71,7 +71,6 @@
     "@typescript-eslint/parser": "^8.71.0",
     "@vitejs/plugin-legacy": "^8.2.3",
     "@vitejs/plugin-vue": "^6.0.9",
-    "@vue/eslint-config-typescript": "^14.9.0",
     "@vue/runtime-core": "^3.5.43",
     "@vue/test-utils": "^2.5.1",
     "@vueuse/core": "^15.0.0",

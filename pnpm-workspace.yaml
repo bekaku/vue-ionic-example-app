@@ -15,3 +15,13 @@ minimumReleaseAgeExclude:
 overrides:
   # GHSA DoS fixes; minimatch@10 allows ^5.0.5 but pnpm keeps 5.0.6 (dev tooling only)
   brace-expansion@>=4.0.0 <5.0.9: ^5.0.9
+  # GHSA-gv4h-j273-9jmq — source-map-js event-loop DoS via indexed source-map section offsets
+  source-map-js@>=1.0.0 <1.2.2: ^1.2.2
+  # GHSA-253c-mchw-3w2r — markdown-it quadratic paths with linkify: true (md-editor-v3 chain)
+  markdown-it@>=0.0.0 <14.3.1: ^14.3.1
+  # GHSA-238p-pmpm-9mq7 — KaTeX prototype pollution bypasses trust restrictions (eslint markdown chain)
+  # Pinned to 0.18.2: the first patched release; 0.18.11 is deprecated upstream
+  # ("accidentally published with breaking changes") and 0.19.x is a breaking bump.
+  katex@>=0.11.0 <0.18.2: 0.18.2
+  # GHSA-w5hq-g745-h8pq — uuid missing buffer bounds check in v3/v5/v6 (Capacitor CLI → xcode)
+  uuid@<11.1.1: ^11.1.1
