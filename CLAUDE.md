@@ -19,5 +19,5 @@ This file is a thin adapter. The authority is `AGENTS.md` + `SKILLS.md`.
    multi-file changes; keep responses concise and cite code as file + symbol
    (see `AGENTS.md` §13).
 6. Start from `AGENTS.md` "Quick Reference" for commands (typecheck/tests/
-   build), the lint-not-required rule, and git rules (commit on the active
-   branch only when asked).
+   build), the lint-not-required rule, and git rules (commit and push only
+   when asked, and only to the branch currently checked out).

@@ -20,5 +20,6 @@ The authority is `AGENTS.md` + `SKILLS.md` at the repository root.
   build. Record platform results separately (web / Android / iOS).
 - Verify with `pnpm exec vue-tsc --noEmit` and relevant `pnpm exec vitest run <path>`
   (run only tests related to changes, do not rerun the full suite); lint is
-  not required. Commit only when asked, on the active branch (see
-  `AGENTS.md` Quick Reference).
+  not required. Commit and push only when asked, and only to the branch
+  currently checked out — never push to `main` from another branch (see
+  `AGENTS.md` §11 and `skills/mobile/SKILL.md` §7).

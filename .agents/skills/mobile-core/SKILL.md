@@ -42,6 +42,9 @@ Every mobile implementation task. Add domain skills per `SKILLS.md`.
    versions/contracts.
 7. Server IDs are snowflake strings (`IdType`); never convert with
    `Number()`/`parseInt` (`skills/mobile/SKILL.md` §4).
+8. Git: commit and push only on explicit request, and only to the branch
+   currently checked out — never push to `main` (or any other branch) from a
+   session that is not on it (`skills/mobile/SKILL.md` §7).
 
 ## Implementation workflow
 

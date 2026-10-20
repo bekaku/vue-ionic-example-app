@@ -94,3 +94,31 @@ use local calendar days. Signed difference helpers compute end minus start;
 retain that order for device/sync thresholds. Cache daily keys use
 `formatLocalDateBy` to preserve the existing device-locale representation.
 `useBase` no longer exposes date-format wrappers; call this composable directly.
+
+## 7. Git workflow
+
+The push target is always the branch the project is currently on. There is no
+fixed `main` target: when the session runs on `feature/login-api`, the commit
+and the push both land on `feature/login-api`.
+
+1. **Resolve the branch first** — `git branch --show-current` (or
+   `git status -sb`). Never assume `main`; the checkout may be any branch.
+2. **Commit on that branch.** Do not create a new branch, switch branches,
+   merge, or rebase as part of a task.
+3. **Push the same branch** — `git push origin <current-branch>` (equivalently
+   `git push origin HEAD:refs/heads/<current-branch>`). Never run
+   `git push origin main` (or any other branch) from a session that is not on
+   it: that publishes the work under the wrong ref and can overwrite another
+   branch's history.
+4. **Only on request.** Commit and push happen when the user explicitly asks;
+   otherwise report the changes and leave the tree as it is.
+5. **Secrets check.** Staged files must not carry `.env*` values, keystores, or
+   tokens before committing.
+6. **Report the ref.** State the branch name, commit id, and pushed ref in the
+   final summary; say so explicitly when a push was skipped.
+
+```sh
+git branch --show-current          # -> feature/login-api
+git add -A && git commit -m "..."
+git push origin feature/login-api  # same branch, never origin main
+```

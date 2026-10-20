@@ -18,7 +18,7 @@ Summary only — each row links to the authoritative home.
 | HTTP call | `const api = useApi(); await api<T>(url, opts)` — direct or via `src/api` (`API.md` §2) |
 | IDs from the server | snowflake **strings** (`IdType`); never `Number()`/`parseInt` (`skills/mobile/SKILL.md` §4) |
 | Open problems before you start | `docs/agent/KNOWN_ISSUES.md` (Open section) |
-| Git | commit only when asked, on the active branch; push only when asked (§11) |
+| Git | commit only when asked, on the branch currently checked out; push only when asked, and only to that same branch — never to `main` from another branch (§11) |
 
 ## 1. Purpose and Scope
 
@@ -214,10 +214,13 @@ Before any implementation task:
   (`PASSED`/`FAILED`/`NOT_RUN`/`NOT_APPLICABLE`/`BLOCKED` — never claim Android/
   iOS passed on a web-only build), checkpoints complete, impacts reviewed,
   limitations disclosed.
-- Git: commit only when the user asks. Commit directly on the currently
-  checked-out branch (including `main`) — do **not** create a new branch.
-  Never push unless the user explicitly asks. Check staged files for secrets
-  (`.env*` values, keystores) before committing.
+- Git: commit only when the user asks. Work on the branch the project is
+  currently on — do **not** create, switch, or merge into another branch.
+  The push target is always that current branch
+  (`git push origin <current-branch>`): `main` is a valid target only when the
+  session actually is on `main`, never as a default. Never push unless the
+  user explicitly asks. Check staged files for secrets (`.env*` values,
+  keystores) before committing. Details: `skills/mobile/SKILL.md` §7.
 
 ## 12. Testing and Platform Verification
 
